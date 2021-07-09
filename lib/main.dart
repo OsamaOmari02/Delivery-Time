@@ -1,72 +1,86 @@
-import 'package:app/Logout.dart';
+// @dart=2.9
 import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
+import 'package:app/Myprovider.dart';
 import 'package:app/Settings.dart';
+import 'package:carousel_pro/carousel_pro.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'Addaddress.dart';
 import 'Drawer.dart';
+import 'LogIn.dart';
 import 'Myaddress.dart';
 import 'PassWord.dart';
+import 'Shopping_cart.dart';
+import 'MyHistory.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(Myhome());
+import 'SignUp.dart';
 
-class Myhome extends StatefulWidget {
-  @override
-  _MyhomeState createState() => _MyhomeState();
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(ChangeNotifierProvider(
+    create: (_)=>MyProvider(),
+    child: MyApp(),
+  ));
 }
 
-class _MyhomeState extends State<Myhome> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      themeMode: ThemeMode.light,
+      debugShowCheckedModeBanner: false,
+      home: Login(),
+      themeMode: Provider.of<MyProvider>(context).isDark == true
+          ? ThemeMode.dark
+          : ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
+        brightness: Brightness.light,
         canvasColor: Colors.white,
-        accentColor: Colors.green,
+        accentColor: Colors.orangeAccent,
         floatingActionButtonTheme:
             FloatingActionButtonThemeData(backgroundColor: Colors.blue),
       ),
-      darkTheme: ThemeData(canvasColor: Colors.black),
-      home: MyHomepage(),
+      darkTheme: ThemeData(brightness: Brightness.dark),
       routes: {
         'MyHomepage': (context) => MyHomepage(),
+        'Signup':(context)=>Register(),
+        'login':(context)=>Login(),
         'MyAccount': (context) => MyAccount(),
         'MyFavourites': (context) => MyFavourites(),
         'MyLocation': (context) => MyAddress(),
         'settings': (context) => Settings(),
-        'logout': (context) => Logout(),
         'password': (context) => MyPassword(),
+        'Shopping': (context) => Shopping(),
+        'myHistory': (context) => History(),
+        'addAddress': (context) => AddAddress(),
       },
-      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MyHomepage extends StatefulWidget {
+class MyHomepage extends StatelessWidget {
   @override
-  _MyHomepageState createState() => _MyHomepageState();
-}
-
-class _MyHomepageState extends State<MyHomepage> {
-
-
-
-
-  content(Color color, title) {
+  content(image, title, Color color) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: color,
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Center(
-          child: Text(
-        title,
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-      )),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Image.asset(image,fit: BoxFit.fill),
+          Text(
+            title,
+            style: TextStyle(
+                fontSize: 16, fontStyle: FontStyle.italic, color: color),
+          ),
+        ],
+      ),
     );
   }
 
@@ -74,48 +88,45 @@ class _MyHomepageState extends State<MyHomepage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
-    Container funImage(route,String title){
+    Container funImage(route, String title) {
       return Container(
-        width: width*0.4,
+        width: width * 0.41,
         child: ListTile(
-          title: Image.asset(route,height: height*0.18,),
+          title: Image.asset(
+            route,
+            height: height * 0.12,
+            fit: BoxFit.fill,
+          ),
           subtitle: Container(
-            // height: height*0.3,
-            child: Text(title,style: TextStyle(color: Colors.lightBlue), textAlign: TextAlign.center),
+            padding: EdgeInsets.symmetric(vertical: height * 0.015),
+            child: Text(title,
+                style: TextStyle(color: Colors.black, fontSize: 15),
+                textAlign: TextAlign.center),
           ),
         ),
       );
     }
 
-    List imageFun=[
-      'file/wallpaperflare.com_wallpaper.jpg',
-      'file/wallpaperflare.com_wallpaper (1).jpg',
-      'file/wallpaperflare.com_wallpaper (2).jpg'
-    ];
-    var _currentIndex;
-    Container funDot(i){
-      return  Container(
-        width: 10,
-        height: 10,
-        margin: EdgeInsets.symmetric(horizontal: 3),
-        decoration: BoxDecoration(
-          color: _currentIndex==i? Colors.blueAccent : Colors.grey,
-          shape: BoxShape.circle,
-        ),
-      );
-    }
+    var _provider = Provider.of<MyProvider>(context);
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.search),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.search),
+            ),
           )
         ],
         centerTitle: true,
-        title: Text('Home page'),
+        title: Text('Home'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).pushNamed('Shopping'),
+        child: Icon(Icons.shopping_cart_outlined),
+        backgroundColor: Theme.of(context).accentColor,
       ),
       body: Container(
         alignment: Alignment.center,
@@ -124,49 +135,65 @@ class _MyHomepageState extends State<MyHomepage> {
             SizedBox(
               height: height * 0.3,
               width: double.infinity,
-              child: CarouselSlider(
-                items: <Widget>[
-                  Image.asset(imageFun[0], fit: BoxFit.cover),
-                  Image.asset(imageFun[1], fit: BoxFit.cover),
-                  Image.asset(imageFun[2], fit: BoxFit.cover),
+              child: Carousel(
+                images: <Widget>[
+                  Image.asset(_provider.imageFun[0], fit: BoxFit.cover),
+                  Image.asset(_provider.imageFun[1], fit: BoxFit.cover),
+                  Image.asset(_provider.imageFun[2], fit: BoxFit.cover),
                 ],
-                options: CarouselOptions(
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(seconds: 1,milliseconds: 750),
-                  enlargeCenterPage : true,
-                  disableCenter : true,
-                  onPageChanged:(index ,_){
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                    },
-                ),
+                dotColor: Colors.white,
+                dotSize: 5,
+                dotSpacing: 20,
+                dotIncreasedColor: Colors.black,
+                showIndicator: true,
+                autoplayDuration: const Duration(seconds: 1, milliseconds: 600),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: height * 0.03),
             Row(
-              mainAxisAlignment:MainAxisAlignment.center,
               children: [
-                funDot(0),
-                funDot(1),
-                funDot(2),
+                SizedBox(
+                  width: width * 0.03,
+                ),
+                Text(
+                  "Order your food now and enjoy !",
+                  maxLines: 3,
+                  style: TextStyle(
+                      fontSize: width * 0.06, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
+            SizedBox(height: height * 0.02),
             Container(
-              height: height*0.25,
+              height: height * 0.24,
               width: double.infinity,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  funImage('file/wallpaperflare.com_wallpaper.jpg',"osama"),
-                  funImage('file/wallpaperflare.com_wallpaper.jpg',"osama"),
-                  funImage('file/wallpaperflare.com_wallpaper.jpg',"osama"),
-                  funImage('file/wallpaperflare.com_wallpaper.jpg',"osama"),
-                  funImage('file/wallpaperflare.com_wallpaper.jpg',"osama"),
-                  funImage('file/wallpaperflare.com_wallpaper.jpg',"osama"),
+                  funImage('file/shawarmah.jpg', "Shawarmah"),
+                  funImage('file/fahita.jpg', "Fahita"),
+                  funImage('file/burger.jpg', "Burgers"),
+                  funImage('file/grill_house.jpg', "Extra"),
+                  funImage('file/دلع_كرشك.jpg', "Extra"),
+                  funImage('file/snap_burger.jpg', "Extra"),
                 ],
               ),
             ),
+            SizedBox(height: height * 0.01),
+            Row(
+              children: [
+                SizedBox(
+                  width: width * 0.03,
+                ),
+                Text(
+                  "Choose your favourite restaurant !",
+                  maxLines: 3,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: width * 0.06),
+                ),
+              ],
+            ),
+            SizedBox(height: height * 0.02),
             Container(
               padding: EdgeInsets.all(10),
               height: height * 0.6,
@@ -178,16 +205,16 @@ class _MyHomepageState extends State<MyHomepage> {
                   childAspectRatio: 3 / 2,
                 ),
                 children: [
-                  content(Colors.red, "res1"),
-                  content(Colors.blue, "res2"),
-                  content(Colors.yellow, "res3"),
-                  content(Colors.amber, "res4"),
-                  content(Colors.deepPurple, "res5"),
-                  content(Colors.blueGrey, "res6"),
-                  content(Colors.green, "res7"),
-                  content(Colors.red, "res8"),
-                  content(Colors.pink, "res9"),
-                  content(Colors.purple, "res10"),
+                  content('file/grill_house.jpg', "", Colors.black),
+                  content('file/grill_house.jpg', "", Colors.black),
+                  content('file/grill_house.jpg', "", Colors.black),
+                  content('file/snap_burger.jpg', "", Colors.white),
+                  content('file/grill_house.jpg', "", Colors.black),
+                  content('file/grill_house.jpg', "", Colors.black),
+                  content('file/grill_house.jpg', "", Colors.black),
+                  content('file/دلع_كرشك.jpg', "", Colors.black),
+                  content('file/grill_house.jpg', "", Colors.black),
+                  content('file/grill_house.jpg', "", Colors.black),
                 ],
               ),
             )

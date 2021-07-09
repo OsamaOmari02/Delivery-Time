@@ -21,7 +21,7 @@ class _MyFavouritesState extends State<MyFavourites> {
 
     return Scaffold(
       drawer: MyDrawer(),
-      appBar: AppBar(title: Text("My favourite"),centerTitle: true,),
+      appBar: AppBar(title: Text("My favourites"),centerTitle: true,),
       body: ListView(
         children: [
 
