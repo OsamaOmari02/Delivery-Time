@@ -3,7 +3,10 @@ import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
 import 'package:app/Settings.dart';
+import 'package:app/res_screen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +25,7 @@ import 'SignUp.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(ChangeNotifierProvider(
     create: (_)=>MyProvider(),
     child: MyApp(),
@@ -34,9 +38,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Login(),
-      themeMode: Provider.of<MyProvider>(context).isDark == true
-          ? ThemeMode.dark
-          : ThemeMode.light,
+      themeMode: Provider.of<MyProvider>(context).isDark?ThemeMode.dark:ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
@@ -53,11 +55,12 @@ class MyApp extends StatelessWidget {
         'MyAccount': (context) => MyAccount(),
         'MyFavourites': (context) => MyFavourites(),
         'MyLocation': (context) => MyAddress(),
-        'settings': (context) => Settings(),
+        'settings': (context) => SettingsScreen(),
         'password': (context) => MyPassword(),
         'Shopping': (context) => Shopping(),
         'myHistory': (context) => History(),
         'addAddress': (context) => AddAddress(),
+        'resScreen':(context)=>Store(),
       },
     );
   }
@@ -65,29 +68,35 @@ class MyApp extends StatelessWidget {
 
 class MyHomepage extends StatelessWidget {
   @override
-  content(image, title, Color color) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Image.asset(image,fit: BoxFit.fill),
-          Text(
-            title,
-            style: TextStyle(
-                fontSize: 16, fontStyle: FontStyle.italic, color: color),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var _provider = Provider.of<MyProvider>(context);
+
+    content(image, title, Color color) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: ElevatedButton(
+          onPressed: ()=>Navigator.of(context).pushNamed('resScreen'),
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white70)),
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Image.asset(image,fit: BoxFit.fill),
+              Text(
+                title,
+                style: TextStyle(
+                    fontSize: 16, fontStyle: FontStyle.italic, color: color),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     Container funImage(route, String title) {
       return Container(
         width: width * 0.41,
@@ -107,7 +116,6 @@ class MyHomepage extends StatelessWidget {
       );
     }
 
-    var _provider = Provider.of<MyProvider>(context);
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
@@ -115,7 +123,9 @@ class MyHomepage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+
+              },
               icon: Icon(Icons.search),
             ),
           )
@@ -155,11 +165,13 @@ class MyHomepage extends StatelessWidget {
                 SizedBox(
                   width: width * 0.03,
                 ),
-                Text(
-                  "Order your food now and enjoy !",
-                  maxLines: 3,
-                  style: TextStyle(
-                      fontSize: width * 0.06, fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Text(
+                    "Order your food now and enjoy !",
+                    maxLines: 3,
+                    style: TextStyle(
+                        fontSize: width * 0.06, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
@@ -185,11 +197,13 @@ class MyHomepage extends StatelessWidget {
                 SizedBox(
                   width: width * 0.03,
                 ),
-                Text(
-                  "Choose your favourite restaurant !",
-                  maxLines: 3,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: width * 0.06),
+                Expanded(
+                  child: Text(
+                    "Choose your favourite restaurant !",
+                    maxLines: 3,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: width * 0.06),
+                  ),
                 ),
               ],
             ),

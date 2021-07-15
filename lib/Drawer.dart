@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:sizer/sizer.dart';
 import 'package:app/Myprovider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,7 +48,8 @@ class MyDrawer extends StatelessWidget {
                     "Yes",
                     style: TextStyle(fontSize: 19, color: Colors.red),
                   ),
-                  onTap: () async => await FirebaseAuth.instance.signOut().then((_){
+                  onTap: () => FirebaseAuth.instance.signOut().then((_){
+                     provider.authState = authStatus.Authenticated;
                     Navigator.of(context).pushReplacementNamed('login');
                   }),
                 ),
@@ -77,7 +77,7 @@ class MyDrawer extends StatelessWidget {
           Row(
             children: [
               SizedBox(width: width * 0.03),
-              Text('welcome .... !', style: TextStyle(fontSize: 21)),
+              Expanded(child: Text('welcome ${provider.authData['name']} !', style: TextStyle(fontSize: 21))),
             ],
           ),
           listTile("Home", Icons.home, 'MyHomepage', context),

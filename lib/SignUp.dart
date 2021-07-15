@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'Myprovider.dart';
 
 class Register extends StatefulWidget {
@@ -17,7 +17,7 @@ class _RegisterViewState extends State<Register> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _repasswordController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
-
+  bool isVisible = true;
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
@@ -60,7 +60,7 @@ class _RegisterViewState extends State<Register> {
     }
 
     final usernameField = TextFormField(
-      controller: provider.nameController,
+      controller: _usernameController,
       keyboardType: TextInputType.text,
       style: TextStyle(
         color: Colors.white,
@@ -104,6 +104,7 @@ class _RegisterViewState extends State<Register> {
 
     final emailField = TextFormField(
       controller: _emailController,
+      // key: ValueKey('email'),
       keyboardType: TextInputType.emailAddress,
       style: TextStyle(
         color: Colors.white,
@@ -126,27 +127,32 @@ class _RegisterViewState extends State<Register> {
       ),
     );
 
-    final passwordField = TextFormField(
-      obscureText: true,
-      controller: _passwordController,
-      keyboardType: TextInputType.visiblePassword,
-      style: TextStyle(
-        color: Colors.white,
-      ),
-      cursorColor: Colors.white,
-      decoration: InputDecoration(
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
+    final passwordField = Container(
+      child: TextField(
+        controller: _passwordController,
+        obscureText: isVisible,
+        keyboardType: TextInputType.visiblePassword,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+        cursorColor: Colors.white,
+        decoration: InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            ),
+          ),
+          suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                isVisible = !isVisible;
+              });
+            },
+            icon: Icon(isVisible == true ? Icons.visibility : Icons.visibility_off),),
+          labelText: "Password",
+          labelStyle: TextStyle(
             color: Colors.white,
           ),
-        ),
-        hintText: "password",
-        labelText: "Password",
-        labelStyle: TextStyle(
-          color: Colors.white,
-        ),
-        hintStyle: TextStyle(
-          color: Colors.white,
         ),
       ),
     );
@@ -205,39 +211,70 @@ class _RegisterViewState extends State<Register> {
           ),
         ),
         onPressed: () async {
+          if (_usernameController.text.isEmpty)
+            return LogoutFun("Empty field!");
           if (_phoneController.text.length!=10 || !_phoneController.text.startsWith("07"))
             return LogoutFun("Invalid phone number");
-          if (_passwordController.text.trim()!=_repasswordController.text.trim())
+          if (_passwordController.text!=_repasswordController.text)
             return LogoutFun("Passwords do not match");
           try {
-            var user =
-                (await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            setState(() {
+              provider.authState = authStatus.Authenticating;
+            });
+                UserCredential authres = await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
-            )).user;
-            if (user != null)
-              Navigator.of(context).pushReplacementNamed('MyHomepage');
+              password: _passwordController.text,
+                );
+                  await FirebaseFirestore.instance.collection('users')
+                      .doc(authres.user!.uid).set({
+                    'email': _emailController.text.trim(),
+                    'phone':_phoneController.text,
+                    'username':_usernameController.text,
+                    'password':_passwordController.text,
+                    'uid':authres.user!.uid,
+                  });
+                  provider.fetch();
+                  setState(() {
+                    // provider.authData['name'] = FirebaseFirestore.instance.doc(authres.user.displayName) as String;
+                    // provider.authData['email'] = _emailController.text;
+                    // provider.authData['password'] = _passwordController.text;
+                    // provider.authData['phone'] = _phoneController.text;
+                    // provider.authData['name'] = _usernameController.text;
+                    // provider.authState = authStatus.Authenticated;
+                 });
+            Navigator.of(context).pushReplacementNamed('MyHomepage');
           } on FirebaseAuthException catch (e) {
-             e.message=='Given String is empty or null'?null:LogoutFun(e.message);
+             e.message=='Given String is empty or null'?LogoutFun('Empty field!'):LogoutFun(e.message);
+            print(e);
+             setState(() {
+               provider.authState = authStatus.unAuthenticated;
+             });
           } catch (e) {
             print(e);
-            _emailController.text = "";
-            _passwordController.text = "";
-            _repasswordController.text = "";
+            setState(() {
+              provider.authState = authStatus.unAuthenticated;
+              _emailController.text = "";
+              _passwordController.text = "";
+              _repasswordController.text = "";
+            });
           }
         },
       ),
     );
 
     final bottom = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         SizedBox(height: MediaQuery.of(context).size.height*0.05),
-        registerButton,
+        if (provider.authState==authStatus.Authenticating)
+          CircularProgressIndicator(color: Colors.white),
+        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
+          registerButton,
         Padding(
           padding: EdgeInsets.all(8.0),
         ),
+        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -265,17 +302,15 @@ class _RegisterViewState extends State<Register> {
     );
 
     return Scaffold(
-      backgroundColor: Color.fromRGBO(250, 140, 200, 1).withOpacity(0.65),
+      backgroundColor: Color.fromRGBO(20, 200, 140, 1).withOpacity(0.65),
       body: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(36),
           child: Container(
             height: mq.size.height,
+            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 6),
               children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height*0.07),
+                SizedBox(height: MediaQuery.of(context).size.height*0.08),
                 Container(
                   margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
@@ -288,7 +323,7 @@ class _RegisterViewState extends State<Register> {
                           offset: Offset(0, 2)),
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 70),
                   child: Text(
                     "Delivery Time",
                     style: TextStyle(
@@ -300,14 +335,13 @@ class _RegisterViewState extends State<Register> {
                 ),
                 fields,
                 Padding(
-                  padding: EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.only(bottom: 8),
                   child: bottom,
                 ),
               ],
             ),
           ),
         ),
-      ),
     );
   }
 }

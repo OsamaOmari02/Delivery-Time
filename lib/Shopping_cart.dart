@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'Myprovider.dart';
 
 class Shopping extends StatefulWidget {
   @override
@@ -9,8 +12,10 @@ class Shopping extends StatefulWidget {
 class _ShoppingState extends State<Shopping> {
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           "Shopping Cart",
           style: TextStyle(fontSize: 20),
@@ -41,17 +46,13 @@ class _ShoppingState extends State<Shopping> {
               );
             },
           );
-          final AlertDialog alert = AlertDialog(
-            title: Text("hey"),
-            content: Text("hey"),
-          );
         },
         child: Icon(Icons.delete),
         backgroundColor: Theme.of(context).accentColor,
       ),
       body: ListView(
         children: [
-          Card(),
+          // Card(child: Text(provider.email),)
         ],
       ),
     );

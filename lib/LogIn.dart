@@ -1,6 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'Myprovider.dart';
@@ -9,8 +9,6 @@ class Login extends StatefulWidget {
   @override
   _LoginViewState createState() => _LoginViewState();
 }
-
-var _validator;
 
 class _LoginViewState extends State<Login> {
   TextEditingController _emailController = TextEditingController();
@@ -108,6 +106,7 @@ class _LoginViewState extends State<Login> {
         Padding(
           padding: EdgeInsets.all(2.0),
         ),
+        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -156,31 +155,45 @@ class _LoginViewState extends State<Login> {
         ),
         onPressed: () async {
           try {
-            var user = (await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
+            setState(() {
+              provider.authState = authStatus.Authenticating;
+            });
+            var auth = (await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email:_emailController.text.trim(),
+              password: _passwordController.text,
             )).user;
-            if (user != null) {
+            setState(() {
+              provider.authState = authStatus.Authenticated;
+            });
+            if (auth != null) {
               Navigator.of(context).pushReplacementNamed('MyHomepage');
             }
           } on FirebaseAuthException catch (e) {
-            e.message=='Given String is empty or null'?null:LogoutFun(e.message);
+            e.message=='Given String is empty or null'?LogoutFun('Empty field!'):
+            LogoutFun(e.message);
+            setState(() {
+              provider.authState = authStatus.unAuthenticated;
+            });
+            // _passwordController.text = "";
+          } catch(e){
+            print(e);
           }
-          // _emailController.text = "";
-          // _passwordController.text = "";
-          // TODO: AlertDialog with error
         },
       ),
     );
 
     final bottom = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
+        if (provider.authState==authStatus.Authenticating)
+          CircularProgressIndicator(color: Colors.white),
+        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
         loginButton,
         Padding(
           padding: EdgeInsets.all(8.0),
         ),
+        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -208,7 +221,7 @@ class _LoginViewState extends State<Login> {
     );
 
     return Scaffold(
-      // backgroundColor: Color.fromRGBO(250, 140, 200, 1).withOpacity(0.65),
+      // backgroundColor: Color.fromRGBO(0, 0, 100, 1).withOpacity(0.65),
       backgroundColor: Colors.blue,
       body: Form(
         key: _formKey,

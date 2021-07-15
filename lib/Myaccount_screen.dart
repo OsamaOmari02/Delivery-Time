@@ -13,15 +13,50 @@ class MyAccount extends StatefulWidget {
 
 class _MyAccountState extends State<MyAccount> {
   bool isVisible = true;
-  var myEmail = TextEditingController();
-  var myOldPass = TextEditingController();
+  var _myName = TextEditingController();
+  var _myOldPass = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
     var provider = Provider.of<MyProvider>(context);
+    dialog(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  SizedBox(width: 17),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: TextStyle(fontSize: 23, color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              elevation: 24,
+              content: Container(
+                height: MediaQuery.of(context).size.height * 0.05,
+                child: Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                TextButton(
+                    child: Text("OK", style: TextStyle(fontSize: 21)),
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
@@ -34,26 +69,25 @@ class _MyAccountState extends State<MyAccount> {
           SizedBox(height: height * 0.02),
           Column(
             children: [
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 12),
-              //   child: TextFormField(
-              //     keyboardType: TextInputType.text,
-              //     controller: provider.nameController,
-              //     // initialValue: provider.nameController.text,
-              //     decoration: InputDecoration(
-              //       icon: Icon(
-              //         Icons.person,
-              //         color: Colors.blue,
-              //       ),
-              //       labelText: "Full Name",
-              //     ),
-              //   ),
-              // ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: TextFormField(
+                  keyboardType: TextInputType.text,
+                  initialValue: provider.authData['name'],
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.person,
+                      color: Colors.blue,
+                    ),
+                    labelText: "Full Name",
+                  ),
+                ),
+              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: TextFormField(
                   keyboardType: TextInputType.emailAddress,
-                  //controller: provider.emailController,
+                  enabled: false,
                   initialValue: provider.authData['email'],
                   decoration: InputDecoration(
                     icon: Icon(
@@ -68,7 +102,6 @@ class _MyAccountState extends State<MyAccount> {
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: TextFormField(
                   keyboardType: TextInputType.phone,
-                  //controller: provider.phoneController,
                   initialValue: provider.authData['phone'],
                   decoration: InputDecoration(
                     icon: Icon(
@@ -93,12 +126,11 @@ class _MyAccountState extends State<MyAccount> {
           ),
           SizedBox(height: height * 0.02),
           Container(
+            padding: EdgeInsets.symmetric(horizontal: width*0.36),
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  // userName = userName;
-                  // userPhoneNum = userPhoneNum;
-                  // userEmail = userEmail;
+
                 });
               },
               child: Text(

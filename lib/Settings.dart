@@ -7,14 +7,14 @@ import 'package:provider/provider.dart';
 import 'Drawer.dart';
 import 'main.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _SettingsState createState() => _SettingsState();
+  _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

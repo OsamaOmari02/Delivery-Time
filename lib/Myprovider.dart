@@ -1,8 +1,11 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
-enum AuthMode { LogIn, SignUp }
+// enum AuthMode { LogIn, SignUp }
+enum authStatus {Authenticating,unAuthenticated,Authenticated}
 class MyProvider with ChangeNotifier {
 
   List imageFun = [
@@ -10,6 +13,7 @@ class MyProvider with ChangeNotifier {
     'file/fahita.jpg',
     'file/shawarmah.jpg',
   ];
+
 
   bool isDark = false;
 
@@ -19,64 +23,36 @@ class MyProvider with ChangeNotifier {
   }
 
   //-----------auth--------
-  AuthMode authMode = AuthMode.LogIn;
+  // AuthMode authMode = AuthMode.LogIn;
+  authStatus authState = authStatus.Authenticated;
   Map<String, String> authData = {
     'email': '',
     'password': '',
     'phone': '',
     'name': '',
   };
-  bool isLoading = false;
+  bool isLoading = true;
+  fetch() async{
+    final userData = FirebaseAuth.instance.currentUser;
+    if (userData!=null)
+      await FirebaseFirestore.instance.collection('users').doc(userData.uid)
+          .get().then((val){
+            authData['email'] = val.data()?['email'];
+            authData['phone'] = val.data()?['phone'];
+            authData['password'] = val.data()?['password'];
+            authData['name'] = val.data()?['username'];
+            notifyListeners();
+    });
+  }
   // final passwordController = TextEditingController();
   // final phoneController = TextEditingController();
-  // late final emailController = TextEditingController();
-  final nameController = TextEditingController();
+  // final emailController = TextEditingController();
+  // final nameController = TextEditingController();
   // final rePasswordController = TextEditingController();
-  // Future <void> submit() async {
-  //   if (!formKey.currentState!.validate())
-  //     return;
-  //   isLoading = true;
-  //
-  //   notifyListeners();
-  //   try {
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  //   isLoading = false;
-  //   notifyListeners();
-  // }
 
-  void switchAuth() {
-    if (authMode == AuthMode.LogIn) {
-      authMode = AuthMode.SignUp;
-      notifyListeners();
-    }
-    else {
-      authMode = AuthMode.LogIn;
-      notifyListeners();
-    }
-  }
+
+
 
   //-------------auth2------------
-  // Future<String> authintecation() async {
-  //   FirebaseAuth fireBase = FirebaseAuth.instance;
-  //   UserCredential user;
-  //   try {
-  //     if (authMode == AuthMode.SignUp) {
-  //       user = await fireBase.createUserWithEmailAndPassword(
-  //         email: emailController.text.trim(),
-  //         password: passwordController.text.trim(),
-  //       );
-  //     } else {
-  //       user = await fireBase.signInWithEmailAndPassword(
-  //         email: emailController.text.trim(),
-  //         password: passwordController.text.trim(),
-  //       );
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     print(e);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+
 }
