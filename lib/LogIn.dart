@@ -174,9 +174,12 @@ class _LoginViewState extends State<Login> {
             setState(() {
               provider.authState = authStatus.unAuthenticated;
             });
-            // _passwordController.text = "";
+            _passwordController.clear();
           } catch(e){
             print(e);
+            setState(() {
+              provider.authState = authStatus.unAuthenticated;
+            });
           }
         },
       ),

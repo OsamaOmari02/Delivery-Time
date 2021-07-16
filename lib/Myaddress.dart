@@ -9,28 +9,70 @@ import 'Drawer.dart';
 import 'Myprovider.dart';
 
 class MyAddress extends StatefulWidget {
-  const MyAddress({Key? key}) : super(key: key);
 
   @override
   _MyAddressState createState() => _MyAddressState();
 }
 
 class _MyAddressState extends State<MyAddress> {
-  // listTile(areaName, stName, mobile) {
-  //   ListTile(
-  //     onTap: () {},
-  //     title: Text(areaName),
-  //     subtitle: Text("Street : $stName\nMobile : $mobile"),
-  //     isThreeLine: true,
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var user = FirebaseAuth.instance.currentUser;
+    LogoutFun(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.delete,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  SizedBox(width: 17),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: TextStyle(fontSize: 23, color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              elevation: 24,
+              content: Container(
+                height: MediaQuery.of(context).size.height * 0.05,
+                child: Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                TextButton(
+                    child: Text("Yes", style: TextStyle(fontSize: 19)),
+                    onPressed: () async{
+                      try {
+                        await
+                        FirebaseFirestore.instance
+                            .collection('/address/${user!.uid}/addresses')
+                            .doc(user.uid)
+                            .delete();
+                        Navigator.of(context).pop();
+                      }catch(e){
+                        print(e);
+                      }
+                    }),
+                TextButton(
+                    child: Text("Cancel", style: TextStyle(fontSize: 19)),
+                    onPressed: () {
+                        Navigator.of(context).pop();
+                    }),
+              ],
+            );
+          });
+    }
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
@@ -44,29 +86,30 @@ class _MyAddressState extends State<MyAddress> {
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('/address/${user!.uid}/addresses').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('/address/${user!.uid}/addresses')
+            .snapshots(),
         builder: (ctx, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator(color: Colors.blue,));
-          else {
+          if(!snapshot.hasData)
+            return Center(child: Text("Add an address",style: TextStyle(color: Colors.grey)));
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, int index) {
-                var userDate = snapshot.data!.docs;
+                var userData = snapshot.data!.docs;
                 return ListTile(
                   onTap: () {},
-                  title: Text(userDate[index]['area']),
+                  onLongPress: () {
+                    LogoutFun("Are you sure you want to delete this address?");
+                  },
+                  title: Text(userData[index]['area']),
                   subtitle: Text("Street : " +
-                      userDate[index]['street'] +
+                      userData[index]['street'] +
                       "\nMobile : " +
-                      userDate[index]['phoneNum']),
+                      userData[index]['phoneNum']),
                   isThreeLine: true,
                 );
               },
-              // children: snapshot.data!.docs.map((doc) {
-              // } ).toList(),
             );
-          }
         },
       ),
     );

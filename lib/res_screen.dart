@@ -1,5 +1,9 @@
+import 'package:app/Myprovider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Store extends StatefulWidget {
   @override
@@ -15,6 +19,7 @@ class _StoreState extends State<Store> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var provider = Provider.of<MyProvider>(context);
     // Container funHorizantal(img, title) {
     //   return Container(
     //     width: width * 0.4,
@@ -53,23 +58,17 @@ class _StoreState extends State<Store> {
                 icon: Icon(
                   Icons.search,
                 ),
-                onPressed: () {}),
+                onPressed: () {},
+                ),
           ],
           bottom: TabBar(
             tabs: [
-              Tab(
-                text: "Shawarmah",
-              ),
-              Tab(
-                text: "snacks",
-              ),
-              Tab(
-                text: "Others",
-              ),
+              Tab(text: "Shawarmah"),
+              Tab(text: "snacks"),
+              Tab(text: "Others"),
             ],
           ),
         ),
-
         body: Stack(
           children: [
             TabBarView(
@@ -134,129 +133,102 @@ class First extends StatefulWidget {
 class _FirstState extends State<First> {
   int _itemCount = 0;
 
-  Card theCommodity(img, name1, type, name2, name3, price,id) {
-    return Card(
-      key: Key(id),
-      child: Row(
-        children: <Widget>[
-          // Container(
-          //   child: Expanded(
-          //     flex: 1,
-          //     child: Image.asset(img),
-          //   ),
-          // ),
-          // you can't change height in last Container
-          // height: height*0.148,
-          Expanded(
-            flex: 2,
-            child: Container(
-              // alignment: Alignment.center,
-              // height: height * 0.18,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.favorite_border,
-                      color: Colors.red,
-                    ), onPressed: () {},
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "Name: ${name1}",
-                          style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        alignment: Alignment.bottomLeft,
-                        // decoration: BoxDecoration(border: Border.all(color: Colors.red),),
-                        // padding: EdgeInsets.only(top: 5),
-                        margin: EdgeInsets.only(top: 17),
-                        child: Text(
-                          "Price: ${price} JD",
-                          style: TextStyle(fontSize: 17, color: Colors.red),
-                        ),
-                      ),
-
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              _itemCount != 0
-                  ? IconButton(
-                icon: Icon(
-                  Icons.remove,
-                  color: Colors.red,
-                ),
-                onPressed: () => setState(() => _itemCount--),
-              )
-                  : Container(),
-              Text(_itemCount.toString()),
-
-              IconButton(
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.green,
-                ),
-                onPressed: () => setState(() => _itemCount++),
-              ),
-
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return ListView(
-      children: <Widget>[
-        Divider(
-          height: 10,
+    var provider = Provider.of<MyProvider>(context);
+    var res = FirebaseAuth.instance.currentUser;
+    Card theCommodity(name,price,id) {
+      return Card(
+        key: Key(id),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        provider.isFavourite?Icons.favorite:Icons.favorite_border,
+                        color: Colors.red,
+                      ),
+                      onPressed: ()=>provider.toggleFavourite(),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 20),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            name,
+                            style:
+                            TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          alignment: Alignment.bottomLeft,
+                          margin: EdgeInsets.only(top: 17),
+                          child: Text(
+                            "Price: $price JD",
+                            style: TextStyle(fontSize: 16, color: Colors.brown),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                _itemCount != 0
+                    ? IconButton(
+                  icon: Icon(
+                    Icons.remove,
+                    color: Colors.red,
+                  ),
+                  onPressed: () => setState(() => _itemCount--),
+                )
+                    : Container(),
+                Text(_itemCount.toString()),
+                IconButton(
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.green,
+                  ),
+                  onPressed: () => setState(() => _itemCount++),
+                ),
+              ],
+            ),
+          ],
         ),
-        Container(
-          height: height * 0.16,
-          child: theCommodity("images/1j.jpg", "ss", "ww", "ee", "rr", "44","111"),
-        ),
-        Container(
-          height: height * 0.16,
-          child: theCommodity("images/1j.jpg", "ss", "ww", "ee", "rr", "44","111"),
-        ),
-        Container(
-          height: height * 0.16,
-          child: theCommodity("images/1j.jpg", "ss", "ww", "ee", "rr", "44","222"),
-        ),
-        Container(
-          height: height * 0.16,
-          child: theCommodity("images/1j.jpg", "ss", "ww", "ee", "rr", "44","444"),
-        ),
-        Container(
-          height: height * 0.16,
-          child: theCommodity("images/1j.jpg", "ss", "ww", "ee", "rr", "44","555"),
-        ),
-        SizedBox(height: height*0.1),
-      ],
+      );
+    }
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('/restaurants/grill house/shawarmah')
+          .snapshots(),
+      builder: (ctx, snapshot) {
+        if(!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, int index) {
+            var resData = snapshot.data!.docs;
+            return theCommodity(resData[index]['meal name']
+                ,resData[index]['price'],res!.uid);
+          },
+        );
+      },
     );
   }
 }
-
 //-------2
 class Second extends StatefulWidget {
   @override

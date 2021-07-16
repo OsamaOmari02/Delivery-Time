@@ -58,7 +58,6 @@ class _RegisterViewState extends State<Register> {
             );
           });
     }
-
     final usernameField = TextFormField(
       controller: _usernameController,
       keyboardType: TextInputType.text,
@@ -72,7 +71,7 @@ class _RegisterViewState extends State<Register> {
             color: Colors.white,
           ),
         ),
-        labelText: "Username",
+        labelText: "First Name",
         labelStyle: TextStyle(
           color: Colors.white,
         ),
@@ -233,16 +232,9 @@ class _RegisterViewState extends State<Register> {
                     'password':_passwordController.text,
                     'uid':authres.user!.uid,
                   });
+                  provider.authState = authStatus.Authenticated;
                   provider.fetch();
-                  setState(() {
-                    // provider.authData['name'] = FirebaseFirestore.instance.doc(authres.user.displayName) as String;
-                    // provider.authData['email'] = _emailController.text;
-                    // provider.authData['password'] = _passwordController.text;
-                    // provider.authData['phone'] = _phoneController.text;
-                    // provider.authData['name'] = _usernameController.text;
-                    // provider.authState = authStatus.Authenticated;
-                 });
-            Navigator.of(context).pushReplacementNamed('MyHomepage');
+                  Navigator.of(context).pushReplacementNamed('MyHomepage');
           } on FirebaseAuthException catch (e) {
              e.message=='Given String is empty or null'?LogoutFun('Empty field!'):LogoutFun(e.message);
             print(e);
@@ -253,9 +245,8 @@ class _RegisterViewState extends State<Register> {
             print(e);
             setState(() {
               provider.authState = authStatus.unAuthenticated;
-              _emailController.text = "";
-              _passwordController.text = "";
-              _repasswordController.text = "";
+              _passwordController.clear();
+              _repasswordController.clear();
             });
           }
         },

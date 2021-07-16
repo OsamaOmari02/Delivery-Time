@@ -14,6 +14,11 @@ class MyProvider with ChangeNotifier {
     'file/shawarmah.jpg',
   ];
 
+  bool isFavourite = false;
+  toggleFavourite(){
+    isFavourite = !isFavourite;
+    notifyListeners();
+  }
 
   bool isDark = false;
 
@@ -44,12 +49,6 @@ class MyProvider with ChangeNotifier {
             notifyListeners();
     });
   }
-  // final passwordController = TextEditingController();
-  // final phoneController = TextEditingController();
-  // final emailController = TextEditingController();
-  // final nameController = TextEditingController();
-  // final rePasswordController = TextEditingController();
-
 
 
 

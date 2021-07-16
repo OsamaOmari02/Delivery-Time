@@ -17,10 +17,6 @@ class _AddAddressState extends State<AddAddress> {
 
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  // validator() {
-  //
-  // }
-
   String? validPass(val) {
     if (val.toString().isEmpty)
       return "Required";
@@ -29,17 +25,6 @@ class _AddAddressState extends State<AddAddress> {
     }
   }
 
-  // address(title, keyboard, cont) {
-  //   return TextFormField(
-  //     controller: cont,
-  //     // initialValue: userAddress,
-  //     decoration: InputDecoration(
-  //       labelText: title,
-  //       contentPadding: EdgeInsets.symmetric(horizontal: 9),
-  //     ),
-  //     keyboardType: keyboard,
-  //   );
-  // }
   required(title, keyboard, cont) {
     return TextFormField(
       controller: cont,
@@ -99,14 +84,22 @@ class _AddAddressState extends State<AddAddress> {
               ),
               child: ElevatedButton(
                 onPressed: () async {
-                  var user = FirebaseAuth.instance.currentUser;
-                  await FirebaseFirestore.instance.collection('/address/${user!.uid}/addresses')
-                      .add({
+                  try{
+                    if (_formkey.currentState!.validate()){
+                      var user = FirebaseAuth.instance.currentUser;
+                      await FirebaseFirestore.instance
+                          .collection('/address/${user!.uid}/addresses')
+                          .doc(user.uid).set({
                         'area' :_area.text,
                         'street':_street.text,
                         'phoneNum':_phone.text,
                         'uid':user.uid,
                       });
+                      Navigator.of(context).pop();
+                    }
+                  } catch(e){
+                    print(e);
+                  }
                 },
                 child: Text(
                   "Add",

@@ -214,8 +214,8 @@ class MyHomepage extends StatelessWidget {
               child: GridView(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 220,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 18,
                   childAspectRatio: 3 / 2,
                 ),
                 children: [

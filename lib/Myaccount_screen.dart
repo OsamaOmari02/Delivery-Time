@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:app/Drawer.dart';
 import 'package:app/Myprovider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,14 +15,16 @@ class MyAccount extends StatefulWidget {
 
 class _MyAccountState extends State<MyAccount> {
   bool isVisible = true;
-  var _myName = TextEditingController();
-  var _myOldPass = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var _myName = TextEditingController(text : provider.authData['name']);
+    var _myOldPass = TextEditingController();
+    CollectionReference userData = FirebaseFirestore.instance.collection('users');
+    var user = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
           context: context,
@@ -60,7 +64,7 @@ class _MyAccountState extends State<MyAccount> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: Text("My account"),
+        title: Text("My Account"),
         centerTitle: true,
         backgroundColor: Colors.blue,
       ),
@@ -69,20 +73,6 @@ class _MyAccountState extends State<MyAccount> {
           SizedBox(height: height * 0.02),
           Column(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  initialValue: provider.authData['name'],
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.person,
-                      color: Colors.blue,
-                    ),
-                    labelText: "Full Name",
-                  ),
-                ),
-              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: TextFormField(
@@ -95,6 +85,25 @@ class _MyAccountState extends State<MyAccount> {
                       color: Colors.blue,
                     ),
                     labelText: "E-mail",
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: _myName,
+                  // onChanged: (val){
+                  //   setState(() {
+                  //     _myName.text = val;
+                  //   });
+                  // },
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.person,
+                      color: Colors.blue,
+                    ),
+                    labelText: "Name",
                   ),
                 ),
               ),
@@ -129,8 +138,14 @@ class _MyAccountState extends State<MyAccount> {
             padding: EdgeInsets.symmetric(horizontal: width*0.36),
             child: ElevatedButton(
               onPressed: () {
+                userData.doc(user!.uid)
+                    .update({'username': _myName.text
+                    })
+                    .then((value) => print("User Updated"))
+                    .catchError((error) => print("Failed to update user: $error"));
                 setState(() {
-
+                  provider.authData['name'] = _myName.text;
+                  provider.authData['name'] = _myName.text;
                 });
               },
               child: Text(
