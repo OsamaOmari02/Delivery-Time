@@ -5,8 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'Drawer.dart';
-
 class MyPassword extends StatefulWidget {
   @override
   _MyPasswordState createState() => _MyPasswordState();

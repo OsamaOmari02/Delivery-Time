@@ -162,10 +162,11 @@ class _LoginViewState extends State<Login> {
               email:_emailController.text.trim(),
               password: _passwordController.text,
             )).user;
-            setState(() {
-              provider.authState = authStatus.Authenticated;
-            });
             if (auth != null) {
+              setState(() {
+                provider.authState = authStatus.Authenticated;
+              });
+              provider.fetch();
               Navigator.of(context).pushReplacementNamed('MyHomepage');
             }
           } on FirebaseAuthException catch (e) {

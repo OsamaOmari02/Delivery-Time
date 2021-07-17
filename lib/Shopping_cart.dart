@@ -17,7 +17,7 @@ class _ShoppingState extends State<Shopping> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Shopping Cart",
+          "Food Cart",
           style: TextStyle(fontSize: 20),
         ),
       ),

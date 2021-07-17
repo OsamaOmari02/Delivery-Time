@@ -13,6 +13,16 @@ class MyProvider with ChangeNotifier {
     'file/fahita.jpg',
     'file/shawarmah.jpg',
   ];
+  var t=0.0;
+  add(int price){
+      t+=price;
+      notifyListeners();
+  }
+  subtract(int price){
+    if (t!=0)
+    t-=price;
+    notifyListeners();
+  }
 
   bool isFavourite = false;
   toggleFavourite(){

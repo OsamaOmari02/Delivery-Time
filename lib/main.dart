@@ -61,6 +61,9 @@ class MyApp extends StatelessWidget {
         'myHistory': (context) => History(),
         'addAddress': (context) => AddAddress(),
         'resScreen':(context)=>Store(),
+        'Email':(context)=>Email(),
+        'Name':(context)=>Name(),
+        // 'Phone':(context)=>Phone(),
       },
     );
   }
@@ -123,9 +126,7 @@ class MyHomepage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               icon: Icon(Icons.search),
             ),
           )
@@ -135,7 +136,7 @@ class MyHomepage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).pushNamed('Shopping'),
-        child: Icon(Icons.shopping_cart_outlined),
+        child: Icon(Icons.shopping_basket_outlined),
         backgroundColor: Theme.of(context).accentColor,
       ),
       body: Container(
@@ -199,7 +200,7 @@ class MyHomepage extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    "Choose your favourite restaurant !",
+                    "Choose your favorite restaurant !",
                     maxLines: 3,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: width * 0.06),
