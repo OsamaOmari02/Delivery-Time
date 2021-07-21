@@ -27,7 +27,7 @@ void main() async{
   await Firebase.initializeApp();
 
   runApp(ChangeNotifierProvider(
-    create: (_)=>MyProvider(),
+    create: (_)=> MyProvider(),
     child: MyApp(),
   ));
 }
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: MyHomepage(),
       themeMode: Provider.of<MyProvider>(context).isDark?ThemeMode.dark:ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),

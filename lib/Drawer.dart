@@ -84,7 +84,7 @@ class MyDrawer extends StatelessWidget {
           Divider(thickness: 1),
           listTile("Account", Icons.account_circle, 'MyAccount', context),
           Divider(thickness: 1),
-          listTile("Favourites", Icons.favorite, 'MyFavourites', context),
+          listTile("Favorites", Icons.favorite, 'MyFavourites', context),
           Divider(thickness: 1),
           listTile(
               "Addresses", Icons.location_on_outlined, 'MyLocation', context),

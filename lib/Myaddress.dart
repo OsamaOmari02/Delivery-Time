@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app/Addaddress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +11,6 @@ import 'Drawer.dart';
 import 'Myprovider.dart';
 
 class MyAddress extends StatefulWidget {
-
   @override
   _MyAddressState createState() => _MyAddressState();
 }
@@ -52,33 +53,45 @@ class _MyAddressState extends State<MyAddress> {
               actions: [
                 TextButton(
                     child: Text("Yes", style: TextStyle(fontSize: 19)),
-                    onPressed: () async{
+                    onPressed: () async {
                       try {
-                        await
-                        FirebaseFirestore.instance
-                            .collection('/address/${user!.uid}/addresses')
-                            .doc(user.uid)
-                            .delete();
+                        setState(() {
+                          provider.isLoading = true;
+                        });
                         Navigator.of(context).pop();
-                      }catch(e){
+                        provider.delete();
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                      } on FirebaseAuthException catch (e) {
+                        print(e.message);
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                      } catch (e) {
                         print(e);
+                        setState(() {
+                          provider.isLoading = false;
+                        });
                       }
                     }),
                 TextButton(
                     child: Text("Cancel", style: TextStyle(fontSize: 19)),
                     onPressed: () {
-                        Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     }),
               ],
             );
           });
     }
+
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: provider.isLoading ? CircularProgressIndicator()
+                : Icon(Icons.add),
             onPressed: () => Navigator.of(context).pushNamed('addAddress'),
           ),
         ],
@@ -90,26 +103,30 @@ class _MyAddressState extends State<MyAddress> {
             .collection('/address/${user!.uid}/addresses')
             .snapshots(),
         builder: (ctx, snapshot) {
-          if(!snapshot.hasData)
-            return Center(child: Text("Add an address",style: TextStyle(color: Colors.grey)));
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (BuildContext context, int index) {
-                var userData = snapshot.data!.docs;
-                return ListTile(
-                  onTap: () {},
-                  onLongPress: () {
-                    LogoutFun("Are you sure you want to delete this address?");
-                  },
-                  title: Text(userData[index]['area']),
-                  subtitle: Text("Street : " +
-                      userData[index]['street'] +
-                      "\nMobile : " +
-                      userData[index]['phoneNum']),
-                  isThreeLine: true,
-                );
-              },
-            );
+          if (!snapshot.hasData)
+            return Center(
+                child: Text("Add an address",
+                    style: TextStyle(color: Colors.grey)));
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              var userData = snapshot.data!.docs;
+              return ListTile(
+                onLongPress: () {
+                  setState(() {
+                   provider.iD = userData[index].id;
+                  });
+                  LogoutFun("Are you sure you want to delete this address?");
+                },
+                title: Text(userData[index]['area']),
+                subtitle: Text("Street : " +
+                    userData[index]['street'] +
+                    "\nMobile : " +
+                    userData[index]['phoneNum']),
+                isThreeLine: true,
+              );
+            },
+          );
         },
       ),
     );

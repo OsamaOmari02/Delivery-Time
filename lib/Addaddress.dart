@@ -1,6 +1,8 @@
+import 'package:app/Meals%20+%20addresses.dart';
 import 'package:app/Myprovider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +12,7 @@ class AddAddress extends StatefulWidget {
   @override
   _AddAddressState createState() => _AddAddressState();
 }
+
 class _AddAddressState extends State<AddAddress> {
   var _area = TextEditingController();
   var _street = TextEditingController();
@@ -43,7 +46,9 @@ class _AddAddressState extends State<AddAddress> {
       // initialValue: value,
       controller: value,
       validator: (val) {
-        if (val.toString().isEmpty || !val.toString().startsWith("07") || val!.length!=10)
+        if (val.toString().isEmpty ||
+            !val.toString().startsWith("07") ||
+            val!.length != 10)
           return "Invalid";
         else {
           return null;
@@ -80,32 +85,44 @@ class _AddAddressState extends State<AddAddress> {
             SizedBox(height: 40),
             Container(
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.33,
+                horizontal: MediaQuery.of(context).size.width * 0.33,
               ),
-              child: ElevatedButton(
-                onPressed: () async {
-                  try{
-                    if (_formkey.currentState!.validate()){
-                      var user = FirebaseAuth.instance.currentUser;
-                      await FirebaseFirestore.instance
-                          .collection('/address/${user!.uid}/addresses')
-                          .doc(user.uid).set({
-                        'area' :_area.text,
-                        'street':_street.text,
-                        'phoneNum':_phone.text,
-                        'uid':user.uid,
-                      });
-                      Navigator.of(context).pop();
-                    }
-                  } catch(e){
-                    print(e);
-                  }
-                },
-                child: Text(
-                  "Add",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-              ),
+              child: provider.isLoading
+                  ? Align(
+                      child: CircularProgressIndicator(),
+                      alignment: Alignment.center)
+                  : ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          if (_formkey.currentState!.validate()) {
+                            setState(() {
+                              provider.isLoading = true;
+                            });
+                            provider
+                                .add(_area.text, _street.text, _phone.text)
+                                .then((_) => Navigator.of(context).pop());
+                            setState(() {
+                              provider.isLoading = false;
+                            });
+                          }
+                        } on FirebaseAuthException catch (e) {
+                          print(e.message);
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                        } catch (e) {
+                          print(e);
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                        }
+                      },
+                      child: Text(
+                        "Add",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ),
             ),
           ],
         ),

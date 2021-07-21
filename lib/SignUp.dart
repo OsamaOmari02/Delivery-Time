@@ -232,7 +232,9 @@ class _RegisterViewState extends State<Register> {
                     'password':_passwordController.text,
                     'uid':authres.user!.uid,
                   });
-                  provider.authState = authStatus.Authenticated;
+                  setState(() {
+                    provider.authState = authStatus.Authenticated;
+                  });
                   provider.fetch();
                   Navigator.of(context).pushReplacementNamed('MyHomepage');
           } on FirebaseAuthException catch (e) {

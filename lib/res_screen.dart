@@ -160,7 +160,7 @@ class _FirstState extends State<First> {
                     color: Colors.red,
                   ),
                   onPressed: (){
-                    provider.subtract(1);
+                    provider.subtractPrice(1);
                     setState (()=>_itemCount--);
                     },
                 )
@@ -172,7 +172,7 @@ class _FirstState extends State<First> {
                     color: Colors.green,
                   ),
                   onPressed: () {
-                    provider.add(1);
+                    provider.addPrice(1);
                     setState(() => _itemCount++);
                   }
                 ),
@@ -272,7 +272,7 @@ class _SecondState extends State<Second> {
                     color: Colors.red,
                   ),
                   onPressed: (){
-                    provider.subtract(1);
+                    provider.subtractPrice(1);
                     setState (()=>_itemCount--);
                   },
                 )
@@ -284,7 +284,7 @@ class _SecondState extends State<Second> {
                       color: Colors.green,
                     ),
                     onPressed: () {
-                      provider.add(1);
+                      provider.addPrice(1);
                       setState(() => _itemCount++);
                     }
                 ),
@@ -383,7 +383,7 @@ class _ThirdState extends State<Third> {
                     color: Colors.red,
                   ),
                   onPressed: (){
-                    provider.subtract(1);
+                    provider.subtractPrice(1);
                     setState (()=>_itemCount--);
                   },
                 )
@@ -395,7 +395,7 @@ class _ThirdState extends State<Third> {
                       color: Colors.green,
                     ),
                     onPressed: () {
-                      provider.add(1);
+                      provider.addPrice(1);
                       setState(() => _itemCount++);
                     }
                 ),
