@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:app/Myprovider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,13 +26,16 @@ class _StoreState extends State<Store> {
             // padding: EdgeInsets.only(left: 10),
             IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () {}),
+                onPressed: ()=>Navigator.of(context).pushNamed('admin'),
+                    // showSearch(context: context,
+                    // delegate: Search())
+                ),
           ],
           bottom: TabBar(
             tabs: [
-              Tab(text: "Shawarmah"),
+              Tab(text: "shawarma"),
               Tab(text: "snacks"),
-              Tab(text: "Others"),
+              Tab(text: "others"),
             ],
           ),
         ),
@@ -86,6 +88,33 @@ class _StoreState extends State<Store> {
       ),
     );
   }
+}
+// -------------------------search-----------------------------
+class Search extends SearchDelegate{
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    throw UnimplementedError();
+  }
+  
 }
 
 //-------------------------------1----------------------------
@@ -155,7 +184,7 @@ class _FirstState extends State<First> {
               children: [
                 _itemCount != 0
                     ? IconButton(
-                  icon: Icon(
+                      icon: Icon(
                     Icons.remove,
                     color: Colors.red,
                   ),
@@ -184,18 +213,20 @@ class _FirstState extends State<First> {
     }
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('/restaurants/grill house/shawarmah')
+          .collection('/restaurants/grill house/shawarma')
           .snapshots(),
       builder: (ctx, snapshot) {
         if(!snapshot.hasData)
           return Center(child: CircularProgressIndicator());
-        return ListView.builder(
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, int index) {
-            var resData = snapshot.data!.docs;
-            return theCommodity(resData[index]['meal name']
-                ,resData[index]['price'],res!.uid);
-          },
+        return Scrollbar(
+          child: ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, int index) {
+              var resData = snapshot.data!.docs;
+              return theCommodity(resData[index]['meal name']
+                  ,resData[index]['price'],res!.uid);
+            },
+          ),
         );
       },
     );
@@ -301,14 +332,15 @@ class _SecondState extends State<Second> {
       builder: (ctx, snapshot) {
         if(!snapshot.hasData)
           return Center(child: CircularProgressIndicator());
-        return ListView.builder(
+        return Scrollbar(
+          child: ListView.builder(
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, int index) {
             var resData = snapshot.data!.docs;
             return theCommodity(resData[index]['meal name']
                 ,resData[index]['price'],res!.uid);
           },
-        );
+          ));
       },
     );
   }
@@ -412,13 +444,15 @@ class _ThirdState extends State<Third> {
       builder: (ctx, snapshot) {
         if(!snapshot.hasData)
           return Center(child: CircularProgressIndicator());
-        return ListView.builder(
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, int index) {
-            var resData = snapshot.data!.docs;
-            return theCommodity(resData[index]['meal name']
-                ,resData[index]['price'],res!.uid);
-          },
+        return Scrollbar(
+          child: ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, int index) {
+              var resData = snapshot.data!.docs;
+              return theCommodity(resData[index]['meal name']
+                  ,resData[index]['price'],res!.uid);
+            },
+          ),
         );
       },
     );

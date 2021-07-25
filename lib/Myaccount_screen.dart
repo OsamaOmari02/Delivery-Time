@@ -73,8 +73,8 @@ class _EmailState extends State<Email> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
-    var _email = TextEditingController();
-    var _password = TextEditingController();
+    TextEditingController _email = TextEditingController();
+    TextEditingController _password = TextEditingController();
     dialog(title) {
       return showDialog(
           context: context,
@@ -121,8 +121,9 @@ class _EmailState extends State<Email> {
             SizedBox(height: height * 0.02),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12),
-              child: TextFormField(
+              child: TextField(
                 keyboardType: TextInputType.emailAddress,
+                autofocus: true,
                 controller: _email,
                 decoration: InputDecoration(
                   icon: Icon(
@@ -137,7 +138,7 @@ class _EmailState extends State<Email> {
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12),
-              child: TextFormField(
+              child: TextField(
                 keyboardType: TextInputType.visiblePassword,
                 controller: _password,
                 obscureText: true,
@@ -250,12 +251,14 @@ class _NameState extends State<Name> {
             );
           });
     }
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Change Name"),
           centerTitle: true,
         ),
-        body: ListView(children: [
+        body: ListView(
+            children: [
           SizedBox(height: height * 0.02),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12),

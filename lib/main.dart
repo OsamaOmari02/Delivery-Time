@@ -3,6 +3,7 @@ import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
 import 'package:app/Settings.dart';
+import 'package:app/admin.dart';
 import 'package:app/res_screen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyHomepage(),
+      home: Login(),
       themeMode: Provider.of<MyProvider>(context).isDark?ThemeMode.dark:ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
         'resScreen':(context)=>Store(),
         'Email':(context)=>Email(),
         'Name':(context)=>Name(),
+        'admin':(context)=>Admin(),
+        'edit':(context)=>Edit(),
+        'addMeal':(context)=>AddMeal(),
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -212,25 +216,27 @@ class MyHomepage extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(10),
               height: height * 0.6,
-              child: GridView(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 220,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 18,
-                  childAspectRatio: 3 / 2,
+              child: Scrollbar(
+                child: GridView(
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 220,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 18,
+                    childAspectRatio: 3 / 2,
+                  ),
+                  children: [
+                    content('file/grill_house.jpg', "", Colors.black),
+                    content('file/grill_house.jpg', "", Colors.black),
+                    content('file/grill_house.jpg', "", Colors.black),
+                    content('file/snap_burger.jpg', "", Colors.white),
+                    content('file/grill_house.jpg', "", Colors.black),
+                    content('file/grill_house.jpg', "", Colors.black),
+                    content('file/grill_house.jpg', "", Colors.black),
+                    content('file/دلع_كرشك.jpg', "", Colors.black),
+                    content('file/grill_house.jpg', "", Colors.black),
+                    content('file/grill_house.jpg', "", Colors.black),
+                  ],
                 ),
-                children: [
-                  content('file/grill_house.jpg', "", Colors.black),
-                  content('file/grill_house.jpg', "", Colors.black),
-                  content('file/grill_house.jpg', "", Colors.black),
-                  content('file/snap_burger.jpg', "", Colors.white),
-                  content('file/grill_house.jpg', "", Colors.black),
-                  content('file/grill_house.jpg', "", Colors.black),
-                  content('file/grill_house.jpg', "", Colors.black),
-                  content('file/دلع_كرشك.jpg', "", Colors.black),
-                  content('file/grill_house.jpg', "", Colors.black),
-                  content('file/grill_house.jpg', "", Colors.black),
-                ],
               ),
             )
           ],

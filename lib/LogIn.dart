@@ -224,47 +224,49 @@ class _LoginViewState extends State<Login> {
       ],
     );
 
-    return Scaffold(
-      // backgroundColor: Color.fromRGBO(0, 0, 100, 1).withOpacity(0.65),
-      backgroundColor: Colors.blue,
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(36),
-          child: Container(
-            height: mq.size.height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                SizedBox(height: 40),
-                Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.deepOrange,
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 8,
-                          color: Colors.black,
-                          offset: Offset(0, 2)),
-                    ],
+    return SafeArea(
+      child: Scaffold(
+        // backgroundColor: Color.fromRGBO(0, 0, 100, 1).withOpacity(0.65),
+        backgroundColor: Colors.blue,
+        body: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(36),
+            child: Container(
+              height: mq.size.height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  SizedBox(height: 40),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.deepOrange,
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 8,
+                            color: Colors.black,
+                            offset: Offset(0, 2)),
+                      ],
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+                    child: Text(
+                      "Delivery Time",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 27,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic),
+                    ),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-                  child: Text(
-                    "Delivery Time",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 27,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
+                  fields,
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 150),
+                    child: bottom,
                   ),
-                ),
-                fields,
-                Padding(
-                  padding: EdgeInsets.only(bottom: 150),
-                  child: bottom,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

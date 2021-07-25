@@ -220,17 +220,17 @@ class _RegisterViewState extends State<Register> {
             setState(() {
               provider.authState = authStatus.Authenticating;
             });
-                UserCredential authres = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                UserCredential authRes = await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text,
                 );
                   await FirebaseFirestore.instance.collection('users')
-                      .doc(authres.user!.uid).set({
+                      .doc(authRes.user!.uid).set({
                     'email': _emailController.text.trim(),
                     'phone':_phoneController.text,
                     'username':_usernameController.text,
                     'password':_passwordController.text,
-                    'uid':authres.user!.uid,
+                    'uid':authRes.user!.uid,
                   });
                   setState(() {
                     provider.authState = authStatus.Authenticated;
@@ -242,6 +242,8 @@ class _RegisterViewState extends State<Register> {
             print(e);
              setState(() {
                provider.authState = authStatus.unAuthenticated;
+               _passwordController.clear();
+               _repasswordController.clear();
              });
           } catch (e) {
             print(e);
@@ -317,15 +319,15 @@ class _RegisterViewState extends State<Register> {
                     ],
                   ),
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 70),
-                  child: Text(
-                    "Delivery Time",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 27,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
+                    child: Text(
+                      "Delivery Time",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 27,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic),
+                    ),
                   ),
-                ),
                 fields,
                 Padding(
                   padding: EdgeInsets.only(bottom: 8),

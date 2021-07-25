@@ -59,20 +59,20 @@ class _MyAddressState extends State<MyAddress> {
                           provider.isLoading = true;
                         });
                         Navigator.of(context).pop();
-                        provider.delete();
+                        await provider.delete();
                         setState(() {
                           provider.isLoading = false;
                         });
                       } on FirebaseAuthException catch (e) {
+                        setState(() {
+                          provider.isLoading = false;
+                        });
                         print(e.message);
-                        setState(() {
-                          provider.isLoading = false;
-                        });
                       } catch (e) {
-                        print(e);
                         setState(() {
                           provider.isLoading = false;
                         });
+                        print(e);
                       }
                     }),
                 TextButton(

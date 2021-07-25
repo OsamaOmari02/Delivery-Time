@@ -22,13 +22,14 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
   bool isLoading = false;
+
+
   // ---------------addresses----------------------
   List<Address> loc = [];
 
   Future<void> add(String area, String street, String phone) async {
     var user = FirebaseAuth.instance.currentUser;
     isLoading = true;
-    notifyListeners();
     await FirebaseFirestore.instance
         .collection('/address/${user!.uid}/addresses')
         .add({

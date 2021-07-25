@@ -1,4 +1,3 @@
-import 'package:app/Meals%20+%20addresses.dart';
 import 'package:app/Myprovider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -92,13 +91,13 @@ class _AddAddressState extends State<AddAddress> {
                       child: CircularProgressIndicator(),
                       alignment: Alignment.center)
                   : ElevatedButton(
-                      onPressed: () async {
+                      onPressed: () async{
                         try {
                           if (_formkey.currentState!.validate()) {
                             setState(() {
                               provider.isLoading = true;
                             });
-                            provider
+                            await provider
                                 .add(_area.text, _street.text, _phone.text)
                                 .then((_) => Navigator.of(context).pop());
                             setState(() {
@@ -106,15 +105,15 @@ class _AddAddressState extends State<AddAddress> {
                             });
                           }
                         } on FirebaseAuthException catch (e) {
+                          setState(() {
+                            provider.isLoading = false;
+                          });
                           print(e.message);
-                          setState(() {
-                            provider.isLoading = false;
-                          });
                         } catch (e) {
-                          print(e);
                           setState(() {
                             provider.isLoading = false;
                           });
+                          print(e);
                         }
                       },
                       child: Text(
