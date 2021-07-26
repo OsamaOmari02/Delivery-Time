@@ -56,6 +56,8 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> {
+  TextEditingController _mealName = TextEditingController();
+  TextEditingController _price = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,14 +72,17 @@ class _EditState extends State<Edit> {
             SizedBox(height: 30),
             TextField(
               keyboardType: TextInputType.text,
+              controller: _mealName,
               decoration: InputDecoration(
                 labelText: "Meal Name",
               ),
             ),
             TextFormField(
               keyboardType: TextInputType.number,
+              controller: _price,
               decoration: InputDecoration(
                 labelText: "Meal Price",
+                hintText: "ex: 2.00"
               ),
             ),
             SizedBox(height: 30),
@@ -87,6 +92,10 @@ class _EditState extends State<Edit> {
       ),
     );
   }
+  // User? res = FirebaseAuth.instance.currentUser;
+  // Future editFun() async{
+  //   FirebaseFirestore.instance.collection('/restaurants/${res!.uid}/')
+  // }
 }
 
 //-------------------------addMeal-----------------------------
@@ -96,8 +105,11 @@ class AddMeal extends StatefulWidget {
 }
 
 class _AddMealState extends State<AddMeal> {
+  TextEditingController _mealName = TextEditingController();
+  TextEditingController _price = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Meal"),
@@ -107,26 +119,30 @@ class _AddMealState extends State<AddMeal> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             TextField(
               keyboardType: TextInputType.text,
-              decoration: InputDecoration(
+              controller: _mealName,
+              decoration: const InputDecoration(
                 labelText: "Meal Name",
               ),
             ),
             TextFormField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              controller: _price,
+              decoration: const InputDecoration(
                 labelText: "Meal Price",
+                hintText: "ex: 2.00",
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             ElevatedButton(onPressed: (){}, child: const Text("Add")),
           ],
         ),
       ),
     );
   }
+
 }
 
 //-------------------------------1----------------------------
@@ -136,7 +152,6 @@ class FirstAdmin extends StatefulWidget {
 }
 
 class _FirstAdminState extends State<FirstAdmin> {
-  int _itemCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -203,22 +218,22 @@ class _FirstAdminState extends State<FirstAdmin> {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           alignment: Alignment.bottomLeft,
-                          margin: EdgeInsets.only(top: 17),
+                          margin: const EdgeInsets.only(top: 17),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
                             child: Text(
                               "Price: $price JD",
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.pink),
+                                  const TextStyle(fontSize: 16, color: Colors.pink),
                             ),
                           ),
                         ),
                       ],
                     ),
                     Spacer(),
-                    IconButton(onPressed: dialog, icon: Icon(Icons.delete),color: Colors.red,),
+                    IconButton(onPressed: dialog, icon: const Icon(Icons.delete),color: Colors.red,),
                   ],
                 ),
               ),
@@ -227,7 +242,6 @@ class _FirstAdminState extends State<FirstAdmin> {
         ),
       );
     }
-
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('/restaurants/grill house/shawarma')

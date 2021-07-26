@@ -31,7 +31,6 @@ class _AddAddressState extends State<AddAddress> {
     return TextFormField(
       controller: cont,
       validator: validPass,
-      // initialValue: userAddress,
       decoration: InputDecoration(
         labelText: title,
         contentPadding: EdgeInsets.symmetric(horizontal: 9),
@@ -42,7 +41,6 @@ class _AddAddressState extends State<AddAddress> {
 
   requiredPhone(title, keyboard, value) {
     return TextFormField(
-      // initialValue: value,
       controller: value,
       validator: (val) {
         if (val.toString().isEmpty ||
@@ -53,7 +51,6 @@ class _AddAddressState extends State<AddAddress> {
           return null;
         }
       },
-      // initialValue: userAddress,
       decoration: InputDecoration(
         labelText: title,
         contentPadding: EdgeInsets.symmetric(horizontal: 9),

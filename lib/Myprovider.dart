@@ -73,9 +73,21 @@ class MyProvider with ChangeNotifier {
       isFavourite = !isFavourite;
       notifyListeners();
     }
-
-
-
+    //-----------------------admin----------------------------
+  // Future<void> addMeal(String mealName, String price) async {
+  //   var user = FirebaseAuth.instance.currentUser;
+  //   isLoading = true;
+  //   await FirebaseFirestore.instance
+  //       .collection('/restaurants/${user!.uid}/')
+  //       .add({
+  //     'area': area,
+  //     'street': street,
+  //     'phoneNum': phone,
+  //   }).then((value) {
+  //     loc.add(Address(id: value.id));
+  //     notifyListeners();
+  //   });
+  // }
 
 
     //------------------------auth----------------------
@@ -98,6 +110,8 @@ class MyProvider with ChangeNotifier {
           notifyListeners();
         });
     }
+
+  //  ---------------------------------------------------------------------
 
 
   }

@@ -13,9 +13,9 @@ class MyPassword extends StatefulWidget {
 class _MyPasswordState extends State<MyPassword> {
   bool isVisible = true;
 
-  var myPass = TextEditingController();
-  var myNewPass = TextEditingController();
-  var myNewPassConf = TextEditingController();
+  TextEditingController myPass = TextEditingController();
+  TextEditingController myNewPass = TextEditingController();
+  TextEditingController myNewPassConf = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
