@@ -7,6 +7,7 @@ import 'package:app/admin.dart';
 import 'package:app/res_screen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'Addaddress.dart';
 import 'Drawer.dart';
+import 'LanguageProvider.dart';
 import 'LogIn.dart';
 import 'Myaddress.dart';
 import 'PassWord.dart';
@@ -27,8 +29,11 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(ChangeNotifierProvider(
-    create: (_)=> MyProvider(),
+  runApp(MultiProvider(
+      providers:[
+        ChangeNotifierProvider<MyProvider>(create: (ctx)=>MyProvider()),
+        ChangeNotifierProvider<LanProvider>(create: (ctx)=>LanProvider()),
+      ],
     child: MyApp(),
   ));
 }
@@ -81,7 +86,7 @@ class MyHomepage extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var _provider = Provider.of<MyProvider>(context);
-
+    var lanProvider = Provider.of<LanProvider>(context);
     content(image, title, Color color) {
       return Container(
         decoration: BoxDecoration(
@@ -136,7 +141,7 @@ class MyHomepage extends StatelessWidget {
           )
         ],
         centerTitle: true,
-        title: Text('Home'),
+        title: Text(lanProvider.texts('Drawer1')),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).pushNamed('Shopping'),
@@ -172,7 +177,7 @@ class MyHomepage extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    "Order your food now and enjoy !",
+                    lanProvider.texts('order ur food..'),
                     maxLines: 3,
                     style: TextStyle(
                         fontSize: width * 0.06, fontWeight: FontWeight.bold),
@@ -204,8 +209,8 @@ class MyHomepage extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    "Choose your favorite restaurant !",
-                    maxLines: 3,
+                    lanProvider.texts('choose ur..'),
+                    maxLines: 2,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: width * 0.06),
                   ),

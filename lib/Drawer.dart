@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
+import 'LanguageProvider.dart';
+
 class MyDrawer extends StatelessWidget {
   ListTile listTile(String title, icon, route, BuildContext ctx) {
     return ListTile(
@@ -26,13 +28,14 @@ class MyDrawer extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     LogoutFun() {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
             return AlertDialog(
               title: Text(
-                "Are you sure you want to log out?",
+                lanProvider.texts('log out?'),
                 style: TextStyle(fontSize: 23),
               ),
               contentPadding: EdgeInsets.symmetric(vertical: 7),
@@ -45,7 +48,7 @@ class MyDrawer extends StatelessWidget {
               actions: [
                 InkWell(
                   child: Text(
-                    "Yes",
+                    lanProvider.texts('yes?'),
                     style: TextStyle(fontSize: 19, color: Colors.red),
                   ),
                   onTap: () => FirebaseAuth.instance.signOut().then((_){
@@ -55,7 +58,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 SizedBox(width: 11),
                 InkWell(
-                    child: Text("Cancel", style: TextStyle(fontSize: 19)),
+                    child: Text(lanProvider.texts('cancel?'), style: TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -80,23 +83,23 @@ class MyDrawer extends StatelessWidget {
               Expanded(child: Text('welcome ${provider.authData['name']} !', style: TextStyle(fontSize: 21))),
             ],
           ),
-          listTile("Home", Icons.home, 'MyHomepage', context),
+          listTile(lanProvider.texts('Drawer1'), Icons.home, 'MyHomepage', context),
           Divider(thickness: 1),
-          listTile("Account", Icons.account_circle, 'MyAccount', context),
+          listTile(lanProvider.texts('Drawer2'), Icons.account_circle, 'MyAccount', context),
           Divider(thickness: 1),
-          listTile("Favorites", Icons.favorite, 'MyFavourites', context),
+          listTile(lanProvider.texts('Drawer3'), Icons.favorite, 'MyFavourites', context),
           Divider(thickness: 1),
           listTile(
-              "Addresses", Icons.location_on_outlined, 'MyLocation', context),
+              lanProvider.texts('Drawer4'), Icons.location_on_outlined, 'MyLocation', context),
           Divider(thickness: 1),
-          listTile("History", Icons.access_time_outlined, 'myHistory', context),
+          listTile(lanProvider.texts('Drawer5'), Icons.access_time_outlined, 'myHistory', context),
           Divider(thickness: 1),
-          listTile("Settings", Icons.settings, 'settings', context),
+          listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings', context),
           Divider(thickness: 1),
           ListTile(
             onTap: LogoutFun,
             title: Text(
-              "Log out",
+              lanProvider.texts('Drawer7'),
               style: TextStyle(fontSize: 25,color: Colors.red),
             ),
             leading: Icon(

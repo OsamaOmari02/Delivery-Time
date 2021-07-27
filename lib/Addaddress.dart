@@ -1,7 +1,6 @@
+import 'package:app/LanguageProvider.dart';
 import 'package:app/Myprovider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +15,7 @@ class _AddAddressState extends State<AddAddress> {
   var _area = TextEditingController();
   var _street = TextEditingController();
   var _phone = TextEditingController();
-
+  
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   String? validPass(val) {
@@ -61,23 +60,25 @@ class _AddAddressState extends State<AddAddress> {
 
   @override
   Widget build(BuildContext context) {
+    var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("New Address"),
+        title: Text(lanProvider.texts('new address')),
       ),
       body: Form(
         key: _formkey,
         child: ListView(
           children: [
             SizedBox(height: 20),
-            required("Area (required)", TextInputType.text, _area),
+            required(lanProvider.texts('area'), TextInputType.text, _area),
             SizedBox(height: 20),
-            required("Street (required)", TextInputType.text, _street),
+            required(lanProvider.texts('street'), TextInputType.text, _street),
             SizedBox(height: 20),
             requiredPhone(
-                "Phone Number (required)", TextInputType.number, _phone),
+                lanProvider.texts('phone number'), TextInputType.number, _phone),
             SizedBox(height: 40),
             Container(
               padding: EdgeInsets.symmetric(
@@ -114,7 +115,7 @@ class _AddAddressState extends State<AddAddress> {
                         }
                       },
                       child: Text(
-                        "Add",
+                        lanProvider.texts('add'),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),

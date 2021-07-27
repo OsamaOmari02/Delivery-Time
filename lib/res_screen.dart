@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'LanguageProvider.dart';
+
 class Store extends StatefulWidget {
   @override
   _StoreState createState() => _StoreState();
@@ -16,6 +18,7 @@ class _StoreState extends State<Store> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -33,9 +36,9 @@ class _StoreState extends State<Store> {
           ],
           bottom: TabBar(
             tabs: [
-              Tab(text: "shawarma"),
-              Tab(text: "snacks"),
-              Tab(text: "others"),
+              Tab(text: lanProvider.texts('tab1')),
+              Tab(text: lanProvider.texts('tab2')),
+              Tab(text: lanProvider.texts('tab3')),
             ],
           ),
         ),
@@ -65,12 +68,12 @@ class _StoreState extends State<Store> {
                       Icon(Icons.shopping_basket_outlined,color: Colors.white,),
                       SizedBox(width: 7),
                       Text(
-                        "Food Cart",
+                        lanProvider.texts('food cart'),
                         style: TextStyle(fontSize: 17, color: Colors.white),
                       ),
                       SizedBox(width: width*0.23),
                       Text(
-                        "Total JD",
+                        lanProvider.texts('total'),
                         style: TextStyle(fontSize: 17, color: Colors.white),
                       ),
                       SizedBox(width: 5),
@@ -131,6 +134,7 @@ class _FirstState extends State<First> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     var res = FirebaseAuth.instance.currentUser;
     Card theCommodity(name,price,id) {
       return Card(
@@ -169,7 +173,7 @@ class _FirstState extends State<First> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
                             child: Text(
-                              "Price: $price JD",
+                              "lanProvider.texts('price')+ $price ",
                               style: TextStyle(fontSize: 16, color: Colors.pink),
                             ),
                           ),

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Drawer.dart';
+import 'LanguageProvider.dart';
 import 'Myprovider.dart';
 
 class MyAddress extends StatefulWidget {
@@ -21,6 +22,7 @@ class _MyAddressState extends State<MyAddress> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     var user = FirebaseAuth.instance.currentUser;
     LogoutFun(title) {
       return showDialog(
@@ -52,7 +54,7 @@ class _MyAddressState extends State<MyAddress> {
               ),
               actions: [
                 TextButton(
-                    child: Text("Yes", style: TextStyle(fontSize: 19)),
+                    child: Text(lanProvider.texts('yes?'), style: TextStyle(fontSize: 19)),
                     onPressed: () async {
                       try {
                         setState(() {
@@ -76,7 +78,7 @@ class _MyAddressState extends State<MyAddress> {
                       }
                     }),
                 TextButton(
-                    child: Text("Cancel", style: TextStyle(fontSize: 19)),
+                    child: Text(lanProvider.texts('cancel'), style: TextStyle(fontSize: 19)),
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
@@ -95,7 +97,7 @@ class _MyAddressState extends State<MyAddress> {
             onPressed: () => Navigator.of(context).pushNamed('addAddress'),
           ),
         ],
-        title: Text("My Addresses"),
+        title: Text(lanProvider.texts('my addresses')),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -105,7 +107,7 @@ class _MyAddressState extends State<MyAddress> {
         builder: (ctx, snapshot) {
           if (!snapshot.hasData)
             return Center(
-                child: Text("Add an address",
+                child: Text(lanProvider.texts('new address'),
                     style: TextStyle(color: Colors.grey)));
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -116,7 +118,7 @@ class _MyAddressState extends State<MyAddress> {
                   setState(() {
                    provider.iD = userData[index].id;
                   });
-                  LogoutFun("Are you sure you want to delete this address?");
+                  LogoutFun(lanProvider.texts('delete this address?'));
                 },
                 title: Text(userData[index]['area']),
                 subtitle: Text("Street : " +

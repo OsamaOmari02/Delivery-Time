@@ -8,29 +8,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'LanguageProvider.dart';
+
 class MyAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    var lanProvider = Provider.of<LanProvider>(context);
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-          title: const Text("My Account"),
+          title: Text(lanProvider.texts('my account')),
           centerTitle: true,
           backgroundColor: Colors.blue),
       body: ListView(
         children: [
             SizedBox(height: height * 0.02),
             ListTile(
-              title: const Text("My Email",style: TextStyle(fontSize: 19),),
+              title: Text(lanProvider.texts('my email'),style: TextStyle(fontSize: 19),),
               leading: const Icon(Icons.alternate_email),
               trailing: const Icon(Icons.arrow_forward),
               onTap: ()=>Navigator.of(context).pushNamed('Email'),
             ),
             const Divider(thickness: 1),
             ListTile(
-              title: const Text("My Name",style: TextStyle(fontSize: 19),),
+              title: Text(lanProvider.texts('my name'),style: TextStyle(fontSize: 19),),
               leading: const Icon(Icons.person),
               trailing: const Icon(Icons.arrow_forward),
               onTap: ()=>Navigator.of(context).pushNamed('Name'),
@@ -44,7 +47,7 @@ class MyAccount extends StatelessWidget {
             // ),
             // Divider(thickness: 1),
             ListTile(
-              title: const Text("My Password",style: TextStyle(fontSize: 19),),
+              title: Text(lanProvider.texts('my password'),style: TextStyle(fontSize: 19),),
               leading: const Icon(Icons.password),
               trailing: const Icon(Icons.arrow_forward),
               onTap: ()=>Navigator.of(context).pushNamed('password'),
@@ -70,6 +73,7 @@ class _EmailState extends State<Email> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -100,7 +104,7 @@ class _EmailState extends State<Email> {
               ),
               actions: [
                 TextButton(
-                    child: Text("OK", style: TextStyle(fontSize: 21)),
+                    child: Text('ok', style: TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -108,7 +112,7 @@ class _EmailState extends State<Email> {
     }
     return Scaffold(
         appBar: AppBar(
-          title: Text("Change E-mail"),
+          title: Text(lanProvider.texts('change email')),
           centerTitle: true,
         ),
         body: ListView(
@@ -125,9 +129,8 @@ class _EmailState extends State<Email> {
                     Icons.alternate_email,
                     color: Colors.blue,
                   ),
-                  labelText: "E-mail",
+                  labelText: lanProvider.texts("email"),
                   hintText: provider.authData['email'],
-                  helperText: "Tap two times",
                 ),
               ),
             ),
@@ -142,7 +145,7 @@ class _EmailState extends State<Email> {
                     Icons.password,
                     color: Colors.blue,
                   ),
-                  labelText: "Password",
+                  labelText: lanProvider.texts('pass'),
                 ),
               ),
             ),
@@ -157,9 +160,9 @@ class _EmailState extends State<Email> {
                     onPressed: () async {
                       try{
                         if(_email.text.isEmpty || _password.text.isEmpty) {
-                          return dialog('Empty field!');
+                          return dialog(lanProvider.texts('Empty field'));
                         }  if (_password.text != provider.authData['password']) {
-                          return dialog('Your password is not correct');
+                          return dialog(lanProvider.texts('ur password isnt correct'));
                         } if (_email.text == provider.authData['email']) {
                           return dialog('Your new email must be different than your current email');
                         }
@@ -188,7 +191,7 @@ class _EmailState extends State<Email> {
                         provider.authState=authStatus.unAuthenticated;
                       }
                     },
-                    child: Text("Save & exit",
+                    child: Text(lanProvider.texts('save&exit'),
                         style: TextStyle(fontSize: 18, color: Colors.white)),
                   ),
                 ),
@@ -211,6 +214,7 @@ class _NameState extends State<Name> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -249,7 +253,7 @@ class _NameState extends State<Name> {
     }
     return Scaffold(
         appBar: AppBar(
-          title: Text("Change Name"),
+          title: Text(lanProvider.texts('change name')),
           centerTitle: true,
         ),
         body: ListView(
@@ -264,9 +268,8 @@ class _NameState extends State<Name> {
                       Icons.person,
                       color: Colors.blue,
                     ),
-                    labelText: "Name",
+                    labelText: lanProvider.texts('name'),
                     hintText: provider.authData['name'],
-                    helperText: "Tap two times",
                   ),
                 ),
              TextFormField(
@@ -278,7 +281,7 @@ class _NameState extends State<Name> {
                       Icons.password,
                       color: Colors.blue,
                     ),
-                    labelText: "Password",
+                    labelText: lanProvider.texts('pass'),
                   ),
                 ),
             SizedBox(height: height * 0.06),
@@ -292,9 +295,9 @@ class _NameState extends State<Name> {
                   onPressed: () async {
                     try{
                       if(_myName.text.isEmpty || _password.text.isEmpty) {
-                        return dialog('Empty field!');
+                        return dialog(lanProvider.texts('empty field'));
                       }  if (_password.text != provider.authData['password']) {
-                        return dialog('Your password is not correct');
+                        return dialog(lanProvider.texts('ur password isnt correct'));
                       }
                       if(_myName.text==provider.authData['name']){
                         return dialog('Your new name must be different than your current name');
@@ -324,7 +327,7 @@ class _NameState extends State<Name> {
                       provider.authState=authStatus.unAuthenticated;
                     }
                   },
-                  child: const Text("Save & exit",
+                  child: Text(lanProvider.texts('save&exit'),
                       style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),
@@ -347,6 +350,7 @@ class _PhoneState extends State<Phone> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,

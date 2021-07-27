@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'LanguageProvider.dart';
+
 class MyPassword extends StatefulWidget {
   @override
   _MyPasswordState createState() => _MyPasswordState();
@@ -22,6 +24,7 @@ class _MyPasswordState extends State<MyPassword> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     var user = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
@@ -62,7 +65,7 @@ class _MyPasswordState extends State<MyPassword> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Change password"),
+        title: Text(lanProvider.texts('my password')),
       ),
       body: ListView(
         padding: EdgeInsets.all(10),
@@ -88,7 +91,7 @@ class _MyPasswordState extends State<MyPassword> {
                   Icons.edit,
                   color: Colors.blue,
                 ),
-                labelText: "Current Password",
+                labelText: lanProvider.texts('current pass'),
               ),
             ),
           ),
@@ -102,7 +105,7 @@ class _MyPasswordState extends State<MyPassword> {
                   Icons.edit,
                   color: Colors.blue,
                 ),
-                labelText: "New Password",
+                labelText: lanProvider.texts('new pass'),
               ),
             ),
           ),
@@ -116,7 +119,7 @@ class _MyPasswordState extends State<MyPassword> {
                   Icons.edit,
                   color: Colors.blue,
                 ),
-                labelText: "Confirm Password",
+                labelText: lanProvider.texts('confirm pass'),
               ),
             ),
           ),
@@ -132,15 +135,15 @@ class _MyPasswordState extends State<MyPassword> {
                   try{
                     if(myNewPass.text.isEmpty || myPass.text.isEmpty ||
                         myNewPassConf.text.isEmpty) {
-                      return dialog('Empty field!');
+                      return dialog(lanProvider.texts('empty field'));
                     }  if (myPass.text != provider.authData['password']) {
-                      return dialog('Your current password is not correct');
+                      return dialog(lanProvider.texts('ur password isnt correct'));
                     }
                     if(myNewPassConf.text!=myNewPass.text){
-                      return dialog('The passwords do not match!');
+                      return dialog(lanProvider.texts('passwords dont match'));
                     }
                     if (myNewPass.text.length<6){
-                      return dialog('Password must be at least 6 characters');
+                      return dialog(lanProvider.texts('pass must be 6'));
                     }
                     if (myNewPass.text==provider.authData['password']){
                       return dialog('New password must be different than old password');
@@ -165,7 +168,7 @@ class _MyPasswordState extends State<MyPassword> {
                     provider.authState=authStatus.unAuthenticated;
                   }
                 },
-                child: Text("Save & exit",
+                child: Text(lanProvider.texts('save&exit'),
                     style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ),

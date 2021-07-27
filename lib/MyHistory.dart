@@ -2,8 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'Drawer.dart';
+import 'LanguageProvider.dart';
 
 class History extends StatefulWidget {
   @override
@@ -15,9 +17,10 @@ class _HistoryState extends State<History> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var lanProvider = Provider.of<LanProvider>(context);
     return Scaffold(
       drawer: MyDrawer(),
-      appBar: AppBar(title: Text("Orders History"),centerTitle: true,),
+      appBar: AppBar(title: Text(lanProvider.texts('orders history')),centerTitle: true,),
       body: ListView(
         children: [
 
