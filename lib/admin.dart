@@ -1,3 +1,4 @@
+import 'package:app/LanguageProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,42 +11,47 @@ class Admin extends StatefulWidget {
   @override
   _AdminState createState() => _AdminState();
 }
-
+enum types{
+  shawarma,snacks,others
+}
 class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.redAccent,
-          centerTitle: true,
-          title: Text('restaurant\'s name'),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: "shawarma"),
-              Tab(text: "snacks"),
-              Tab(text: "others"),
-            ],
+    var lanProvider = Provider.of<LanProvider>(context);
+    return Directionality(
+        textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+        child: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.redAccent,
+              centerTitle: true,
+              title: Text('restaurant\'s name'),
+              bottom: TabBar(
+                tabs: [
+                  Tab(text: lanProvider.texts('tab1'),),
+                  Tab(text: lanProvider.texts('tab2')),
+                  Tab(text: lanProvider.texts('tab3')),
+                ],
+              ),
+            ),
+            body: Stack(children: [
+              TabBarView(
+                children: <Widget>[
+                  FirstAdmin(),
+                  SecondAdmin(),
+                  ThirdAdmin(),
+                ],
+              ),
+            ]),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => Navigator.of(context).pushNamed('addMeal'),
+              child: Icon(Icons.add),
+              backgroundColor: Colors.redAccent,
+            ),
           ),
-        ),
-        body: Stack(children: [
-          TabBarView(
-            children: <Widget>[
-              FirstAdmin(),
-              SecondAdmin(),
-              ThirdAdmin(),
-            ],
-          ),
-        ]),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed('addMeal'),
-          child: Icon(Icons.add),
-          backgroundColor: Colors.redAccent,
-        ),
-      ),
-    );
+        ));
   }
 }
 
@@ -56,46 +62,116 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> {
+
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
+  var mealId;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Edit Meal"),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            SizedBox(height: 30),
-            TextField(
-              keyboardType: TextInputType.text,
-              controller: _mealName,
-              decoration: InputDecoration(
-                labelText: "Meal Name",
+    var lanProvider = Provider.of<LanProvider>(context);
+    var provider = Provider.of<MyProvider>(context);
+    dialog(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    title,
+                    textAlign:
+                    lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                    style: TextStyle(fontSize: 23),
+                  ),
+                ],
               ),
-            ),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              controller: _price,
-              decoration: InputDecoration(
-                labelText: "Meal Price",
-                hintText: "ex: 2.00"
+              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
               ),
+              actions: [
+                InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(lanProvider.texts('ok'),
+                          style: TextStyle(fontSize: 19, color: Colors.blue)),
+                    ),
+                    onTap: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
+    return Directionality(
+        textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(lanProvider.texts('edit meal')),
+            centerTitle: true,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+                TextField(
+                  keyboardType: TextInputType.text,
+                  controller: _mealName,
+                  decoration: InputDecoration(
+                    labelText: lanProvider.texts('meal name'),
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: _price,
+                  decoration: InputDecoration(
+                      labelText: lanProvider.texts('meal price'),
+                      hintText: "ex: 2.00"),
+                ),
+                SizedBox(height: 30),
+                if (provider.isLoading) Center(child: CircularProgressIndicator()),
+                if (!provider.isLoading)
+                ElevatedButton(
+                    onPressed: () async{
+                      try{
+                        setState(() {
+                            provider.isLoading= true;
+                        });
+                        await provider.editMeal(_mealName.text, _price.text, "shawarma");
+                        Navigator.of(context).pop();
+                        setState(() {
+                          provider.isLoading= false;
+                        });
+                      } on FirebaseException catch (e){
+                        setState(() {
+                          provider.isLoading= false;
+                        });
+                        dialog(e.message);
+                      } catch (e){
+                        setState(() {
+                          provider.isLoading= false;
+                        });
+                        dialog('error !');
+                      }
+                    },
+                    child: Text(lanProvider.texts('save'))),
+              ],
             ),
-            SizedBox(height: 30),
-            ElevatedButton(onPressed: (){}, child: Text("Save")),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
-  // User? res = FirebaseAuth.instance.currentUser;
-  // Future editFun() async{
-  //   FirebaseFirestore.instance.collection('/restaurants/${res!.uid}/')
-  // }
+// User? res = FirebaseAuth.instance.currentUser;
+// Future editFun() async{
+//   FirebaseFirestore.instance.collection('/restaurants/${res!.uid}/')
+// }
 }
 
 //-------------------------addMeal-----------------------------
@@ -107,66 +183,31 @@ class AddMeal extends StatefulWidget {
 class _AddMealState extends State<AddMeal> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var user = FirebaseAuth.instance.currentUser;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Add Meal"),
-        centerTitle: true,
-      ),
-      body:  Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            TextField(
-              keyboardType: TextInputType.text,
-              controller: _mealName,
-              decoration: const InputDecoration(
-                labelText: "Meal Name",
-              ),
-            ),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              controller: _price,
-              decoration: const InputDecoration(
-                labelText: "Meal Price",
-                hintText: "ex: 2.00",
-              ),
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton(onPressed: (){}, child: const Text("Add")),
-          ],
-        ),
-      ),
-    );
-  }
-
-}
-
-//-------------------------------1----------------------------
-class FirstAdmin extends StatefulWidget {
-  @override
-  _FirstAdminState createState() => _FirstAdminState();
-}
-
-class _FirstAdminState extends State<FirstAdmin> {
-
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
-    var res = FirebaseAuth.instance.currentUser;
-    dialog() {
+    dialog(title) {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
             return AlertDialog(
-              title: const Text(
-                "Are you sure you want to delete this meal?",
-                style: TextStyle(fontSize: 23),
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    title,
+                    textAlign:
+                        lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                    style: TextStyle(fontSize: 23),
+                  ),
+                ],
               ),
               contentPadding: EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
@@ -177,71 +218,122 @@ class _FirstAdminState extends State<FirstAdmin> {
               ),
               actions: [
                 InkWell(
-                  child: const Text(
-                    "Yes",
-                    style: TextStyle(fontSize: 19, color: Colors.red),
-                  ),
-                  onTap: (){},
-                ),
-                SizedBox(width: 11),
-                InkWell(
-                    child: const Text("Cancel", style: TextStyle(fontSize: 19)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(lanProvider.texts('ok'),
+                          style: TextStyle(fontSize: 19, color: Colors.blue)),
+                    ),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
           });
     }
-    Card theCommodity(name, price, id) {
-      return Card(
-        key: Key(id),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: Row(
-                  children: [
-                    IconButton(onPressed: ()=>
-                        Navigator.of(context).pushNamed('edit'),
-                      icon: Icon(Icons.edit),color: Colors.blue,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 20),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            name,
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w800),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          alignment: Alignment.bottomLeft,
-                          margin: const EdgeInsets.only(top: 17),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 7),
-                            child: Text(
-                              "Price: $price JD",
-                              style:
-                                  const TextStyle(fontSize: 16, color: Colors.pink),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    IconButton(onPressed: dialog, icon: const Icon(Icons.delete),color: Colors.red,),
-                  ],
+
+    return Directionality(
+      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(lanProvider.texts('add meal')),
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 30),
+              TextField(
+                keyboardType: TextInputType.text,
+                controller: _mealName,
+                decoration: InputDecoration(
+                  labelText: lanProvider.texts('add meal'),
                 ),
               ),
-            ),
-          ],
+              TextFormField(
+                keyboardType: TextInputType.number,
+                controller: _price,
+                decoration: InputDecoration(
+                  labelText: lanProvider.texts('meal price'),
+                  hintText: "ex: 2.00",
+                ),
+              ),
+              const SizedBox(height: 30),
+              if (provider.isLoading)
+                Center(child: CircularProgressIndicator()),
+              if (!provider.isLoading)
+                ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        if (_mealName.text.isEmpty || _price.text.isEmpty)
+                          return dialog(lanProvider.texts('empty field'));
+                        setState(() {
+                          provider.isLoading = true;
+                        });
+                        await provider.addMeal(
+                            _mealName.text, _price.text, "shawarma");
+                        Navigator.of(context).pop();
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                      } on FirebaseException catch (e) {
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                        return dialog(e.message);
+                      } catch (e) {
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                        return dialog('error!');
+                      }
+                    },
+                    child: Text(lanProvider.texts('add'))),
+            ],
+          ),
         ),
-      );
+      ),
+    );
+  }
+}
+
+//-------------------------------1----------------------------
+class FirstAdmin extends StatefulWidget {
+  @override
+  _FirstAdminState createState() => _FirstAdminState();
+}
+
+class _FirstAdminState extends State<FirstAdmin> {
+  @override
+  Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
+    dialog(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                title,
+                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                style: TextStyle(fontSize: 23),
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                SizedBox(width: 11),
+                InkWell(
+                    child: Text(lanProvider.texts('ok'),
+                        style: TextStyle(fontSize: 19)),
+                    onTap: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
     }
+
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('/restaurants/grill house/shawarma')
@@ -254,8 +346,140 @@ class _FirstAdminState extends State<FirstAdmin> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
-              return theCommodity(resData[index]['meal name'],
-                  resData[index]['price'], res!.uid);
+              return Card(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  provider.mealID = resData[index].id;
+                                });
+                                Navigator.of(context).pushNamed('edit');
+                              },
+                              icon: Icon(Icons.edit),
+                              color: Colors.blue,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: 20),
+                                Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    resData[index]['meal name'],
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 17),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 7),
+                                    child: Text(
+                                      lanProvider.texts('price') +
+                                          " " +
+                                          resData[index]['meal price'] +
+                                          " " +
+                                          lanProvider.texts('jd'),
+                                      style: const TextStyle(
+                                          fontSize: 16, color: Colors.pink),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (BuildContext ctx) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        lanProvider.texts('delete this meal?'),
+                                        textAlign: lanProvider.isEn
+                                            ? TextAlign.start
+                                            : TextAlign.end,
+                                        style: TextStyle(fontSize: 23),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(vertical: 7),
+                                      elevation: 24,
+                                      content: Container(
+                                        height: 30,
+                                        child: const Divider(),
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                      actions: [
+                                        if (provider.isLoading)
+                                          Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                        if (!provider.isLoading)
+                                          InkWell(
+                                            child: Text(
+                                              lanProvider.texts('yes?'),
+                                              style: TextStyle(
+                                                  fontSize: 19,
+                                                  color: Colors.red),
+                                            ),
+                                            onTap: () async {
+                                              try {
+                                                setState(() {
+                                                  provider.mealID =
+                                                      resData[index].id;
+                                                  provider.isLoading = true;
+                                                });
+                                                await provider
+                                                    .deleteMeal("shawarma");
+                                                Navigator.of(context).pop();
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                              } on FirebaseException catch (e) {
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                                return dialog(e.message);
+                                              } catch (e) {
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                                dialog('error!');
+                                              }
+                                            },
+                                          ),
+                                        SizedBox(width: 11),
+                                        if (!provider.isLoading)
+                                          InkWell(
+                                              child: Text(
+                                                  lanProvider.texts('cancel?'),
+                                                  style:
+                                                      TextStyle(fontSize: 19)),
+                                              onTap: () =>
+                                                  Navigator.of(context).pop()),
+                                      ],
+                                    );
+                                  }),
+                              icon: const Icon(Icons.delete),
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         );
@@ -271,96 +495,36 @@ class SecondAdmin extends StatefulWidget {
 }
 
 class _SecondAdminState extends State<SecondAdmin> {
-  int _itemCount = 0;
-
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
-    var res = FirebaseAuth.instance.currentUser;
-    dialog() {
+    var lanProvider = Provider.of<LanProvider>(context);
+    dialog(title) {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
             return AlertDialog(
-              title: const Text(
-                "Are you sure you want to delete this meal?",
+              title: Text(
+                title,
+                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
                 style: TextStyle(fontSize: 23),
               ),
               contentPadding: EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
-                InkWell(
-                  child: const Text(
-                    "Yes",
-                    style: TextStyle(fontSize: 19, color: Colors.red),
-                  ),
-                  onTap: (){},
-                ),
                 SizedBox(width: 11),
                 InkWell(
-                    child: const Text("Cancel", style: TextStyle(fontSize: 19)),
+                    child: Text(lanProvider.texts('ok'),
+                        style: TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
           });
-    }
-    Card theCommodity(name, price, id) {
-      return Card(
-        key: Key(id),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: Row(
-                  children: [
-                    IconButton(onPressed: ()=>
-                        Navigator.of(context).pushNamed('edit'),
-                      icon: Icon(Icons.edit),color: Colors.blue,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 20),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            name,
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w800),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          alignment: Alignment.bottomLeft,
-                          margin: EdgeInsets.only(top: 17),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 7),
-                            child: Text(
-                              "Price: $price JD",
-                              style:
-                              TextStyle(fontSize: 16, color: Colors.pink),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    IconButton(onPressed: dialog, icon: Icon(Icons.delete),color: Colors.red,),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
     }
 
     return StreamBuilder<QuerySnapshot>(
@@ -371,14 +535,147 @@ class _SecondAdminState extends State<SecondAdmin> {
         if (!snapshot.hasData)
           return Center(child: CircularProgressIndicator());
         return Scrollbar(
-            child: ListView.builder(
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, int index) {
-            var resData = snapshot.data!.docs;
-            return theCommodity(
-                resData[index]['meal name'], resData[index]['price'], res!.uid);
-          },
-        ));
+          child: ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, int index) {
+              var resData = snapshot.data!.docs;
+              return Card(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  provider.mealID = resData[index].id;
+                                });
+                                Navigator.of(context).pushNamed('edit');
+                              },
+                              icon: Icon(Icons.edit),
+                              color: Colors.blue,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: 20),
+                                Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    resData[index]['meal name'],
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 17),
+                                  child: Padding(
+                                    padding:
+                                    const EdgeInsets.symmetric(vertical: 7),
+                                    child: Text(
+                                      lanProvider.texts('price') +
+                                          " " +
+                                          resData[index]['meal price'] +
+                                          " " +
+                                          lanProvider.texts('jd'),
+                                      style: const TextStyle(
+                                          fontSize: 16, color: Colors.pink),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (BuildContext ctx) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        lanProvider.texts('delete this meal?'),
+                                        textAlign: lanProvider.isEn
+                                            ? TextAlign.start
+                                            : TextAlign.end,
+                                        style: TextStyle(fontSize: 23),
+                                      ),
+                                      contentPadding:
+                                      EdgeInsets.symmetric(vertical: 7),
+                                      elevation: 24,
+                                      content: Container(
+                                        height: 30,
+                                        child: const Divider(),
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                      actions: [
+                                        if (provider.isLoading)
+                                          Center(
+                                              child:
+                                              CircularProgressIndicator()),
+                                        if (!provider.isLoading)
+                                          InkWell(
+                                            child: Text(
+                                              lanProvider.texts('yes?'),
+                                              style: TextStyle(
+                                                  fontSize: 19,
+                                                  color: Colors.red),
+                                            ),
+                                            onTap: () async {
+                                              try {
+                                                setState(() {
+                                                  provider.mealID =
+                                                      resData[index].id;
+                                                  provider.isLoading = true;
+                                                });
+                                                await provider
+                                                    .deleteMeal('snacks');
+                                                Navigator.of(context).pop();
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                              } on FirebaseException catch (e) {
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                                return dialog(e.message);
+                                              } catch (e) {
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                                dialog('error!');
+                                              }
+                                            },
+                                          ),
+                                        SizedBox(width: 11),
+                                        if (!provider.isLoading)
+                                          InkWell(
+                                              child: Text(
+                                                  lanProvider.texts('cancel?'),
+                                                  style:
+                                                  TextStyle(fontSize: 19)),
+                                              onTap: () =>
+                                                  Navigator.of(context).pop()),
+                                      ],
+                                    );
+                                  }),
+                              icon: const Icon(Icons.delete),
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
       },
     );
   }
@@ -395,92 +692,34 @@ class _ThirdAdminState extends State<ThirdAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
-    var res = FirebaseAuth.instance.currentUser;
-    dialog() {
+    var lanProvider = Provider.of<LanProvider>(context);
+    dialog(title) {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
             return AlertDialog(
-              title: const Text(
-                "Are you sure you want to delete this meal?",
+              title: Text(
+                title,
+                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
                 style: TextStyle(fontSize: 23),
               ),
               contentPadding: EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
-                InkWell(
-                  child: const Text(
-                    "Yes",
-                    style: TextStyle(fontSize: 19, color: Colors.red),
-                  ),
-                  onTap: (){},
-                ),
                 SizedBox(width: 11),
                 InkWell(
-                    child: const Text("Cancel", style: TextStyle(fontSize: 19)),
+                    child: Text(lanProvider.texts('ok'),
+                        style: TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
           });
-    }
-    Card theCommodity(name, price, id) {
-      return Card(
-        key: Key(id),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: Row(
-                  children: [
-                    IconButton(onPressed: ()=>
-                        Navigator.of(context).pushNamed('edit'),
-                      icon: Icon(Icons.edit),color: Colors.blue,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 20),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            name,
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w800),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          alignment: Alignment.bottomLeft,
-                          margin: EdgeInsets.only(top: 17),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 7),
-                            child: Text(
-                              "Price: $price JD",
-                              style:
-                              TextStyle(fontSize: 16, color: Colors.pink),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    IconButton(onPressed: dialog, icon: Icon(Icons.delete),color: Colors.red,),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
     }
 
     return StreamBuilder<QuerySnapshot>(
@@ -495,8 +734,140 @@ class _ThirdAdminState extends State<ThirdAdmin> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
-              return theCommodity(resData[index]['meal name'],
-                  resData[index]['price'], res!.uid);
+              return Card(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  provider.mealID = resData[index].id;
+                                });
+                                Navigator.of(context).pushNamed('edit');
+                              },
+                              icon: Icon(Icons.edit),
+                              color: Colors.blue,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: 20),
+                                Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    resData[index]['meal name'],
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 17),
+                                  child: Padding(
+                                    padding:
+                                    const EdgeInsets.symmetric(vertical: 7),
+                                    child: Text(
+                                      lanProvider.texts('price') +
+                                          " " +
+                                          resData[index]['meal price'] +
+                                          " " +
+                                          lanProvider.texts('jd'),
+                                      style: const TextStyle(
+                                          fontSize: 16, color: Colors.pink),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (BuildContext ctx) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        lanProvider.texts('delete this meal?'),
+                                        textAlign: lanProvider.isEn
+                                            ? TextAlign.start
+                                            : TextAlign.end,
+                                        style: TextStyle(fontSize: 23),
+                                      ),
+                                      contentPadding:
+                                      EdgeInsets.symmetric(vertical: 7),
+                                      elevation: 24,
+                                      content: Container(
+                                        height: 30,
+                                        child: const Divider(),
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                      actions: [
+                                        if (provider.isLoading)
+                                          Center(
+                                              child:
+                                              CircularProgressIndicator()),
+                                        if (!provider.isLoading)
+                                          InkWell(
+                                            child: Text(
+                                              lanProvider.texts('yes?'),
+                                              style: TextStyle(
+                                                  fontSize: 19,
+                                                  color: Colors.red),
+                                            ),
+                                            onTap: () async {
+                                              try {
+                                                setState(() {
+                                                  provider.mealID =
+                                                      resData[index].id;
+                                                  provider.isLoading = true;
+                                                });
+                                                await provider
+                                                    .deleteMeal("others");
+                                                Navigator.of(context).pop();
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                              } on FirebaseException catch (e) {
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                                return dialog(e.message);
+                                              } catch (e) {
+                                                setState(() {
+                                                  provider.isLoading = false;
+                                                });
+                                                dialog('error!');
+                                              }
+                                            },
+                                          ),
+                                        SizedBox(width: 11),
+                                        if (!provider.isLoading)
+                                          InkWell(
+                                              child: Text(
+                                                  lanProvider.texts('cancel?'),
+                                                  style:
+                                                  TextStyle(fontSize: 19)),
+                                              onTap: () =>
+                                                  Navigator.of(context).pop()),
+                                      ],
+                                    );
+                                  }),
+                              icon: const Icon(Icons.delete),
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         );

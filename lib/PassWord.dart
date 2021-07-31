@@ -63,116 +63,119 @@ class _MyPasswordState extends State<MyPassword> {
           });
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(lanProvider.texts('my password')),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(10),
-        children: [
-          SizedBox(height: height * 0.005),
-          Container(
-            child: TextField(
-              controller: myPass,
-              obscureText: isVisible,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isVisible = !isVisible;
-                    });
-                  },
-                  icon: Icon(isVisible == true
-                      ? Icons.visibility
-                      : Icons.visibility_off),
-                ),
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.blue,
-                ),
-                labelText: lanProvider.texts('current pass'),
-              ),
-            ),
-          ),
-          Container(
-            child: TextField(
-              obscureText: true,
-              controller: myNewPass,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: InputDecoration(
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.blue,
-                ),
-                labelText: lanProvider.texts('new pass'),
-              ),
-            ),
-          ),
-          Container(
-            child: TextField(
-              obscureText: true,
-              controller: myNewPassConf,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: InputDecoration(
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.blue,
-                ),
-                labelText: lanProvider.texts('confirm pass'),
-              ),
-            ),
-          ),
-          SizedBox(height: height * 0.06),
-          if(provider.authState==authStatus.Authenticating)
-            Container(child: CircularProgressIndicator(),
-              alignment: Alignment.center),
-          if(provider.authState!=authStatus.Authenticating)
+    return Directionality(
+      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(lanProvider.texts('my password')),
+        ),
+        body: ListView(
+          padding: EdgeInsets.all(10),
+          children: [
+            SizedBox(height: height * 0.005),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: width*0.26),
-              child: ElevatedButton(
-                onPressed: () async {
-                  try{
-                    if(myNewPass.text.isEmpty || myPass.text.isEmpty ||
-                        myNewPassConf.text.isEmpty) {
-                      return dialog(lanProvider.texts('empty field'));
-                    }  if (myPass.text != provider.authData['password']) {
-                      return dialog(lanProvider.texts('ur password isnt correct'));
-                    }
-                    if(myNewPassConf.text!=myNewPass.text){
-                      return dialog(lanProvider.texts('passwords dont match'));
-                    }
-                    if (myNewPass.text.length<6){
-                      return dialog(lanProvider.texts('pass must be 6'));
-                    }
-                    if (myNewPass.text==provider.authData['password']){
-                      return dialog('New password must be different than old password');
-                    }
-                    setState(() {
-                      provider.authState=authStatus.Authenticating;
-                    });
-                    await
-                    FirebaseAuth.instance.currentUser!.updatePassword(myNewPass.text);
-                    await
-                    FirebaseFirestore.instance.collection('users')
-                        .doc(user!.uid)
-                        .update({'password':myNewPass.text});
-                    setState(() {
-                      provider.authData['password'] = myNewPass.text;
-                      provider.authState=authStatus.Authenticated;
-                    });
-                    Navigator.of(context).pop('password');
-                  }catch(e)
-                  {
-                    print(e);
-                    provider.authState=authStatus.unAuthenticated;
-                  }
-                },
-                child: Text(lanProvider.texts('save&exit'),
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
+              child: TextField(
+                controller: myPass,
+                obscureText: isVisible,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isVisible = !isVisible;
+                      });
+                    },
+                    icon: Icon(isVisible == true
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                  ),
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.blue,
+                  ),
+                  labelText: lanProvider.texts('current pass'),
+                ),
               ),
             ),
-        ],
+            Container(
+              child: TextField(
+                obscureText: true,
+                controller: myNewPass,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.blue,
+                  ),
+                  labelText: lanProvider.texts('new pass'),
+                ),
+              ),
+            ),
+            Container(
+              child: TextField(
+                obscureText: true,
+                controller: myNewPassConf,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.blue,
+                  ),
+                  labelText: lanProvider.texts('confirm pass'),
+                ),
+              ),
+            ),
+            SizedBox(height: height * 0.06),
+            if(provider.authState==authStatus.Authenticating)
+              Container(child: CircularProgressIndicator(),
+                alignment: Alignment.center),
+            if(provider.authState!=authStatus.Authenticating)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: width*0.26),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try{
+                      if(myNewPass.text.isEmpty || myPass.text.isEmpty ||
+                          myNewPassConf.text.isEmpty) {
+                        return dialog(lanProvider.texts('empty field'));
+                      }  if (myPass.text != provider.authData['password']) {
+                        return dialog(lanProvider.texts('ur password isnt correct'));
+                      }
+                      if(myNewPassConf.text!=myNewPass.text){
+                        return dialog(lanProvider.texts('passwords dont match'));
+                      }
+                      if (myNewPass.text.length<6){
+                        return dialog(lanProvider.texts('pass must be 6'));
+                      }
+                      if (myNewPass.text==provider.authData['password']){
+                        return dialog('New password must be different than old password');
+                      }
+                      setState(() {
+                        provider.authState=authStatus.Authenticating;
+                      });
+                      await
+                      FirebaseAuth.instance.currentUser!.updatePassword(myNewPass.text);
+                      await
+                      FirebaseFirestore.instance.collection('users')
+                          .doc(user!.uid)
+                          .update({'password':myNewPass.text});
+                      setState(() {
+                        provider.authData['password'] = myNewPass.text;
+                        provider.authState=authStatus.Authenticated;
+                      });
+                      Navigator.of(context).pop('password');
+                    }catch(e)
+                    {
+                      print(e);
+                      provider.authState=authStatus.unAuthenticated;
+                    }
+                  },
+                  child: Text(lanProvider.texts('save&exit'),
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

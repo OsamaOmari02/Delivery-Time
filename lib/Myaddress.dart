@@ -60,8 +60,8 @@ class _MyAddressState extends State<MyAddress> {
                         setState(() {
                           provider.isLoading = true;
                         });
-                        Navigator.of(context).pop();
                         await provider.delete();
+                        Navigator.of(context).pop();
                         setState(() {
                           provider.isLoading = false;
                         });
@@ -78,7 +78,7 @@ class _MyAddressState extends State<MyAddress> {
                       }
                     }),
                 TextButton(
-                    child: Text(lanProvider.texts('cancel'), style: TextStyle(fontSize: 19)),
+                    child: Text(lanProvider.texts('cancel?'), style: TextStyle(fontSize: 19)),
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
@@ -87,49 +87,52 @@ class _MyAddressState extends State<MyAddress> {
           });
     }
 
-    return Scaffold(
-      drawer: MyDrawer(),
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: provider.isLoading ? CircularProgressIndicator()
-                : Icon(Icons.add),
-            onPressed: () => Navigator.of(context).pushNamed('addAddress'),
-          ),
-        ],
-        title: Text(lanProvider.texts('my addresses')),
-        centerTitle: true,
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('/address/${user!.uid}/addresses')
-            .snapshots(),
-        builder: (ctx, snapshot) {
-          if (!snapshot.hasData)
-            return Center(
-                child: Text(lanProvider.texts('new address'),
-                    style: TextStyle(color: Colors.grey)));
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              var userData = snapshot.data!.docs;
-              return ListTile(
-                onLongPress: () {
-                  setState(() {
-                   provider.iD = userData[index].id;
-                  });
-                  LogoutFun(lanProvider.texts('delete this address?'));
-                },
-                title: Text(userData[index]['area']),
-                subtitle: Text("Street : " +
-                    userData[index]['street'] +
-                    "\nMobile : " +
-                    userData[index]['phoneNum']),
-                isThreeLine: true,
-              );
-            },
-          );
-        },
+    return Directionality(
+      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        drawer: MyDrawer(),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: provider.isLoading ? CircularProgressIndicator()
+                  : Icon(Icons.add),
+              onPressed: () => Navigator.of(context).pushNamed('addAddress'),
+            ),
+          ],
+          title: Text(lanProvider.texts('my addresses')),
+          centerTitle: true,
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('/address/${user!.uid}/addresses')
+              .snapshots(),
+          builder: (ctx, snapshot) {
+            if (!snapshot.hasData)
+              return Center(
+                  child: Text(lanProvider.texts('new address'),
+                      style: TextStyle(color: Colors.grey)));
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                var userData = snapshot.data!.docs;
+                return ListTile(
+                  onLongPress: () {
+                    setState(() {
+                     provider.iD = userData[index].id;
+                    });
+                    LogoutFun(lanProvider.texts('delete this address?'));
+                  },
+                  title: Text(userData[index]['area']),
+                  subtitle: Text(lanProvider.texts('street:') +
+                      userData[index]['street'] +
+                      "\n" + lanProvider.texts('phone:') +
+                      userData[index]['phoneNum']),
+                  isThreeLine: true,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class LanProvider with ChangeNotifier{
   bool isEn = true;
@@ -37,7 +38,9 @@ class LanProvider with ChangeNotifier{
     'street':'الشارع (مطلوب)',
     'street:':'الشارع: ',
     'phone number':'رقم الهاتف (مطلوب)',
+    'phone:':'رقم الهاتف: ',
     'add':'اضافه',
+    'save':'احفظ',
     'orders history':'طلباتي',
     'language':'اللغة',
     'dark mode':'الوضع الليلي',
@@ -48,9 +51,9 @@ class LanProvider with ChangeNotifier{
     'tab2':'سناكات',
     'tab3':'غير ذلك',
     'food cart':'سله الطعام',
-    'total':'المجموع د.أ',
+    'total':'المجموع',
     'jd':'د.أ',
-    'price':'السعر',
+    'price':'السعر:',
     'log out?':'هل تريد تسجيل الخروج؟',
     'clear everything?':'احذف كل شيء؟',
     'yes?':'نعم',
@@ -60,6 +63,11 @@ class LanProvider with ChangeNotifier{
     'empty field':'حقل فارغ !',
     'pass must be 6':'كلمة المرور يجب ان تكون على الاقل 6 حروف !',
     'passwords dont match':'كلمات المرور لا يتطابقان !',
+    'delete this meal?':'هل تريد حذف هذه الوجبه ؟',
+    'edit meal':'تغيير الوجبة',
+    'meal name':'اسم الوجبة',
+    'meal price':'سعر الوجبة',
+    'add meal':'اضافة وجبة جديدة',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -94,7 +102,9 @@ class LanProvider with ChangeNotifier{
     'street':'Street (required)',
     'street:':'street: ',
     'phone number':'Phone Number (required)',
+    'phone:':'Mobile: ',
     'add':'Add',
+    'save':'Save',
     'orders history':'Orders History',
     'language':'Language',
     'dark mode':'Dark Mode',
@@ -104,9 +114,9 @@ class LanProvider with ChangeNotifier{
     'tab2':'Snacks',
     'tab3':'Others',
     'food cart':'Food Cart',
-    'total':'Total JD',
+    'total':'Total',
     'jd':'JD',
-    'price':'Price',
+    'price':'Price:',
     'log out?':'Are you sure you want to log out ?',
     'clear everything?':'Clear everything ?',
     'yes?':'Yes',
@@ -116,6 +126,11 @@ class LanProvider with ChangeNotifier{
     'empty field':'Empty field !',
     'pass must be 6':'Password must be at least 6 characters !',
     'passwords dont match':'The passwords do not match !',
+    'delete this meal?':'Are you sure you want to delete this meal ?',
+    'edit meal':'Edit Meal',
+    'meal name':'Meal Name',
+    'meal price':'Meal Price',
+    'add meal':'Add Meal',
   };
 
   void changeLan(bool lan){

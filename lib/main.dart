@@ -7,7 +7,6 @@ import 'package:app/admin.dart';
 import 'package:app/res_screen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -128,123 +127,126 @@ class MyHomepage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      drawer: MyDrawer(),
-      appBar: AppBar(
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.search),
-            ),
-          )
-        ],
-        centerTitle: true,
-        title: Text(lanProvider.texts('Drawer1')),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed('Shopping'),
-        child: Icon(Icons.shopping_basket_outlined),
-        backgroundColor: Theme.of(context).accentColor,
-      ),
-      body: Container(
-        alignment: Alignment.center,
-        child: ListView(
-          children: [
-            SizedBox(
-              height: height * 0.3,
-              width: double.infinity,
-              child: Carousel(
-                images: <Widget>[
-                  Image.asset(_provider.imageFun[0], fit: BoxFit.cover),
-                  Image.asset(_provider.imageFun[1], fit: BoxFit.cover),
-                  Image.asset(_provider.imageFun[2], fit: BoxFit.cover),
-                ],
-                dotColor: Colors.white,
-                dotSize: 5,
-                dotSpacing: 20,
-                dotIncreasedColor: Colors.black,
-                showIndicator: true,
-                autoplayDuration: const Duration(seconds: 1, milliseconds: 600),
-              ),
-            ),
-            SizedBox(height: height * 0.03),
-            Row(
-              children: [
-                SizedBox(
-                  width: width * 0.03,
-                ),
-                Expanded(
-                  child: Text(
-                    lanProvider.texts('order ur food..'),
-                    maxLines: 3,
-                    style: TextStyle(
-                        fontSize: width * 0.06, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: height * 0.02),
-            Container(
-              height: height * 0.24,
-              width: double.infinity,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  funImage('file/shawarmah.jpg', "Shawarmah"),
-                  funImage('file/fahita.jpg', "Fahita"),
-                  funImage('file/burger.jpg', "Burgers"),
-                  funImage('file/grill_house.jpg', "Extra"),
-                  funImage('file/دلع_كرشك.jpg', "Extra"),
-                  funImage('file/snap_burger.jpg', "Extra"),
-                ],
-              ),
-            ),
-            SizedBox(height: height * 0.01),
-            Row(
-              children: [
-                SizedBox(
-                  width: width * 0.03,
-                ),
-                Expanded(
-                  child: Text(
-                    lanProvider.texts('choose ur..'),
-                    maxLines: 2,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: width * 0.06),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: height * 0.02),
-            Container(
-              padding: EdgeInsets.all(10),
-              height: height * 0.6,
-              child: Scrollbar(
-                child: GridView(
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 220,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 18,
-                    childAspectRatio: 3 / 2,
-                  ),
-                  children: [
-                    content('file/grill_house.jpg', "", Colors.black),
-                    content('file/grill_house.jpg', "", Colors.black),
-                    content('file/grill_house.jpg', "", Colors.black),
-                    content('file/snap_burger.jpg', "", Colors.white),
-                    content('file/grill_house.jpg', "", Colors.black),
-                    content('file/grill_house.jpg', "", Colors.black),
-                    content('file/grill_house.jpg', "", Colors.black),
-                    content('file/دلع_كرشك.jpg', "", Colors.black),
-                    content('file/grill_house.jpg', "", Colors.black),
-                    content('file/grill_house.jpg', "", Colors.black),
-                  ],
-                ),
+    return Directionality(
+      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        drawer: MyDrawer(),
+        appBar: AppBar(
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.search),
               ),
             )
           ],
+          centerTitle: true,
+          title: Text(lanProvider.texts('Drawer1')),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.of(context).pushNamed('Shopping'),
+          child: Icon(Icons.shopping_basket_outlined),
+          backgroundColor: Theme.of(context).accentColor,
+        ),
+        body: Container(
+          alignment: Alignment.center,
+          child: ListView(
+            children: [
+              SizedBox(
+                height: height * 0.3,
+                width: double.infinity,
+                child: Carousel(
+                  images: <Widget>[
+                    Image.asset(_provider.imageFun[0], fit: BoxFit.cover),
+                    Image.asset(_provider.imageFun[1], fit: BoxFit.cover),
+                    Image.asset(_provider.imageFun[2], fit: BoxFit.cover),
+                  ],
+                  dotColor: Colors.white,
+                  dotSize: 5,
+                  dotSpacing: 20,
+                  dotIncreasedColor: Colors.black,
+                  showIndicator: true,
+                  autoplayDuration: const Duration(seconds: 1, milliseconds: 600),
+                ),
+              ),
+              SizedBox(height: height * 0.03),
+              Row(
+                children: [
+                  SizedBox(
+                    width: width * 0.03,
+                  ),
+                  Expanded(
+                    child: Text(
+                      lanProvider.texts('order ur food..'),
+                      maxLines: 3,
+                      style: TextStyle(
+                          fontSize: width * 0.06, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: height * 0.02),
+              Container(
+                height: height * 0.24,
+                width: double.infinity,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    funImage('file/shawarmah.jpg', "Shawarmah"),
+                    funImage('file/fahita.jpg', "Fahita"),
+                    funImage('file/burger.jpg', "Burgers"),
+                    funImage('file/grill_house.jpg', "Extra"),
+                    funImage('file/دلع_كرشك.jpg', "Extra"),
+                    funImage('file/snap_burger.jpg', "Extra"),
+                  ],
+                ),
+              ),
+              Divider(thickness: 1),
+              Row(
+                children: [
+                  SizedBox(
+                    width: width * 0.03,
+                  ),
+                  Expanded(
+                    child: Text(
+                      lanProvider.texts('choose ur..'),
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: width * 0.06),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: height * 0.02),
+              Container(
+                padding: EdgeInsets.all(10),
+                height: height * 0.6,
+                child: Scrollbar(
+                  child: GridView(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 220,
+                      mainAxisSpacing: 15,
+                      crossAxisSpacing: 18,
+                      childAspectRatio: 3 / 2,
+                    ),
+                    children: [
+                      content('file/grill_house.jpg', "", Colors.black),
+                      content('file/grill_house.jpg', "", Colors.black),
+                      content('file/grill_house.jpg', "", Colors.black),
+                      content('file/snap_burger.jpg', "", Colors.white),
+                      content('file/grill_house.jpg', "", Colors.black),
+                      content('file/grill_house.jpg', "", Colors.black),
+                      content('file/grill_house.jpg', "", Colors.black),
+                      content('file/دلع_كرشك.jpg', "", Colors.black),
+                      content('file/grill_house.jpg', "", Colors.black),
+                      content('file/grill_house.jpg', "", Colors.black),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

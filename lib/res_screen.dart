@@ -19,74 +19,82 @@ class _StoreState extends State<Store> {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('name'),
-          actions: <Widget>[
-            // padding: EdgeInsets.only(left: 10),
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: ()=>Navigator.of(context).pushNamed('admin'),
-                    // showSearch(context: context,
-                    // delegate: Search())
-                ),
-          ],
-          bottom: TabBar(
-            tabs: [
-              Tab(text: lanProvider.texts('tab1')),
-              Tab(text: lanProvider.texts('tab2')),
-              Tab(text: lanProvider.texts('tab3')),
+    return Directionality(
+      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text('name'),
+            actions: <Widget>[
+              // padding: EdgeInsets.only(left: 10),
+              IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: ()=>Navigator.of(context).pushNamed('admin'),
+                      // showSearch(context: context,
+                      // delegate: Search())
+                  ),
             ],
-          ),
-        ),
-        body: Stack(
-          children: [
-            TabBarView(
-              children: <Widget>[
-                First(),
-                Second(),
-                Third(),
+            bottom: TabBar(
+              tabs: [
+                Tab(text: lanProvider.texts('tab1')),
+                Tab(text: lanProvider.texts('tab2')),
+                Tab(text: lanProvider.texts('tab3')),
               ],
             ),
-            Container(
-              padding:  EdgeInsets.fromLTRB(12,0,12,15),
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 4,
-                      primary:Colors.orange,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),),
-                  ),
-                  onPressed: () =>Navigator.of(context).pushNamed('Shopping'),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.shopping_basket_outlined,color: Colors.white,),
-                      SizedBox(width: 7),
-                      Text(
-                        lanProvider.texts('food cart'),
-                        style: TextStyle(fontSize: 17, color: Colors.white),
-                      ),
-                      SizedBox(width: width*0.23),
-                      Text(
-                        lanProvider.texts('total'),
-                        style: TextStyle(fontSize: 17, color: Colors.white),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "${provider.t}",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ],
+          ),
+          body: Stack(
+            children: [
+              TabBarView(
+                children: <Widget>[
+                  First(),
+                  Second(),
+                  Third(),
+                ],
+              ),
+              Container(
+                padding:  EdgeInsets.fromLTRB(12,0,12,15),
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 4,
+                        primary:Colors.orange,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),),
+                    ),
+                    onPressed: () =>Navigator.of(context).pushNamed('Shopping'),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.shopping_basket_outlined,color: Colors.white,),
+                        SizedBox(width: 7),
+                        Text(
+                          lanProvider.texts('food cart'),
+                          style: TextStyle(fontSize: 17, color: Colors.white),
+                        ),
+                        SizedBox(width: width*0.23),
+                        Text(
+                          lanProvider.texts('total'),
+                          style: TextStyle(fontSize: 17, color: Colors.white),
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          "${provider.t}",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          lanProvider.texts('jd'),
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -173,7 +181,7 @@ class _FirstState extends State<First> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
                             child: Text(
-                              "lanProvider.texts('price')+ $price ",
+                              lanProvider.texts('price') + " $price " + lanProvider.texts('jd'),
                               style: TextStyle(fontSize: 16, color: Colors.pink),
                             ),
                           ),
@@ -228,7 +236,7 @@ class _FirstState extends State<First> {
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return theCommodity(resData[index]['meal name']
-                  ,resData[index]['price'],res!.uid);
+                  ,resData[index]['meal price'],res!.uid);
             },
           ),
         );
@@ -249,6 +257,7 @@ class _SecondState extends State<Second> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     var res = FirebaseAuth.instance.currentUser;
     Card theCommodity(name,price,id) {
       return Card(
@@ -287,7 +296,7 @@ class _SecondState extends State<Second> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
                             child: Text(
-                              "Price: $price JD",
+                              lanProvider.texts('price') + " $price " + lanProvider.texts('jd'),
                               style: TextStyle(fontSize: 16, color: Colors.pink),
                             ),
                           ),
@@ -342,7 +351,7 @@ class _SecondState extends State<Second> {
           itemBuilder: (context, int index) {
             var resData = snapshot.data!.docs;
             return theCommodity(resData[index]['meal name']
-                ,resData[index]['price'],res!.uid);
+                ,resData[index]['meal price'],res!.uid);
           },
           ));
       },
@@ -361,6 +370,7 @@ class _ThirdState extends State<Third> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     var res = FirebaseAuth.instance.currentUser;
     Card theCommodity(name,price,id) {
       return Card(
@@ -399,7 +409,7 @@ class _ThirdState extends State<Third> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
                             child: Text(
-                              "Price: $price JD",
+                              lanProvider.texts('price') + " $price " + lanProvider.texts('jd'),
                               style: TextStyle(fontSize: 16, color: Colors.pink),
                             ),
                           ),
@@ -454,7 +464,7 @@ class _ThirdState extends State<Third> {
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return theCommodity(resData[index]['meal name']
-                  ,resData[index]['price'],res!.uid);
+                  ,resData[index]['meal price'],res!.uid);
             },
           ),
         );

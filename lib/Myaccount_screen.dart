@@ -16,44 +16,47 @@ class MyAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
-    return Scaffold(
-      drawer: MyDrawer(),
-      appBar: AppBar(
-          title: Text(lanProvider.texts('my account')),
-          centerTitle: true,
-          backgroundColor: Colors.blue),
-      body: ListView(
-        children: [
-            SizedBox(height: height * 0.02),
-            ListTile(
-              title: Text(lanProvider.texts('my email'),style: TextStyle(fontSize: 19),),
-              leading: const Icon(Icons.alternate_email),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: ()=>Navigator.of(context).pushNamed('Email'),
-            ),
-            const Divider(thickness: 1),
-            ListTile(
-              title: Text(lanProvider.texts('my name'),style: TextStyle(fontSize: 19),),
-              leading: const Icon(Icons.person),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: ()=>Navigator.of(context).pushNamed('Name'),
-            ),
-            const Divider(thickness: 1),
-            // ListTile(
-            //   title: Text("My Phone Number",style: TextStyle(fontSize: 19),),
-            //   leading: Icon(Icons.phone),
-            //   trailing: Icon(Icons.arrow_forward),
-            //   onTap: ()=>Navigator.of(context).pushNamed('Phone'),
-            // ),
-            // Divider(thickness: 1),
-            ListTile(
-              title: Text(lanProvider.texts('my password'),style: TextStyle(fontSize: 19),),
-              leading: const Icon(Icons.password),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: ()=>Navigator.of(context).pushNamed('password'),
-            ),
-          ],
-        ),
+    return Directionality(
+      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        drawer: MyDrawer(),
+        appBar: AppBar(
+            title: Text(lanProvider.texts('my account')),
+            centerTitle: true,
+            backgroundColor: Colors.blue),
+        body: ListView(
+          children: [
+              SizedBox(height: height * 0.02),
+              ListTile(
+                title: Text(lanProvider.texts('my email'),style: TextStyle(fontSize: 19),),
+                leading: const Icon(Icons.alternate_email),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: ()=>Navigator.of(context).pushNamed('Email'),
+              ),
+              const Divider(thickness: 1),
+              ListTile(
+                title: Text(lanProvider.texts('my name'),style: TextStyle(fontSize: 19),),
+                leading: const Icon(Icons.person),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: ()=>Navigator.of(context).pushNamed('Name'),
+              ),
+              const Divider(thickness: 1),
+              // ListTile(
+              //   title: Text("My Phone Number",style: TextStyle(fontSize: 19),),
+              //   leading: Icon(Icons.phone),
+              //   trailing: Icon(Icons.arrow_forward),
+              //   onTap: ()=>Navigator.of(context).pushNamed('Phone'),
+              // ),
+              // Divider(thickness: 1),
+              ListTile(
+                title: Text(lanProvider.texts('my password'),style: TextStyle(fontSize: 19),),
+                leading: const Icon(Icons.password),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: ()=>Navigator.of(context).pushNamed('password'),
+              ),
+            ],
+          ),
+      ),
     );
   }
 }
@@ -110,92 +113,95 @@ class _EmailState extends State<Email> {
             );
           });
     }
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(lanProvider.texts('change email')),
-          centerTitle: true,
-        ),
-        body: ListView(
-            children: [
-            SizedBox(height: height * 0.02),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                autofocus: true,
-                controller: _email,
-                decoration: InputDecoration(
-                  icon: Icon(
-                    Icons.alternate_email,
-                    color: Colors.blue,
+    return Directionality(
+      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(lanProvider.texts('change email')),
+            centerTitle: true,
+          ),
+          body: ListView(
+              children: [
+              SizedBox(height: height * 0.02),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  autofocus: true,
+                  controller: _email,
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.alternate_email,
+                      color: Colors.blue,
+                    ),
+                    labelText: lanProvider.texts("email"),
+                    hintText: provider.authData['email'],
                   ),
-                  labelText: lanProvider.texts("email"),
-                  hintText: provider.authData['email'],
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: TextField(
-                keyboardType: TextInputType.visiblePassword,
-                controller: _password,
-                obscureText: true,
-                decoration: InputDecoration(
-                  icon: Icon(
-                    Icons.password,
-                    color: Colors.blue,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: TextField(
+                  keyboardType: TextInputType.visiblePassword,
+                  controller: _password,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.password,
+                      color: Colors.blue,
+                    ),
+                    labelText: lanProvider.texts('pass'),
                   ),
-                  labelText: lanProvider.texts('pass'),
                 ),
               ),
-            ),
-              SizedBox(height: height*0.08),
-              if(provider.authState==authStatus.Authenticating)
-                Container(child: CircularProgressIndicator(),
-                    alignment: Alignment.center),
-              if(provider.authState!=authStatus.Authenticating)
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: width*0.26),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      try{
-                        if(_email.text.isEmpty || _password.text.isEmpty) {
-                          return dialog(lanProvider.texts('Empty field'));
-                        }  if (_password.text != provider.authData['password']) {
-                          return dialog(lanProvider.texts('ur password isnt correct'));
-                        } if (_email.text == provider.authData['email']) {
-                          return dialog('Your new email must be different than your current email');
+                SizedBox(height: height*0.08),
+                if(provider.authState==authStatus.Authenticating)
+                  Container(child: CircularProgressIndicator(),
+                      alignment: Alignment.center),
+                if(provider.authState!=authStatus.Authenticating)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: width*0.26),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        try{
+                          if(_email.text.isEmpty || _password.text.isEmpty) {
+                            return dialog(lanProvider.texts('Empty field'));
+                          }  if (_password.text != provider.authData['password']) {
+                            return dialog(lanProvider.texts('ur password isnt correct'));
+                          } if (_email.text == provider.authData['email']) {
+                            return dialog('Your new email must be different than your current email');
+                          }
+                          setState(() {
+                            provider.authState=authStatus.Authenticating;
+                          });
+                          await
+                          FirebaseAuth.instance.currentUser!.updateEmail(_email.text);
+                          await
+                          FirebaseFirestore.instance.collection('users')
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .update({'email':_email.text});
+                          setState(() {
+                            provider.authData['email'] = _email.text;
+                            provider.authState=authStatus.Authenticated;
+                          });
+                          Navigator.of(context).pop();
+                        } on FirebaseAuthException catch (e) {
+                          dialog(e.message);
+                          setState(() {
+                            provider.authState = authStatus.unAuthenticated;
+                          });
+                        } catch(e)
+                        {
+                          dialog('error!');
+                          provider.authState=authStatus.unAuthenticated;
                         }
-                        setState(() {
-                          provider.authState=authStatus.Authenticating;
-                        });
-                        await
-                        FirebaseAuth.instance.currentUser!.updateEmail(_email.text);
-                        await
-                        FirebaseFirestore.instance.collection('users')
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
-                            .update({'email':_email.text});
-                        setState(() {
-                          provider.authData['email'] = _email.text;
-                          provider.authState=authStatus.Authenticated;
-                        });
-                        Navigator.of(context).pop();
-                      } on FirebaseAuthException catch (e) {
-                        dialog(e.message);
-                        setState(() {
-                          provider.authState = authStatus.unAuthenticated;
-                        });
-                      } catch(e)
-                      {
-                        dialog('error!');
-                        provider.authState=authStatus.unAuthenticated;
-                      }
-                    },
-                    child: Text(lanProvider.texts('save&exit'),
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
+                      },
+                      child: Text(lanProvider.texts('save&exit'),
+                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                    ),
                   ),
-                ),
-        ]));
+          ])),
+    );
   }
 
 }
@@ -251,88 +257,91 @@ class _NameState extends State<Name> {
             );
           });
     }
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(lanProvider.texts('change name')),
-          centerTitle: true,
-        ),
-        body: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 12),
-              children: [
-            SizedBox(height: height * 0.02),
-            TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _myName,
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.person,
-                      color: Colors.blue,
+    return Directionality(
+      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(lanProvider.texts('change name')),
+            centerTitle: true,
+          ),
+          body: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+                children: [
+              SizedBox(height: height * 0.02),
+              TextFormField(
+                    keyboardType: TextInputType.text,
+                    controller: _myName,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.blue,
+                      ),
+                      labelText: lanProvider.texts('name'),
+                      hintText: provider.authData['name'],
                     ),
-                    labelText: lanProvider.texts('name'),
-                    hintText: provider.authData['name'],
+                  ),
+               TextFormField(
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
+                    controller: _password,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.password,
+                        color: Colors.blue,
+                      ),
+                      labelText: lanProvider.texts('pass'),
+                    ),
+                  ),
+              SizedBox(height: height * 0.06),
+              if(provider.authState==authStatus.Authenticating)
+                Container(child: CircularProgressIndicator(),
+                    alignment: Alignment.center),
+              if(provider.authState!=authStatus.Authenticating)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: width*0.26),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try{
+                        if(_myName.text.isEmpty || _password.text.isEmpty) {
+                          return dialog(lanProvider.texts('empty field'));
+                        }  if (_password.text != provider.authData['password']) {
+                          return dialog(lanProvider.texts('ur password isnt correct'));
+                        }
+                        if(_myName.text==provider.authData['name']){
+                          return dialog('Your new name must be different than your current name');
+                        }
+                        setState(() {
+                          provider.authState=authStatus.Authenticating;
+                        });
+                        await
+                        FirebaseAuth.instance.currentUser!.updateDisplayName(_myName.text);
+                        await
+                        FirebaseFirestore.instance.collection('users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({'username':_myName.text});
+                        setState(() {
+                          provider.authData['name'] = _myName.text;
+                          provider.authState=authStatus.Authenticated;
+                        });
+                        Navigator.of(context).pop();
+                      } on FirebaseAuthException catch (e) {
+                        dialog(e.message);
+                        setState(() {
+                          provider.authState = authStatus.unAuthenticated;
+                        });
+                      } catch(e)
+                      {
+                        dialog('error!');
+                        provider.authState=authStatus.unAuthenticated;
+                      }
+                    },
+                    child: Text(lanProvider.texts('save&exit'),
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                   ),
                 ),
-             TextFormField(
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: true,
-                  controller: _password,
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.password,
-                      color: Colors.blue,
-                    ),
-                    labelText: lanProvider.texts('pass'),
-                  ),
-                ),
-            SizedBox(height: height * 0.06),
-            if(provider.authState==authStatus.Authenticating)
-              Container(child: CircularProgressIndicator(),
-                  alignment: Alignment.center),
-            if(provider.authState!=authStatus.Authenticating)
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: width*0.26),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try{
-                      if(_myName.text.isEmpty || _password.text.isEmpty) {
-                        return dialog(lanProvider.texts('empty field'));
-                      }  if (_password.text != provider.authData['password']) {
-                        return dialog(lanProvider.texts('ur password isnt correct'));
-                      }
-                      if(_myName.text==provider.authData['name']){
-                        return dialog('Your new name must be different than your current name');
-                      }
-                      setState(() {
-                        provider.authState=authStatus.Authenticating;
-                      });
-                      await
-                      FirebaseAuth.instance.currentUser!.updateDisplayName(_myName.text);
-                      await
-                      FirebaseFirestore.instance.collection('users')
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .update({'username':_myName.text});
-                      setState(() {
-                        provider.authData['name'] = _myName.text;
-                        provider.authState=authStatus.Authenticated;
-                      });
-                      Navigator.of(context).pop();
-                    } on FirebaseAuthException catch (e) {
-                      dialog(e.message);
-                      setState(() {
-                        provider.authState = authStatus.unAuthenticated;
-                      });
-                    } catch(e)
-                    {
-                      dialog('error!');
-                      provider.authState=authStatus.unAuthenticated;
-                    }
-                  },
-                  child: Text(lanProvider.texts('save&exit'),
-                      style: TextStyle(fontSize: 18, color: Colors.white)),
-                ),
-              ),
-          ]),
-        );
+            ]),
+          ),
+    );
   }
 }
 
@@ -387,94 +396,97 @@ class _PhoneState extends State<Phone> {
             );
           });
     }
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Change Phone"),
-          centerTitle: true,
-        ),
-        body: ListView(children: [
-          SizedBox(height: height * 0.02),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: TextFormField(
-                keyboardType: TextInputType.phone,
-                controller: _phone,
-                decoration: InputDecoration(
-                  icon: Icon(
-                    Icons.phone,
-                    color: Colors.blue,
+    return Directionality(
+      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text("Change Phone"),
+            centerTitle: true,
+          ),
+          body: ListView(children: [
+            SizedBox(height: height * 0.02),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: TextFormField(
+                  keyboardType: TextInputType.phone,
+                  controller: _phone,
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.phone,
+                      color: Colors.blue,
+                    ),
+                    labelText: "Phone",
+                    hintText: provider.authData['phone'],
+                    helperText: "Tap two times",
                   ),
-                  labelText: "Phone",
-                  hintText: provider.authData['phone'],
-                  helperText: "Tap two times",
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: TextFormField(
-                keyboardType: TextInputType.visiblePassword,
-                controller: _password,
-                decoration: InputDecoration(
-                  icon: Icon(
-                    Icons.password,
-                    color: Colors.blue,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: TextFormField(
+                  keyboardType: TextInputType.visiblePassword,
+                  controller: _password,
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.password,
+                      color: Colors.blue,
+                    ),
+                    labelText: "Password",
                   ),
-                  labelText: "Password",
                 ),
               ),
-            ),
-          SizedBox(height: height * 0.06),
-          if(provider.authState==authStatus.Authenticating)
-            Container(child: CircularProgressIndicator(),
-                alignment: Alignment.center),
-          if(provider.authState!=authStatus.Authenticating)
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: width*0.26),
-              child: ElevatedButton(
-                onPressed: () async {
-                  try{
-                    if(_phone.text.isEmpty || _password.text.isEmpty) {
-                      return dialog('Empty field!');
+            SizedBox(height: height * 0.06),
+            if(provider.authState==authStatus.Authenticating)
+              Container(child: CircularProgressIndicator(),
+                  alignment: Alignment.center),
+            if(provider.authState!=authStatus.Authenticating)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: width*0.26),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try{
+                      if(_phone.text.isEmpty || _password.text.isEmpty) {
+                        return dialog('Empty field!');
+                      }
+                      if (_password.text != provider.authData['password']) {
+                        return dialog('Your password is not correct');
+                      }
+                      if (_phone.text==provider.authData['phone']){
+                        return dialog('New Phone number must be different than current phone number');
+                      }
+                      setState(() {
+                        provider.authState=authStatus.Authenticating;
+                      });
+                      // PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                      //     verificationId: FirebaseAuth.instance.currentUser!.uid
+                      //     , smsCode: '${Random()}');
+                      // await
+                      // FirebaseAuth.instance.currentUser!.updatePhoneNumber(credential);
+                      await
+                      FirebaseFirestore.instance.collection('users')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .update({'phone':_phone.text});
+                      setState(() {
+                        provider.authData['phone'] = _phone.text;
+                        provider.authState=authStatus.Authenticated;
+                      });
+                      Navigator.of(context).pop();
+                    } on FirebaseAuthException catch (e) {
+                      dialog(e.message);
+                      setState(() {
+                        provider.authState = authStatus.unAuthenticated;
+                      });
+                    } catch(e)
+                    {
+                      dialog('error!');
+                      provider.authState=authStatus.unAuthenticated;
                     }
-                    if (_password.text != provider.authData['password']) {
-                      return dialog('Your password is not correct');
-                    }
-                    if (_phone.text==provider.authData['phone']){
-                      return dialog('New Phone number must be different than current phone number');
-                    }
-                    setState(() {
-                      provider.authState=authStatus.Authenticating;
-                    });
-                    // PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                    //     verificationId: FirebaseAuth.instance.currentUser!.uid
-                    //     , smsCode: '${Random()}');
-                    // await
-                    // FirebaseAuth.instance.currentUser!.updatePhoneNumber(credential);
-                    await
-                    FirebaseFirestore.instance.collection('users')
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({'phone':_phone.text});
-                    setState(() {
-                      provider.authData['phone'] = _phone.text;
-                      provider.authState=authStatus.Authenticated;
-                    });
-                    Navigator.of(context).pop();
-                  } on FirebaseAuthException catch (e) {
-                    dialog(e.message);
-                    setState(() {
-                      provider.authState = authStatus.unAuthenticated;
-                    });
-                  } catch(e)
-                  {
-                    dialog('error!');
-                    provider.authState=authStatus.unAuthenticated;
-                  }
-                },
-                child: Text("Save & exit",
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
+                  },
+                  child: Text("Save & exit",
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                ),
               ),
-            ),
-        ]));
+          ])),
+    );
   }
 }
