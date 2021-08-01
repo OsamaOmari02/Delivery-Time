@@ -248,7 +248,7 @@ class _AddMealState extends State<AddMeal> {
                   labelText: lanProvider.texts('add meal'),
                 ),
               ),
-              TextFormField(
+              TextField(
                 keyboardType: TextInputType.number,
                 controller: _price,
                 decoration: InputDecoration(
@@ -283,7 +283,8 @@ class _AddMealState extends State<AddMeal> {
                         setState(() {
                           provider.isLoading = false;
                         });
-                        return dialog('error!');
+                        print(e);
+                        dialog('error !');
                       }
                     },
                     child: Text(lanProvider.texts('add'))),
@@ -454,7 +455,8 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                 setState(() {
                                                   provider.isLoading = false;
                                                 });
-                                                dialog('error!');
+                                                print(e);
+                                                dialog('error !');
                                               }
                                             },
                                           ),

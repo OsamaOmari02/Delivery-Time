@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:app/Myprovider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -143,85 +145,33 @@ class _FirstState extends State<First> {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    var res = FirebaseAuth.instance.currentUser;
-    Card theCommodity(name,price,id) {
-      return Card(
-        key: Key(id),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        provider.isFavourite?Icons.favorite:Icons.favorite_border,
-                        color: Colors.red,
-                      ),
-                      onPressed: ()=>provider.toggleFavourite(),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 20),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            name,
-                            style:
-                            TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          alignment: Alignment.bottomLeft,
-                          margin: EdgeInsets.only(top: 17),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 7),
-                            child: Text(
-                              lanProvider.texts('price') + " $price " + lanProvider.texts('jd'),
-                              style: TextStyle(fontSize: 16, color: Colors.pink),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+    var user = FirebaseAuth.instance.currentUser;
+    dialog(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                title,
+                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                style: TextStyle(fontSize: 23),
               ),
-            ),
-            Row(
-              children: [
-                _itemCount != 0
-                    ? IconButton(
-                      icon: Icon(
-                    Icons.remove,
-                    color: Colors.red,
-                  ),
-                  onPressed: (){
-                    provider.subtractPrice(1);
-                    setState (()=>_itemCount--);
-                    },
-                )
-                    : Container(),
-                Text(_itemCount.toString()),
-                IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.green,
-                  ),
-                  onPressed: () {
-                    provider.addPrice(1);
-                    setState(() => _itemCount++);
-                  }
-                ),
+              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                SizedBox(width: 11),
+                InkWell(
+                    child: Text(lanProvider.texts('ok'),
+                        style: TextStyle(fontSize: 19)),
+                    onTap: () => Navigator.of(context).pop()),
               ],
-            ),
-          ],
-        ),
-      );
+            );
+          });
     }
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
@@ -235,8 +185,109 @@ class _FirstState extends State<First> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
-              return theCommodity(resData[index]['meal name']
-                  ,resData[index]['meal price'],res!.uid);
+              return Card(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            if (provider.isLoading) CircularProgressIndicator(),
+                            if (!provider.isLoading) IconButton(
+                              icon: Icon(
+                                provider.isFavourite?Icons.favorite:Icons.favorite_border,
+                                color: Colors.red,
+                              ),
+                              onPressed: () async{
+                                try{
+                                  setState(() {
+                                    provider.isLoading = true;
+                                    provider.mealID = resData[index].id;
+                                  });
+                                  provider.toggleFavourite();
+                                  setState(() {
+                                    provider.isLoading = false;
+                                  });
+                                } on FirebaseException catch (e){
+                                  setState(() {
+                                    provider.isLoading = false;
+                                  });
+                                  dialog(e.message);
+                                  print(e);
+                                } catch (e){
+                                  setState(() {
+                                    provider.isLoading = false;
+                                  });
+                                  dialog('error !');
+                                  print(e);
+                                }
+                              },
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: 20),
+                                Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    resData[index]['meal name'],
+                                    style:
+                                    TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: EdgeInsets.only(top: 17),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 7),
+                                    child: Text(
+                                      lanProvider.texts('price') +" "+
+                                          resData[index]['meal price'] +
+                                          " " + lanProvider.texts('jd'),
+                                      style: TextStyle(fontSize: 16, color: Colors.pink),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 50),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        _itemCount != 0
+                            ? IconButton(
+                          icon: Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
+                          onPressed: (){
+                            provider.subtractPrice(1);
+                            setState (()=>_itemCount--);
+                          },
+                        )
+                            : Container(),
+                        Text(_itemCount.toString()),
+                        IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.green,
+                            ),
+                            onPressed: () {
+                              provider.addPrice(1);
+                              setState(() => _itemCount++);
+                            }
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         );

@@ -1,4 +1,5 @@
 
+import 'package:app/Myfavourites_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,11 @@ class Meals{
   final String mealPrice;
 
   Meals({required this.mealName,required this.mealPrice, required this.id});
+}
+class Favorites{
+  final isMyFavorite;
+
+  Favorites({required this.isMyFavorite});
 }
 class MyProvider with ChangeNotifier {
   bool isDark = false;
@@ -71,10 +77,20 @@ class MyProvider with ChangeNotifier {
         t -= price;
       notifyListeners();
     }
-
+    List<Favorites> myFavorites = [];
     bool isFavourite = false;
-    toggleFavourite() {
-      isFavourite = !isFavourite;
+    toggleFavourite() async{
+      isLoading = true;
+      var user = FirebaseAuth.instance.currentUser;
+      final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
+        await FirebaseFirestore.instance
+            .collection('/favorites/${user!.uid}/myFavorites').add({
+          'meal':mealIDs[mealIndex].id,
+          'meal name':mealIDs[mealIndex].mealName,
+          'meal price':mealIDs[mealIndex].mealPrice,
+        }).then((value) {
+          myFavorites.add(Favorites(isMyFavorite: mealID));
+        });
       notifyListeners();
     }
     //-----------------------admin----------------------------
@@ -102,7 +118,7 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  editMeal(String mealName,String price,type) async {
+  editMeal(String mealName,price,type) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     mealIDs.removeAt(mealIndex);
