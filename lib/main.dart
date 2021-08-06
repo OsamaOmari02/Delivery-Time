@@ -92,7 +92,14 @@ class MyHomepage extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: ElevatedButton(
-          onPressed: ()=>Navigator.of(context).pushNamed('resScreen'),
+          onPressed: () async{
+            try{
+              await _provider.fetchMeals();
+              Navigator.of(context).pushNamed('resScreen');
+            }catch (e){
+              print(e);
+            }
+          },
           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white70)),
           child: Stack(
             alignment: Alignment.bottomCenter,

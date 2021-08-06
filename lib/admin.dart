@@ -11,9 +11,6 @@ class Admin extends StatefulWidget {
   @override
   _AdminState createState() => _AdminState();
 }
-enum types{
-  shawarma,snacks,others
-}
 class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context) {
@@ -65,8 +62,6 @@ class _EditState extends State<Edit> {
 
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
-  var mealId;
-
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
@@ -145,7 +140,7 @@ class _EditState extends State<Edit> {
                         setState(() {
                             provider.isLoading= true;
                         });
-                        await provider.editMeal(_mealName.text, _price.text, "shawarma");
+                        await provider.editMeal(_mealName.text, _price.text,"");
                         Navigator.of(context).pop();
                         setState(() {
                           provider.isLoading= false;
@@ -189,6 +184,8 @@ class _AddMealState extends State<AddMeal> {
     var user = FirebaseAuth.instance.currentUser;
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
           context: context,
@@ -238,7 +235,7 @@ class _AddMealState extends State<AddMeal> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Column(
+          child: ListView(
             children: [
               const SizedBox(height: 30),
               TextField(
@@ -256,38 +253,111 @@ class _AddMealState extends State<AddMeal> {
                   hintText: "ex: 2.00",
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               if (provider.isLoading)
                 Center(child: CircularProgressIndicator()),
               if (!provider.isLoading)
-                ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        if (_mealName.text.isEmpty || _price.text.isEmpty)
-                          return dialog(lanProvider.texts('empty field'));
-                        setState(() {
-                          provider.isLoading = true;
-                        });
-                        await provider.addMeal(
-                            _mealName.text, _price.text, "shawarma");
-                        Navigator.of(context).pop();
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                      } on FirebaseException catch (e) {
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                        return dialog(e.message);
-                      } catch (e) {
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                        print(e);
-                        dialog('error !');
-                      }
-                    },
-                    child: Text(lanProvider.texts('add'))),
+                Center(child: Text(lanProvider.texts('add text'),style: TextStyle(fontSize: width*0.037),),),
+                    SizedBox(height: 10),
+                    Container(
+                      width: width*0.3,
+                      height: height*0.07,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              if (_mealName.text.isEmpty || _price.text.isEmpty)
+                                return dialog(lanProvider.texts('empty field'));
+                              setState(() {
+                                provider.isLoading = true;
+                              });
+                              await provider.addMeal(
+                                  _mealName.text, _price.text, "shawarma");
+                              Navigator.of(context).pop();
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                            } on FirebaseException catch (e) {
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                              return dialog(e.message);
+                            } catch (e) {
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                              print(e);
+                              dialog('error !');
+                            }
+                          },
+                          child: Text(lanProvider.texts('tab1'),style: TextStyle(fontSize: width*0.05),),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      width: width*0.3,
+                      height: height*0.07,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              if (_mealName.text.isEmpty || _price.text.isEmpty)
+                                return dialog(lanProvider.texts('empty field'));
+                              setState(() {
+                                provider.isLoading = true;
+                              });
+                              await provider.addMeal(
+                                  _mealName.text, _price.text, "snacks");
+                              Navigator.of(context).pop();
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                            } on FirebaseException catch (e) {
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                              return dialog(e.message);
+                            } catch (e) {
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                              print(e);
+                              dialog('error !');
+                            }
+                          },
+                          child: Text(lanProvider.texts('tab2'),style: TextStyle(fontSize: width*0.05),)),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      width: width*0.3,
+                      height: height*0.07,
+                      child: ElevatedButton(
+                            onPressed: () async {
+                              try {
+                                if (_mealName.text.isEmpty || _price.text.isEmpty)
+                                  return dialog(lanProvider.texts('empty field'));
+                                setState(() {
+                                  provider.isLoading = true;
+                                });
+                                await provider.addMeal(
+                                    _mealName.text, _price.text, "others");
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                              } on FirebaseException catch (e) {
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                                return dialog(e.message);
+                              } catch (e) {
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                                print(e);
+                                dialog('error !');
+                              }
+                            },
+                            child: Text(lanProvider.texts('tab3'),style: TextStyle(fontSize: width*0.05),)),
+                    ),
             ],
           ),
         ),

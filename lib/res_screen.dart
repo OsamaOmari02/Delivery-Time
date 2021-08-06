@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:app/Myprovider.dart';
@@ -7,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'LanguageProvider.dart';
 
 class Store extends StatefulWidget {
@@ -196,7 +194,7 @@ class _FirstState extends State<First> {
                             if (provider.isLoading) CircularProgressIndicator(),
                             if (!provider.isLoading) IconButton(
                               icon: Icon(
-                                provider.isFavourite?Icons.favorite:Icons.favorite_border,
+                                Icons.favorite_border,
                                 color: Colors.red,
                               ),
                               onPressed: () async{
@@ -322,7 +320,7 @@ class _SecondState extends State<Second> {
                   children: [
                     IconButton(
                       icon: Icon(
-                        provider.isFavourite?Icons.favorite:Icons.favorite_border,
+                        Icons.favorite_border,
                         color: Colors.red,
                       ),
                       onPressed: ()=>provider.toggleFavourite(),
@@ -434,8 +432,7 @@ class _ThirdState extends State<Third> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: Icon(
-                        provider.isFavourite?Icons.favorite:Icons.favorite_border,
+                      icon: Icon(Icons.favorite_border,
                         color: Colors.red,
                       ),
                       onPressed: ()=>provider.toggleFavourite(),

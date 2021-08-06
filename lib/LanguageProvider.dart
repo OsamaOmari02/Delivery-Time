@@ -68,6 +68,7 @@ class LanProvider with ChangeNotifier{
     'meal name':'اسم الوجبة',
     'meal price':'سعر الوجبة',
     'add meal':'اضافة وجبة جديدة',
+    'add text':'اضافة الى'
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -131,6 +132,7 @@ class LanProvider with ChangeNotifier{
     'meal name':'Meal Name',
     'meal price':'Meal Price',
     'add meal':'Add Meal',
+    'add text':'Add To'
   };
 
   void changeLan(bool lan){

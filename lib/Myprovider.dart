@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
-// enum AuthMode { LogIn, SignUp }
 enum authStatus {Authenticating,unAuthenticated,Authenticated}
 
 class Address {
@@ -21,10 +20,11 @@ class Meals{
   Meals({required this.mealName,required this.mealPrice, required this.id});
 }
 class Favorites{
-  final isMyFavorite;
+  final myFavoriteID;
 
-  Favorites({required this.isMyFavorite});
+  Favorites({required this.myFavoriteID});
 }
+//-----------------------------------------------------------
 class MyProvider with ChangeNotifier {
   bool isDark = false;
   void darkMode(bool val) {
@@ -78,9 +78,18 @@ class MyProvider with ChangeNotifier {
       notifyListeners();
     }
     List<Favorites> myFavorites = [];
-    bool isFavourite = false;
+  Future<void> fetchFav() async {
+    var user = FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance
+        .collection('favorites/${user!.uid}/myFavorites').get().then((value){
+      value.docs.forEach((element) {
+        mealIDs.add(Meals(mealName: element.data()['meal name'],
+            mealPrice: element.data()['meal price'], id: element.id));
+      });
+    });
+    notifyListeners();
+  }
     toggleFavourite() async{
-      isLoading = true;
       var user = FirebaseAuth.instance.currentUser;
       final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
         await FirebaseFirestore.instance
@@ -88,13 +97,40 @@ class MyProvider with ChangeNotifier {
           'meal':mealIDs[mealIndex].id,
           'meal name':mealIDs[mealIndex].mealName,
           'meal price':mealIDs[mealIndex].mealPrice,
-        }).then((value) {
-          myFavorites.add(Favorites(isMyFavorite: mealID));
         });
+          //   .then((value) {
+          // myFavorites.add(Favorites(myFavoriteID: mealID));
+          for (int i=0;i<myFavorites.length;i++)
+          print(myFavorites[i].myFavoriteID);
+        // });
       notifyListeners();
     }
     //-----------------------admin----------------------------
   List<Meals> mealIDs = [];
+    Future<void> fetchMeals() async {
+      await FirebaseFirestore.instance
+          .collection('restaurants/grill house/shawarma').get().then((value){
+            value.docs.forEach((element) {
+              mealIDs.add(Meals(mealName: element.data()['meal name'],
+                  mealPrice: element.data()['meal price'], id: element.id));
+            });
+      });
+      await FirebaseFirestore.instance
+          .collection('restaurants/grill house/snacks').get().then((value){
+        value.docs.forEach((element) {
+          mealIDs.add(Meals(mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'], id: element.id));
+        });
+      });
+      await FirebaseFirestore.instance
+          .collection('restaurants/grill house/others').get().then((value){
+        value.docs.forEach((element) {
+          mealIDs.add(Meals(mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'], id: element.id));
+        });
+      });
+      notifyListeners();
+    }
   Future<void> addMeal(String mealName, String price,type) async {
     isLoading = true;
     await FirebaseFirestore.instance
@@ -102,15 +138,16 @@ class MyProvider with ChangeNotifier {
         .add({
       'meal name':mealName,
       'meal price':price,
-    }).then((value) {
+    })
+    .then((value) {
       mealIDs.add(Meals(id: value.id, mealPrice: price, mealName: mealName));
-      notifyListeners();
     });
+    notifyListeners();
   }
   var mealID;
+    var favID;
   deleteMeal(type) async {
     isLoading = true;
-    // var user = FirebaseAuth.instance.currentUser;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     mealIDs.removeAt(mealIndex);
     await FirebaseFirestore.instance.collection('/restaurants/grill house/$type')
