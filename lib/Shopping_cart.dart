@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'LanguageProvider.dart';
@@ -58,7 +59,14 @@ class _ShoppingState extends State<Shopping> {
         ),
         body: ListView(
           children: [
-            // Card(child: Text(provider.email),)
+            ElevatedButton(onPressed: ()=> Fluttertoast.showToast(
+                msg: "This is Center Short Toast",
+                toastLength: Toast.LENGTH_SHORT,
+                backgroundColor: Colors.grey,
+                textColor: Colors.white,
+                fontSize: 16.0
+            ), child: Text("tests")
+            ),
           ],
         ),
       ),

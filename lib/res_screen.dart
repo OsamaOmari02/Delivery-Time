@@ -14,6 +14,11 @@ class Store extends StatefulWidget {
 }
 class _StoreState extends State<Store> {
   @override
+  void initState() {
+    Provider.of<MyProvider>(context,listen: false).fetchMeals();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -31,7 +36,11 @@ class _StoreState extends State<Store> {
               // padding: EdgeInsets.only(left: 10),
               IconButton(
                   icon: Icon(Icons.search),
-                  onPressed: ()=>Navigator.of(context).pushNamed('admin'),
+                  onPressed: (){
+                    Navigator.of(context).pushNamed('admin');
+                    for (int i=0;i<provider.mealIDs.length;i++)
+                    print("mealIds: ${provider.mealIDs[i].mealName}");
+                  }
                       // showSearch(context: context,
                       // delegate: Search())
                   ),

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'LanguageProvider.dart';
@@ -164,8 +165,19 @@ class _MyPasswordState extends State<MyPassword> {
                         provider.authState=authStatus.Authenticated;
                       });
                       Navigator.of(context).pop('password');
-                    }catch(e)
-                    {
+                      Fluttertoast.showToast(
+                          msg: "Password Updated Successfully",
+                          toastLength: Toast.LENGTH_SHORT,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    } on FirebaseException catch (e){
+                      dialog(e.message);
+                      provider.authState=authStatus.unAuthenticated;
+                    }
+                    catch(e) {
+                      dialog('error !');
                       print(e);
                       provider.authState=authStatus.unAuthenticated;
                     }

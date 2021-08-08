@@ -9,13 +9,17 @@ import 'Drawer.dart';
 import 'LanguageProvider.dart';
 
 class MyFavourites extends StatefulWidget {
-  const MyFavourites({Key? key}) : super(key: key);
 
   @override
   _MyFavouritesState createState() => _MyFavouritesState();
 }
 
 class _MyFavouritesState extends State<MyFavourites> {
+  @override
+  void initState() {
+    Provider.of<MyProvider>(context,listen: false).fetchFav();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     int _itemCount = 0;
@@ -94,8 +98,13 @@ class _MyFavouritesState extends State<MyFavourites> {
                                           provider.isLoading = true;
                                           provider.mealID = resData[index].id;
                                         });
-                                        await FirebaseFirestore.instance.collection
-                                          ('/favorites/${user.uid}/myFavorites').doc(provider.mealID).delete();
+                                        await FirebaseFirestore.instance
+                                            .collection('favorites/${user.uid}/myFavorites')
+                                            .doc(provider.mealID).delete().then((value){
+                                              provider.myFavorites.removeWhere((element) =>
+                                              element.myFavoriteID==provider.mealID);
+                                        });
+                                        print("provider.mealID ${provider.mealID}");
                                         setState(() {
                                           provider.isLoading = false;
                                         });

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'Myprovider.dart';
@@ -259,6 +260,7 @@ class _AddMealState extends State<AddMeal> {
               if (!provider.isLoading)
                 Center(child: Text(lanProvider.texts('add text'),style: TextStyle(fontSize: width*0.037),),),
                     SizedBox(height: 10),
+              if (!provider.isLoading)
                     Container(
                       width: width*0.3,
                       height: height*0.07,
@@ -273,6 +275,13 @@ class _AddMealState extends State<AddMeal> {
                               await provider.addMeal(
                                   _mealName.text, _price.text, "shawarma");
                               Navigator.of(context).pop();
+                              Fluttertoast.showToast(
+                                  msg: "Meal Added",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  backgroundColor: Colors.grey,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                              );
                               setState(() {
                                 provider.isLoading = false;
                               });
@@ -293,6 +302,7 @@ class _AddMealState extends State<AddMeal> {
                       ),
                     ),
                     SizedBox(height: 20),
+              if (!provider.isLoading)
                     Container(
                       width: width*0.3,
                       height: height*0.07,
@@ -326,6 +336,7 @@ class _AddMealState extends State<AddMeal> {
                           child: Text(lanProvider.texts('tab2'),style: TextStyle(fontSize: width*0.05),)),
                     ),
                     SizedBox(height: 20),
+              if (!provider.isLoading)
                     Container(
                       width: width*0.3,
                       height: height*0.07,
@@ -492,9 +503,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                       ),
                                       actions: [
                                         if (provider.isLoading)
-                                          Center(
-                                              child:
-                                                  CircularProgressIndicator()),
+                                          Center(child: CircularProgressIndicator()),
                                         if (!provider.isLoading)
                                           InkWell(
                                             child: Text(
@@ -508,11 +517,17 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                 setState(() {
                                                   provider.mealID =
                                                       resData[index].id;
-                                                  provider.isLoading = true;
                                                 });
+                                                Navigator.of(context).pop();
                                                 await provider
                                                     .deleteMeal("shawarma");
-                                                Navigator.of(context).pop();
+                                                Fluttertoast.showToast(
+                                                    msg: "Meal Deleted",
+                                                    toastLength: Toast.LENGTH_SHORT,
+                                                    backgroundColor: Colors.grey,
+                                                    textColor: Colors.white,
+                                                    fontSize: 16.0
+                                                );
                                                 setState(() {
                                                   provider.isLoading = false;
                                                 });

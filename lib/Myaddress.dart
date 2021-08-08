@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
@@ -24,7 +25,7 @@ class _MyAddressState extends State<MyAddress> {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     var user = FirebaseAuth.instance.currentUser;
-    LogoutFun(title) {
+    dialog(title) {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
@@ -60,8 +61,15 @@ class _MyAddressState extends State<MyAddress> {
                         setState(() {
                           provider.isLoading = true;
                         });
-                        await provider.delete();
                         Navigator.of(context).pop();
+                        await provider.delete();
+                        Fluttertoast.showToast(
+                            msg: "Address Deleted",
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
                         setState(() {
                           provider.isLoading = false;
                         });
@@ -120,7 +128,7 @@ class _MyAddressState extends State<MyAddress> {
                     setState(() {
                      provider.iD = userData[index].id;
                     });
-                    LogoutFun(lanProvider.texts('delete this address?'));
+                    dialog(lanProvider.texts('delete this address?'));
                   },
                   title: Text(userData[index]['area']),
                   subtitle: Text(lanProvider.texts('street:') +

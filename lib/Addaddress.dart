@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class AddAddress extends StatefulWidget {
@@ -100,6 +101,13 @@ class _AddAddressState extends State<AddAddress> {
                               await provider
                                   .add(_area.text, _street.text, _phone.text)
                                   .then((_) => Navigator.of(context).pop());
+                              Fluttertoast.showToast(
+                                  msg: "Address Added",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  backgroundColor: Colors.grey,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                              );
                               setState(() {
                                 provider.isLoading = false;
                               });

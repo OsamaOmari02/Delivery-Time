@@ -3,6 +3,8 @@ import 'package:app/Myfavourites_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uuid/uuid.dart';
 
 
 enum authStatus {Authenticating,unAuthenticated,Authenticated}
@@ -32,8 +34,8 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
   bool isLoading = false;
-
-
+  List<Meals> mealIDs = [];
+  var mealID;
   // ---------------addresses----------------------
   List<Address> loc = [];
 
@@ -89,24 +91,40 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
+
     toggleFavourite() async{
       var user = FirebaseAuth.instance.currentUser;
       final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
+      final exists = myFavorites.indexWhere((element) => element.myFavoriteID == mealID);
+      if (exists<0){
         await FirebaseFirestore.instance
-            .collection('/favorites/${user!.uid}/myFavorites').add({
+            .collection('/favorites/${user!.uid}/myFavorites').doc(mealID).set({
           'meal':mealIDs[mealIndex].id,
           'meal name':mealIDs[mealIndex].mealName,
           'meal price':mealIDs[mealIndex].mealPrice,
+        }).then((value) {
+          myFavorites.add(Favorites(myFavoriteID: mealID));
         });
-          //   .then((value) {
-          // myFavorites.add(Favorites(myFavoriteID: mealID));
+      } else {
+        print("deleted");
+         await FirebaseFirestore.instance
+            .collection('favorites/${user!.uid}/myFavorites').doc(mealID).delete().then((value){
+              myFavorites.removeAt(exists);
+         });
+      }
           for (int i=0;i<myFavorites.length;i++)
           print(myFavorites[i].myFavoriteID);
-        // });
+          print('===================');
+          print("mealID: $mealID");
+      // for (int i=0;i<mealIDs.length;i++)
+      //   print(mealIDs[i].id);
       notifyListeners();
     }
+    bool isMyFav(){
+    return myFavorites.any((element) => element.myFavoriteID==mealID);
+    }
     //-----------------------admin----------------------------
-  List<Meals> mealIDs = [];
+
     Future<void> fetchMeals() async {
       await FirebaseFirestore.instance
           .collection('restaurants/grill house/shawarma').get().then((value){
@@ -133,25 +151,24 @@ class MyProvider with ChangeNotifier {
     }
   Future<void> addMeal(String mealName, String price,type) async {
     isLoading = true;
-    await FirebaseFirestore.instance
-        .collection('/restaurants/grill house/$type')
-        .add({
-      'meal name':mealName,
-      'meal price':price,
-    })
-    .then((value) {
-      mealIDs.add(Meals(id: value.id, mealPrice: price, mealName: mealName));
-    });
+    var uuid = Uuid().v4();
+          await FirebaseFirestore.instance
+              .collection('/restaurants/grill house/$type').doc(uuid).set
+              ({
+            'meal name':mealName,
+            'meal price':price,
+          }).then((value) {
+            mealIDs.add(Meals(id: uuid, mealPrice: price, mealName: mealName));
+          });
     notifyListeners();
   }
-  var mealID;
-    var favID;
+
   deleteMeal(type) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
-    mealIDs.removeAt(mealIndex);
     await FirebaseFirestore.instance.collection('/restaurants/grill house/$type')
         .doc(mealID).delete();
+    mealIDs.removeAt(mealIndex);
     notifyListeners();
   }
 

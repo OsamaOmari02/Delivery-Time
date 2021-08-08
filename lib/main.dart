@@ -78,7 +78,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomepage extends StatelessWidget {
-  @override
 
   @override
   Widget build(BuildContext context) {
@@ -92,14 +91,7 @@ class MyHomepage extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: ElevatedButton(
-          onPressed: () async{
-            try{
-              await _provider.fetchMeals();
-              Navigator.of(context).pushNamed('resScreen');
-            }catch (e){
-              print(e);
-            }
-          },
+          onPressed: ()=> Navigator.of(context).pushNamed('resScreen'),
           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white70)),
           child: Stack(
             alignment: Alignment.bottomCenter,

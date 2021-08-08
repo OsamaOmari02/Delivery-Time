@@ -99,8 +99,8 @@ class MyDrawer extends StatelessWidget {
                 'MyAccount', context),
             Divider(thickness: 1),
             ListTile(
-              onTap: () async{
-                await provider.fetchFav();
+              onTap: (){
+                // await provider.fetchFav();
                 Navigator.of(context).pushReplacementNamed('MyFavourites');
               },
               title: Text(

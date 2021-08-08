@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'LanguageProvider.dart';
@@ -185,6 +186,13 @@ class _EmailState extends State<Email> {
                             provider.authState=authStatus.Authenticated;
                           });
                           Navigator.of(context).pop();
+                          Fluttertoast.showToast(
+                              msg: "Email Updated Successfully",
+                              toastLength: Toast.LENGTH_SHORT,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
                         } on FirebaseAuthException catch (e) {
                           dialog(e.message);
                           setState(() {
@@ -324,6 +332,13 @@ class _NameState extends State<Name> {
                           provider.authState=authStatus.Authenticated;
                         });
                         Navigator.of(context).pop();
+                        Fluttertoast.showToast(
+                            msg: "Name Updated Successfully",
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
                       } on FirebaseAuthException catch (e) {
                         dialog(e.message);
                         setState(() {
