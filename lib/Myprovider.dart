@@ -1,4 +1,3 @@
-
 import 'package:app/Myfavourites_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,36 +5,43 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uuid/uuid.dart';
 
-
-enum authStatus {Authenticating,unAuthenticated,Authenticated}
+enum authStatus { Authenticating, unAuthenticated, Authenticated }
 
 class Address {
   final String id;
-  Address({required this.id,});
+
+  Address({
+    required this.id,
+  });
 }
 
-class Meals{
+class Meals {
   final String id;
   final String mealName;
   final String mealPrice;
 
-  Meals({required this.mealName,required this.mealPrice, required this.id});
+  Meals({required this.mealName, required this.mealPrice, required this.id});
 }
-class Favorites{
+
+class Favorites {
   final myFavoriteID;
 
   Favorites({required this.myFavoriteID});
 }
+
 //-----------------------------------------------------------
 class MyProvider with ChangeNotifier {
   bool isDark = false;
+
   void darkMode(bool val) {
     isDark = val;
     notifyListeners();
   }
+
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
+
   // ---------------addresses----------------------
   List<Address> loc = [];
 
@@ -53,161 +59,226 @@ class MyProvider with ChangeNotifier {
       notifyListeners();
     });
   }
+
   var iD;
+
   delete() async {
     isLoading = true;
     var user = FirebaseAuth.instance.currentUser;
     final addressIndex = loc.indexWhere((element) => element.id == iD);
     loc.removeAt(addressIndex);
-    await FirebaseFirestore.instance.collection('/address/${user!.uid}/addresses')
-        .doc(iD).delete();
+    await FirebaseFirestore.instance
+        .collection('/address/${user!.uid}/addresses')
+        .doc(iD)
+        .delete();
     notifyListeners();
   }
-    // --------------------------res-----------------------
-    List imageFun = [
-      'file/burger.jpg',
-      'file/fahita.jpg',
-      'file/shawarmah.jpg',
-    ];
-    var t = 0.0;
-    addPrice(int price) {
-      t += price;
-      notifyListeners();
-    }
-    subtractPrice(int price) {
-      if (t != 0)
-        t -= price;
-      notifyListeners();
-    }
-    List<Favorites> myFavorites = [];
+
+  // --------------------------res-----------------------
+  List imageFun = [
+    'file/burger.jpg',
+    'file/fahita.jpg',
+    'file/shawarmah.jpg',
+  ];
+  double t = 0.0;
+
+  addPrice(price) {
+    t += price;
+    notifyListeners();
+  }
+
+  subtractPrice(price) {
+    if (t != 0) t -= price;
+    notifyListeners();
+  }
+
+  List<Favorites> myFavorites = [];
+
   Future<void> fetchFav() async {
     var user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance
-        .collection('favorites/${user!.uid}/myFavorites').get().then((value){
+        .collection('favorites/${user!.uid}/myFavorites')
+        .get()
+        .then((value) {
       value.docs.forEach((element) {
-        mealIDs.add(Meals(mealName: element.data()['meal name'],
-            mealPrice: element.data()['meal price'], id: element.id));
+        mealIDs.add(Meals(
+            mealName: element.data()['meal name'],
+            mealPrice: element.data()['meal price'],
+            id: element.id));
       });
     });
     notifyListeners();
   }
 
-    toggleFavourite() async{
-      var user = FirebaseAuth.instance.currentUser;
-      final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
-      final exists = myFavorites.indexWhere((element) => element.myFavoriteID == mealID);
-      if (exists<0){
-        await FirebaseFirestore.instance
-            .collection('/favorites/${user!.uid}/myFavorites').doc(mealID).set({
-          'meal':mealIDs[mealIndex].id,
-          'meal name':mealIDs[mealIndex].mealName,
-          'meal price':mealIDs[mealIndex].mealPrice,
-        }).then((value) {
-          myFavorites.add(Favorites(myFavoriteID: mealID));
-        });
-      } else {
-        print("deleted");
-         await FirebaseFirestore.instance
-            .collection('favorites/${user!.uid}/myFavorites').doc(mealID).delete().then((value){
-              myFavorites.removeAt(exists);
-         });
-      }
-          for (int i=0;i<myFavorites.length;i++)
-          print(myFavorites[i].myFavoriteID);
-          print('===================');
-          print("mealID: $mealID");
-      // for (int i=0;i<mealIDs.length;i++)
-      //   print(mealIDs[i].id);
-      notifyListeners();
+  toggleFavourite() async {
+    var user = FirebaseAuth.instance.currentUser;
+    final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
+    final exists =
+        myFavorites.indexWhere((element) => element.myFavoriteID == mealID);
+    if (exists < 0) {
+      await FirebaseFirestore.instance
+          .collection('/favorites/${user!.uid}/myFavorites')
+          .doc(mealID)
+          .set({
+        'meal': mealIDs[mealIndex].id,
+        'meal name': mealIDs[mealIndex].mealName,
+        'meal price': mealIDs[mealIndex].mealPrice,
+      }).then((value) {
+        myFavorites.add(Favorites(myFavoriteID: mealID));
+      });
+    } else {
+      print("deleted");
+      await FirebaseFirestore.instance
+          .collection('favorites/${user!.uid}/myFavorites')
+          .doc(mealID)
+          .delete()
+          .then((value) {
+        myFavorites.removeAt(exists);
+      });
     }
-    bool isMyFav(){
-    return myFavorites.any((element) => element.myFavoriteID==mealID);
-    }
-    //-----------------------admin----------------------------
+    for (int i = 0; i < myFavorites.length; i++)
+      print(myFavorites[i].myFavoriteID);
+    print('===================');
+    print("mealID: $mealID");
+    // for (int i=0;i<mealIDs.length;i++)
+    //   print(mealIDs[i].id);
+    notifyListeners();
+  }
 
-    Future<void> fetchMeals() async {
-      await FirebaseFirestore.instance
-          .collection('restaurants/grill house/shawarma').get().then((value){
-            value.docs.forEach((element) {
-              mealIDs.add(Meals(mealName: element.data()['meal name'],
-                  mealPrice: element.data()['meal price'], id: element.id));
-            });
-      });
-      await FirebaseFirestore.instance
-          .collection('restaurants/grill house/snacks').get().then((value){
-        value.docs.forEach((element) {
-          mealIDs.add(Meals(mealName: element.data()['meal name'],
-              mealPrice: element.data()['meal price'], id: element.id));
-        });
-      });
-      await FirebaseFirestore.instance
-          .collection('restaurants/grill house/others').get().then((value){
-        value.docs.forEach((element) {
-          mealIDs.add(Meals(mealName: element.data()['meal name'],
-              mealPrice: element.data()['meal price'], id: element.id));
-        });
-      });
-      notifyListeners();
-    }
-  Future<void> addMeal(String mealName, String price,type) async {
+  bool isMyFav(id) {
+    return myFavorites.any((element) => element.myFavoriteID == id);
+  }
+
+  //  -----------------------------------------food cart------------------------
+  Future<void> foodCart(String mealName, String price, i) async {
     isLoading = true;
     var uuid = Uuid().v4();
-          await FirebaseFirestore.instance
-              .collection('/restaurants/grill house/$type').doc(uuid).set
-              ({
-            'meal name':mealName,
-            'meal price':price,
-          }).then((value) {
-            mealIDs.add(Meals(id: uuid, mealPrice: price, mealName: mealName));
-          });
+    var user = FirebaseAuth.instance.currentUser;
+    if (i <= 1) {
+      await FirebaseFirestore.instance
+          .collection('/users/${user!.uid}').doc(uuid)
+          .set({
+        'meal name': mealName,
+        'meal price': price,
+        'quantity': i,
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection('/users/${user!.uid}').doc(mealID)
+          .update({
+        'quantity': i,
+      });
+    }
+    isLoading = false;
+    notifyListeners();
+  }
+
+  //-----------------------admin----------------------------
+
+  Future<void> fetchMeals() async {
+    await FirebaseFirestore.instance
+        .collection('restaurants/grill house/shawarma')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        mealIDs.add(Meals(
+            mealName: element.data()['meal name'],
+            mealPrice: element.data()['meal price'],
+            id: element.id));
+      });
+    });
+    await FirebaseFirestore.instance
+        .collection('restaurants/grill house/snacks')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        mealIDs.add(Meals(
+            mealName: element.data()['meal name'],
+            mealPrice: element.data()['meal price'],
+            id: element.id));
+      });
+    });
+    await FirebaseFirestore.instance
+        .collection('restaurants/grill house/others')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        mealIDs.add(Meals(
+            mealName: element.data()['meal name'],
+            mealPrice: element.data()['meal price'],
+            id: element.id));
+      });
+    });
+    notifyListeners();
+  }
+
+  Future<void> addMeal(String mealName, String price, type) async {
+    isLoading = true;
+    var uuid = Uuid().v4();
+    await FirebaseFirestore.instance
+        .collection('/restaurants/grill house/$type')
+        .doc(uuid)
+        .set({
+      'meal name': mealName,
+      'meal price': price,
+    }).then((value) {
+      mealIDs.add(Meals(id: uuid, mealPrice: price, mealName: mealName));
+    });
     notifyListeners();
   }
 
   deleteMeal(type) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
-    await FirebaseFirestore.instance.collection('/restaurants/grill house/$type')
-        .doc(mealID).delete();
+    await FirebaseFirestore.instance
+        .collection('/restaurants/grill house/$type')
+        .doc(mealID)
+        .delete();
     mealIDs.removeAt(mealIndex);
     notifyListeners();
   }
 
-  editMeal(String mealName,price,type) async {
+  editMeal(String mealName, price, type) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     mealIDs.removeAt(mealIndex);
-    await FirebaseFirestore.instance.collection('/restaurants/grill house/$type')
-        .doc(mealID).update({
-      'meal name':mealName,
-      'meal price':price,
+    await FirebaseFirestore.instance
+        .collection('/restaurants/grill house/$type')
+        .doc(mealID)
+        .update({
+      'meal name': mealName,
+      'meal price': price,
     }).then((value) {
       mealIDs.add(Meals(mealName: mealName, mealPrice: price, id: mealID));
     });
     notifyListeners();
   }
 
-    //------------------------auth----------------------
-    authStatus authState = authStatus.Authenticated;
-    Map<String, String> authData = {
-      'email': '',
-      'password': '',
-      'phone': '',
-      'name': '',
-    };
-    fetch() async {
-      final userData = FirebaseAuth.instance.currentUser;
-      if (userData != null)
-        await FirebaseFirestore.instance.collection('users').doc(userData.uid)
-            .get().then((val) {
-          authData['email'] = val.data()?['email'];
-          authData['phone'] = val.data()?['phone'];
-          authData['password'] = val.data()?['password'];
-          authData['name'] = val.data()?['username'];
-          notifyListeners();
-        });
-    }
+  //------------------------auth----------------------
+  authStatus authState = authStatus.Authenticated;
+  Map<String, String> authData = {
+    'email': '',
+    'password': '',
+    'phone': '',
+    'name': '',
+  };
 
-  //  ---------------------------------------------------------------------
-
-
+  fetch() async {
+    final userData = FirebaseAuth.instance.currentUser;
+    if (userData != null)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userData.uid)
+          .get()
+          .then((val) {
+        authData['email'] = val.data()?['email'];
+        authData['phone'] = val.data()?['phone'];
+        authData['password'] = val.data()?['password'];
+        authData['name'] = val.data()?['username'];
+        notifyListeners();
+      });
   }
+
+//  ---------------------------------------------------------------------
+
+}
