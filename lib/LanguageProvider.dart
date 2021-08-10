@@ -17,7 +17,8 @@ class LanProvider with ChangeNotifier{
     'Drawer4':'عناوين التوصيل',
     'Drawer5':'طلباتي',
     'Drawer6':'الإعدادات',
-    'Drawer7':'تسجيل الخروج',
+    'Drawer7':'حول التطبيق',
+    'Drawer8':'تسجيل الخروج',
     'my account':'حسابي',
     'my email':'البريد الالكتروني',
     'my name':'اسمي',
@@ -68,7 +69,10 @@ class LanProvider with ChangeNotifier{
     'meal name':'اسم الوجبة',
     'meal price':'سعر الوجبة',
     'add meal':'اضافة وجبة جديدة',
-    'add text':'اضافة الى'
+    'add text':'اضافة الى',
+    'about':'حول التطبيق',
+    'hello':'مرحبا, شكراً لإستخدامكم تطبيقنا.',
+    'If you face':'اذا واجهتم مشاكل خلال استخدامكم التطبيق الرجاء التواصل معنا',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -81,7 +85,8 @@ class LanProvider with ChangeNotifier{
     'Drawer4':'Addresses',
     'Drawer5':'History',
     'Drawer6':'Settings',
-    'Drawer7':'Log out',
+    'Drawer7':'About',
+    'Drawer8':'Log out',
     'my account':'My Account',
     'my email':'My Email',
     'my name':'My Name',
@@ -132,7 +137,10 @@ class LanProvider with ChangeNotifier{
     'meal name':'Meal Name',
     'meal price':'Meal Price',
     'add meal':'Add Meal',
-    'add text':'Add To'
+    'add text':'Add To',
+    'about':'About The Application',
+    'hello':'Hello, thanks for using our app.',
+    'If you face':'If you face any problem let me know please and thank you !',
   };
 
   void changeLan(bool lan){

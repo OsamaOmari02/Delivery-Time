@@ -64,6 +64,12 @@ class _EditState extends State<Edit> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
   @override
+  void dispose() {
+    _mealName.dispose();
+    _price.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
@@ -164,10 +170,6 @@ class _EditState extends State<Edit> {
           ),
         ));
   }
-// User? res = FirebaseAuth.instance.currentUser;
-// Future editFun() async{
-//   FirebaseFirestore.instance.collection('/restaurants/${res!.uid}/')
-// }
 }
 
 //-------------------------addMeal-----------------------------
@@ -180,6 +182,12 @@ class _AddMealState extends State<AddMeal> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
 
+  @override
+  void dispose() {
+    _mealName.dispose();
+    _price.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     var user = FirebaseAuth.instance.currentUser;
@@ -775,7 +783,6 @@ class ThirdAdmin extends StatefulWidget {
 }
 
 class _ThirdAdminState extends State<ThirdAdmin> {
-  int _itemCount = 0;
 
   @override
   Widget build(BuildContext context) {

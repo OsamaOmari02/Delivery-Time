@@ -19,6 +19,13 @@ class _MyPasswordState extends State<MyPassword> {
   TextEditingController myPass = TextEditingController();
   TextEditingController myNewPass = TextEditingController();
   TextEditingController myNewPassConf = TextEditingController();
+  @override
+  void dispose() {
+    myPass.dispose();
+    myNewPass.dispose();
+    myNewPassConf.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

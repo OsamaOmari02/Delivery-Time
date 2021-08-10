@@ -17,7 +17,17 @@ class _RegisterViewState extends State<Register> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _repasswordController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
+
   bool isVisible = true;
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _repasswordController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);

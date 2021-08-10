@@ -73,6 +73,12 @@ class _EmailState extends State<Email> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
   @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -224,6 +230,12 @@ class _NameState extends State<Name> {
   TextEditingController _myName = TextEditingController();
   TextEditingController _password = TextEditingController();
   @override
+  void dispose() {
+    _myName.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -369,6 +381,11 @@ class Phone extends StatefulWidget {
 class _PhoneState extends State<Phone> {
   TextEditingController _phone = TextEditingController();
   TextEditingController _password = TextEditingController();
+  void dispose() {
+    _phone.dispose();
+    _password.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

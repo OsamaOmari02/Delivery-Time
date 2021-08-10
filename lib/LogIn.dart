@@ -123,9 +123,8 @@ class _LoginViewState extends State<Login> {
                       .caption!
                       .copyWith(color: Colors.white),
                 ),
-                onPressed: () {
-                  // TODO: Create forgot password popup.
-                }),
+                onPressed: ()=> Navigator.of(context).pushReplacementNamed('resetPassword')
+            ),
           ],
         ),
       ],

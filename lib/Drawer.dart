@@ -94,10 +94,10 @@ class MyDrawer extends StatelessWidget {
             ),
             listTile(lanProvider.texts('Drawer1'), Icons.home, 'MyHomepage',
                 context),
-            Divider(thickness: 1),
+            Divider(thickness: 0.1,),
             listTile(lanProvider.texts('Drawer2'), Icons.account_circle,
                 'MyAccount', context),
-            Divider(thickness: 1),
+            Divider(thickness: 0.1,),
             ListTile(
               onTap: (){
                 // await provider.fetchFav();
@@ -112,20 +112,23 @@ class MyDrawer extends StatelessWidget {
                 color: Colors.blueAccent,
               ),
             ),
-            Divider(thickness: 1),
+            Divider(thickness: 0.1,),
             listTile(lanProvider.texts('Drawer4'), Icons.location_on_outlined,
                 'MyLocation', context),
-            Divider(thickness: 1),
+            Divider(thickness: 0.1),
             listTile(lanProvider.texts('Drawer5'), Icons.access_time_outlined,
                 'myHistory', context),
-            Divider(thickness: 1),
+            Divider(thickness: 1.5),
             listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings',
                 context),
-            Divider(thickness: 1),
+            Divider(thickness: 0.1),
+            listTile(lanProvider.texts('Drawer7'), Icons.error_outline, 'about',
+                context),
+            Divider(thickness: 0.1),
             ListTile(
               onTap: LogoutFun,
               title: Text(
-                lanProvider.texts('Drawer7'),
+                lanProvider.texts('Drawer8'),
                 style: TextStyle(fontSize: 25, color: Colors.red),
               ),
               leading: Icon(

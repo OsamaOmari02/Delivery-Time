@@ -16,9 +16,8 @@ class _AddAddressState extends State<AddAddress> {
   var _area = TextEditingController();
   var _street = TextEditingController();
   var _phone = TextEditingController();
-  
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
+  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   String? validPass(val) {
     if (val.toString().isEmpty)
       return "Required";
@@ -58,7 +57,13 @@ class _AddAddressState extends State<AddAddress> {
       keyboardType: keyboard,
     );
   }
-
+@override
+  void dispose() {
+  _area.dispose();
+  _street.dispose();
+  _phone.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);

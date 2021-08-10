@@ -18,11 +18,13 @@ import 'LanguageProvider.dart';
 import 'LogIn.dart';
 import 'Myaddress.dart';
 import 'PassWord.dart';
+import 'ResetPassword.dart';
 import 'Shopping_cart.dart';
 import 'MyHistory.dart';
 import 'package:provider/provider.dart';
 
 import 'SignUp.dart';
+import 'about.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,15 +64,18 @@ class MyApp extends StatelessWidget {
         'MyLocation': (context) => MyAddress(),
         'settings': (context) => SettingsScreen(),
         'password': (context) => MyPassword(),
+        'resetPassword':(context) => ResetPassword(),
         'Shopping': (context) => Shopping(),
         'myHistory': (context) => History(),
         'addAddress': (context) => AddAddress(),
         'resScreen':(context)=>Store(),
         'Email':(context)=>Email(),
         'Name':(context)=>Name(),
+        'about':(context)=>About(),
         'admin':(context)=>Admin(),
         'edit':(context)=>Edit(),
         'addMeal':(context)=>AddMeal(),
+
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -83,7 +88,7 @@ class MyHomepage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var _provider = Provider.of<MyProvider>(context);
+    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     content(image, title, Color color) {
       return Container(
@@ -135,7 +140,11 @@ class MyHomepage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed('admin');
+                  for (int i=0;i<provider.mealIDs.length;i++)
+                    print("mealIds: ${provider.mealIDs[i].mealName}");
+                },
                 icon: Icon(Icons.search),
               ),
             )
@@ -157,9 +166,9 @@ class MyHomepage extends StatelessWidget {
                 width: double.infinity,
                 child: Carousel(
                   images: <Widget>[
-                    Image.asset(_provider.imageFun[0], fit: BoxFit.cover),
-                    Image.asset(_provider.imageFun[1], fit: BoxFit.cover),
-                    Image.asset(_provider.imageFun[2], fit: BoxFit.cover),
+                    Image.asset(provider.imageFun[0], fit: BoxFit.cover),
+                    Image.asset(provider.imageFun[1], fit: BoxFit.cover),
+                    Image.asset(provider.imageFun[2], fit: BoxFit.cover),
                   ],
                   dotColor: Colors.white,
                   dotSize: 5,

@@ -33,16 +33,11 @@ class _StoreState extends State<Store> {
             centerTitle: true,
             title: Text('name'),
             actions: <Widget>[
-              // padding: EdgeInsets.only(left: 10),
               IconButton(
                   icon: Icon(Icons.search),
                   onPressed: (){
-                    Navigator.of(context).pushNamed('admin');
-                    for (int i=0;i<provider.mealIDs.length;i++)
-                    print("mealIds: ${provider.mealIDs[i].mealName}");
+
                   }
-                      // showSearch(context: context,
-                      // delegate: Search())
                   ),
             ],
             bottom: TabBar(
