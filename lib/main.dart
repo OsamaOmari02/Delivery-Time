@@ -24,12 +24,12 @@ import 'MyHistory.dart';
 import 'package:provider/provider.dart';
 
 import 'SignUp.dart';
+import 'UserState.dart';
 import 'about.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   runApp(MultiProvider(
       providers:[
         ChangeNotifierProvider<MyProvider>(create: (ctx)=>MyProvider()),
@@ -39,13 +39,28 @@ void main() async{
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState(){
+    Provider.of<MyProvider>(context,listen: false).getDarkMode();
+    Provider.of<LanProvider>(context,listen: false).getLanguage();
+    Provider.of<MyProvider>(context,listen: false).fetch();
+    print(FirebaseAuth.instance.currentUser.uid);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
-      themeMode: Provider.of<MyProvider>(context).isDark?ThemeMode.dark:ThemeMode.light,
+      home: UserState(),
+      themeMode: provider.isDark?ThemeMode.dark:ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
@@ -75,7 +90,7 @@ class MyApp extends StatelessWidget {
         'admin':(context)=>Admin(),
         'edit':(context)=>Edit(),
         'addMeal':(context)=>AddMeal(),
-
+        'userState':(context)=>UserState(),
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -257,6 +272,8 @@ class MyHomepage extends StatelessWidget {
           ),
         ),
       ),
+
     );
   }
+
 }

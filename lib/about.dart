@@ -17,7 +17,8 @@ class _AboutState extends State<About> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
-
+    void _launchURL(url) async =>
+        !await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -53,9 +54,8 @@ class _AboutState extends State<About> {
                   child: IconButton(
                     icon: const Icon(Icons.facebook),
                     color: Colors.white,
-                    onPressed: () async {
-                      await launch("https://www.facebook.com/osama.omarii02");
-                    },
+                    onPressed: ()=>
+                      launch("https://www.facebook.com/osama.omarii02"),
                   ),
                 ),
               ),
@@ -72,9 +72,8 @@ class _AboutState extends State<About> {
                       child: IconButton(
                         icon: const Icon(Icons.email),
                         color: Colors.white,
-                        onPressed: () async {
-                          await launch('mailto:osama.omarii02@gmail.com?subject=&body=');
-                        },
+                        onPressed: ()=>
+                            launch('mailto:osama.omarii02@gmail.com?subject=&body='),
                       ),
                     ),
                   ),

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 enum authStatus { Authenticating, unAuthenticated, Authenticated }
@@ -32,11 +33,29 @@ class Favorites {
 //-----------------------------------------------------------
 class MyProvider with ChangeNotifier {
   bool isDark = false;
+  getDarkMode() async{
+    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+      isDark =  value.data()!['darkMode']?true:false;
+    });
 
-  void darkMode(bool val) {
-    isDark = val;
     notifyListeners();
   }
+  void setDarkMode(bool val) async{
+    isDark = val;
+    notifyListeners();
+    print(FirebaseAuth.instance.currentUser!.uid);
+  }
+  // void setDarkMode(bool val) async{
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   pref.setBool('darkMode', val);
+  //   isDark = val;
+  //   notifyListeners();
+  // }
+  // void getDarkMode() async{
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   isDark = pref.getBool('darkMode')!;
+  //   notifyListeners();
+  // }
 
   bool isLoading = false;
   List<Meals> mealIDs = [];

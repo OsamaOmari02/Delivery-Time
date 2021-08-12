@@ -224,7 +224,7 @@ class _RegisterViewState extends State<Register> {
             return LogoutFun("Empty field!");
           if (_phoneController.text.length!=10 || !_phoneController.text.startsWith("07"))
             return LogoutFun("Invalid phone number");
-          if (_passwordController.text!=_repasswordController.text)
+          if (_passwordController.text.trim()!=_repasswordController.text.trim())
             return LogoutFun("Passwords do not match");
           try {
             setState(() {
@@ -232,15 +232,16 @@ class _RegisterViewState extends State<Register> {
             });
                 UserCredential authRes = await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
-              password: _passwordController.text,
+              password: _passwordController.text.trim(),
                 );
                   await FirebaseFirestore.instance.collection('users')
                       .doc(authRes.user!.uid).set({
-                    'email': _emailController.text.trim(),
+                    'email': _emailController.text,
                     'phone':_phoneController.text,
                     'username':_usernameController.text,
                     'password':_passwordController.text,
-                    'uid':authRes.user!.uid,
+                    'darkMode':false,
+                    'Language':true,
                   });
                   setState(() {
                     provider.authState = authStatus.Authenticated;

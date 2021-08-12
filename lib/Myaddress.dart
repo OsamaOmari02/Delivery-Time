@@ -115,10 +115,12 @@ class _MyAddressState extends State<MyAddress> {
               .collection('/address/${user!.uid}/addresses')
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (!snapshot.hasData)
+            if (!snapshot.hasData ||provider.loc.isEmpty)
               return Center(
                   child: Text(lanProvider.texts('new address'),
-                      style: TextStyle(color: Colors.grey)));
+                      style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
+            if (snapshot.connectionState==ConnectionState.waiting)
+              return Center(child: CircularProgressIndicator());
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, int index) {

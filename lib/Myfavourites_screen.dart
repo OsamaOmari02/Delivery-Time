@@ -69,7 +69,10 @@ class _MyFavouritesState extends State<MyFavourites> {
               .collection('/favorites/${user!.uid}/myFavorites')
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (!snapshot.hasData)
+            if (!snapshot.hasData||provider.myFavorites.isEmpty)
+              return Center(child: Text(lanProvider.texts('no meals were added to favorites'),
+                style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
+            if (snapshot.connectionState==ConnectionState.waiting)
               return Center(child: CircularProgressIndicator());
             return Scrollbar(
               child: Stack(
@@ -78,6 +81,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                   itemBuilder: (context, int index) {
                     var resData = snapshot.data!.docs;
                     return Card(
+                      elevation: 2.5,
                       child: Row(
                         children: <Widget>[
                           Expanded(

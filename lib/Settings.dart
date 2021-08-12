@@ -1,5 +1,7 @@
 import 'package:app/LanguageProvider.dart';
 import 'package:app/Myprovider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -16,6 +18,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var user = FirebaseAuth.instance.currentUser;
+    var res =  FirebaseFirestore.instance.collection('users');
     var lanProvider = Provider.of<LanProvider>(context);
     dialog() {
       return showDialog(
@@ -30,8 +34,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       activeColor: Colors.blueAccent,
                       activeTrackColor: Colors.blue[200],
                       value: lanProvider.isEn,
-                      onChanged: (val){
-                        Provider.of<LanProvider>(context,listen: false).changeLan(val);
+                      onChanged: (val) async{
+                        await res.doc(user!.uid).update({
+                          'Language':val,
+                        });
+                        Provider.of<LanProvider>(context,listen: false).setLanguage(val);
                         Navigator.of(context).pop();
                   }),
                   Text("English", style: TextStyle(fontSize: 20)),
@@ -78,8 +85,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 activeColor: Colors.blueAccent,
                 activeTrackColor: Colors.blue[200],
                 value: Provider.of<MyProvider>(context).isDark,
-                onChanged: (bool val) =>
-                    Provider.of<MyProvider>(context, listen: false).darkMode(val),
+                onChanged: (bool val) async{
+                  await res.doc(user!.uid).update({
+                    'darkMode':val,
+                  });
+                    Provider.of<MyProvider>(context,listen: false).setDarkMode(val);
+                }
+                    // Provider.of<MyProvider>(context, listen: false).setDarkMode(val),
               ),
             ),
             SizedBox(height: height * 0.013),

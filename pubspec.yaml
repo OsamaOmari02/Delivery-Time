@@ -30,6 +30,7 @@ dependencies:
   fluttertoast: ^8.0.8
   url_launcher: ^6.0.9
   cloud_firestore:
+  shared_preferences:
   flutter:
     sdk: flutter
 

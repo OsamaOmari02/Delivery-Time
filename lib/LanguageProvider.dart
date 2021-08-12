@@ -1,9 +1,13 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LanProvider with ChangeNotifier{
+
   bool isEn = true;
 
   Map<String,Object> arabic ={
@@ -34,7 +38,7 @@ class LanProvider with ChangeNotifier{
     'confirm pass':'تأكيد كلمة المرور',
     'my favorites':'المفضلة',
     'my addresses':'عناوين التوصيل',
-    'new address':'عنوان جديد',
+    'new address':'اضف عنوان جديد',
     'area':'المنطقه (مطلوب)',
     'street':'الشارع (مطلوب)',
     'street:':'الشارع: ',
@@ -73,6 +77,9 @@ class LanProvider with ChangeNotifier{
     'about':'حول التطبيق',
     'hello':'مرحبا, شكراً لإستخدامكم تطبيقنا.',
     'If you face':'اذا واجهتم مشاكل خلال استخدامكم التطبيق الرجاء التواصل معنا',
+    'Error occured !':'حدث خطأ !',
+    'something went wrong !':'حدث خطأ !',
+    'no meals were added to favorites':'لا يوجد وجبات مفضلة',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -102,7 +109,7 @@ class LanProvider with ChangeNotifier{
     'confirm pass':'Confirm Password',
     'my favorites':'My Favorites',
     'my addresses':'My Addresses',
-    'new address':'New Address',
+    'new address':'Add A New Address',
     'required':'Required',
     'area':'Area (required)',
     'street':'Street (required)',
@@ -140,15 +147,37 @@ class LanProvider with ChangeNotifier{
     'add text':'Add To',
     'about':'About The Application',
     'hello':'Hello, thanks for using our app.',
-    'If you face':'If you face any problem let me know please and thank you !',
+    'If you face':'If you face any problem let us know please and thank you !',
+    'Error occured !':'Error occured !',
+    'something went wrong !':'something went wrong !',
+    'no meals were added to favorites':'no meals were added to favorites',
   };
 
-  void changeLan(bool lan){
-    isEn = lan;
-    notifyListeners();
-  }
   texts(String txt){
     if (isEn) return english[txt];
     return arabic[txt];
   }
+  void getLanguage() async{
+    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+      isEn =  value.data()!['Language']?true:false;
+    });
+    notifyListeners();
+
+  }
+  void setLanguage(bool val){
+    isEn = val;
+    notifyListeners();
+    print(FirebaseAuth.instance.currentUser!.uid);
+  }
+  // void setDarkMode(bool lan) async{
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   pref.setBool('language', lan);
+  //   isEn = lan;
+  //   notifyListeners();
+  // }
+  // void getLanguage() async{
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   isEn = pref.getBool('language')!;
+  //   notifyListeners();
+  // }
 }

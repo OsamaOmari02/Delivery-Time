@@ -190,6 +190,7 @@ class _FirstState extends State<First> {
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return Card(
+                elevation: 2.5,
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -356,6 +357,7 @@ class _SecondState extends State<Second> {
           itemBuilder: (context, int index) {
             var resData = snapshot.data!.docs;
             return Card(
+              elevation: 2.5,
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -520,6 +522,7 @@ class _ThirdState extends State<Third> {
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return Card(
+                elevation: 2.5,
                 child: Row(
                   children: <Widget>[
                     Expanded(
