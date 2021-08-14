@@ -46,14 +46,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState(){
-    Provider.of<MyProvider>(context,listen: false).getDarkMode();
-    Provider.of<LanProvider>(context,listen: false).getLanguage();
-    Provider.of<MyProvider>(context,listen: false).fetch();
-    print(FirebaseAuth.instance.currentUser.uid);
-    super.initState();
-  }
+
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -97,21 +91,37 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class MyHomepage extends StatelessWidget {
+class MyHomepage extends StatefulWidget {
 
+  @override
+  _MyHomepageState createState() => _MyHomepageState();
+}
+
+class _MyHomepageState extends State<MyHomepage> {
+  @override
+  void initState(){
+    Provider.of<MyProvider>(context,listen: false).getDarkMode();
+    Provider.of<LanProvider>(context,listen: false).getLanguage();
+    Provider.of<MyProvider>(context,listen: false).fetch();
+    Provider.of<MyProvider>(context,listen: false).fetchFav();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    content(image, title, Color color) {
+    Widget content(image, title, Color color) {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
         ),
         child: ElevatedButton(
-          onPressed: ()=> Navigator.of(context).pushNamed('resScreen'),
+          onPressed: (){
+            provider.restaurantName = title;
+            Navigator.of(context).pushNamed('resScreen');
+          },
           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white70)),
           child: Stack(
             alignment: Alignment.bottomCenter,
@@ -127,7 +137,7 @@ class MyHomepage extends StatelessWidget {
         ),
       );
     }
-    Container funImage(route, String title) {
+    Widget funImage(route, String title) {
       return Container(
         width: width * 0.41,
         child: ListTile(
@@ -159,6 +169,9 @@ class MyHomepage extends StatelessWidget {
                   Navigator.of(context).pushNamed('admin');
                   for (int i=0;i<provider.mealIDs.length;i++)
                     print("mealIds: ${provider.mealIDs[i].mealName}");
+                  print("===========================");
+                  for (int i=0;i<provider.myFavorites.length;i++)
+                    print("mealIds: ${provider.myFavorites[i].myFavoriteID}");
                 },
                 icon: Icon(Icons.search),
               ),
@@ -254,10 +267,10 @@ class MyHomepage extends StatelessWidget {
                       childAspectRatio: 3 / 2,
                     ),
                     children: [
+                      content('file/grill_house.jpg', "grill house", Colors.black),
+                      content('file/snap_burger.jpg', "Snap Burger", Colors.white),
                       content('file/grill_house.jpg', "", Colors.black),
                       content('file/grill_house.jpg', "", Colors.black),
-                      content('file/grill_house.jpg', "", Colors.black),
-                      content('file/snap_burger.jpg', "", Colors.white),
                       content('file/grill_house.jpg', "", Colors.black),
                       content('file/grill_house.jpg', "", Colors.black),
                       content('file/grill_house.jpg', "", Colors.black),
@@ -275,5 +288,4 @@ class MyHomepage extends StatelessWidget {
 
     );
   }
-
 }

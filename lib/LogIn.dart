@@ -167,10 +167,11 @@ class _LoginViewState extends State<Login> {
               password: _passwordController.text,
             )).user;
             if (auth != null) {
+              if (!mounted) return;
               setState(() {
+                provider.fetch();
                 provider.authState = authStatus.Authenticated;
               });
-              provider.fetch();
               Navigator.of(context).pushReplacementNamed('MyHomepage');
             }
           } on FirebaseAuthException catch (e) {
@@ -191,8 +192,6 @@ class _LoginViewState extends State<Login> {
     );
 
     final bottom = Column(
-      // mainAxisAlignment: MainAxisAlignment.start,
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         if (provider.authState==authStatus.Authenticating)
           CircularProgressIndicator(color: Colors.white),
@@ -230,7 +229,6 @@ class _LoginViewState extends State<Login> {
 
     return SafeArea(
       child: Scaffold(
-        // backgroundColor: Color.fromRGBO(0, 0, 100, 1).withOpacity(0.65),
         backgroundColor: Colors.blue,
         body: Form(
           key: _formKey,

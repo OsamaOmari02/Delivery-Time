@@ -18,11 +18,18 @@ class _MyFavouritesState extends State<MyFavourites> {
   @override
   void initState() {
     Provider.of<MyProvider>(context,listen: false).fetchFav();
+    print("initState");
     super.initState();
   }
   int _itemCount = 0;
   @override
+  void didChangeDependencies() {
+    print("didChange");
+    super.didChangeDependencies();
+  }
+  @override
   Widget build(BuildContext context) {
+    print("build");
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
@@ -69,17 +76,19 @@ class _MyFavouritesState extends State<MyFavourites> {
               .collection('/favorites/${user!.uid}/myFavorites')
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (!snapshot.hasData||provider.myFavorites.isEmpty)
-              return Center(child: Text(lanProvider.texts('no meals were added to favorites'),
-                style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
+            // if (!snapshot.hasData)
+            //   return Center(child: Text(lanProvider.texts('no meals were added to favorites'),
+            //     style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
             if (snapshot.connectionState==ConnectionState.waiting)
               return Center(child: CircularProgressIndicator());
             return Scrollbar(
               child: Stack(
-                children:[ ListView.builder(
+                children:[
+                  ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, int index) {
                     var resData = snapshot.data!.docs;
+                    if (resData.length!=0)
                     return Card(
                       elevation: 2.5,
                       child: Row(
@@ -195,6 +204,8 @@ class _MyFavouritesState extends State<MyFavourites> {
                         ],
                       ),
                     );
+                    return Center(child: Text(lanProvider.texts('no meals were added to favorites'),
+                        style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
                   },
                 ),
                   Opacity(

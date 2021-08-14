@@ -60,6 +60,7 @@ class MyProvider with ChangeNotifier {
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
+  var restaurantName;
 
   // ---------------addresses----------------------
   List<Address> loc = [];
@@ -120,10 +121,7 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        mealIDs.add(Meals(
-            mealName: element.data()['meal name'],
-            mealPrice: element.data()['meal price'],
-            id: element.id));
+        myFavorites.add(Favorites(myFavoriteID: element.id));
       });
     });
     notifyListeners();
@@ -142,25 +140,15 @@ class MyProvider with ChangeNotifier {
         'meal': mealIDs[mealIndex].id,
         'meal name': mealIDs[mealIndex].mealName,
         'meal price': mealIDs[mealIndex].mealPrice,
-      }).then((value) {
-        myFavorites.add(Favorites(myFavoriteID: mealID));
       });
+        myFavorites.add(Favorites(myFavoriteID: mealID));
     } else {
-      print("deleted");
       await FirebaseFirestore.instance
           .collection('favorites/${user!.uid}/myFavorites')
           .doc(mealID)
-          .delete()
-          .then((value) {
+          .delete();
         myFavorites.removeAt(exists);
-      });
     }
-    for (int i = 0; i < myFavorites.length; i++)
-      print(myFavorites[i].myFavoriteID);
-    print('===================');
-    print("mealID: $mealID");
-    // for (int i=0;i<mealIDs.length;i++)
-    //   print(mealIDs[i].id);
     notifyListeners();
   }
 
@@ -194,9 +182,9 @@ class MyProvider with ChangeNotifier {
 
   //-----------------------admin----------------------------
 
-  Future<void> fetchMeals() async {
+  Future<void> fetchMeals(title) async {
     await FirebaseFirestore.instance
-        .collection('restaurants/grill house/shawarma')
+        .collection('restaurants/$title/shawarma')
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -207,7 +195,7 @@ class MyProvider with ChangeNotifier {
       });
     });
     await FirebaseFirestore.instance
-        .collection('restaurants/grill house/snacks')
+        .collection('restaurants/$title/snacks')
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -218,7 +206,7 @@ class MyProvider with ChangeNotifier {
       });
     });
     await FirebaseFirestore.instance
-        .collection('restaurants/grill house/others')
+        .collection('restaurants/$title/others')
         .get()
         .then((value) {
       value.docs.forEach((element) {

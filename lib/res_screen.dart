@@ -13,13 +13,17 @@ class Store extends StatefulWidget {
   _StoreState createState() => _StoreState();
 }
 class _StoreState extends State<Store> {
+  //-----------------infinite loop--------------
   @override
-  void initState() {
-    Provider.of<MyProvider>(context,listen: false).fetchMeals();
-    super.initState();
+  void didChangeDependencies() {
+    // Provider.of<MyProvider>(context,listen: false).fetchMeals(Provider.of<MyProvider>(context).restaurantName);
+    super.didChangeDependencies();
+    print("didChange");
   }
+  //-----------------infinite loop--------------
   @override
   Widget build(BuildContext context) {
+    print("build");
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
@@ -180,7 +184,7 @@ class _FirstState extends State<First> {
     }
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('/restaurants/grill house/shawarma').snapshots(),
+          .collection('/restaurants/${provider.restaurantName}/shawarma').snapshots(),
       builder: (ctx, snapshot) {
         if(!snapshot.hasData)
           return Center(child: CircularProgressIndicator());
@@ -346,7 +350,7 @@ class _SecondState extends State<Second> {
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('/restaurants/grill house/snacks')
+          .collection('/restaurants/${provider.restaurantName}/snacks')
           .snapshots(),
       builder: (ctx, snapshot) {
         if(!snapshot.hasData)
@@ -508,10 +512,9 @@ class _ThirdState extends State<Third> {
             );
           });
     }
-
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('/restaurants/grill house/others')
+          .collection('/restaurants/${provider.restaurantName}/others')
           .snapshots(),
       builder: (ctx, snapshot) {
         if(!snapshot.hasData)

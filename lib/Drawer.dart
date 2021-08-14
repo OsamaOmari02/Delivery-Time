@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:app/Myprovider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,12 @@ import 'package:provider/provider.dart';
 
 import 'LanguageProvider.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
+  @override
+  _MyDrawerState createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
   ListTile listTile(String title, icon, route, BuildContext ctx) {
     return ListTile(
       onTap: () => Navigator.of(ctx).pushReplacementNamed(route),
@@ -52,12 +58,31 @@ class MyDrawer extends StatelessWidget {
                     lanProvider.texts('yes?'),
                     style: TextStyle(fontSize: 19, color: Colors.red),
                   ),
-                  onTap: () => FirebaseAuth.instance.signOut().then((_) {
-                    provider.authState = authStatus.Authenticated;
-                    Navigator.of(context).pushReplacementNamed('login');
-                  }),
+                  onTap: () async{
+                    try {
+                      await FirebaseAuth.instance.signOut();
+                      setState(() {
+                        provider.authState = authStatus.Authenticated;
+                        Navigator.of(context).pushReplacementNamed('login');
+                        Provider.of<MyProvider>(context,listen: false).authData.clear();
+                        Provider.of<MyProvider>(context,listen: false).myFavorites.clear();
+                        Provider.of<MyProvider>(context,listen: false).loc.clear();
+                        Provider.of<MyProvider>(context,listen: false).mealIDs.clear();
+                      });
+                    }on FirebaseException catch (e){
+                       print(e.message);
+                      setState(() {
+                        provider.authState = authStatus.unAuthenticated;
+                      });
+                    } catch (e){
+                      print(e);
+                      setState(() {
+                        provider.authState = authStatus.unAuthenticated;
+                      });
+                    }
+                  }
                 ),
-                SizedBox(width: 11),
+                const SizedBox(width: 11),
                 InkWell(
                     child: Text(lanProvider.texts('cancel?'),
                         style: TextStyle(fontSize: 19)),
