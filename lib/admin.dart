@@ -12,7 +12,21 @@ class Admin extends StatefulWidget {
   @override
   _AdminState createState() => _AdminState();
 }
+var i=0;
 class _AdminState extends State<Admin> {
+  @override
+  void initState() {
+    Future.delayed(Duration.zero).then((value){
+      Provider.of<MyProvider>(context,listen: false).tabIndex = "shawarma";
+      Provider.of<MyProvider>(context,listen: false).fetchMeals("grill house");
+    });
+    super.initState();
+  }
+  // @override
+  // void dispose() {
+  //   Provider.of<MyProvider>(context,listen: false).mealIDs = [];
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -32,6 +46,16 @@ class _AdminState extends State<Admin> {
                   Tab(text: lanProvider.texts('tab2')),
                   Tab(text: lanProvider.texts('tab3')),
                 ],
+                onTap: (index){
+                  if (index==0)
+                    provider.tabIndex = "shawarma";
+                  else if (index==1)
+                    provider.tabIndex = "snacks";
+                  else
+                    provider.tabIndex = "others";
+                  print(provider.tabIndex);
+                  print(index);
+                },
               ),
             ),
             body: Stack(children: [
@@ -85,11 +109,13 @@ class _EditState extends State<Edit> {
                     color: Colors.red,
                   ),
                   SizedBox(width: 10),
-                  Text(
-                    title,
-                    textAlign:
-                    lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                    style: TextStyle(fontSize: 23),
+                  Expanded(
+                    child: Text(
+                      title,
+                      textAlign:
+                      lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                      style: TextStyle(fontSize: 23),
+                    ),
                   ),
                 ],
               ),
@@ -147,7 +173,7 @@ class _EditState extends State<Edit> {
                         setState(() {
                             provider.isLoading= true;
                         });
-                        await provider.editMeal(_mealName.text, _price.text,"");
+                        await provider.editMeal(_mealName.text, _price.text,provider.tabIndex);
                         Navigator.of(context).pop();
                         setState(() {
                           provider.isLoading= false;
@@ -157,11 +183,13 @@ class _EditState extends State<Edit> {
                           provider.isLoading= false;
                         });
                         dialog(e.message);
+                        print(e);
                       } catch (e){
                         setState(() {
                           provider.isLoading= false;
                         });
                         dialog('error !');
+                        print(e);
                       }
                     },
                     child: Text(lanProvider.texts('save'))),
@@ -251,7 +279,7 @@ class _AddMealState extends State<AddMeal> {
                 keyboardType: TextInputType.text,
                 controller: _mealName,
                 decoration: InputDecoration(
-                  labelText: lanProvider.texts('add meal'),
+                  labelText: lanProvider.texts('meal name'),
                 ),
               ),
               TextField(

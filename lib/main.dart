@@ -171,7 +171,7 @@ class _MyHomepageState extends State<MyHomepage> {
                     print("mealIds: ${provider.mealIDs[i].mealName}");
                   print("===========================");
                   for (int i=0;i<provider.myFavorites.length;i++)
-                    print("mealIds: ${provider.myFavorites[i].myFavoriteID}");
+                    print("favoritesIds: ${provider.myFavorites[i].myFavoriteID}");
                 },
                 icon: Icon(Icons.search),
               ),

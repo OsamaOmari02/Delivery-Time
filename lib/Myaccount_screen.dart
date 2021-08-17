@@ -72,10 +72,18 @@ class _EmailState extends State<Email> {
 
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
+  FocusNode? focusNode;
+
+  @override
+  void initState() {
+    focusNode = new FocusNode();
+    super.initState();
+  }
   @override
   void dispose() {
     _email.dispose();
     _password.dispose();
+    focusNode!.dispose();
     super.dispose();
   }
   @override
@@ -133,6 +141,7 @@ class _EmailState extends State<Email> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: TextField(
+                  focusNode: focusNode,
                   keyboardType: TextInputType.emailAddress,
                   autofocus: true,
                   controller: _email,
@@ -149,6 +158,7 @@ class _EmailState extends State<Email> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: TextField(
+                  focusNode: focusNode,
                   keyboardType: TextInputType.visiblePassword,
                   controller: _password,
                   obscureText: true,
@@ -182,13 +192,13 @@ class _EmailState extends State<Email> {
                             provider.authState=authStatus.Authenticating;
                           });
                           await
-                          FirebaseAuth.instance.currentUser!.updateEmail(_email.text);
+                          FirebaseAuth.instance.currentUser!.updateEmail(_email.text.trim());
                           await
                           FirebaseFirestore.instance.collection('users')
                               .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .update({'email':_email.text});
+                              .update({'email':_email.text.trim()});
                           setState(() {
-                            provider.authData['email'] = _email.text;
+                            provider.authData['email'] = _email.text.trim();
                             provider.authState=authStatus.Authenticated;
                           });
                           Navigator.of(context).pop();
@@ -200,10 +210,41 @@ class _EmailState extends State<Email> {
                               fontSize: 16.0
                           );
                         } on FirebaseAuthException catch (e) {
-                          dialog(e.message);
-                          setState(() {
-                            provider.authState = authStatus.unAuthenticated;
-                          });
+                          if (e.message=="This operation is sensitive and requires"
+                              " recent authentication. Log in again before retrying this request.")
+                            {
+                              AuthCredential credential = EmailAuthProvider.credential(email: provider.authData['email']!, password: provider.authData['password']!);
+                              await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+                              setState(() {
+                                provider.authState=authStatus.Authenticating;
+                              });
+                              await
+                              FirebaseAuth.instance.currentUser!.updateEmail(_email.text.trim());
+                              await
+                              FirebaseFirestore.instance.collection('users')
+                                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                                  .update({'email':_email.text.trim()});
+                              setState(() {
+                                provider.authData['email'] = _email.text.trim();
+                                provider.authState=authStatus.Authenticated;
+                              });
+                              Navigator.of(context).pop();
+                              Fluttertoast.showToast(
+                                  msg: "Email Updated Successfully",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  backgroundColor: Colors.grey,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                              );
+                            }
+                          else
+                            {
+                              dialog(e.message);
+                              setState(() {
+                                provider.authState = authStatus.unAuthenticated;
+                              });
+                            }
+                          print(e.message);
                         } catch(e)
                         {
                           dialog('error!');

@@ -181,7 +181,7 @@ class MyProvider with ChangeNotifier {
   }
 
   //-----------------------admin----------------------------
-
+  String tabIndex = "shawarma";
   Future<void> fetchMeals(title) async {
     await FirebaseFirestore.instance
         .collection('restaurants/$title/shawarma')

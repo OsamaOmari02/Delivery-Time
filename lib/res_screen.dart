@@ -13,17 +13,21 @@ class Store extends StatefulWidget {
   _StoreState createState() => _StoreState();
 }
 class _StoreState extends State<Store> {
-  //-----------------infinite loop--------------
   @override
-  void didChangeDependencies() {
-    // Provider.of<MyProvider>(context,listen: false).fetchMeals(Provider.of<MyProvider>(context).restaurantName);
-    super.didChangeDependencies();
-    print("didChange");
+  void initState() {
+    Future.delayed(Duration.zero).then((value){
+      Provider.of<MyProvider>(context,listen: false).
+      fetchMeals(Provider.of<MyProvider>(context,listen: false).restaurantName);
+    });
+    super.initState();
   }
-  //-----------------infinite loop--------------
+  // @override
+  // void dispose() {
+  //   Provider.of<MyProvider>(context,listen: false).mealIDs = [];
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
-    print("build");
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);

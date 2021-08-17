@@ -18,15 +18,9 @@ class _MyFavouritesState extends State<MyFavourites> {
   @override
   void initState() {
     Provider.of<MyProvider>(context,listen: false).fetchFav();
-    print("initState");
     super.initState();
   }
   int _itemCount = 0;
-  @override
-  void didChangeDependencies() {
-    print("didChange");
-    super.didChangeDependencies();
-  }
   @override
   Widget build(BuildContext context) {
     print("build");
