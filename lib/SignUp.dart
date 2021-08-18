@@ -17,8 +17,21 @@ class _RegisterViewState extends State<Register> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _repasswordController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
-
+  FocusNode nameNode = FocusNode();
+  FocusNode phoneNode = FocusNode();
+  FocusNode emailNode = FocusNode();
+  FocusNode passNode = FocusNode();
+  FocusNode repassNode = FocusNode();
   bool isVisible = true;
+  @override
+  void initState() {
+    nameNode = FocusNode();
+    phoneNode = FocusNode();
+    emailNode = FocusNode();
+    passNode = FocusNode();
+    repassNode = FocusNode();
+    super.initState();
+  }
   @override
   void dispose() {
     _usernameController.dispose();
@@ -26,6 +39,11 @@ class _RegisterViewState extends State<Register> {
     _passwordController.dispose();
     _repasswordController.dispose();
     _phoneController.dispose();
+    nameNode.dispose();
+    phoneNode.dispose();
+    emailNode.dispose();
+    passNode.dispose();
+    repassNode.dispose();
     super.dispose();
   }
   @override
@@ -68,7 +86,13 @@ class _RegisterViewState extends State<Register> {
             );
           });
     }
+    void requestNode(BuildContext context,FocusNode focusNode){
+      FocusScope.of(context).requestFocus(focusNode);
+    }
     final usernameField = TextFormField(
+      focusNode: nameNode,
+      onEditingComplete: ()=>requestNode(context,phoneNode),
+      textInputAction: TextInputAction.next,
       controller: _usernameController,
       keyboardType: TextInputType.text,
       style: TextStyle(
@@ -76,6 +100,7 @@ class _RegisterViewState extends State<Register> {
       ),
       cursorColor: Colors.white,
       decoration: InputDecoration(
+        icon: Icon(Icons.person,color: Colors.white),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.white,
@@ -89,6 +114,9 @@ class _RegisterViewState extends State<Register> {
     );
 
     final phoneField = TextFormField(
+      focusNode: phoneNode,
+      onEditingComplete: ()=>requestNode(context,emailNode),
+      textInputAction: TextInputAction.next,
       controller: _phoneController,
       keyboardType: TextInputType.phone,
       style: TextStyle(
@@ -96,6 +124,7 @@ class _RegisterViewState extends State<Register> {
       ),
       cursorColor: Colors.white,
       decoration: InputDecoration(
+        icon: Icon(Icons.phone,color: Colors.white),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.white,
@@ -112,6 +141,9 @@ class _RegisterViewState extends State<Register> {
     );
 
     final emailField = TextFormField(
+      focusNode: emailNode,
+      onEditingComplete: ()=>requestNode(context,passNode),
+      textInputAction: TextInputAction.next,
       controller: _emailController,
       // key: ValueKey('email'),
       keyboardType: TextInputType.emailAddress,
@@ -120,6 +152,7 @@ class _RegisterViewState extends State<Register> {
       ),
       cursorColor: Colors.white,
       decoration: InputDecoration(
+        icon: Icon(Icons.alternate_email_outlined,color: Colors.white),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.white,
@@ -138,6 +171,9 @@ class _RegisterViewState extends State<Register> {
 
     final passwordField = Container(
       child: TextField(
+        focusNode: passNode,
+        onEditingComplete: ()=>requestNode(context,repassNode),
+        textInputAction: TextInputAction.next,
         controller: _passwordController,
         obscureText: isVisible,
         keyboardType: TextInputType.visiblePassword,
@@ -146,6 +182,7 @@ class _RegisterViewState extends State<Register> {
         ),
         cursorColor: Colors.white,
         decoration: InputDecoration(
+          icon: Icon(Icons.lock,color: Colors.white),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               color: Colors.white,
@@ -157,7 +194,7 @@ class _RegisterViewState extends State<Register> {
                 isVisible = !isVisible;
               });
             },
-            icon: Icon(isVisible == true ? Icons.visibility : Icons.visibility_off),),
+            icon: Icon(isVisible ? Icons.visibility : Icons.visibility_off),color: Colors.white,),
           labelText: "Password",
           labelStyle: TextStyle(
             color: Colors.white,
@@ -167,6 +204,7 @@ class _RegisterViewState extends State<Register> {
     );
 
     final repasswordField = TextFormField(
+      focusNode: repassNode,
       obscureText: true,
       controller: _repasswordController,
       style: TextStyle(
@@ -174,6 +212,7 @@ class _RegisterViewState extends State<Register> {
       ),
       cursorColor: Colors.white,
       decoration: InputDecoration(
+        icon: Icon(Icons.lock,color: Colors.white),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.white,
@@ -224,7 +263,7 @@ class _RegisterViewState extends State<Register> {
             return LogoutFun("Empty field!");
           if (_phoneController.text.length!=10 || !_phoneController.text.startsWith("07"))
             return LogoutFun("Invalid phone number");
-          if (_passwordController.text.trim()!=_repasswordController.text.trim())
+          if (_passwordController.text!=_repasswordController.text)
             return LogoutFun("Passwords do not match");
           try {
             setState(() {
@@ -232,11 +271,11 @@ class _RegisterViewState extends State<Register> {
             });
                 UserCredential authRes = await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
+              password: _passwordController.text,
                 );
                   await FirebaseFirestore.instance.collection('users')
                       .doc(authRes.user!.uid).set({
-                    'email': _emailController.text,
+                    'email': _emailController.text.trim(),
                     'phone':_phoneController.text,
                     'username':_usernameController.text,
                     'password':_passwordController.text,

@@ -65,6 +65,21 @@ class MyProvider with ChangeNotifier {
   // ---------------addresses----------------------
   List<Address> loc = [];
 
+  Future<void> fetchAddress() async {
+    var user = FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance
+        .collection('address/${user!.uid}/addresses')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = loc.any((e) => e.id==element.id);
+        if (!exists)
+        loc.add(Address(id: element.id));
+      });
+    });
+    notifyListeners();
+  }
+
   Future<void> add(String area, String street, String phone) async {
     var user = FirebaseAuth.instance.currentUser;
     isLoading = true;
@@ -121,6 +136,8 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
+        bool exists = myFavorites.any((e) => e.myFavoriteID==element.id);
+        if (!exists)
         myFavorites.add(Favorites(myFavoriteID: element.id));
       });
     });
@@ -188,6 +205,8 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
+         bool exists = mealIDs.any((e) => e.id==element.id);
+        if (!exists)
         mealIDs.add(Meals(
             mealName: element.data()['meal name'],
             mealPrice: element.data()['meal price'],
@@ -199,6 +218,8 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id==element.id);
+        if (!exists)
         mealIDs.add(Meals(
             mealName: element.data()['meal name'],
             mealPrice: element.data()['meal price'],
@@ -210,6 +231,8 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id==element.id);
+        if (!exists)
         mealIDs.add(Meals(
             mealName: element.data()['meal name'],
             mealPrice: element.data()['meal price'],

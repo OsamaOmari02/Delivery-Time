@@ -18,6 +18,13 @@ class MyAddress extends StatefulWidget {
 }
 
 class _MyAddressState extends State<MyAddress> {
+
+
+  @override
+  void initState() {
+    Provider.of<MyProvider>(context,listen: false).fetchAddress();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

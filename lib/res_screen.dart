@@ -21,11 +21,6 @@ class _StoreState extends State<Store> {
     });
     super.initState();
   }
-  // @override
-  // void dispose() {
-  //   Provider.of<MyProvider>(context,listen: false).mealIDs = [];
-  //   super.dispose();
-  // }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

@@ -22,11 +22,6 @@ class _AdminState extends State<Admin> {
     });
     super.initState();
   }
-  // @override
-  // void dispose() {
-  //   Provider.of<MyProvider>(context,listen: false).mealIDs = [];
-  //   super.dispose();
-  // }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);

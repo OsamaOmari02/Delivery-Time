@@ -51,7 +51,7 @@ class MyAccount extends StatelessWidget {
               // Divider(thickness: 1),
               ListTile(
                 title: Text(lanProvider.texts('my password'),style: TextStyle(fontSize: 19),),
-                leading: const Icon(Icons.password),
+                leading: const Icon(Icons.lock),
                 trailing: const Icon(Icons.arrow_forward),
                 onTap: ()=>Navigator.of(context).pushNamed('password'),
               ),
@@ -72,18 +72,11 @@ class _EmailState extends State<Email> {
 
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
-  FocusNode? focusNode;
 
-  @override
-  void initState() {
-    focusNode = new FocusNode();
-    super.initState();
-  }
   @override
   void dispose() {
     _email.dispose();
     _password.dispose();
-    focusNode!.dispose();
     super.dispose();
   }
   @override
@@ -141,9 +134,7 @@ class _EmailState extends State<Email> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: TextField(
-                  focusNode: focusNode,
                   keyboardType: TextInputType.emailAddress,
-                  autofocus: true,
                   controller: _email,
                   decoration: InputDecoration(
                     icon: Icon(
@@ -158,13 +149,12 @@ class _EmailState extends State<Email> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: TextField(
-                  focusNode: focusNode,
                   keyboardType: TextInputType.visiblePassword,
                   controller: _password,
                   obscureText: true,
                   decoration: InputDecoration(
                     icon: Icon(
-                      Icons.password,
+                      Icons.lock,
                       color: Colors.blue,
                     ),
                     labelText: lanProvider.texts('pass'),
@@ -181,11 +171,11 @@ class _EmailState extends State<Email> {
                     child: ElevatedButton(
                       onPressed: () async {
                         try{
-                          if(_email.text.isEmpty || _password.text.isEmpty) {
-                            return dialog(lanProvider.texts('Empty field'));
+                          if(_email.text.trim().isEmpty || _password.text.isEmpty) {
+                            return dialog(lanProvider.texts('empty field'));
                           }  if (_password.text != provider.authData['password']) {
                             return dialog(lanProvider.texts('ur password isnt correct'));
-                          } if (_email.text == provider.authData['email']) {
+                          } if (_email.text.trim() == provider.authData['email']) {
                             return dialog('Your new email must be different than your current email');
                           }
                           setState(() {
@@ -213,11 +203,11 @@ class _EmailState extends State<Email> {
                           if (e.message=="This operation is sensitive and requires"
                               " recent authentication. Log in again before retrying this request.")
                             {
-                              AuthCredential credential = EmailAuthProvider.credential(email: provider.authData['email']!, password: provider.authData['password']!);
-                              await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
                               setState(() {
                                 provider.authState=authStatus.Authenticating;
                               });
+                              AuthCredential credential = EmailAuthProvider.credential(email: provider.authData['email']!, password: provider.authData['password']!);
+                              await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
                               await
                               FirebaseAuth.instance.currentUser!.updateEmail(_email.text.trim());
                               await
@@ -248,7 +238,10 @@ class _EmailState extends State<Email> {
                         } catch(e)
                         {
                           dialog('error!');
-                          provider.authState=authStatus.unAuthenticated;
+                          print(e);
+                          setState(() {
+                            provider.authState=authStatus.unAuthenticated;
+                          });
                         }
                       },
                       child: Text(lanProvider.texts('save&exit'),
@@ -347,7 +340,7 @@ class _NameState extends State<Name> {
                     controller: _password,
                     decoration: InputDecoration(
                       icon: Icon(
-                        Icons.password,
+                        Icons.lock,
                         color: Colors.blue,
                       ),
                       labelText: lanProvider.texts('pass'),
@@ -501,7 +494,7 @@ class _PhoneState extends State<Phone> {
                   controller: _password,
                   decoration: InputDecoration(
                     icon: Icon(
-                      Icons.password,
+                      Icons.lock,
                       color: Colors.blue,
                     ),
                     labelText: "Password",

@@ -67,6 +67,7 @@ class _LoginViewState extends State<Login> {
       ),
       cursorColor: Colors.white,
       decoration: InputDecoration(
+        icon: Icon(Icons.alternate_email_outlined,color: Colors.white),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.white,
@@ -93,6 +94,7 @@ class _LoginViewState extends State<Login> {
           ),
           cursorColor: Colors.white,
           decoration: InputDecoration(
+            icon: Icon(Icons.lock,color: Colors.white),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.white,
@@ -229,7 +231,7 @@ class _LoginViewState extends State<Login> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blueAccent,
         body: Form(
           key: _formKey,
           child: SingleChildScrollView(

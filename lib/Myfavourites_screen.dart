@@ -23,7 +23,6 @@ class _MyFavouritesState extends State<MyFavourites> {
   int _itemCount = 0;
   @override
   Widget build(BuildContext context) {
-    print("build");
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
