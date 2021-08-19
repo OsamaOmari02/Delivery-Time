@@ -130,39 +130,50 @@ class _MyFavouritesState extends State<MyFavourites> {
                                         }
                                       },
                                     ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      SizedBox(height: 20),
-                                      Container(
-                                        padding: EdgeInsets.only(left: 10),
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          resData[index]['meal name'],
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(left: 10),
-                                        alignment: Alignment.bottomLeft,
-                                        margin: EdgeInsets.only(top: 17),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 7),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        const SizedBox(height: 20),
+                                        Container(
+                                          padding: const EdgeInsets.only(left: 10),
+                                          alignment: Alignment.topLeft,
                                           child: Text(
-                                            lanProvider.texts('price') +
-                                                " " +
-                                                resData[index]['meal price'] +
-                                                " " +
-                                                lanProvider.texts('jd'),
+                                            resData[index]['meal name'],
                                             style: TextStyle(
-                                                fontSize: 16, color: Colors.pink),
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w800),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(height: 10),
+                                        Container(
+                                          padding: const EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            resData[index]['description'],
+                                            style: TextStyle(
+                                                fontSize: 15, color: Colors.grey),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.only(left: 10),
+                                          alignment: Alignment.bottomLeft,
+                                          margin: const EdgeInsets.only(top: 17),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 7),
+                                            child: Text(
+                                              lanProvider.texts('price') +
+                                                  " " +
+                                                  resData[index]['meal price'] +
+                                                  " " +
+                                                  lanProvider.texts('jd'),
+                                              style: TextStyle(
+                                                  fontSize: 16, color: Colors.pink),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),

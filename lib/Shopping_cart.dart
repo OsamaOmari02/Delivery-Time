@@ -13,9 +13,9 @@ class Shopping extends StatefulWidget {
   _ShoppingState createState() => _ShoppingState();
 }
 
-int _itemCount = 0;
 
 class _ShoppingState extends State<Shopping> {
+  int _itemCount = 0;
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);

@@ -80,6 +80,7 @@ class LanProvider with ChangeNotifier{
     'Error occured !':'حدث خطأ !',
     'something went wrong !':'حدث خطأ !',
     'no meals were added to favorites':'لا يوجد وجبات مفضلة',
+    'desc':'الوصف',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -151,6 +152,7 @@ class LanProvider with ChangeNotifier{
     'Error occured !':'Error occured !',
     'something went wrong !':'something went wrong !',
     'no meals were added to favorites':'no meals were added to favorites',
+    'desc':'Description',
   };
 
   texts(String txt){

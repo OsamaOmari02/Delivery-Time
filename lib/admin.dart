@@ -12,16 +12,19 @@ class Admin extends StatefulWidget {
   @override
   _AdminState createState() => _AdminState();
 }
-var i=0;
+
+var i = 0;
+
 class _AdminState extends State<Admin> {
   @override
   void initState() {
-    Future.delayed(Duration.zero).then((value){
-      Provider.of<MyProvider>(context,listen: false).tabIndex = "shawarma";
-      Provider.of<MyProvider>(context,listen: false).fetchMeals("grill house");
+    Future.delayed(Duration.zero).then((value) {
+      Provider.of<MyProvider>(context, listen: false).tabIndex = "shawarma";
+      Provider.of<MyProvider>(context, listen: false).fetchMeals("grill house");
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -37,14 +40,16 @@ class _AdminState extends State<Admin> {
               title: Text('restaurant\'s name'),
               bottom: TabBar(
                 tabs: [
-                  Tab(text: lanProvider.texts('tab1'),),
+                  Tab(
+                    text: lanProvider.texts('tab1'),
+                  ),
                   Tab(text: lanProvider.texts('tab2')),
                   Tab(text: lanProvider.texts('tab3')),
                 ],
-                onTap: (index){
-                  if (index==0)
+                onTap: (index) {
+                  if (index == 0)
                     provider.tabIndex = "shawarma";
-                  else if (index==1)
+                  else if (index == 1)
                     provider.tabIndex = "snacks";
                   else
                     provider.tabIndex = "others";
@@ -79,15 +84,18 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> {
-
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
+  TextEditingController _description = TextEditingController();
+
   @override
   void dispose() {
     _mealName.dispose();
     _price.dispose();
+    _description.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
@@ -108,7 +116,7 @@ class _EditState extends State<Edit> {
                     child: Text(
                       title,
                       textAlign:
-                      lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                          lanProvider.isEn ? TextAlign.start : TextAlign.end,
                       style: TextStyle(fontSize: 23),
                     ),
                   ),
@@ -133,6 +141,7 @@ class _EditState extends State<Edit> {
             );
           });
     }
+
     return Directionality(
         textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
         child: Scaffold(
@@ -159,35 +168,46 @@ class _EditState extends State<Edit> {
                       labelText: lanProvider.texts('meal price'),
                       hintText: "ex: 2.00"),
                 ),
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: _description,
+                  decoration: InputDecoration(
+                    labelText: lanProvider.texts('desc'),
+                  ),
+                ),
                 SizedBox(height: 30),
-                if (provider.isLoading) Center(child: CircularProgressIndicator()),
+                if (provider.isLoading)
+                  Center(child: CircularProgressIndicator()),
                 if (!provider.isLoading)
-                ElevatedButton(
-                    onPressed: () async{
-                      try{
-                        setState(() {
-                            provider.isLoading= true;
-                        });
-                        await provider.editMeal(_mealName.text, _price.text,provider.tabIndex);
-                        Navigator.of(context).pop();
-                        setState(() {
-                          provider.isLoading= false;
-                        });
-                      } on FirebaseException catch (e){
-                        setState(() {
-                          provider.isLoading= false;
-                        });
-                        dialog(e.message);
-                        print(e);
-                      } catch (e){
-                        setState(() {
-                          provider.isLoading= false;
-                        });
-                        dialog('error !');
-                        print(e);
-                      }
-                    },
-                    child: Text(lanProvider.texts('save'))),
+                  ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          if (_mealName.text.isEmpty || _price.text.isEmpty)
+                            return dialog(lanProvider.texts('empty field'));
+                          setState(() {
+                            provider.isLoading = true;
+                          });
+                          await provider.editMeal(_mealName.text, _price.text,
+                              _description.text, provider.tabIndex);
+                          Navigator.of(context).pop();
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                        } on FirebaseException catch (e) {
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                          dialog(e.message);
+                          print(e);
+                        } catch (e) {
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                          dialog('error !');
+                          print(e);
+                        }
+                      },
+                      child: Text(lanProvider.texts('save'))),
               ],
             ),
           ),
@@ -204,13 +224,16 @@ class AddMeal extends StatefulWidget {
 class _AddMealState extends State<AddMeal> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
+  TextEditingController _description = TextEditingController();
 
   @override
   void dispose() {
     _mealName.dispose();
     _price.dispose();
+    _description.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     var user = FirebaseAuth.instance.currentUser;
@@ -285,121 +308,141 @@ class _AddMealState extends State<AddMeal> {
                   hintText: "ex: 2.00",
                 ),
               ),
+              TextField(
+                keyboardType: TextInputType.text,
+                controller: _description,
+                decoration: InputDecoration(
+                  labelText: lanProvider.texts('desc'),
+                ),
+              ),
               const SizedBox(height: 20),
               if (provider.isLoading)
                 Center(child: CircularProgressIndicator()),
               if (!provider.isLoading)
-                Center(child: Text(lanProvider.texts('add text'),style: TextStyle(fontSize: width*0.037),),),
-                    SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    lanProvider.texts('add text'),
+                    style: TextStyle(fontSize: width * 0.037),
+                  ),
+                ),
+              SizedBox(height: 10),
               if (!provider.isLoading)
-                    Container(
-                      width: width*0.3,
-                      height: height*0.07,
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            try {
-                              if (_mealName.text.isEmpty || _price.text.isEmpty)
-                                return dialog(lanProvider.texts('empty field'));
-                              setState(() {
-                                provider.isLoading = true;
-                              });
-                              await provider.addMeal(
-                                  _mealName.text, _price.text, "shawarma");
-                              Navigator.of(context).pop();
-                              Fluttertoast.showToast(
-                                  msg: "Meal Added",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  backgroundColor: Colors.grey,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0
-                              );
-                              setState(() {
-                                provider.isLoading = false;
-                              });
-                            } on FirebaseException catch (e) {
-                              setState(() {
-                                provider.isLoading = false;
-                              });
-                              return dialog(e.message);
-                            } catch (e) {
-                              setState(() {
-                                provider.isLoading = false;
-                              });
-                              print(e);
-                              dialog('error !');
-                            }
-                          },
-                          child: Text(lanProvider.texts('tab1'),style: TextStyle(fontSize: width*0.05),),
-                      ),
+                Container(
+                  width: width * 0.3,
+                  height: height * 0.07,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        if (_mealName.text.isEmpty || _price.text.isEmpty)
+                          return dialog(lanProvider.texts('empty field'));
+                        setState(() {
+                          provider.isLoading = true;
+                        });
+                        await provider.addMeal(_mealName.text, _price.text,
+                            _description.text, "shawarma");
+                        Navigator.of(context).pop();
+                        Fluttertoast.showToast(
+                            msg: "Meal Added",
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                      } on FirebaseException catch (e) {
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                        return dialog(e.message);
+                      } catch (e) {
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                        print(e);
+                        dialog('error !');
+                      }
+                    },
+                    child: Text(
+                      lanProvider.texts('tab1'),
+                      style: TextStyle(fontSize: width * 0.05),
                     ),
-                    SizedBox(height: 20),
+                  ),
+                ),
+              SizedBox(height: 20),
               if (!provider.isLoading)
-                    Container(
-                      width: width*0.3,
-                      height: height*0.07,
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            try {
-                              if (_mealName.text.isEmpty || _price.text.isEmpty)
-                                return dialog(lanProvider.texts('empty field'));
-                              setState(() {
-                                provider.isLoading = true;
-                              });
-                              await provider.addMeal(
-                                  _mealName.text, _price.text, "snacks");
-                              Navigator.of(context).pop();
-                              setState(() {
-                                provider.isLoading = false;
-                              });
-                            } on FirebaseException catch (e) {
-                              setState(() {
-                                provider.isLoading = false;
-                              });
-                              return dialog(e.message);
-                            } catch (e) {
-                              setState(() {
-                                provider.isLoading = false;
-                              });
-                              print(e);
-                              dialog('error !');
-                            }
-                          },
-                          child: Text(lanProvider.texts('tab2'),style: TextStyle(fontSize: width*0.05),)),
-                    ),
-                    SizedBox(height: 20),
+                Container(
+                  width: width * 0.3,
+                  height: height * 0.07,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          if (_mealName.text.isEmpty || _price.text.isEmpty)
+                            return dialog(lanProvider.texts('empty field'));
+                          setState(() {
+                            provider.isLoading = true;
+                          });
+                          await provider.addMeal(_mealName.text, _price.text,
+                              _description.text, "snacks");
+                          Navigator.of(context).pop();
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                        } on FirebaseException catch (e) {
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                          return dialog(e.message);
+                        } catch (e) {
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                          print(e);
+                          dialog('error !');
+                        }
+                      },
+                      child: Text(
+                        lanProvider.texts('tab2'),
+                        style: TextStyle(fontSize: width * 0.05),
+                      )),
+                ),
+              SizedBox(height: 20),
               if (!provider.isLoading)
-                    Container(
-                      width: width*0.3,
-                      height: height*0.07,
-                      child: ElevatedButton(
-                            onPressed: () async {
-                              try {
-                                if (_mealName.text.isEmpty || _price.text.isEmpty)
-                                  return dialog(lanProvider.texts('empty field'));
-                                setState(() {
-                                  provider.isLoading = true;
-                                });
-                                await provider.addMeal(
-                                    _mealName.text, _price.text, "others");
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  provider.isLoading = false;
-                                });
-                              } on FirebaseException catch (e) {
-                                setState(() {
-                                  provider.isLoading = false;
-                                });
-                                return dialog(e.message);
-                              } catch (e) {
-                                setState(() {
-                                  provider.isLoading = false;
-                                });
-                                print(e);
-                                dialog('error !');
-                              }
-                            },
-                            child: Text(lanProvider.texts('tab3'),style: TextStyle(fontSize: width*0.05),)),
-                    ),
+                Container(
+                  width: width * 0.3,
+                  height: height * 0.07,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          if (_mealName.text.isEmpty || _price.text.isEmpty)
+                            return dialog(lanProvider.texts('empty field'));
+                          setState(() {
+                            provider.isLoading = true;
+                          });
+                          await provider.addMeal(_mealName.text, _price.text,
+                              _description.text, "others");
+                          Navigator.of(context).pop();
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                        } on FirebaseException catch (e) {
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                          return dialog(e.message);
+                        } catch (e) {
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                          print(e);
+                          dialog('error !');
+                        }
+                      },
+                      child: Text(
+                        lanProvider.texts('tab3'),
+                        style: TextStyle(fontSize: width * 0.05),
+                      )),
+                ),
             ],
           ),
         ),
@@ -477,41 +520,51 @@ class _FirstAdminState extends State<FirstAdmin> {
                               icon: Icon(Icons.edit),
                               color: Colors.blue,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(height: 20),
-                                Container(
-                                  padding: EdgeInsets.only(left: 10),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    resData[index]['meal name'],
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  alignment: Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(top: 17),
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(height: 20),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    alignment: Alignment.topLeft,
                                     child: Text(
-                                      lanProvider.texts('price') +
-                                          " " +
-                                          resData[index]['meal price'] +
-                                          " " +
-                                          lanProvider.texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                      resData[index]['meal name'],
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 10),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      resData[index]['description'],
+                                      style: TextStyle(
+                                          fontSize: 15, color: Colors.grey),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    alignment: Alignment.bottomLeft,
+                                    margin: const EdgeInsets.only(top: 10),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 7),
+                                      child: Text(
+                                        lanProvider.texts('price') +
+                                            " " +
+                                            resData[index]['meal price'] +
+                                            " " +
+                                            lanProvider.texts('jd'),
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.pink),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Spacer(),
                             IconButton(
                               onPressed: () => showDialog(
                                   context: context,
@@ -534,7 +587,9 @@ class _FirstAdminState extends State<FirstAdmin> {
                                       ),
                                       actions: [
                                         if (provider.isLoading)
-                                          Center(child: CircularProgressIndicator()),
+                                          Center(
+                                              child:
+                                                  CircularProgressIndicator()),
                                         if (!provider.isLoading)
                                           InkWell(
                                             child: Text(
@@ -554,11 +609,12 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                     .deleteMeal("shawarma");
                                                 Fluttertoast.showToast(
                                                     msg: "Meal Deleted",
-                                                    toastLength: Toast.LENGTH_SHORT,
-                                                    backgroundColor: Colors.grey,
+                                                    toastLength:
+                                                        Toast.LENGTH_SHORT,
+                                                    backgroundColor:
+                                                        Colors.grey,
                                                     textColor: Colors.white,
-                                                    fontSize: 16.0
-                                                );
+                                                    fontSize: 16.0);
                                                 setState(() {
                                                   provider.isLoading = false;
                                                 });
@@ -675,41 +731,51 @@ class _SecondAdminState extends State<SecondAdmin> {
                               icon: Icon(Icons.edit),
                               color: Colors.blue,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(height: 20),
-                                Container(
-                                  padding: EdgeInsets.only(left: 10),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    resData[index]['meal name'],
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  alignment: Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(top: 17),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.symmetric(vertical: 7),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(height: 20),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 10),
+                                    alignment: Alignment.topLeft,
                                     child: Text(
-                                      lanProvider.texts('price') +
-                                          " " +
-                                          resData[index]['meal price'] +
-                                          " " +
-                                          lanProvider.texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                      resData[index]['meal name'],
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 10),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      resData[index]['description'],
+                                      style: TextStyle(
+                                          fontSize: 15, color: Colors.grey),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    alignment: Alignment.bottomLeft,
+                                    margin: const EdgeInsets.only(top: 17),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 7),
+                                      child: Text(
+                                        lanProvider.texts('price') +
+                                            " " +
+                                            resData[index]['meal price'] +
+                                            " " +
+                                            lanProvider.texts('jd'),
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.pink),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Spacer(),
                             IconButton(
                               onPressed: () => showDialog(
                                   context: context,
@@ -723,7 +789,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                         style: TextStyle(fontSize: 23),
                                       ),
                                       contentPadding:
-                                      EdgeInsets.symmetric(vertical: 7),
+                                          EdgeInsets.symmetric(vertical: 7),
                                       elevation: 24,
                                       content: Container(
                                         height: 30,
@@ -734,7 +800,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                         if (provider.isLoading)
                                           Center(
                                               child:
-                                              CircularProgressIndicator()),
+                                                  CircularProgressIndicator()),
                                         if (!provider.isLoading)
                                           InkWell(
                                             child: Text(
@@ -775,7 +841,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                               child: Text(
                                                   lanProvider.texts('cancel?'),
                                                   style:
-                                                  TextStyle(fontSize: 19)),
+                                                      TextStyle(fontSize: 19)),
                                               onTap: () =>
                                                   Navigator.of(context).pop()),
                                       ],
@@ -806,7 +872,6 @@ class ThirdAdmin extends StatefulWidget {
 }
 
 class _ThirdAdminState extends State<ThirdAdmin> {
-
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -869,41 +934,51 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                               icon: Icon(Icons.edit),
                               color: Colors.blue,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(height: 20),
-                                Container(
-                                  padding: EdgeInsets.only(left: 10),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    resData[index]['meal name'],
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  alignment: Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(top: 17),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.symmetric(vertical: 7),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  const SizedBox(height: 20),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    alignment: Alignment.topLeft,
                                     child: Text(
-                                      lanProvider.texts('price') +
-                                          " " +
-                                          resData[index]['meal price'] +
-                                          " " +
-                                          lanProvider.texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                      resData[index]['meal name'],
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 10),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      resData[index]['description'],
+                                      style: TextStyle(
+                                          fontSize: 15, color: Colors.grey),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    alignment: Alignment.bottomLeft,
+                                    margin: const EdgeInsets.only(top: 17),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 7),
+                                      child: Text(
+                                        lanProvider.texts('price') +
+                                            " " +
+                                            resData[index]['meal price'] +
+                                            " " +
+                                            lanProvider.texts('jd'),
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.pink),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Spacer(),
                             IconButton(
                               onPressed: () => showDialog(
                                   context: context,
@@ -917,7 +992,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                         style: TextStyle(fontSize: 23),
                                       ),
                                       contentPadding:
-                                      EdgeInsets.symmetric(vertical: 7),
+                                          EdgeInsets.symmetric(vertical: 7),
                                       elevation: 24,
                                       content: Container(
                                         height: 30,
@@ -928,7 +1003,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                         if (provider.isLoading)
                                           Center(
                                               child:
-                                              CircularProgressIndicator()),
+                                                  CircularProgressIndicator()),
                                         if (!provider.isLoading)
                                           InkWell(
                                             child: Text(
@@ -969,7 +1044,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                               child: Text(
                                                   lanProvider.texts('cancel?'),
                                                   style:
-                                                  TextStyle(fontSize: 19)),
+                                                      TextStyle(fontSize: 19)),
                                               onTap: () =>
                                                   Navigator.of(context).pop()),
                                       ],

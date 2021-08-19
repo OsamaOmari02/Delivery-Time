@@ -20,8 +20,9 @@ class Meals {
   final String id;
   final String mealName;
   final String mealPrice;
+  final String description;
 
-  Meals({required this.mealName, required this.mealPrice, required this.id});
+  Meals({required this.description,required this.mealName, required this.mealPrice, required this.id});
 }
 
 class Favorites {
@@ -34,8 +35,10 @@ class Favorites {
 class MyProvider with ChangeNotifier {
   bool isDark = false;
   getDarkMode() async{
-    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+    await FirebaseFirestore.instance.collection('users').
+    doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
       isDark =  value.data()!['darkMode']?true:false;
+      notifyListeners();
     });
 
     notifyListeners();
@@ -43,7 +46,6 @@ class MyProvider with ChangeNotifier {
   void setDarkMode(bool val) async{
     isDark = val;
     notifyListeners();
-    print(FirebaseAuth.instance.currentUser!.uid);
   }
   // void setDarkMode(bool val) async{
   //   SharedPreferences pref = await SharedPreferences.getInstance();
@@ -154,9 +156,9 @@ class MyProvider with ChangeNotifier {
           .collection('/favorites/${user!.uid}/myFavorites')
           .doc(mealID)
           .set({
-        'meal': mealIDs[mealIndex].id,
         'meal name': mealIDs[mealIndex].mealName,
         'meal price': mealIDs[mealIndex].mealPrice,
+        'description': mealIDs[mealIndex].description,
       });
         myFavorites.add(Favorites(myFavoriteID: mealID));
     } else {
@@ -210,6 +212,7 @@ class MyProvider with ChangeNotifier {
         mealIDs.add(Meals(
             mealName: element.data()['meal name'],
             mealPrice: element.data()['meal price'],
+            description: element.data()['description'],
             id: element.id));
       });
     });
@@ -223,6 +226,7 @@ class MyProvider with ChangeNotifier {
         mealIDs.add(Meals(
             mealName: element.data()['meal name'],
             mealPrice: element.data()['meal price'],
+            description: element.data()['description'],
             id: element.id));
       });
     });
@@ -236,13 +240,14 @@ class MyProvider with ChangeNotifier {
         mealIDs.add(Meals(
             mealName: element.data()['meal name'],
             mealPrice: element.data()['meal price'],
+            description: element.data()['description'],
             id: element.id));
       });
     });
     notifyListeners();
   }
 
-  Future<void> addMeal(String mealName, String price, type) async {
+  Future<void> addMeal(String mealName, String price,String desc, type) async {
     isLoading = true;
     var uuid = Uuid().v4();
     await FirebaseFirestore.instance
@@ -251,8 +256,9 @@ class MyProvider with ChangeNotifier {
         .set({
       'meal name': mealName,
       'meal price': price,
+      'description':desc,
     }).then((value) {
-      mealIDs.add(Meals(id: uuid, mealPrice: price, mealName: mealName));
+      mealIDs.add(Meals(id: uuid, mealPrice: price, mealName: mealName, description: desc));
     });
     notifyListeners();
   }
@@ -268,7 +274,7 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  editMeal(String mealName, price, type) async {
+  editMeal(String mealName, price,String desc, type) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     mealIDs.removeAt(mealIndex);
@@ -278,8 +284,9 @@ class MyProvider with ChangeNotifier {
         .update({
       'meal name': mealName,
       'meal price': price,
+      'description':desc,
     }).then((value) {
-      mealIDs.add(Meals(mealName: mealName, mealPrice: price, id: mealID));
+      mealIDs.add(Meals(mealName: mealName, mealPrice: price, id: mealID, description: desc));
     });
     notifyListeners();
   }
