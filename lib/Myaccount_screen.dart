@@ -115,7 +115,7 @@ class _EmailState extends State<Email> {
               ),
               actions: [
                 TextButton(
-                    child: Text('ok', style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style: TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -176,7 +176,7 @@ class _EmailState extends State<Email> {
                           }  if (_password.text != provider.authData['password']) {
                             return dialog(lanProvider.texts('ur password isnt correct'));
                           } if (_email.text.trim() == provider.authData['email']) {
-                            return dialog('Your new email must be different than your current email');
+                            return dialog(lanProvider.texts('new email must diff'));
                           }
                           setState(() {
                             provider.authState=authStatus.Authenticating;
@@ -193,7 +193,7 @@ class _EmailState extends State<Email> {
                           });
                           Navigator.of(context).pop();
                           Fluttertoast.showToast(
-                              msg: "Email Updated Successfully",
+                              msg: lanProvider.texts('Email Updated Successfully'),
                               toastLength: Toast.LENGTH_SHORT,
                               backgroundColor: Colors.grey,
                               textColor: Colors.white,
@@ -220,7 +220,7 @@ class _EmailState extends State<Email> {
                               });
                               Navigator.of(context).pop();
                               Fluttertoast.showToast(
-                                  msg: "Email Updated Successfully",
+                                  msg: lanProvider.texts('Email Updated Successfully'),
                                   toastLength: Toast.LENGTH_SHORT,
                                   backgroundColor: Colors.grey,
                                   textColor: Colors.white,
@@ -229,7 +229,10 @@ class _EmailState extends State<Email> {
                             }
                           else
                             {
-                              dialog(e.message);
+                              if (e.message=="The email address is badly formatted.")
+                              dialog(lanProvider.texts('badly formatted'));
+                              else
+                                dialog(e.message);
                               setState(() {
                                 provider.authState = authStatus.unAuthenticated;
                               });
@@ -237,7 +240,7 @@ class _EmailState extends State<Email> {
                           print(e.message);
                         } catch(e)
                         {
-                          dialog('error!');
+                          dialog(lanProvider.texts('Error occurred !'));
                           print(e);
                           setState(() {
                             provider.authState=authStatus.unAuthenticated;
@@ -305,7 +308,7 @@ class _NameState extends State<Name> {
               ),
               actions: [
                 TextButton(
-                    child: Text("OK", style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style: TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -362,7 +365,7 @@ class _NameState extends State<Name> {
                           return dialog(lanProvider.texts('ur password isnt correct'));
                         }
                         if(_myName.text==provider.authData['name']){
-                          return dialog('Your new name must be different than your current name');
+                          return dialog(lanProvider.texts('new name must diff'));
                         }
                         setState(() {
                           provider.authState=authStatus.Authenticating;
@@ -379,7 +382,7 @@ class _NameState extends State<Name> {
                         });
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
-                            msg: "Name Updated Successfully",
+                            msg: lanProvider.texts('Name Updated Successfully'),
                             toastLength: Toast.LENGTH_SHORT,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
@@ -392,7 +395,7 @@ class _NameState extends State<Name> {
                         });
                       } catch(e)
                       {
-                        dialog('error!');
+                        dialog(lanProvider.texts('Error occurred !'));
                         provider.authState=authStatus.unAuthenticated;
                       }
                     },

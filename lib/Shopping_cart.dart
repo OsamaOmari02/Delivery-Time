@@ -59,7 +59,7 @@ class _ShoppingState extends State<Shopping> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          tooltip: "delete",
+          tooltip: lanProvider.texts('delete'),
           onPressed: () {
             showDialog(
               context: context,
@@ -179,7 +179,7 @@ class _ShoppingState extends State<Shopping> {
                                         });
                                         print(e);
                                       } catch (e){
-                                        dialog('error !');
+                                        dialog(lanProvider.texts('Error occurred !'));
                                         setState(() {
                                           provider.isLoading=false;
                                           _itemCount++;
@@ -214,7 +214,7 @@ class _ShoppingState extends State<Shopping> {
                                     });
                                     print(e);
                                   } catch (e){
-                                    dialog('error !');
+                                    dialog(lanProvider.texts('Error occurred !'));
                                     setState(() {
                                       provider.isLoading=false;
                                       _itemCount--;

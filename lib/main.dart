@@ -149,7 +149,7 @@ class _MyHomepageState extends State<MyHomepage> {
           subtitle: Container(
             padding: EdgeInsets.symmetric(vertical: height * 0.015),
             child: Text(title,
-                style: TextStyle(color: Colors.black, fontSize: 15),
+                style: const TextStyle(color: Colors.black, fontSize: 15),
                 textAlign: TextAlign.center),
           ),
         ),
@@ -167,13 +167,8 @@ class _MyHomepageState extends State<MyHomepage> {
               child: IconButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('admin');
-                  for (int i=0;i<provider.mealIDs.length;i++)
-                    print("mealIds: ${provider.mealIDs[i].mealName}");
-                  print("===========================");
-                  for (int i=0;i<provider.myFavorites.length;i++)
-                    print("favoritesIds: ${provider.myFavorites[i].myFavoriteID}");
                 },
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
               ),
             )
           ],
@@ -182,7 +177,7 @@ class _MyHomepageState extends State<MyHomepage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.of(context).pushNamed('Shopping'),
-          child: Icon(Icons.shopping_basket_outlined),
+          child: const Icon(Icons.shopping_basket_outlined),
           backgroundColor: Theme.of(context).accentColor,
         ),
         body: Container(
@@ -210,7 +205,7 @@ class _MyHomepageState extends State<MyHomepage> {
               Row(
                 children: [
                   SizedBox(
-                    width: width * 0.03,
+                    width: width * 0.03
                   ),
                   Expanded(
                     child: Text(
@@ -238,11 +233,11 @@ class _MyHomepageState extends State<MyHomepage> {
                   ],
                 ),
               ),
-              Divider(thickness: 1),
+              const Divider(thickness: 1),
               Row(
                 children: [
                   SizedBox(
-                    width: width * 0.03,
+                    width: width * 0.03
                   ),
                   Expanded(
                     child: Text(

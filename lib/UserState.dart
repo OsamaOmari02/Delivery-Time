@@ -21,7 +21,7 @@ class UserState extends StatelessWidget {
           }
           if (snapshot.hasError) {
             return Center(
-              child: Text(lanProvider.texts("Error occured !"),
+              child: Text(lanProvider.texts("Error occurred !"),
                   style: TextStyle(fontSize: 20, color: Colors.red)),
             );
           }

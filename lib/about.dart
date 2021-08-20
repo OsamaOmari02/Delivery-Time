@@ -49,7 +49,7 @@ class _AboutState extends State<About> {
                 child: Ink(
                   decoration: const ShapeDecoration(
                     color: Colors.blueAccent,
-                    shape: CircleBorder(),
+                    shape: const CircleBorder(),
                   ),
                   child: IconButton(
                     icon: const Icon(Icons.facebook),
@@ -67,7 +67,7 @@ class _AboutState extends State<About> {
                     child: Ink(
                       decoration: const ShapeDecoration(
                         color: Colors.red,
-                        shape: CircleBorder(),
+                        shape: const CircleBorder(),
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.email),
@@ -81,7 +81,7 @@ class _AboutState extends State<About> {
               ],
             ),
             SizedBox(height: height*0.4),
-            Text("Developed by: Osama Bassam Omari",style: TextStyle(color: Colors.grey)),
+            Text("Developed by: Osama Bassam Omari",style: const TextStyle(color: Colors.grey)),
           ]),
         ),
       ),

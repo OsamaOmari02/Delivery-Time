@@ -125,7 +125,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                                           setState(() {
                                             provider.isLoading = false;
                                           });
-                                          dialog('error !');
+                                          dialog(lanProvider.texts('Error occurred !'));
                                           print(e);
                                         }
                                       },

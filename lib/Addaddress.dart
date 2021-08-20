@@ -32,7 +32,7 @@ class _AddAddressState extends State<AddAddress> {
       validator: validPass,
       decoration: InputDecoration(
         labelText: title,
-        contentPadding: EdgeInsets.symmetric(horizontal: 9),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 9),
       ),
       keyboardType: keyboard,
     );
@@ -52,7 +52,7 @@ class _AddAddressState extends State<AddAddress> {
       },
       decoration: InputDecoration(
         labelText: title,
-        contentPadding: EdgeInsets.symmetric(horizontal: 9),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 9),
       ),
       keyboardType: keyboard,
     );
@@ -69,6 +69,45 @@ class _AddAddressState extends State<AddAddress> {
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
 
+    dialog(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    title,
+                    textAlign:
+                    lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                    style: const TextStyle(fontSize: 23),
+                  ),
+                ],
+              ),
+              contentPadding:const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(lanProvider.texts('ok'),
+                          style: const TextStyle(fontSize: 19, color: Colors.blue)),
+                    ),
+                    onTap: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
     return Directionality(
       textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -80,21 +119,21 @@ class _AddAddressState extends State<AddAddress> {
           key: _formkey,
           child: ListView(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               required(lanProvider.texts('area'), TextInputType.text, _area),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               required(lanProvider.texts('street'), TextInputType.text, _street),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               requiredPhone(
                   lanProvider.texts('phone number'), TextInputType.number, _phone),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.33,
                 ),
                 child: provider.isLoading
                     ? Align(
-                        child: CircularProgressIndicator(),
+                        child: const CircularProgressIndicator(),
                         alignment: Alignment.center)
                     : ElevatedButton(
                         onPressed: () async{
@@ -107,7 +146,7 @@ class _AddAddressState extends State<AddAddress> {
                                   .add(_area.text, _street.text, _phone.text)
                                   .then((_) => Navigator.of(context).pop());
                               Fluttertoast.showToast(
-                                  msg: "Address Added",
+                                  msg: lanProvider.texts('Address Added'),
                                   toastLength: Toast.LENGTH_SHORT,
                                   backgroundColor: Colors.grey,
                                   textColor: Colors.white,
@@ -118,11 +157,12 @@ class _AddAddressState extends State<AddAddress> {
                               });
                             }
                           } on FirebaseAuthException catch (e) {
+                            dialog(e.message);
                             setState(() {
                               provider.isLoading = false;
                             });
-                            print(e.message);
                           } catch (e) {
+                            dialog(lanProvider.texts('Error occurred !'));
                             setState(() {
                               provider.isLoading = false;
                             });
@@ -131,7 +171,7 @@ class _AddAddressState extends State<AddAddress> {
                         },
                         child: Text(
                           lanProvider.texts('add'),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),

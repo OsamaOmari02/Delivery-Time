@@ -227,7 +227,7 @@ class _FirstState extends State<First> {
                                     setState(() {
                                       provider.isLoading = false;
                                     });
-                                    dialog('error !');
+                                    dialog(lanProvider.texts('Error occurred !'));
                                     print(e);
                                   }
                                 },
@@ -405,7 +405,7 @@ class _SecondState extends State<Second> {
                                   setState(() {
                                     provider.isLoading = false;
                                   });
-                                  dialog('error !');
+                                  dialog(lanProvider.texts('Error occurred !'));
                                   print(e);
                                 }
                               },
@@ -581,7 +581,7 @@ class _ThirdState extends State<Third> {
                                   setState(() {
                                     provider.isLoading = false;
                                   });
-                                  dialog('error !');
+                                  dialog(lanProvider.texts('Error occurred !'));
                                   print(e);
                                 }
                               },

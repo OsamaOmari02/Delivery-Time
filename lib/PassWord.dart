@@ -64,7 +64,7 @@ class _MyPasswordState extends State<MyPassword> {
               ),
               actions: [
                 TextButton(
-                    child: Text("OK", style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style: TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -156,7 +156,7 @@ class _MyPasswordState extends State<MyPassword> {
                         return dialog(lanProvider.texts('pass must be 6'));
                       }
                       if (myNewPass.text==provider.authData['password']){
-                        return dialog('New password must be different than old password');
+                        return dialog(lanProvider.texts('new pass must be'));
                       }
                       setState(() {
                         provider.authState=authStatus.Authenticating;
@@ -173,18 +173,50 @@ class _MyPasswordState extends State<MyPassword> {
                       });
                       Navigator.of(context).pop('password');
                       Fluttertoast.showToast(
-                          msg: "Password Updated Successfully",
+                          msg: lanProvider.texts('Pass Updated'),
                           toastLength: Toast.LENGTH_SHORT,
                           backgroundColor: Colors.grey,
                           textColor: Colors.white,
                           fontSize: 16.0
                       );
                     } on FirebaseException catch (e){
-                      dialog(e.message);
-                      provider.authState=authStatus.unAuthenticated;
+                      if (e.message=="This operation is sensitive and requires"
+                          " recent authentication. Log in again before retrying this request.") {
+                        setState(() {
+                          provider.authState = authStatus.Authenticating;
+                        });
+                        AuthCredential credential = EmailAuthProvider
+                            .credential(email: provider.authData['email']!,
+                            password: provider.authData['password']!);
+                        await FirebaseAuth.instance.currentUser!
+                            .reauthenticateWithCredential(credential);
+                        await
+                        FirebaseAuth.instance.currentUser!.updatePassword(
+                            myNewPass.text);
+                        await
+                        FirebaseFirestore.instance.collection('users')
+                            .doc(user!.uid)
+                            .update({'password': myNewPass.text});
+                        setState(() {
+                          provider.authData['password'] = myNewPass.text;
+                          provider.authState = authStatus.Authenticated;
+                        });
+                        Navigator.of(context).pop('password');
+                        Fluttertoast.showToast(
+                            msg: lanProvider.texts('Pass Updated'),
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+                      }
+                      else {
+                        dialog(e.message);
+                        provider.authState = authStatus.unAuthenticated;
+                      }
                     }
                     catch(e) {
-                      dialog('error !');
+                      dialog(lanProvider.texts('Error occurred !'));
                       print(e);
                       provider.authState=authStatus.unAuthenticated;
                     }

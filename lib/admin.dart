@@ -69,7 +69,7 @@ class _AdminState extends State<Admin> {
             ]),
             floatingActionButton: FloatingActionButton(
               onPressed: () => Navigator.of(context).pushNamed('addMeal'),
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
               backgroundColor: Colors.redAccent,
             ),
           ),
@@ -107,22 +107,22 @@ class _EditState extends State<Edit> {
             return AlertDialog(
               title: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     color: Colors.red,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       title,
                       textAlign:
                           lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                      style: TextStyle(fontSize: 23),
+                      style: const TextStyle(fontSize: 23),
                     ),
                   ),
                 ],
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
@@ -134,7 +134,7 @@ class _EditState extends State<Edit> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(lanProvider.texts('ok'),
-                          style: TextStyle(fontSize: 19, color: Colors.blue)),
+                          style: const TextStyle(fontSize: 19, color: Colors.blue)),
                     ),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -153,7 +153,7 @@ class _EditState extends State<Edit> {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 TextField(
                   keyboardType: TextInputType.text,
                   controller: _mealName,
@@ -175,9 +175,9 @@ class _EditState extends State<Edit> {
                     labelText: lanProvider.texts('desc'),
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 if (provider.isLoading)
-                  Center(child: CircularProgressIndicator()),
+                  Center(child: const CircularProgressIndicator()),
                 if (!provider.isLoading)
                   ElevatedButton(
                       onPressed: () async {
@@ -203,7 +203,7 @@ class _EditState extends State<Edit> {
                           setState(() {
                             provider.isLoading = false;
                           });
-                          dialog('error !');
+                          dialog(lanProvider.texts('Error occurred !'));
                           print(e);
                         }
                       },
@@ -248,20 +248,20 @@ class _AddMealState extends State<AddMeal> {
             return AlertDialog(
               title: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     color: Colors.red,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(
                     title,
                     textAlign:
                         lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                    style: TextStyle(fontSize: 23),
+                    style: const TextStyle(fontSize: 23),
                   ),
                 ],
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
@@ -273,7 +273,7 @@ class _AddMealState extends State<AddMeal> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(lanProvider.texts('ok'),
-                          style: TextStyle(fontSize: 19, color: Colors.blue)),
+                          style: const TextStyle(fontSize: 19, color: Colors.blue)),
                     ),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -317,7 +317,7 @@ class _AddMealState extends State<AddMeal> {
               ),
               const SizedBox(height: 20),
               if (provider.isLoading)
-                Center(child: CircularProgressIndicator()),
+                Center(child: const CircularProgressIndicator()),
               if (!provider.isLoading)
                 Center(
                   child: Text(
@@ -325,7 +325,7 @@ class _AddMealState extends State<AddMeal> {
                     style: TextStyle(fontSize: width * 0.037),
                   ),
                 ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               if (!provider.isLoading)
                 Container(
                   width: width * 0.3,
@@ -342,7 +342,7 @@ class _AddMealState extends State<AddMeal> {
                             _description.text, "shawarma");
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
-                            msg: "Meal Added",
+                            msg: lanProvider.texts('Meal Added'),
                             toastLength: Toast.LENGTH_SHORT,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
@@ -360,7 +360,7 @@ class _AddMealState extends State<AddMeal> {
                           provider.isLoading = false;
                         });
                         print(e);
-                        dialog('error !');
+                        dialog(lanProvider.texts('Error occurred !'));
                       }
                     },
                     child: Text(
@@ -369,7 +369,7 @@ class _AddMealState extends State<AddMeal> {
                     ),
                   ),
                 ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               if (!provider.isLoading)
                 Container(
                   width: width * 0.3,
@@ -398,7 +398,7 @@ class _AddMealState extends State<AddMeal> {
                             provider.isLoading = false;
                           });
                           print(e);
-                          dialog('error !');
+                          dialog(lanProvider.texts('Error occurred !'));
                         }
                       },
                       child: Text(
@@ -406,7 +406,7 @@ class _AddMealState extends State<AddMeal> {
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               if (!provider.isLoading)
                 Container(
                   width: width * 0.3,
@@ -435,7 +435,7 @@ class _AddMealState extends State<AddMeal> {
                             provider.isLoading = false;
                           });
                           print(e);
-                          dialog('error !');
+                          dialog(lanProvider.texts('Error occurred !'));
                         }
                       },
                       child: Text(
@@ -470,9 +470,9 @@ class _FirstAdminState extends State<FirstAdmin> {
               title: Text(
                 title,
                 textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: TextStyle(fontSize: 23),
+                style: const TextStyle(fontSize: 23),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
@@ -480,10 +480,10 @@ class _FirstAdminState extends State<FirstAdmin> {
                 alignment: Alignment.topCenter,
               ),
               actions: [
-                SizedBox(width: 11),
+                const SizedBox(width: 11),
                 InkWell(
                     child: Text(lanProvider.texts('ok'),
-                        style: TextStyle(fontSize: 19)),
+                        style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -517,14 +517,14 @@ class _FirstAdminState extends State<FirstAdmin> {
                                 });
                                 Navigator.of(context).pushNamed('edit');
                               },
-                              icon: Icon(Icons.edit),
+                              icon: const Icon(Icons.edit),
                               color: Colors.blue,
                             ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  SizedBox(height: 20),
+                                  const SizedBox(height: 20),
                                   Container(
                                     padding: const EdgeInsets.only(left: 10),
                                     alignment: Alignment.topLeft,
@@ -535,12 +535,12 @@ class _FirstAdminState extends State<FirstAdmin> {
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Container(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       resData[index]['description'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 15, color: Colors.grey),
                                     ),
                                   ),
@@ -575,7 +575,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                         textAlign: lanProvider.isEn
                                             ? TextAlign.start
                                             : TextAlign.end,
-                                        style: TextStyle(fontSize: 23),
+                                        style: const TextStyle(fontSize: 23),
                                       ),
                                       contentPadding:
                                           EdgeInsets.symmetric(vertical: 7),
@@ -589,12 +589,12 @@ class _FirstAdminState extends State<FirstAdmin> {
                                         if (provider.isLoading)
                                           Center(
                                               child:
-                                                  CircularProgressIndicator()),
+                                              const CircularProgressIndicator()),
                                         if (!provider.isLoading)
                                           InkWell(
                                             child: Text(
                                               lanProvider.texts('yes?'),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 19,
                                                   color: Colors.red),
                                             ),
@@ -608,7 +608,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                 await provider
                                                     .deleteMeal("shawarma");
                                                 Fluttertoast.showToast(
-                                                    msg: "Meal Deleted",
+                                                    msg: lanProvider.texts('Meal Deleted'),
                                                     toastLength:
                                                         Toast.LENGTH_SHORT,
                                                     backgroundColor:
@@ -628,17 +628,17 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                   provider.isLoading = false;
                                                 });
                                                 print(e);
-                                                dialog('error !');
+                                                dialog(lanProvider.texts('Error occurred !'));
                                               }
                                             },
                                           ),
-                                        SizedBox(width: 11),
+                                        const SizedBox(width: 11),
                                         if (!provider.isLoading)
                                           InkWell(
                                               child: Text(
                                                   lanProvider.texts('cancel?'),
                                                   style:
-                                                      TextStyle(fontSize: 19)),
+                                                  const TextStyle(fontSize: 19)),
                                               onTap: () =>
                                                   Navigator.of(context).pop()),
                                       ],
@@ -681,9 +681,9 @@ class _SecondAdminState extends State<SecondAdmin> {
               title: Text(
                 title,
                 textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: TextStyle(fontSize: 23),
+                style: const TextStyle(fontSize: 23),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
@@ -691,10 +691,10 @@ class _SecondAdminState extends State<SecondAdmin> {
                 alignment: Alignment.topCenter,
               ),
               actions: [
-                SizedBox(width: 11),
+                const SizedBox(width: 11),
                 InkWell(
                     child: Text(lanProvider.texts('ok'),
-                        style: TextStyle(fontSize: 19)),
+                        style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -707,7 +707,7 @@ class _SecondAdminState extends State<SecondAdmin> {
           .snapshots(),
       builder: (ctx, snapshot) {
         if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
+          return Center(child: const CircularProgressIndicator());
         return Scrollbar(
           child: ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -728,30 +728,30 @@ class _SecondAdminState extends State<SecondAdmin> {
                                 });
                                 Navigator.of(context).pushNamed('edit');
                               },
-                              icon: Icon(Icons.edit),
+                              icon: const Icon(Icons.edit),
                               color: Colors.blue,
                             ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  SizedBox(height: 20),
+                                  const SizedBox(height: 20),
                                   Container(
-                                    padding: EdgeInsets.only(left: 10),
+                                    padding: const EdgeInsets.only(left: 10),
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       resData[index]['meal name'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Container(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       resData[index]['description'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 15, color: Colors.grey),
                                     ),
                                   ),
@@ -786,10 +786,10 @@ class _SecondAdminState extends State<SecondAdmin> {
                                         textAlign: lanProvider.isEn
                                             ? TextAlign.start
                                             : TextAlign.end,
-                                        style: TextStyle(fontSize: 23),
+                                        style: const TextStyle(fontSize: 23),
                                       ),
                                       contentPadding:
-                                          EdgeInsets.symmetric(vertical: 7),
+                                          const EdgeInsets.symmetric(vertical: 7),
                                       elevation: 24,
                                       content: Container(
                                         height: 30,
@@ -800,12 +800,12 @@ class _SecondAdminState extends State<SecondAdmin> {
                                         if (provider.isLoading)
                                           Center(
                                               child:
-                                                  CircularProgressIndicator()),
+                                                  const CircularProgressIndicator()),
                                         if (!provider.isLoading)
                                           InkWell(
                                             child: Text(
                                               lanProvider.texts('yes?'),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 19,
                                                   color: Colors.red),
                                             ),
@@ -831,17 +831,17 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                 setState(() {
                                                   provider.isLoading = false;
                                                 });
-                                                dialog('error!');
+                                                dialog(lanProvider.texts('Error occurred !'));
                                               }
                                             },
                                           ),
-                                        SizedBox(width: 11),
+                                        const SizedBox(width: 11),
                                         if (!provider.isLoading)
                                           InkWell(
                                               child: Text(
                                                   lanProvider.texts('cancel?'),
                                                   style:
-                                                      TextStyle(fontSize: 19)),
+                                                     const TextStyle(fontSize: 19)),
                                               onTap: () =>
                                                   Navigator.of(context).pop()),
                                       ],
@@ -884,9 +884,9 @@ class _ThirdAdminState extends State<ThirdAdmin> {
               title: Text(
                 title,
                 textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: TextStyle(fontSize: 23),
+                style: const TextStyle(fontSize: 23),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
@@ -894,10 +894,10 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                 alignment: Alignment.topCenter,
               ),
               actions: [
-                SizedBox(width: 11),
+                const SizedBox(width: 11),
                 InkWell(
                     child: Text(lanProvider.texts('ok'),
-                        style: TextStyle(fontSize: 19)),
+                        style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -910,7 +910,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
           .snapshots(),
       builder: (ctx, snapshot) {
         if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
+          return Center(child: const CircularProgressIndicator());
         return Scrollbar(
           child: ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -931,7 +931,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                 });
                                 Navigator.of(context).pushNamed('edit');
                               },
-                              icon: Icon(Icons.edit),
+                              icon:const Icon(Icons.edit),
                               color: Colors.blue,
                             ),
                             Expanded(
@@ -944,17 +944,17 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       resData[index]['meal name'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Container(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       resData[index]['description'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 15, color: Colors.grey),
                                     ),
                                   ),
@@ -989,10 +989,10 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                         textAlign: lanProvider.isEn
                                             ? TextAlign.start
                                             : TextAlign.end,
-                                        style: TextStyle(fontSize: 23),
+                                        style: const TextStyle(fontSize: 23),
                                       ),
                                       contentPadding:
-                                          EdgeInsets.symmetric(vertical: 7),
+                                      const EdgeInsets.symmetric(vertical: 7),
                                       elevation: 24,
                                       content: Container(
                                         height: 30,
@@ -1003,12 +1003,12 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                         if (provider.isLoading)
                                           Center(
                                               child:
-                                                  CircularProgressIndicator()),
+                                              const CircularProgressIndicator()),
                                         if (!provider.isLoading)
                                           InkWell(
                                             child: Text(
                                               lanProvider.texts('yes?'),
-                                              style: TextStyle(
+                                              style:const TextStyle(
                                                   fontSize: 19,
                                                   color: Colors.red),
                                             ),
@@ -1034,17 +1034,17 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                 setState(() {
                                                   provider.isLoading = false;
                                                 });
-                                                dialog('error!');
+                                                dialog(lanProvider.texts('Error occurred !'));
                                               }
                                             },
                                           ),
-                                        SizedBox(width: 11),
+                                        const SizedBox(width: 11),
                                         if (!provider.isLoading)
                                           InkWell(
                                               child: Text(
                                                   lanProvider.texts('cancel?'),
                                                   style:
-                                                      TextStyle(fontSize: 19)),
+                                                  const TextStyle(fontSize: 19)),
                                               onTap: () =>
                                                   Navigator.of(context).pop()),
                                       ],

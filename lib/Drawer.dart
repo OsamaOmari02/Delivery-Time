@@ -1,5 +1,4 @@
-import 'dart:developer';
-import 'dart:io';
+
 import 'package:app/Myprovider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +19,7 @@ class _MyDrawerState extends State<MyDrawer> {
       onTap: () => Navigator.of(ctx).pushReplacementNamed(route),
       title: Text(
         title,
-        style: TextStyle(fontSize: 25),
+        style: const TextStyle(fontSize: 25),
       ),
       leading: Icon(
         icon,
@@ -35,7 +34,34 @@ class _MyDrawerState extends State<MyDrawer> {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    LogoutFun() {
+    dialog(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                title,
+                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                style: const TextStyle(fontSize: 23),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                const SizedBox(width: 11),
+                InkWell(
+                    child: Text(lanProvider.texts('ok'),
+                        style: const TextStyle(fontSize: 19)),
+                    onTap: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
+    logOutFun() {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
@@ -43,20 +69,20 @@ class _MyDrawerState extends State<MyDrawer> {
               title: Text(
                 lanProvider.texts('log out?'),
                 textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: TextStyle(fontSize: 23),
+                style: const TextStyle(fontSize: 23),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
                 InkWell(
                   child: Text(
                     lanProvider.texts('yes?'),
-                    style: TextStyle(fontSize: 19, color: Colors.red),
+                    style: const TextStyle(fontSize: 19, color: Colors.red),
                   ),
                   onTap: () async{
                     try {
@@ -69,12 +95,13 @@ class _MyDrawerState extends State<MyDrawer> {
                         Provider.of<MyProvider>(context,listen: false).loc.clear();
                         Provider.of<MyProvider>(context,listen: false).mealIDs.clear();
                       });
-                    }on FirebaseException catch (e){
-                       print(e.message);
+                    } on FirebaseException catch (e){
+                      dialog(e.message);
                       setState(() {
                         provider.authState = authStatus.unAuthenticated;
                       });
                     } catch (e){
+                      dialog(lanProvider.texts('Error occurred !'));
                       print(e);
                       setState(() {
                         provider.authState = authStatus.unAuthenticated;
@@ -85,7 +112,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 const SizedBox(width: 11),
                 InkWell(
                     child: Text(lanProvider.texts('cancel?'),
-                        style: TextStyle(fontSize: 19)),
+                        style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -104,7 +131,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   fit: BoxFit.fill,
                 ),
               ),
-              padding: EdgeInsets.all(0),
+              padding: const EdgeInsets.all(0),
             ),
             Row(
               children: [
@@ -113,16 +140,16 @@ class _MyDrawerState extends State<MyDrawer> {
                     child: Text(
                   lanProvider.texts('welcome') +
                       ' ${provider.authData['name']} !',
-                  style: TextStyle(fontSize: 21),
+                  style: const TextStyle(fontSize: 21),
                 )),
               ],
             ),
             listTile(lanProvider.texts('Drawer1'), Icons.home, 'MyHomepage',
                 context),
-            Divider(thickness: 0.1,),
+            const Divider(thickness: 0.1,),
             listTile(lanProvider.texts('Drawer2'), Icons.account_circle,
                 'MyAccount', context),
-            Divider(thickness: 0.1,),
+            const Divider(thickness: 0.1,),
             ListTile(
               onTap: (){
                 // await provider.fetchFav();
@@ -130,33 +157,33 @@ class _MyDrawerState extends State<MyDrawer> {
               },
               title: Text(
                 lanProvider.texts('Drawer3'),
-                style: TextStyle(fontSize: 25),
+                style: const TextStyle(fontSize: 25),
               ),
-              leading: Icon(
+              leading: const Icon(
                 Icons.favorite,
                 color: Colors.blueAccent,
               ),
             ),
-            Divider(thickness: 0.1,),
+            const Divider(thickness: 0.1,),
             listTile(lanProvider.texts('Drawer4'), Icons.location_on_outlined,
                 'MyLocation', context),
-            Divider(thickness: 0.1),
+            const Divider(thickness: 0.1),
             listTile(lanProvider.texts('Drawer5'), Icons.access_time_outlined,
                 'myHistory', context),
-            Divider(thickness: 1.5),
+            const Divider(thickness: 1.5),
             listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings',
                 context),
-            Divider(thickness: 0.1),
+            const Divider(thickness: 0.1),
             listTile(lanProvider.texts('Drawer7'), Icons.error_outline, 'about',
                 context),
-            Divider(thickness: 0.1),
+            const Divider(thickness: 0.1),
             ListTile(
-              onTap: LogoutFun,
+              onTap: logOutFun,
               title: Text(
                 lanProvider.texts('Drawer8'),
-                style: TextStyle(fontSize: 25, color: Colors.red),
+                style: const TextStyle(fontSize: 25, color: Colors.red),
               ),
-              leading: Icon(
+              leading: const Icon(
                 Icons.logout,
                 color: Colors.red,
               ),

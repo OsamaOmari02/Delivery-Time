@@ -29,7 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: Row(
                 children: [
                   SizedBox(width: 10),
-                  Text("Arabic", style: TextStyle(fontSize: 20)),
+                  Text("عربي", style: TextStyle(fontSize: 20)),
                   Switch(
                       activeColor: Colors.blueAccent,
                       activeTrackColor: Colors.blue[200],
@@ -48,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               elevation: 24,
               actions: [
                 TextButton(
-                    child: Text("OK", style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style: TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -91,7 +91,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   });
                     Provider.of<MyProvider>(context,listen: false).setDarkMode(val);
                 }
-                    // Provider.of<MyProvider>(context, listen: false).setDarkMode(val),
               ),
             ),
             SizedBox(height: height * 0.013),

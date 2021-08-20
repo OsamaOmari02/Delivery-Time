@@ -71,7 +71,7 @@ class _MyAddressState extends State<MyAddress> {
                         Navigator.of(context).pop();
                         await provider.delete();
                         Fluttertoast.showToast(
-                            msg: "Address Deleted",
+                            msg: lanProvider.texts('Address Deleted'),
                             toastLength: Toast.LENGTH_SHORT,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
@@ -81,11 +81,13 @@ class _MyAddressState extends State<MyAddress> {
                           provider.isLoading = false;
                         });
                       } on FirebaseAuthException catch (e) {
+                        dialog(e.message);
                         setState(() {
                           provider.isLoading = false;
                         });
                         print(e.message);
                       } catch (e) {
+                        dialog(lanProvider.texts('Error occurred !'));
                         setState(() {
                           provider.isLoading = false;
                         });
