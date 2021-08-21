@@ -28,8 +28,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             return AlertDialog(
               title: Row(
                 children: [
-                  SizedBox(width: 10),
-                  Text("عربي", style: TextStyle(fontSize: 20)),
+                  const SizedBox(width: 10),
+                  const Text("عربي", style: const TextStyle(fontSize: 20)),
                   Switch(
                       activeColor: Colors.blueAccent,
                       activeTrackColor: Colors.blue[200],
@@ -41,14 +41,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Provider.of<LanProvider>(context,listen: false).setLanguage(val);
                         Navigator.of(context).pop();
                   }),
-                  Text("English", style: TextStyle(fontSize: 20)),
+                  const Text("English", style: const TextStyle(fontSize: 20)),
                 ],
               ),
               contentPadding: EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'), style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -95,7 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             SizedBox(height: height * 0.013),
             ListTile(
-              leading: Icon(Icons.phone),
+              leading: const Icon(Icons.phone),
               title: InkWell(
                 child: Text(lanProvider.texts('call us'),
                     style: TextStyle(
@@ -106,7 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             Divider(thickness: 0.6),
             ListTile(
-              leading: Icon(Icons.star_rate_outlined),
+              leading: const Icon(Icons.star_rate_outlined),
               title: InkWell(
                 child: Text(lanProvider.texts('rate app'),
                     style: TextStyle(

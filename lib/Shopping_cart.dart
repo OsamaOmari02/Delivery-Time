@@ -29,9 +29,9 @@ class _ShoppingState extends State<Shopping> {
               title: Text(
                 title,
                 textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: TextStyle(fontSize: 23),
+                style: const TextStyle(fontSize: 23),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
@@ -39,10 +39,10 @@ class _ShoppingState extends State<Shopping> {
                 alignment: Alignment.topCenter,
               ),
               actions: [
-                SizedBox(width: 11),
+                const SizedBox(width: 11),
                 InkWell(
                     child: Text(lanProvider.texts('ok'),
-                        style: TextStyle(fontSize: 19)),
+                        style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -55,7 +55,7 @@ class _ShoppingState extends State<Shopping> {
           centerTitle: true,
           title: Text(
             lanProvider.texts('food cart'),
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -66,28 +66,28 @@ class _ShoppingState extends State<Shopping> {
               builder: (BuildContext ctx) {
                 return AlertDialog(
                   title: Text(lanProvider.texts('clear everything?'),
-                      style: TextStyle(fontSize: 23),
+                      style: const TextStyle(fontSize: 23),
                       textAlign:
                           lanProvider.isEn ? TextAlign.start : TextAlign.end),
-                  contentPadding: EdgeInsets.symmetric(vertical: 7),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 7),
                   elevation: 24,
                   content: Container(
                     height: 46,
-                    child: Divider(),
+                    child: const Divider(),
                     alignment: Alignment.topCenter,
                   ),
                   actions: [
                     InkWell(
                       child: Text(
                         lanProvider.texts('yes?'),
-                        style: TextStyle(fontSize: 19, color: Colors.red),
+                        style: const TextStyle(fontSize: 19, color: Colors.red),
                       ),
                       onTap: () {},
                     ),
-                    SizedBox(width: 11),
+                    const SizedBox(width: 11),
                     InkWell(
                         child: Text(lanProvider.texts('cancel?'),
-                            style: TextStyle(fontSize: 19)),
+                            style: const TextStyle(fontSize: 19)),
                         onTap: () => Navigator.of(context).pop()),
                   ],
                 );
@@ -103,7 +103,7 @@ class _ShoppingState extends State<Shopping> {
               .snapshots(),
           builder: (ctx, snapshot) {
             if (!snapshot.hasData)
-              return Center(child: CircularProgressIndicator());
+              return Center(child: const CircularProgressIndicator());
             return Scrollbar(
               child: ListView.builder(
                 itemCount: snapshot.data!.docs.length,
@@ -120,21 +120,21 @@ class _ShoppingState extends State<Shopping> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    SizedBox(height: 20),
+                                    const SizedBox(height: 20),
                                     Container(
-                                      padding: EdgeInsets.only(left: 10),
+                                      padding: const EdgeInsets.only(left: 10),
                                       alignment: Alignment.topLeft,
                                       child: Text(
                                         resData[index]['meal name'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.w800),
                                       ),
                                     ),
                                     Container(
-                                      padding: EdgeInsets.only(left: 10),
+                                      padding: const EdgeInsets.only(left: 10),
                                       alignment: Alignment.bottomLeft,
-                                      margin: EdgeInsets.only(top: 17),
+                                      margin: const EdgeInsets.only(top: 17),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 7),
@@ -144,7 +144,7 @@ class _ShoppingState extends State<Shopping> {
                                               resData[index]['meal price'] +
                                               " " +
                                               lanProvider.texts('jd'),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 16, color: Colors.pink),
                                         ),
                                       ),
@@ -157,7 +157,7 @@ class _ShoppingState extends State<Shopping> {
                           children: [
                             _itemCount != 0
                                 ? IconButton(
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.remove,
                                       color: Colors.red,
                                     ),
@@ -192,7 +192,7 @@ class _ShoppingState extends State<Shopping> {
                                 : Container(),
                             Text(_itemCount.toString()),
                             IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.add,
                                   color: Colors.green,
                                 ),

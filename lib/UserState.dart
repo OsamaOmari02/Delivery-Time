@@ -22,13 +22,13 @@ class UserState extends StatelessWidget {
           if (snapshot.hasError) {
             return Center(
               child: Text(lanProvider.texts("Error occurred !"),
-                  style: TextStyle(fontSize: 20, color: Colors.red)),
+                  style: const TextStyle(fontSize: 20, color: Colors.red)),
             );
           }
           return Scaffold(
               body: Center(
                   child: Text(lanProvider.texts("something went wrong !"),
-                      style: TextStyle(fontSize: 20, color: Colors.red))));
+                      style: const TextStyle(fontSize: 20, color: Colors.red))));
         });
   }
 }

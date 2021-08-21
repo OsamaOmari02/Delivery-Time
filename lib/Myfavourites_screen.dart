@@ -36,9 +36,9 @@ class _MyFavouritesState extends State<MyFavourites> {
               title: Text(
                 title,
                 textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: TextStyle(fontSize: 23),
+                style: const TextStyle(fontSize: 23),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 7),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
               elevation: 24,
               content: Container(
                 height: 30,
@@ -46,10 +46,10 @@ class _MyFavouritesState extends State<MyFavourites> {
                 alignment: Alignment.topCenter,
               ),
               actions: [
-                SizedBox(width: 11),
+                const SizedBox(width: 11),
                 InkWell(
                     child: Text(lanProvider.texts('ok'),
-                        style: TextStyle(fontSize: 19)),
+                        style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -73,7 +73,7 @@ class _MyFavouritesState extends State<MyFavourites> {
             //   return Center(child: Text(lanProvider.texts('no meals were added to favorites'),
             //     style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
             if (snapshot.connectionState==ConnectionState.waiting)
-              return Center(child: CircularProgressIndicator());
+              return Center(child: const CircularProgressIndicator());
             return Scrollbar(
               child: Stack(
                 children:[
@@ -92,10 +92,10 @@ class _MyFavouritesState extends State<MyFavourites> {
                               child: Row(
                                 children: [
                                   if (provider.isLoading)
-                                    CircularProgressIndicator(),
+                                    const CircularProgressIndicator(),
                                   if (!provider.isLoading)
-                                    IconButton(
-                                      icon: Icon(
+                                     IconButton(
+                                      icon: const Icon(
                                         Icons.favorite,
                                         color: Colors.red,
                                       ),
@@ -150,7 +150,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                                           padding: const EdgeInsets.only(left: 10),
                                           child: Text(
                                             resData[index]['description'],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 15, color: Colors.grey),
                                           ),
                                         ),
@@ -167,7 +167,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                   resData[index]['meal price'] +
                                                   " " +
                                                   lanProvider.texts('jd'),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 16, color: Colors.pink),
                                             ),
                                           ),
@@ -183,7 +183,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                             children: [
                               _itemCount != 0
                                   ? IconButton(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.remove,
                                         color: Colors.red,
                                       ),
@@ -195,7 +195,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                                   : Container(),
                               Text(_itemCount.toString()),
                               IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add,
                                     color: Colors.green,
                                   ),
@@ -209,13 +209,13 @@ class _MyFavouritesState extends State<MyFavourites> {
                       ),
                     );
                     return Center(child: Text(lanProvider.texts('no meals were added to favorites'),
-                        style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
+                        style: const TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
                   },
                 ),
                   Opacity(
                     opacity: provider.t==0?0.4:1,
                     child: Container(
-                      padding:  EdgeInsets.fromLTRB(12,0,12,15),
+                      padding:  const EdgeInsets.fromLTRB(12,0,12,15),
                       alignment: Alignment.bottomCenter,
                       child: Container(
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),),
@@ -228,26 +228,26 @@ class _MyFavouritesState extends State<MyFavourites> {
                           onPressed: () =>Navigator.of(context).pushNamed('Shopping'),
                           child: Row(
                             children: <Widget>[
-                              Icon(Icons.shopping_basket_outlined,color: Colors.white,),
-                              SizedBox(width: 7),
+                              const Icon(Icons.shopping_basket_outlined,color: Colors.white,),
+                              const SizedBox(width: 7),
                               Text(
                                 lanProvider.texts('food cart'),
-                                style: TextStyle(fontSize: 17, color: Colors.white),
+                                style: const TextStyle(fontSize: 17, color: Colors.white),
                               ),
                               SizedBox(width: width*0.23),
                               Text(
                                 lanProvider.texts('total'),
-                                style: TextStyle(fontSize: 17, color: Colors.white),
+                                style: const TextStyle(fontSize: 17, color: Colors.white),
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Text(
                                 "${provider.t}",
-                                style: TextStyle(fontSize: 16, color: Colors.white),
+                                style: const TextStyle(fontSize: 16, color: Colors.white),
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Text(
                                 lanProvider.texts('jd'),
-                                style: TextStyle(fontSize: 16, color: Colors.white),
+                                style: const TextStyle(fontSize: 16, color: Colors.white),
                               ),
                             ],
                           ),

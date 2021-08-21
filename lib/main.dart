@@ -251,11 +251,11 @@ class _MyHomepageState extends State<MyHomepage> {
               ),
               SizedBox(height: height * 0.02),
               Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 height: height * 0.6,
                 child: Scrollbar(
                   child: GridView(
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 220,
                       mainAxisSpacing: 15,
                       crossAxisSpacing: 18,

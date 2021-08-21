@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:app/Addaddress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,66 +39,31 @@ class _MyAddressState extends State<MyAddress> {
             return AlertDialog(
               title: Row(
                 children: [
-                  Icon(
-                    Icons.delete,
+                  const Icon(
+                    Icons.error_outline,
                     size: 30,
                     color: Colors.red,
                   ),
-                  SizedBox(width: 17),
+                  const SizedBox(width: 17),
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 23, color: Colors.red),
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
                     ),
                   ),
                 ],
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               content: Container(
                 height: MediaQuery.of(context).size.height * 0.05,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('yes?'), style: TextStyle(fontSize: 19)),
-                    onPressed: () async {
-                      try {
-                        setState(() {
-                          provider.isLoading = true;
-                        });
-                        Navigator.of(context).pop();
-                        await provider.delete();
-                        Fluttertoast.showToast(
-                            msg: lanProvider.texts('Address Deleted'),
-                            toastLength: Toast.LENGTH_SHORT,
-                            backgroundColor: Colors.grey,
-                            textColor: Colors.white,
-                            fontSize: 16.0
-                        );
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                      } on FirebaseAuthException catch (e) {
-                        dialog(e.message);
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                        print(e.message);
-                      } catch (e) {
-                        dialog(lanProvider.texts('Error occurred !'));
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                        print(e);
-                      }
-                    }),
-                TextButton(
-                    child: Text(lanProvider.texts('cancel?'), style: TextStyle(fontSize: 19)),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
+                    child: Text(lanProvider.texts('ok'), style: const TextStyle(fontSize: 21)),
+                    onPressed: () => Navigator.of(context).pop()),
               ],
             );
           });
@@ -126,9 +91,9 @@ class _MyAddressState extends State<MyAddress> {
           builder: (ctx, snapshot) {
             if (!snapshot.hasData)
               return Center(child: Text(lanProvider.texts('new address'),
-                  style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
+                  style: const TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
             if (snapshot.connectionState==ConnectionState.waiting)
-              return Center(child: CircularProgressIndicator());
+              return Center(child: const CircularProgressIndicator());
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, int index) {
@@ -150,7 +115,7 @@ class _MyAddressState extends State<MyAddress> {
                 );
                   return Center(
                       child: Text(lanProvider.texts('new address'),
-                          style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
+                          style: const TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
               },
             );
           },

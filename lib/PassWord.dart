@@ -41,30 +41,30 @@ class _MyPasswordState extends State<MyPassword> {
             return AlertDialog(
               title: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     size: 30,
                     color: Colors.red,
                   ),
-                  SizedBox(width: 17),
+                  const SizedBox(width: 17),
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 23, color: Colors.red),
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
                     ),
                   ),
                 ],
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               content: Container(
                 height: MediaQuery.of(context).size.height * 0.05,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'), style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style:const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -78,7 +78,7 @@ class _MyPasswordState extends State<MyPassword> {
           title: Text(lanProvider.texts('my password')),
         ),
         body: ListView(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           children: [
             SizedBox(height: height * 0.005),
             Container(
@@ -97,7 +97,7 @@ class _MyPasswordState extends State<MyPassword> {
                         ? Icons.visibility
                         : Icons.visibility_off),
                   ),
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.edit,
                     color: Colors.blue,
                   ),
@@ -111,7 +111,7 @@ class _MyPasswordState extends State<MyPassword> {
                 controller: myNewPass,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.edit,
                     color: Colors.blue,
                   ),
@@ -125,7 +125,7 @@ class _MyPasswordState extends State<MyPassword> {
                 controller: myNewPassConf,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.edit,
                     color: Colors.blue,
                   ),
@@ -135,7 +135,7 @@ class _MyPasswordState extends State<MyPassword> {
             ),
             SizedBox(height: height * 0.06),
             if(provider.authState==authStatus.Authenticating)
-              Container(child: CircularProgressIndicator(),
+              Container(child: const CircularProgressIndicator(),
                 alignment: Alignment.center),
             if(provider.authState!=authStatus.Authenticating)
               Container(
@@ -212,17 +212,21 @@ class _MyPasswordState extends State<MyPassword> {
                       }
                       else {
                         dialog(e.message);
-                        provider.authState = authStatus.unAuthenticated;
+                        setState(() {
+                          provider.authState = authStatus.unAuthenticated;
+                        });
                       }
                     }
                     catch(e) {
                       dialog(lanProvider.texts('Error occurred !'));
                       print(e);
-                      provider.authState=authStatus.unAuthenticated;
+                      setState(() {
+                        provider.authState=authStatus.unAuthenticated;
+                      });
                     }
                   },
                   child: Text(lanProvider.texts('save&exit'),
-                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                      style: const TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),
           ],

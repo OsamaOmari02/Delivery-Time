@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:app/Drawer.dart';
 import 'package:app/Myprovider.dart';
@@ -29,14 +28,14 @@ class MyAccount extends StatelessWidget {
           children: [
               SizedBox(height: height * 0.02),
               ListTile(
-                title: Text(lanProvider.texts('my email'),style: TextStyle(fontSize: 19),),
+                title: Text(lanProvider.texts('my email'),style: const TextStyle(fontSize: 19),),
                 leading: const Icon(Icons.alternate_email),
                 trailing: const Icon(Icons.arrow_forward),
                 onTap: ()=>Navigator.of(context).pushNamed('Email'),
               ),
               const Divider(thickness: 1),
               ListTile(
-                title: Text(lanProvider.texts('my name'),style: TextStyle(fontSize: 19),),
+                title: Text(lanProvider.texts('my name'),style:const TextStyle(fontSize: 19),),
                 leading: const Icon(Icons.person),
                 trailing: const Icon(Icons.arrow_forward),
                 onTap: ()=>Navigator.of(context).pushNamed('Name'),
@@ -50,7 +49,7 @@ class MyAccount extends StatelessWidget {
               // ),
               // Divider(thickness: 1),
               ListTile(
-                title: Text(lanProvider.texts('my password'),style: TextStyle(fontSize: 19),),
+                title: Text(lanProvider.texts('my password'),style: const TextStyle(fontSize: 19),),
                 leading: const Icon(Icons.lock),
                 trailing: const Icon(Icons.arrow_forward),
                 onTap: ()=>Navigator.of(context).pushNamed('password'),
@@ -92,30 +91,30 @@ class _EmailState extends State<Email> {
             return AlertDialog(
               title: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     size: 30,
                     color: Colors.red,
                   ),
-                  SizedBox(width: 17),
+                  const SizedBox(width: 17),
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 23, color: Colors.red),
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
                     ),
                   ),
                 ],
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding:const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               content: Container(
                 height: MediaQuery.of(context).size.height * 0.05,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'), style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -132,12 +131,12 @@ class _EmailState extends State<Email> {
               children: [
               SizedBox(height: height * 0.02),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: TextField(
                   keyboardType: TextInputType.emailAddress,
                   controller: _email,
                   decoration: InputDecoration(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.alternate_email,
                       color: Colors.blue,
                     ),
@@ -147,13 +146,13 @@ class _EmailState extends State<Email> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: TextField(
                   keyboardType: TextInputType.visiblePassword,
                   controller: _password,
                   obscureText: true,
                   decoration: InputDecoration(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.lock,
                       color: Colors.blue,
                     ),
@@ -163,7 +162,7 @@ class _EmailState extends State<Email> {
               ),
                 SizedBox(height: height*0.08),
                 if(provider.authState==authStatus.Authenticating)
-                  Container(child: CircularProgressIndicator(),
+                  Container(child: const CircularProgressIndicator(),
                       alignment: Alignment.center),
                 if(provider.authState!=authStatus.Authenticating)
                   Container(
@@ -248,7 +247,7 @@ class _EmailState extends State<Email> {
                         }
                       },
                       child: Text(lanProvider.texts('save&exit'),
-                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                          style: const TextStyle(fontSize: 18, color: Colors.white)),
                     ),
                   ),
           ])),
@@ -285,30 +284,30 @@ class _NameState extends State<Name> {
             return AlertDialog(
               title: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     size: 30,
                     color: Colors.red,
                   ),
-                  SizedBox(width: 17),
+                  const SizedBox(width: 17),
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 23, color: Colors.red),
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
                     ),
                   ),
                 ],
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               content: Container(
                 height: MediaQuery.of(context).size.height * 0.05,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'), style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -329,7 +328,7 @@ class _NameState extends State<Name> {
                     keyboardType: TextInputType.text,
                     controller: _myName,
                     decoration: InputDecoration(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.person,
                         color: Colors.blue,
                       ),
@@ -342,7 +341,7 @@ class _NameState extends State<Name> {
                     obscureText: true,
                     controller: _password,
                     decoration: InputDecoration(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.lock,
                         color: Colors.blue,
                       ),
@@ -351,7 +350,7 @@ class _NameState extends State<Name> {
                   ),
               SizedBox(height: height * 0.06),
               if(provider.authState==authStatus.Authenticating)
-                Container(child: CircularProgressIndicator(),
+                Container(child: const CircularProgressIndicator(),
                     alignment: Alignment.center),
               if(provider.authState!=authStatus.Authenticating)
                 Container(
@@ -400,7 +399,7 @@ class _NameState extends State<Name> {
                       }
                     },
                     child: Text(lanProvider.texts('save&exit'),
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
+                        style: const TextStyle(fontSize: 18, color: Colors.white)),
                   ),
                 ),
             ]),
@@ -436,30 +435,30 @@ class _PhoneState extends State<Phone> {
             return AlertDialog(
               title: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     size: 30,
                     color: Colors.red,
                   ),
-                  SizedBox(width: 17),
+                  const SizedBox(width: 17),
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 23, color: Colors.red),
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
                     ),
                   ),
                 ],
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               content: Container(
                 height: MediaQuery.of(context).size.height * 0.05,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
                 TextButton(
-                    child: Text("OK", style: TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'), style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -475,12 +474,12 @@ class _PhoneState extends State<Phone> {
           body: ListView(children: [
             SizedBox(height: height * 0.02),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: TextFormField(
                   keyboardType: TextInputType.phone,
                   controller: _phone,
                   decoration: InputDecoration(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.phone,
                       color: Colors.blue,
                     ),
@@ -496,7 +495,7 @@ class _PhoneState extends State<Phone> {
                   keyboardType: TextInputType.visiblePassword,
                   controller: _password,
                   decoration: InputDecoration(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.lock,
                       color: Colors.blue,
                     ),
@@ -506,7 +505,7 @@ class _PhoneState extends State<Phone> {
               ),
             SizedBox(height: height * 0.06),
             if(provider.authState==authStatus.Authenticating)
-              Container(child: CircularProgressIndicator(),
+              Container(child: const CircularProgressIndicator(),
                   alignment: Alignment.center),
             if(provider.authState!=authStatus.Authenticating)
               Container(
@@ -547,12 +546,12 @@ class _PhoneState extends State<Phone> {
                       });
                     } catch(e)
                     {
-                      dialog('error!');
+                      dialog(lanProvider.texts('Error occurred !'));
                       provider.authState=authStatus.unAuthenticated;
                     }
                   },
-                  child: Text("Save & exit",
-                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                  child: Text(lanProvider.texts('save&exit'),
+                      style: const TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),
           ])),
