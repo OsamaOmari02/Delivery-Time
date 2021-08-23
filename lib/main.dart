@@ -27,34 +27,31 @@ import 'SignUp.dart';
 import 'UserState.dart';
 import 'about.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MultiProvider(
-      providers:[
-        ChangeNotifierProvider<MyProvider>(create: (ctx)=>MyProvider()),
-        ChangeNotifierProvider<LanProvider>(create: (ctx)=>LanProvider()),
-      ],
+    providers: [
+      ChangeNotifierProvider<MyProvider>(create: (ctx) => MyProvider()),
+      ChangeNotifierProvider<LanProvider>(create: (ctx) => LanProvider()),
+    ],
     child: MyApp(),
   ));
 }
 
 class MyApp extends StatefulWidget {
-
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: UserState(),
-      themeMode: provider.isDark?ThemeMode.dark:ThemeMode.light,
+      themeMode: provider.isDark ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
@@ -66,25 +63,25 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData(brightness: Brightness.dark),
       routes: {
         'MyHomepage': (context) => MyHomepage(),
-        'Signup':(context)=>Register(),
-        'login':(context)=>Login(),
+        'Signup': (context) => Register(),
+        'login': (context) => Login(),
         'MyAccount': (context) => MyAccount(),
         'MyFavourites': (context) => MyFavourites(),
         'MyLocation': (context) => MyAddress(),
         'settings': (context) => SettingsScreen(),
         'password': (context) => MyPassword(),
-        'resetPassword':(context) => ResetPassword(),
+        'resetPassword': (context) => ResetPassword(),
         'Shopping': (context) => Shopping(),
         'myHistory': (context) => History(),
         'addAddress': (context) => AddAddress(),
-        'resScreen':(context)=>Store(),
-        'Email':(context)=>Email(),
-        'Name':(context)=>Name(),
-        'about':(context)=>About(),
-        'admin':(context)=>Admin(),
-        'edit':(context)=>Edit(),
-        'addMeal':(context)=>AddMeal(),
-        'userState':(context)=>UserState(),
+        'resScreen': (context) => Store(),
+        'Email': (context) => Email(),
+        'Name': (context) => Name(),
+        'about': (context) => About(),
+        'admin': (context) => Admin(),
+        'edit': (context) => Edit(),
+        'addMeal': (context) => AddMeal(),
+        'userState': (context) => UserState(),
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -92,20 +89,20 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyHomepage extends StatefulWidget {
-
   @override
   _MyHomepageState createState() => _MyHomepageState();
 }
 
 class _MyHomepageState extends State<MyHomepage> {
   @override
-  void initState(){
-    Provider.of<MyProvider>(context,listen: false).getDarkMode();
-    Provider.of<LanProvider>(context,listen: false).getLanguage();
-    Provider.of<MyProvider>(context,listen: false).fetch();
-    Provider.of<MyProvider>(context,listen: false).fetchFav();
+  void initState() {
+    Provider.of<MyProvider>(context, listen: false).getDarkMode();
+    Provider.of<LanProvider>(context, listen: false).getLanguage();
+    Provider.of<MyProvider>(context, listen: false).fetch();
+    Provider.of<MyProvider>(context, listen: false).fetchFav();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -118,15 +115,16 @@ class _MyHomepageState extends State<MyHomepage> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: ElevatedButton(
-          onPressed: (){
+          onPressed: () {
             provider.restaurantName = title;
             Navigator.of(context).pushNamed('resScreen');
           },
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white70)),
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white70)),
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              Image.asset(image,fit: BoxFit.fill),
+              Image.asset(image, fit: BoxFit.fill),
               Text(
                 title,
                 style: TextStyle(
@@ -137,6 +135,7 @@ class _MyHomepageState extends State<MyHomepage> {
         ),
       );
     }
+
     Widget funImage(route, String title) {
       return Container(
         width: width * 0.41,
@@ -155,9 +154,8 @@ class _MyHomepageState extends State<MyHomepage> {
         ),
       );
     }
-
     return Directionality(
-      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         drawer: MyDrawer(),
         appBar: AppBar(
@@ -165,19 +163,19 @@ class _MyHomepageState extends State<MyHomepage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed('admin');
-                },
-                icon: const Icon(Icons.search),
+                onPressed: () => Navigator.of(context).pushNamed('Shopping'),
+                icon: const Icon(Icons.shopping_basket_outlined),
               ),
-            )
+            ),
           ],
           centerTitle: true,
           title: Text(lanProvider.texts('Drawer1')),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed('Shopping'),
-          child: const Icon(Icons.shopping_basket_outlined),
+          onPressed: () {
+
+          },
+          child: const Icon(Icons.my_location),
           backgroundColor: Theme.of(context).accentColor,
         ),
         body: Container(
@@ -198,15 +196,14 @@ class _MyHomepageState extends State<MyHomepage> {
                   dotSpacing: 20,
                   dotIncreasedColor: Colors.black,
                   showIndicator: true,
-                  autoplayDuration: const Duration(seconds: 1, milliseconds: 600),
+                  autoplayDuration:
+                      const Duration(seconds: 1, milliseconds: 600),
                 ),
               ),
               SizedBox(height: height * 0.03),
               Row(
                 children: [
-                  SizedBox(
-                    width: width * 0.03
-                  ),
+                  SizedBox(width: width * 0.03),
                   Expanded(
                     child: Text(
                       lanProvider.texts('order ur food..'),
@@ -236,9 +233,7 @@ class _MyHomepageState extends State<MyHomepage> {
               const Divider(thickness: 1),
               Row(
                 children: [
-                  SizedBox(
-                    width: width * 0.03
-                  ),
+                  SizedBox(width: width * 0.03),
                   Expanded(
                     child: Text(
                       lanProvider.texts('choose ur..'),
@@ -255,15 +250,18 @@ class _MyHomepageState extends State<MyHomepage> {
                 height: height * 0.6,
                 child: Scrollbar(
                   child: GridView(
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 220,
                       mainAxisSpacing: 15,
                       crossAxisSpacing: 18,
                       childAspectRatio: 3 / 2,
                     ),
                     children: [
-                      content('file/grill_house.jpg', "grill house", Colors.black),
-                      content('file/snap_burger.jpg', "Snap Burger", Colors.white),
+                      content(
+                          'file/grill_house.jpg', "grill house", Colors.black),
+                      content(
+                          'file/snap_burger.jpg', "Snap Burger", Colors.white),
                       content('file/grill_house.jpg', "", Colors.black),
                       content('file/grill_house.jpg', "", Colors.black),
                       content('file/grill_house.jpg', "", Colors.black),
@@ -280,7 +278,6 @@ class _MyHomepageState extends State<MyHomepage> {
           ),
         ),
       ),
-
     );
   }
 }

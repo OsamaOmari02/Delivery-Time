@@ -111,32 +111,32 @@ class _StoreState extends State<Store> {
   }
 }
 // -------------------------search-----------------------------
-class Search extends SearchDelegate{
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    // TODO: implement buildActions
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    throw UnimplementedError();
-  }
-  
-}
+// class Search extends SearchDelegate{
+//   @override
+//   List<Widget> buildActions(BuildContext context) {
+//     // TODO: implement buildActions
+//     throw UnimplementedError();
+//   }
+//
+//   @override
+//   Widget buildLeading(BuildContext context) {
+//     // TODO: implement buildLeading
+//     throw UnimplementedError();
+//   }
+//
+//   @override
+//   Widget buildResults(BuildContext context) {
+//     // TODO: implement buildResults
+//     throw UnimplementedError();
+//   }
+//
+//   @override
+//   Widget buildSuggestions(BuildContext context) {
+//     // TODO: implement buildSuggestions
+//     throw UnimplementedError();
+//   }
+//
+// }
 
 //-------------------------------1----------------------------
 class First extends StatefulWidget {

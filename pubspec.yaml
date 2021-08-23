@@ -31,6 +31,7 @@ dependencies:
   url_launcher: ^6.0.9
   cloud_firestore:
   shared_preferences:
+  location: ^4.3.0
   flutter:
     sdk: flutter
 
@@ -39,8 +40,16 @@ dependencies:
 
 
 dev_dependencies:
+  flutter_native_splash: ^1.2.1
   flutter_test:
     sdk: flutter
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: file/dt.png
+  android_gravity: center
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -55,16 +64,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - file/wallpaperflare.com_wallpaper (2).jpg
-    - file/wallpaperflare.com_wallpaper (1).jpg
-    - file/wallpaperflare.com_wallpaper.jpg
-    - file/burger.jpg
-    - file/fahita.jpg
-    - file/shawarmah.jpg
-    - file/grill_house.jpg
-    - file/snap_burger.jpg
-    - file/دلع_كرشك.jpg
-    - file/time_delivery.jpg
+    - file/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
