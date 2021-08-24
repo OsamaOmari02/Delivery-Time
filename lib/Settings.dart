@@ -21,6 +21,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     var user = FirebaseAuth.instance.currentUser;
     var res =  FirebaseFirestore.instance.collection('users');
     var lanProvider = Provider.of<LanProvider>(context);
+    var provider = Provider.of<MyProvider>(context);
+    double _long = 0;
+    double _lat = 0;
     dialog() {
       return showDialog(
           context: context,
@@ -111,7 +114,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Text(lanProvider.texts('rate app'),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () {},
+                onTap: () async{
+                  await FirebaseFirestore.instance.collection('users').doc(user!.uid).get().then((value) {
+                    _lat = value.data()!['latitude']??=0;
+                    _long = value.data()!['longitude']??=0;
+                  });
+                  await provider.goToMaps(_long, _lat);
+                },
               ),
             ),
           ],

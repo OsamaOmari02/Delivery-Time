@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 enum authStatus { Authenticating, unAuthenticated, Authenticated }
@@ -31,6 +33,12 @@ class Favorites {
   Favorites({required this.myFavoriteID});
 }
 
+class FoodCart {
+  final foodID;
+  var quantity;
+  FoodCart({required this.quantity, required this.foodID});
+
+}
 //-----------------------------------------------------------
 class MyProvider with ChangeNotifier {
   bool isDark = false;
@@ -59,10 +67,16 @@ class MyProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  //----------------things---------------------
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
   var restaurantName;
+  List imageFun = [
+    'file/burger.jpg',
+    'file/fahita.jpg',
+    'file/shawarmah.jpg',
+  ];
 
   // ---------------addresses----------------------
   List<Address> loc = [];
@@ -111,23 +125,8 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // --------------------------res-----------------------
-  List imageFun = [
-    'file/burger.jpg',
-    'file/fahita.jpg',
-    'file/shawarmah.jpg',
-  ];
-  double t = 0.0;
+  // --------------------------favorites-----------------------
 
-  addPrice(price) {
-    t += price;
-    notifyListeners();
-  }
-
-  subtractPrice(price) {
-    if (t != 0) t -= price;
-    notifyListeners();
-  }
 
   List<Favorites> myFavorites = [];
 
@@ -158,7 +157,6 @@ class MyProvider with ChangeNotifier {
           .set({
         'meal name': mealIDs[mealIndex].mealName,
         'meal price': mealIDs[mealIndex].mealPrice,
-        'description': mealIDs[mealIndex].description,
       });
         myFavorites.add(Favorites(myFavoriteID: mealID));
     } else {
@@ -176,28 +174,76 @@ class MyProvider with ChangeNotifier {
   }
 
   //  -----------------------------------------food cart------------------------
-  Future<void> foodCart(String mealName, String price, i) async {
-    isLoading = true;
-    var uuid = Uuid().v4();
+
+  List<FoodCart> myCart = [];
+
+
+  double t = 0.0;
+
+  addPrice(price) {
+    t += price;
+    notifyListeners();
+  }
+
+  subtractPrice(price) {
+    if (t != 0) t -= price;
+    notifyListeners();
+  }
+
+  Future<void> fetchCart() async {
     var user = FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance
+        .collection('orders/${user!.uid}/myOrders')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = myCart.any((e) => e.foodID==element.id);
+        if (!exists)
+          myCart.add(FoodCart(quantity: element['quantity'], foodID: element.id));
+      });
+    });
+    notifyListeners();
+  }
+
+  Future<void> addFoodCart(String mealName, String price, i) async {
+    isLoading = true;
+    var user = FirebaseAuth.instance.currentUser;
+    final exists =
+    myCart.indexWhere((element) => element.foodID == mealID);
     if (i <= 1) {
       await FirebaseFirestore.instance
-          .collection('/users/${user!.uid}').doc(uuid)
+          .collection('orders/${user!.uid}/myOrders').doc(mealID)
           .set({
         'meal name': mealName,
         'meal price': price,
         'quantity': i,
       });
+      if (exists>0)
+      myCart.removeAt(exists);
+      myCart.add(FoodCart(quantity: i, foodID: mealID));
     } else {
       await FirebaseFirestore.instance
-          .collection('/users/${user!.uid}').doc(mealID)
+          .collection('orders/${user!.uid}/myOrders').doc(mealID)
           .update({
         'quantity': i,
       });
+      if (exists>0)
+        myCart.removeAt(exists);
+      myCart.add(FoodCart(quantity: i, foodID: mealID));
     }
     isLoading = false;
     notifyListeners();
   }
+
+   getIndex(i){
+    var index = myCart.indexWhere((element) => element.foodID == i);
+    return index;
+  }
+
+  bool existsInCart(id) {
+    return myCart.any((element) => element.foodID == id);
+  }
+
 
   //-----------------------admin----------------------------
   String tabIndex = "shawarma";
@@ -316,6 +362,46 @@ class MyProvider with ChangeNotifier {
       });
   }
 
-//  ---------------------------------------------------------------------
+//  ---------------------------location------------------------------------------
 
+  double lat = 0;
+  double long = 0;
+
+  sendLocationToDB() async{
+    var user = FirebaseAuth.instance.currentUser;
+
+    var serviceEnabled = await Location().serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await Location().requestService();
+      if (!serviceEnabled)
+        return;
+    }
+
+    var permission = await Location().hasPermission();
+    if (permission==PermissionStatus.denied) {
+      permission = await Location().requestPermission();
+      if (permission != PermissionStatus.granted)
+        return;
+    }
+    var location = await Location().getLocation();
+    await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
+      'latitude':location.latitude,
+      'longitude':location.longitude,
+    });
+    notifyListeners();
+
+  }
+
+  goToMaps(double long,double lat) async{
+    String url = "https://www.google.com/maps/search/?api=1&query=$lat,$long";
+    final String encodeUrl = Uri.encodeFull(url);
+    // if (!await canLaunch(encodeUrl))
+      await launch(encodeUrl);
+    // else
+    //   {
+    //     print('could not launch url');
+    //     throw 'could not launch url';
+    //   }
+
+  }
 }

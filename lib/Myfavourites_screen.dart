@@ -117,8 +117,6 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                       element.myFavoriteID ==
                                                       provider.mealID);
                                             });
-                                            print(
-                                                "provider.mealID ${provider.mealID}");
                                             setState(() {
                                               provider.isLoading = false;
                                             });
@@ -155,15 +153,6 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                   fontWeight: FontWeight.w800),
                                             ),
                                           ),
-                                          // const SizedBox(height: 10),
-                                          // Container(
-                                          //   padding: const EdgeInsets.only(left: 10),
-                                          //   child: Text(
-                                          //     resData[index]['description'],
-                                          //     style: const TextStyle(
-                                          //         fontSize: 15, color: Colors.grey),
-                                          //   ),
-                                          // ),
                                           Container(
                                             padding:
                                                 const EdgeInsets.only(left: 10),
@@ -215,49 +204,6 @@ class _MyFavouritesState extends State<MyFavourites> {
                                 fontSize: 17, fontStyle: FontStyle.italic)));
                   },
                 ),
-                // Opacity(
-                //   opacity: provider.t==0?0.4:1,
-                //   child: Container(
-                //     padding:  const EdgeInsets.fromLTRB(12,0,12,15),
-                //     alignment: Alignment.bottomCenter,
-                //     child: Container(
-                //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),),
-                //       child: ElevatedButton(
-                //         style: ElevatedButton.styleFrom(
-                //           elevation: 4,
-                //           primary:Colors.orange,
-                //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),),
-                //         ),
-                //         onPressed: () =>Navigator.of(context).pushNamed('Shopping'),
-                //         child: Row(
-                //           children: <Widget>[
-                //             const Icon(Icons.shopping_basket_outlined,color: Colors.white,),
-                //             const SizedBox(width: 7),
-                //             Text(
-                //               lanProvider.texts('food cart'),
-                //               style: const TextStyle(fontSize: 17, color: Colors.white),
-                //             ),
-                //             SizedBox(width: width*0.23),
-                //             Text(
-                //               lanProvider.texts('total'),
-                //               style: const TextStyle(fontSize: 17, color: Colors.white),
-                //             ),
-                //             const SizedBox(width: 5),
-                //             Text(
-                //               "${provider.t}",
-                //               style: const TextStyle(fontSize: 16, color: Colors.white),
-                //             ),
-                //             const SizedBox(width: 5),
-                //             Text(
-                //               lanProvider.texts('jd'),
-                //               style: const TextStyle(fontSize: 16, color: Colors.white),
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ]),
             );
           },

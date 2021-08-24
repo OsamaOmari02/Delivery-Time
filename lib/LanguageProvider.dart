@@ -93,6 +93,7 @@ class LanProvider with ChangeNotifier{
     'delete':'احذف',
     'Meal Added':'تم اضافة الوجبة',
     'Meal Deleted':'تم حذف الوجبة',
+    'location':'لقد حصلنا على موقعك بنجاح',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -177,6 +178,7 @@ class LanProvider with ChangeNotifier{
     'delete':'Delete',
     'Meal Added':'Meal Added',
     'Meal Deleted':'Meal Deleted',
+    'location':'We have got your location successfully',
   };
 
   texts(String txt){

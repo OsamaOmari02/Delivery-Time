@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'dart:developer';
+
 import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
@@ -12,6 +14,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Addaddress.dart';
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
@@ -136,6 +139,24 @@ class _MyHomepageState extends State<MyHomepage> {
       );
     }
 
+    dialog() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              content: Container(
+                height: 40,
+                width: 10,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              backgroundColor: Colors.grey,
+            );
+          });
+    }
+
+    bool _loading = false;
     Widget funImage(route, String title) {
       return Container(
         width: width * 0.41,
@@ -154,6 +175,7 @@ class _MyHomepageState extends State<MyHomepage> {
         ),
       );
     }
+
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -172,8 +194,29 @@ class _MyHomepageState extends State<MyHomepage> {
           title: Text(lanProvider.texts('Drawer1')),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-
+          onPressed: () async {
+            try {
+              dialog();
+              await provider.sendLocationToDB();
+              setState(() {
+                _loading = false;
+              });
+              Fluttertoast.showToast(
+                  msg: lanProvider.texts('location'),
+                  toastLength: Toast.LENGTH_SHORT,
+                  backgroundColor: Colors.grey,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+              print('done');
+            } catch (e) {
+              Fluttertoast.showToast(
+                  msg: lanProvider.texts('Error occurred !'),
+                  toastLength: Toast.LENGTH_SHORT,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+              print(e);
+            }
           },
           child: const Icon(Icons.my_location),
           backgroundColor: Theme.of(context).accentColor,

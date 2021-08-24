@@ -48,6 +48,7 @@ class _ShoppingState extends State<Shopping> {
             );
           });
     }
+
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -82,7 +83,9 @@ class _ShoppingState extends State<Shopping> {
                         lanProvider.texts('yes?'),
                         style: const TextStyle(fontSize: 19, color: Colors.red),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                      //  delete the food cart
+                      },
                     ),
                     const SizedBox(width: 11),
                     InkWell(
@@ -94,16 +97,18 @@ class _ShoppingState extends State<Shopping> {
               },
             );
           },
-          child: Icon(Icons.delete),
+          child: const Icon(Icons.delete),
           backgroundColor: Theme.of(context).accentColor,
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('/users/${user!.uid}/food cart')
+              .collection('orders/${user!.uid}/myOrders')
               .snapshots(),
           builder: (ctx, snapshot) {
+            if (snapshot.connectionState==ConnectionState.waiting)
+               Center(child: const CircularProgressIndicator());
             if (!snapshot.hasData)
-              return Center(child: const CircularProgressIndicator());
+              return Center(child: Text("Food cart is empty!"));
             return Scrollbar(
               child: ListView.builder(
                 itemCount: snapshot.data!.docs.length,
@@ -169,7 +174,7 @@ class _ShoppingState extends State<Shopping> {
                                         });
                                         provider.subtractPrice(int.parse(
                                             resData[index]['meal price']));
-                                        provider.foodCart(resData[index]['meal name'],
+                                        provider.addFoodCart(resData[index]['meal name'],
                                             resData[index]['meal price'],_itemCount);
                                       } on FirebaseException catch (e){
                                         dialog(e.message);
@@ -186,7 +191,6 @@ class _ShoppingState extends State<Shopping> {
                                         });
                                         print(e);
                                       }
-
                                     },
                                   )
                                 : Container(),
@@ -204,7 +208,7 @@ class _ShoppingState extends State<Shopping> {
                                     });
                                     provider.addPrice(int.parse(
                                         resData[index]['meal price']));
-                                    provider.foodCart(resData[index]['meal name'],
+                                    provider.addFoodCart(resData[index]['meal name'],
                                         resData[index]['meal price'],_itemCount);
                                   } on FirebaseException catch (e){
                                     dialog(e.message);
@@ -221,7 +225,6 @@ class _ShoppingState extends State<Shopping> {
                                     });
                                     print(e);
                                   }
-
                                 },
                             ),
                           ],
