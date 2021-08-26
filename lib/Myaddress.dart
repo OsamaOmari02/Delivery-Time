@@ -1,5 +1,3 @@
-
-
 import 'package:app/Addaddress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,13 +16,12 @@ class MyAddress extends StatefulWidget {
 }
 
 class _MyAddressState extends State<MyAddress> {
-
-
   @override
   void initState() {
-    Provider.of<MyProvider>(context,listen: false).fetchAddress();
+    Provider.of<MyProvider>(context, listen: false).fetchAddress();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -62,21 +59,88 @@ class _MyAddressState extends State<MyAddress> {
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'), style: const TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'),
+                        style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
           });
     }
 
+    delete(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                title,
+                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                style: const TextStyle(fontSize: 23),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                InkWell(
+                    child: Text(
+                      lanProvider.texts('yes?'),
+                      style: const TextStyle(fontSize: 19, color: Colors.red),
+                    ),
+                    onTap: () async {
+                      try {
+                        setState(() {
+                          provider.isLoading = true;
+                        });
+                        await FirebaseFirestore.instance
+                            .collection('address/${user!.uid}/addresses')
+                            .doc(provider.iD)
+                            .delete();
+                        Fluttertoast.showToast(
+                            msg: lanProvider.texts('Address deleted'),
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                        Navigator.of(context).pop();
+                      } on FirebaseException catch (e) {
+                        dialog(e.message);
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                      } catch (e) {
+                        dialog(lanProvider.texts('Error occurred !'));
+                        print(e);
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                      }
+                    }),
+                const SizedBox(width: 11),
+                InkWell(
+                    child: Text(lanProvider.texts('cancel?'),
+                        style: const TextStyle(fontSize: 19)),
+                    onTap: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
+
     return Directionality(
-      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         drawer: MyDrawer(),
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: provider.isLoading ? CircularProgressIndicator()
+              icon: provider.isLoading
+                  ? CircularProgressIndicator()
                   : Icon(Icons.add),
               onPressed: () => Navigator.of(context).pushNamed('addAddress'),
             ),
@@ -90,32 +154,36 @@ class _MyAddressState extends State<MyAddress> {
               .snapshots(),
           builder: (ctx, snapshot) {
             if (!snapshot.hasData)
-              return Center(child: Text(lanProvider.texts('new address'),
-                  style: const TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
-            if (snapshot.connectionState==ConnectionState.waiting)
+              return Center(
+                  child: Text(lanProvider.texts('new address'),
+                      style: const TextStyle(
+                          fontSize: 17, fontStyle: FontStyle.italic)));
+            if (snapshot.connectionState == ConnectionState.waiting)
               return Center(child: const CircularProgressIndicator());
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, int index) {
                 var userData = snapshot.data!.docs;
-                if (snapshot.data!.docs.length!=0)
-                return ListTile(
-                  onLongPress: () {
-                    setState(() {
-                     provider.iD = userData[index].id;
-                    });
-                    dialog(lanProvider.texts('delete this address?'));
-                  },
-                  title: Text(userData[index]['area']),
-                  subtitle: Text(lanProvider.texts('street:') +
-                      userData[index]['street'] +
-                      "\n" + lanProvider.texts('phone:') +
-                      userData[index]['phoneNum']),
-                  isThreeLine: true,
-                );
-                  return Center(
-                      child: Text(lanProvider.texts('new address'),
-                          style: const TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
+                if (snapshot.data!.docs.length != 0)
+                  return ListTile(
+                    onLongPress: () {
+                      setState(() {
+                        provider.iD = userData[index].id;
+                      });
+                      delete(lanProvider.texts('delete this address?'));
+                    },
+                    title: Text(userData[index]['area']),
+                    subtitle: Text(lanProvider.texts('street:') +
+                        userData[index]['street'] +
+                        "\n" +
+                        lanProvider.texts('phone:') +
+                        userData[index]['phoneNum']),
+                    isThreeLine: true,
+                  );
+                return Center(
+                    child: Text(lanProvider.texts('new address'),
+                        style: const TextStyle(
+                            fontSize: 17, fontStyle: FontStyle.italic)));
               },
             );
           },

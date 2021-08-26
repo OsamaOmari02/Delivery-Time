@@ -175,7 +175,7 @@ class _ShoppingState extends State<Shopping> {
                                         provider.subtractPrice(int.parse(
                                             resData[index]['meal price']));
                                         provider.addFoodCart(resData[index]['meal name'],
-                                            resData[index]['meal price'],_itemCount);
+                                            resData[index]['meal price']);
                                       } on FirebaseException catch (e){
                                         dialog(e.message);
                                         setState(() {
@@ -209,7 +209,7 @@ class _ShoppingState extends State<Shopping> {
                                     provider.addPrice(int.parse(
                                         resData[index]['meal price']));
                                     provider.addFoodCart(resData[index]['meal name'],
-                                        resData[index]['meal price'],_itemCount);
+                                        resData[index]['meal price']);
                                   } on FirebaseException catch (e){
                                     dialog(e.message);
                                     setState(() {

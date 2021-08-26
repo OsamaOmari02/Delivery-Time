@@ -280,7 +280,7 @@ class _RegisterViewState extends State<Register> {
                     'username':_usernameController.text,
                     'password':_passwordController.text,
                     'darkMode':false,
-                    'Language':true,
+                    'Language':false,
                   });
                   setState(() {
                     provider.authState = authStatus.Authenticated;

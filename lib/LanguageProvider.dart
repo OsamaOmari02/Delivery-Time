@@ -10,6 +10,7 @@ class LanProvider with ChangeNotifier{
 
   bool isEn = true;
 
+
   Map<String,Object> arabic ={
     'order ur food..':'اطلب اكلك واستمتع !',
     'choose ur..':'اختر مطعمك المفضل !',
@@ -40,7 +41,7 @@ class LanProvider with ChangeNotifier{
     'my addresses':'عناوين التوصيل',
     'new address':'اضف عنوان جديد',
     'area':'المنطقه (مطلوب)',
-    'street':'الشارع (مطلوب)',
+    'street':'الشارع',
     'street:':'الشارع: ',
     'phone number':'رقم الهاتف (مطلوب)',
     'phone:':'رقم الهاتف: ',
@@ -94,6 +95,8 @@ class LanProvider with ChangeNotifier{
     'Meal Added':'تم اضافة الوجبة',
     'Meal Deleted':'تم حذف الوجبة',
     'location':'لقد حصلنا على موقعك بنجاح',
+    'Choose your area':'يجب اختيار المنطقة',
+    'invalid':'غير صالح',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -179,6 +182,8 @@ class LanProvider with ChangeNotifier{
     'Meal Added':'Meal Added',
     'Meal Deleted':'Meal Deleted',
     'location':'We have got your location successfully',
+    'Choose your area':'Choose your area',
+    'invalid':'invalid',
   };
 
   texts(String txt){

@@ -24,7 +24,11 @@ class Meals {
   final String mealPrice;
   final String description;
 
-  Meals({required this.description,required this.mealName, required this.mealPrice, required this.id});
+  Meals(
+      {required this.description,
+      required this.mealName,
+      required this.mealPrice,
+      required this.id});
 }
 
 class Favorites {
@@ -36,25 +40,38 @@ class Favorites {
 class FoodCart {
   final foodID;
   var quantity;
-  FoodCart({required this.quantity, required this.foodID});
+  final mealName;
+  final mealPrice;
 
+  FoodCart(
+      {required this.mealName,
+      required this.mealPrice,
+      required this.quantity,
+      required this.foodID});
 }
+
 //-----------------------------------------------------------
 class MyProvider with ChangeNotifier {
   bool isDark = false;
-  getDarkMode() async{
-    await FirebaseFirestore.instance.collection('users').
-    doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
-      isDark =  value.data()!['darkMode']?true:false;
+
+  getDarkMode() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      isDark = value.data()!['darkMode'] ? true : false;
       notifyListeners();
     });
 
     notifyListeners();
   }
-  void setDarkMode(bool val) async{
+
+  void setDarkMode(bool val) async {
     isDark = val;
     notifyListeners();
   }
+
   // void setDarkMode(bool val) async{
   //   SharedPreferences pref = await SharedPreferences.getInstance();
   //   pref.setBool('darkMode', val);
@@ -78,6 +95,25 @@ class MyProvider with ChangeNotifier {
     'file/shawarmah.jpg',
   ];
 
+  List<String> areas = <String>[
+    'اختر المنطقة',
+    'حي المستشفى',
+    'حي الزهور',
+    'حي الحسين',
+    'الضاحيه',
+    'حي الحياك',
+  ];
+  String area = 'اختر المنطقة';
+  List<String> streets = <String>[
+    '-',
+    'شارع احمد',
+    'شارع الزهور',
+    'شارع الحسين',
+    'الضاحيه شارع',
+    'شارع الحياك',
+  ];
+  String street = '-';
+
   // ---------------addresses----------------------
   List<Address> loc = [];
 
@@ -88,9 +124,8 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        bool exists = loc.any((e) => e.id==element.id);
-        if (!exists)
-        loc.add(Address(id: element.id));
+        bool exists = loc.any((e) => e.id == element.id);
+        if (!exists) loc.add(Address(id: element.id));
       });
     });
     notifyListeners();
@@ -127,7 +162,6 @@ class MyProvider with ChangeNotifier {
 
   // --------------------------favorites-----------------------
 
-
   List<Favorites> myFavorites = [];
 
   Future<void> fetchFav() async {
@@ -137,9 +171,8 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        bool exists = myFavorites.any((e) => e.myFavoriteID==element.id);
-        if (!exists)
-        myFavorites.add(Favorites(myFavoriteID: element.id));
+        bool exists = myFavorites.any((e) => e.myFavoriteID == element.id);
+        if (!exists) myFavorites.add(Favorites(myFavoriteID: element.id));
       });
     });
     notifyListeners();
@@ -158,13 +191,13 @@ class MyProvider with ChangeNotifier {
         'meal name': mealIDs[mealIndex].mealName,
         'meal price': mealIDs[mealIndex].mealPrice,
       });
-        myFavorites.add(Favorites(myFavoriteID: mealID));
+      myFavorites.add(Favorites(myFavoriteID: mealID));
     } else {
       await FirebaseFirestore.instance
           .collection('favorites/${user!.uid}/myFavorites')
           .doc(mealID)
           .delete();
-        myFavorites.removeAt(exists);
+      myFavorites.removeAt(exists);
     }
     notifyListeners();
   }
@@ -176,7 +209,6 @@ class MyProvider with ChangeNotifier {
   //  -----------------------------------------food cart------------------------
 
   List<FoodCart> myCart = [];
-
 
   double t = 0.0;
 
@@ -197,45 +229,51 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        bool exists = myCart.any((e) => e.foodID==element.id);
+        bool exists = myCart.any((e) => e.foodID == element.id);
         if (!exists)
-          myCart.add(FoodCart(quantity: element['quantity'], foodID: element.id));
+          myCart.add(FoodCart(
+              quantity: element['quantity'],
+              foodID: element.id,
+              mealPrice: element['meal name'],
+              mealName: element['meal price']));
       });
     });
     notifyListeners();
   }
 
-  Future<void> addFoodCart(String mealName, String price, i) async {
-    isLoading = true;
-    var user = FirebaseAuth.instance.currentUser;
-    final exists =
-    myCart.indexWhere((element) => element.foodID == mealID);
-    if (i <= 1) {
-      await FirebaseFirestore.instance
-          .collection('orders/${user!.uid}/myOrders').doc(mealID)
-          .set({
-        'meal name': mealName,
-        'meal price': price,
-        'quantity': i,
-      });
-      if (exists>0)
-      myCart.removeAt(exists);
-      myCart.add(FoodCart(quantity: i, foodID: mealID));
-    } else {
-      await FirebaseFirestore.instance
-          .collection('orders/${user!.uid}/myOrders').doc(mealID)
-          .update({
-        'quantity': i,
-      });
-      if (exists>0)
-        myCart.removeAt(exists);
-      myCart.add(FoodCart(quantity: i, foodID: mealID));
+  Future<void> addFoodCart(String mealName, String price) async {
+    bool exists = myCart.any((element) => element.foodID == mealID);
+    if (!exists)
+      myCart.add(FoodCart(
+          quantity: 1, foodID: mealID, mealName: mealName, mealPrice: price));
+    else {
+      int index = myCart.indexWhere((element) => element.foodID == mealID);
+      myCart[index].quantity++;
     }
-    isLoading = false;
+    for (int i = 0; i < myCart.length; i++)
+      print(
+          "myCart foodID = ${myCart[i].foodID}\n"
+              "meal name = ${myCart[i].mealName}\n"
+              "quantity = ${myCart[i].quantity}");
     notifyListeners();
   }
 
-   getIndex(i){
+  Future<void> removeFoodCart(String mealName, String price) async {
+
+      int index = myCart.indexWhere((element) => element.foodID == mealID);
+      if (myCart[index].quantity==1)
+        myCart.removeAt(index);
+      else
+        myCart[index].quantity--;
+    for (int i = 0; i < myCart.length; i++)
+      print(
+          "myCart foodID = ${myCart[i].foodID}\n"
+              "meal name = ${myCart[i].mealName}\n"
+              "quantity = ${myCart[i].quantity}");
+    notifyListeners();
+  }
+
+  getIndex(i) {
     var index = myCart.indexWhere((element) => element.foodID == i);
     return index;
   }
@@ -244,22 +282,22 @@ class MyProvider with ChangeNotifier {
     return myCart.any((element) => element.foodID == id);
   }
 
-
   //-----------------------admin----------------------------
   String tabIndex = "shawarma";
+
   Future<void> fetchMeals(title) async {
     await FirebaseFirestore.instance
         .collection('restaurants/$title/shawarma')
         .get()
         .then((value) {
       value.docs.forEach((element) {
-         bool exists = mealIDs.any((e) => e.id==element.id);
+        bool exists = mealIDs.any((e) => e.id == element.id);
         if (!exists)
-        mealIDs.add(Meals(
-            mealName: element.data()['meal name'],
-            mealPrice: element.data()['meal price'],
-            description: element.data()['description'],
-            id: element.id));
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
       });
     });
     await FirebaseFirestore.instance
@@ -267,13 +305,13 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        bool exists = mealIDs.any((e) => e.id==element.id);
+        bool exists = mealIDs.any((e) => e.id == element.id);
         if (!exists)
-        mealIDs.add(Meals(
-            mealName: element.data()['meal name'],
-            mealPrice: element.data()['meal price'],
-            description: element.data()['description'],
-            id: element.id));
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
       });
     });
     await FirebaseFirestore.instance
@@ -281,19 +319,19 @@ class MyProvider with ChangeNotifier {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        bool exists = mealIDs.any((e) => e.id==element.id);
+        bool exists = mealIDs.any((e) => e.id == element.id);
         if (!exists)
-        mealIDs.add(Meals(
-            mealName: element.data()['meal name'],
-            mealPrice: element.data()['meal price'],
-            description: element.data()['description'],
-            id: element.id));
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
       });
     });
     notifyListeners();
   }
 
-  Future<void> addMeal(String mealName, String price,String desc, type) async {
+  Future<void> addMeal(String mealName, String price, String desc, type) async {
     isLoading = true;
     var uuid = Uuid().v4();
     await FirebaseFirestore.instance
@@ -302,9 +340,10 @@ class MyProvider with ChangeNotifier {
         .set({
       'meal name': mealName,
       'meal price': price,
-      'description':desc,
+      'description': desc,
     }).then((value) {
-      mealIDs.add(Meals(id: uuid, mealPrice: price, mealName: mealName, description: desc));
+      mealIDs.add(Meals(
+          id: uuid, mealPrice: price, mealName: mealName, description: desc));
     });
     notifyListeners();
   }
@@ -320,7 +359,7 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  editMeal(String mealName, price,String desc, type) async {
+  editMeal(String mealName, price, String desc, type) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     mealIDs.removeAt(mealIndex);
@@ -330,9 +369,10 @@ class MyProvider with ChangeNotifier {
         .update({
       'meal name': mealName,
       'meal price': price,
-      'description':desc,
+      'description': desc,
     }).then((value) {
-      mealIDs.add(Meals(mealName: mealName, mealPrice: price, id: mealID, description: desc));
+      mealIDs.add(Meals(
+          mealName: mealName, mealPrice: price, id: mealID, description: desc));
     });
     notifyListeners();
   }
@@ -367,41 +407,37 @@ class MyProvider with ChangeNotifier {
   double lat = 0;
   double long = 0;
 
-  sendLocationToDB() async{
+  sendLocationToDB() async {
     var user = FirebaseAuth.instance.currentUser;
 
     var serviceEnabled = await Location().serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await Location().requestService();
-      if (!serviceEnabled)
-        return;
+      if (!serviceEnabled) return;
     }
 
     var permission = await Location().hasPermission();
-    if (permission==PermissionStatus.denied) {
+    if (permission == PermissionStatus.denied) {
       permission = await Location().requestPermission();
-      if (permission != PermissionStatus.granted)
-        return;
+      if (permission != PermissionStatus.granted) return;
     }
     var location = await Location().getLocation();
     await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
-      'latitude':location.latitude,
-      'longitude':location.longitude,
+      'latitude': location.latitude,
+      'longitude': location.longitude,
     });
     notifyListeners();
-
   }
 
-  goToMaps(double long,double lat) async{
+  goToMaps(double long, double lat) async {
     String url = "https://www.google.com/maps/search/?api=1&query=$lat,$long";
     final String encodeUrl = Uri.encodeFull(url);
     // if (!await canLaunch(encodeUrl))
-      await launch(encodeUrl);
+    await launch(encodeUrl);
     // else
     //   {
     //     print('could not launch url');
     //     throw 'could not launch url';
     //   }
-
   }
 }

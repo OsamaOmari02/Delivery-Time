@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:app/Myprovider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +18,6 @@ class _StoreState extends State<Store> {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<MyProvider>(context, listen: false).fetchMeals(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
-      Provider.of<MyProvider>(context, listen: false).fetchCart();
     });
     super.initState();
   }
@@ -38,14 +36,6 @@ class _StoreState extends State<Store> {
           appBar: AppBar(
             centerTitle: true,
             title: Text(provider.restaurantName),
-            // actions: <Widget>[
-            //   IconButton(
-            //       icon: Icon(Icons.search),
-            //       onPressed: (){
-            //
-            //       }
-            //       ),
-            // ],
             bottom: TabBar(
               tabs: [
                 Tab(text: lanProvider.texts('tab1')),
@@ -160,7 +150,6 @@ class First extends StatefulWidget {
 }
 
 class _FirstState extends State<First> {
-  int _itemCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -314,25 +303,16 @@ class _FirstState extends State<First> {
                                 onPressed: () async{
                                   setState(() {
                                     provider.mealID = resData[index].id;
-                                    _itemCount = provider.myCart[provider.getIndex(provider.mealID)].quantity??0;
-                                    _itemCount++;
-                                    print("itemCount = $_itemCount");
-                                    print(
-                                        "quantity = {provider.myCart[provider.getIndex(provider.mealID)].quantity}");
                                   });
-                                  await provider.addFoodCart(
-                                      resData[index]['meal name'],
-                                      resData[index]['meal price'],
-                                      _itemCount);
+                                  provider.removeFoodCart(resData[index]['meal name'], resData[index]['meal price']);
                                   provider.subtractPrice(
-                                      int.parse(resData[index]['meal price']));
-                                  print("sub - done");
+                                      double.parse(resData[index]['meal price']));
                                 },
                               )
                             : Container(),
                         Text(provider.getIndex(resData[index].id) == -1
                             ? "0"
-                            : (provider.getIndex(resData[index].id)+1).toString()),
+                            : (provider.myCart[provider.getIndex(resData[index].id)].quantity).toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,
@@ -341,20 +321,10 @@ class _FirstState extends State<First> {
                             onPressed: () async {
                               setState(() {
                                 provider.mealID = resData[index].id;
-                                _itemCount = provider.myCart[provider.getIndex(provider.mealID)==-1?
-                                0:provider.getIndex(provider.mealID)].quantity??0;
-                                _itemCount++;
-                                print("itemCount = $_itemCount");
-                                print(
-                                    "quantity = {provider.myCart[provider.getIndex(provider.mealID)].quantity}");
                               });
-                              await provider.addFoodCart(
-                                  resData[index]['meal name'],
-                                  resData[index]['meal price'],
-                                  _itemCount);
+                              provider.addFoodCart(resData[index]['meal name'], resData[index]['meal price']);
                               await provider.addPrice(
-                                  int.parse(resData[index]['meal price']));
-                              print("done");
+                                  double.parse(resData[index]['meal price']));
                             }),
                       ],
                     ),
@@ -384,7 +354,6 @@ class _SecondState extends State<Second> {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    var res = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
           context: context,
@@ -522,29 +491,37 @@ class _SecondState extends State<Second> {
                     ),
                     Row(
                       children: [
-                        _itemCount != 0
+                        provider.existsInCart(resData[index].id)
                             ? IconButton(
-                                icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () {
-                                  provider.subtractPrice(
-                                      int.parse(resData[index]['meal price']));
-                                  setState(() => _itemCount--);
-                                },
-                              )
+                          icon: const Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
+                          onPressed: () async{
+                            setState(() {
+                              provider.mealID = resData[index].id;
+                            });
+                            provider.removeFoodCart(resData[index]['meal name'],resData[index]['meal price']);
+                            provider.subtractPrice(
+                                double.parse(resData[index]['meal price']));
+                          },
+                        )
                             : Container(),
-                        Text(_itemCount.toString()),
+                        Text(provider.getIndex(resData[index].id) == -1
+                            ? "0"
+                            : (provider.myCart[provider.getIndex(resData[index].id)].quantity).toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,
                               color: Colors.green,
                             ),
-                            onPressed: () {
-                              provider.addPrice(
-                                  int.parse(resData[index]['meal price']));
-                              setState(() => _itemCount++);
+                            onPressed: () async {
+                              setState(() {
+                                provider.mealID = resData[index].id;
+                              });
+                              provider.addFoodCart(resData[index]['meal name'],resData[index]['meal price']);
+                              await provider.addPrice(
+                                  double.parse(resData[index]['meal price']));
                             }),
                       ],
                     ),
@@ -566,7 +543,6 @@ class Third extends StatefulWidget {
 }
 
 class _ThirdState extends State<Third> {
-  int _itemCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -574,7 +550,6 @@ class _ThirdState extends State<Third> {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    var res = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
           context: context,
@@ -712,29 +687,37 @@ class _ThirdState extends State<Third> {
                     ),
                     Row(
                       children: [
-                        _itemCount != 0
+                        provider.existsInCart(resData[index].id)
                             ? IconButton(
-                                icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () {
-                                  provider.subtractPrice(
-                                      int.parse(resData[index]['meal price']));
-                                  setState(() => _itemCount--);
-                                },
-                              )
+                          icon: const Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
+                          onPressed: () async{
+                            setState(() {
+                              provider.mealID = resData[index].id;
+                            });
+                            provider.removeFoodCart(resData[index]['meal name'], resData[index]['meal price']);
+                            provider.subtractPrice(
+                                double.parse(resData[index]['meal price']));
+                          },
+                        )
                             : Container(),
-                        Text(_itemCount.toString()),
+                        Text(provider.getIndex(resData[index].id) == -1
+                            ? "0"
+                            : (provider.myCart[provider.getIndex(resData[index].id)].quantity).toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,
                               color: Colors.green,
                             ),
-                            onPressed: () {
-                              provider.addPrice(
-                                  int.parse(resData[index]['meal price']));
-                              setState(() => _itemCount++);
+                            onPressed: () async {
+                              setState(() {
+                                provider.mealID = resData[index].id;
+                              });
+                              provider.addFoodCart(resData[index]['meal name'], resData[index]['meal price']);
+                              await provider.addPrice(
+                                  double.parse(resData[index]['meal price']));
                             }),
                       ],
                     ),

@@ -196,10 +196,12 @@ class _MyHomepageState extends State<MyHomepage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             try {
-              dialog();
+              setState(() {
+                provider.isLoading = true;
+              });
               await provider.sendLocationToDB();
               setState(() {
-                _loading = false;
+                provider.isLoading = false;
               });
               Fluttertoast.showToast(
                   msg: lanProvider.texts('location'),
@@ -209,6 +211,9 @@ class _MyHomepageState extends State<MyHomepage> {
                   fontSize: 16.0);
               print('done');
             } catch (e) {
+              setState(() {
+                provider.isLoading = false;
+              });
               Fluttertoast.showToast(
                   msg: lanProvider.texts('Error occurred !'),
                   toastLength: Toast.LENGTH_SHORT,
@@ -218,7 +223,7 @@ class _MyHomepageState extends State<MyHomepage> {
               print(e);
             }
           },
-          child: const Icon(Icons.my_location),
+          child: !provider.isLoading?Icon(Icons.my_location):CircularProgressIndicator(),
           backgroundColor: Theme.of(context).accentColor,
         ),
         body: Container(
