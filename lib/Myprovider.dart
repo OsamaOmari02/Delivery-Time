@@ -12,8 +12,11 @@ enum authStatus { Authenticating, unAuthenticated, Authenticated }
 
 class Address {
   final String id;
-
-  Address({
+  final String area;
+  final String street;
+  final String phoneNum;
+  Address(
+  {required this.area, required this.street, required this.phoneNum,
     required this.id,
   });
 }
@@ -114,6 +117,13 @@ class MyProvider with ChangeNotifier {
   ];
   String street = '-';
 
+  Map<String, String> checkOut = {
+    'area': '',
+    'street': '',
+    'phoneNum': '',
+  };
+
+  double deliveryPrice = 1.00;
   // ---------------addresses----------------------
   List<Address> loc = [];
 
@@ -125,7 +135,7 @@ class MyProvider with ChangeNotifier {
         .then((value) {
       value.docs.forEach((element) {
         bool exists = loc.any((e) => e.id == element.id);
-        if (!exists) loc.add(Address(id: element.id));
+        if (!exists) loc.add(Address(id: element.id, area: element['area'], street: element['street'], phoneNum: element['phoneNum']));
       });
     });
     notifyListeners();
@@ -141,7 +151,7 @@ class MyProvider with ChangeNotifier {
       'street': street,
       'phoneNum': phone,
     }).then((value) {
-      loc.add(Address(id: value.id));
+      loc.add(Address(id: value.id, area: area, street: street, phoneNum: phone));
       notifyListeners();
     });
   }
@@ -151,12 +161,12 @@ class MyProvider with ChangeNotifier {
   delete() async {
     isLoading = true;
     var user = FirebaseAuth.instance.currentUser;
-    final addressIndex = loc.indexWhere((element) => element.id == iD);
-    loc.removeAt(addressIndex);
     await FirebaseFirestore.instance
         .collection('/address/${user!.uid}/addresses')
         .doc(iD)
         .delete();
+    final addressIndex = loc.indexWhere((element) => element.id == iD);
+    loc.removeAt(addressIndex);
     notifyListeners();
   }
 
@@ -210,15 +220,15 @@ class MyProvider with ChangeNotifier {
 
   List<FoodCart> myCart = [];
 
-  double t = 0.0;
+  double total = 0.00;
 
   addPrice(price) {
-    t += price;
+    total += price;
     notifyListeners();
   }
 
   subtractPrice(price) {
-    if (t != 0) t -= price;
+    if (total != 0) total -= price;
     notifyListeners();
   }
 
@@ -258,7 +268,7 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> removeFoodCart(String mealName, String price) async {
+  Future<void> removeFoodCart() async {
 
       int index = myCart.indexWhere((element) => element.foodID == mealID);
       if (myCart[index].quantity==1)
@@ -408,6 +418,7 @@ class MyProvider with ChangeNotifier {
   double long = 0;
 
   sendLocationToDB() async {
+    isLoading = true;
     var user = FirebaseAuth.instance.currentUser;
 
     var serviceEnabled = await Location().serviceEnabled();
@@ -426,6 +437,7 @@ class MyProvider with ChangeNotifier {
       'latitude': location.latitude,
       'longitude': location.longitude,
     });
+    isLoading = false;
     notifyListeners();
   }
 
@@ -440,4 +452,5 @@ class MyProvider with ChangeNotifier {
     //     throw 'could not launch url';
     //   }
   }
+
 }

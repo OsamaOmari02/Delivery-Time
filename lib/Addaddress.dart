@@ -13,14 +13,11 @@ class AddAddress extends StatefulWidget {
 }
 
 class _AddAddressState extends State<AddAddress> {
-  var _area = TextEditingController();
-  var _street = TextEditingController();
+
   var _phone = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
-    _area.dispose();
-    _street.dispose();
     _phone.dispose();
     super.dispose();
   }

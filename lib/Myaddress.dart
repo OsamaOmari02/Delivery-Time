@@ -24,8 +24,6 @@ class _MyAddressState extends State<MyAddress> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     var user = FirebaseAuth.instance.currentUser;
@@ -95,12 +93,10 @@ class _MyAddressState extends State<MyAddress> {
                         setState(() {
                           provider.isLoading = true;
                         });
-                        await FirebaseFirestore.instance
-                            .collection('address/${user!.uid}/addresses')
-                            .doc(provider.iD)
-                            .delete();
+                        await provider.delete();
+                        Navigator.of(context).pop();
                         Fluttertoast.showToast(
-                            msg: lanProvider.texts('Address deleted'),
+                            msg: lanProvider.texts('Address Deleted'),
                             toastLength: Toast.LENGTH_SHORT,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
@@ -108,11 +104,11 @@ class _MyAddressState extends State<MyAddress> {
                         setState(() {
                           provider.isLoading = false;
                         });
-                        Navigator.of(context).pop();
                       } on FirebaseException catch (e) {
                         dialog(e.message);
                         setState(() {
                           provider.isLoading = false;
+
                         });
                       } catch (e) {
                         dialog(lanProvider.texts('Error occurred !'));
@@ -153,18 +149,17 @@ class _MyAddressState extends State<MyAddress> {
               .collection('/address/${user!.uid}/addresses')
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (!snapshot.hasData)
-              return Center(
-                  child: Text(lanProvider.texts('new address'),
-                      style: const TextStyle(
-                          fontSize: 17, fontStyle: FontStyle.italic)));
             if (snapshot.connectionState == ConnectionState.waiting)
-              return Center(child: const CircularProgressIndicator());
+               Center(child: const CircularProgressIndicator());
             return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: provider.loc.length,
               itemBuilder: (BuildContext context, int index) {
                 var userData = snapshot.data!.docs;
-                if (snapshot.data!.docs.length != 0)
+                if (provider.loc.isEmpty)
+                  return Center(
+                      child: Text(lanProvider.texts('new address'),
+                          style: const TextStyle(
+                              fontSize: 17, fontStyle: FontStyle.italic)));
                   return ListTile(
                     onLongPress: () {
                       setState(() {
@@ -180,10 +175,6 @@ class _MyAddressState extends State<MyAddress> {
                         userData[index]['phoneNum']),
                     isThreeLine: true,
                   );
-                return Center(
-                    child: Text(lanProvider.texts('new address'),
-                        style: const TextStyle(
-                            fontSize: 17, fontStyle: FontStyle.italic)));
               },
             );
           },

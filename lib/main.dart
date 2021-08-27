@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Addaddress.dart';
+import 'CheckOut.dart';
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
 import 'LogIn.dart';
@@ -85,6 +86,7 @@ class _MyAppState extends State<MyApp> {
         'edit': (context) => Edit(),
         'addMeal': (context) => AddMeal(),
         'userState': (context) => UserState(),
+        'checkOut':(context)=>CheckOut(),
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -103,6 +105,7 @@ class _MyHomepageState extends State<MyHomepage> {
     Provider.of<LanProvider>(context, listen: false).getLanguage();
     Provider.of<MyProvider>(context, listen: false).fetch();
     Provider.of<MyProvider>(context, listen: false).fetchFav();
+    Provider.of<MyProvider>(context, listen: false).fetchAddress();
     super.initState();
   }
 
@@ -156,7 +159,6 @@ class _MyHomepageState extends State<MyHomepage> {
           });
     }
 
-    bool _loading = false;
     Widget funImage(route, String title) {
       return Container(
         width: width * 0.41,
@@ -187,6 +189,13 @@ class _MyHomepageState extends State<MyHomepage> {
               child: IconButton(
                 onPressed: () => Navigator.of(context).pushNamed('Shopping'),
                 icon: const Icon(Icons.shopping_basket_outlined),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pushNamed('admin'),
+                icon: const Icon(Icons.search),
               ),
             ),
           ],

@@ -1,4 +1,3 @@
-
 import 'package:app/Myprovider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,70 +43,69 @@ class _StoreState extends State<Store> {
               ],
             ),
           ),
-          body: Stack(
-            children: [
-              TabBarView(
-                children: <Widget>[
-                  First(),
-                  Second(),
-                  Third(),
-                ],
-              ),
-              Opacity(
-                opacity: provider.t == 0 ? 0.4 : 1,
+          bottomNavigationBar: Container(
+            height: 65,
+            child: Opacity(
+              opacity: provider.total == 0 ? 0.4 : 1,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 15),
+                alignment: Alignment.bottomCenter,
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 15),
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 4,
+                      primary: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 4,
-                        primary: Colors.orange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
+                    onPressed: () =>
+                        Navigator.of(context).pushReplacementNamed('Shopping'),
+                    child: Row(
+                      children: <Widget>[
+                        const Icon(
+                          Icons.shopping_basket_outlined,
+                          color: Colors.white,
                         ),
-                      ),
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed('Shopping'),
-                      child: Row(
-                        children: <Widget>[
-                          const Icon(
-                            Icons.shopping_basket_outlined,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 7),
-                          Text(
-                            lanProvider.texts('food cart'),
-                            style: const TextStyle(
-                                fontSize: 17, color: Colors.white),
-                          ),
-                          SizedBox(width: width * 0.23),
-                          Text(
-                            lanProvider.texts('total'),
-                            style: const TextStyle(
-                                fontSize: 17, color: Colors.white),
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            "${provider.t}",
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            lanProvider.texts('jd'),
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
-                          ),
-                        ],
-                      ),
+                        const SizedBox(width: 7),
+                        Text(
+                          lanProvider.texts('food cart'),
+                          style: const TextStyle(
+                              fontSize: 17, color: Colors.white),
+                        ),
+                        SizedBox(width: width * 0.23),
+                        Text(
+                          lanProvider.texts('total'),
+                          style: const TextStyle(
+                              fontSize: 17, color: Colors.white),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          "${provider.total}",
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          lanProvider.texts('jd'),
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
+            ),
+          ),
+          body: TabBarView(
+            children: <Widget>[
+              First(),
+              Second(),
+              Third(),
             ],
           ),
         ),
@@ -150,7 +148,6 @@ class First extends StatefulWidget {
 }
 
 class _FirstState extends State<First> {
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -242,51 +239,49 @@ class _FirstState extends State<First> {
                                   }
                                 },
                               ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  const SizedBox(height: 20),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.topLeft,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const SizedBox(height: 20),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    resData[index]['meal name'],
+                                    style: const TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    resData[index]['description'],
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.grey),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 17),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      resData[index]['meal name'],
+                                      lanProvider.texts('price') +
+                                          " " +
+                                          resData[index]['meal price'] +
+                                          " " +
+                                          lanProvider.texts('jd'),
                                       style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w800),
+                                          fontSize: 16, color: Colors.pink),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      resData[index]['description'],
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.grey),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.bottomLeft,
-                                    margin: const EdgeInsets.only(top: 17),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 7),
-                                      child: Text(
-                                        lanProvider.texts('price') +
-                                            " " +
-                                            resData[index]['meal price'] +
-                                            " " +
-                                            lanProvider.texts('jd'),
-                                        style: const TextStyle(
-                                            fontSize: 16, color: Colors.pink),
-                                      ),
-                                    ),
-                                  ),
-                                  // SizedBox(height: 50),
-                                ],
-                              ),
+                                ),
+                                // SizedBox(height: 50),
+                              ],
                             ),
                           ],
                         ),
@@ -300,19 +295,23 @@ class _FirstState extends State<First> {
                                   Icons.remove,
                                   color: Colors.red,
                                 ),
-                                onPressed: () async{
+                                onPressed: () async {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  provider.removeFoodCart(resData[index]['meal name'], resData[index]['meal price']);
-                                  provider.subtractPrice(
-                                      double.parse(resData[index]['meal price']));
+                                  provider.removeFoodCart();
+                                  provider.subtractPrice(double.parse(
+                                      resData[index]['meal price']));
                                 },
                               )
                             : Container(),
                         Text(provider.getIndex(resData[index].id) == -1
                             ? "0"
-                            : (provider.myCart[provider.getIndex(resData[index].id)].quantity).toString()),
+                            : (provider
+                                    .myCart[
+                                        provider.getIndex(resData[index].id)]
+                                    .quantity)
+                                .toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,
@@ -322,7 +321,8 @@ class _FirstState extends State<First> {
                               setState(() {
                                 provider.mealID = resData[index].id;
                               });
-                              provider.addFoodCart(resData[index]['meal name'], resData[index]['meal price']);
+                              provider.addFoodCart(resData[index]['meal name'],
+                                  resData[index]['meal price']);
                               await provider.addPrice(
                                   double.parse(resData[index]['meal price']));
                             }),
@@ -439,51 +439,49 @@ class _SecondState extends State<Second> {
                                   }
                                 },
                               ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  const SizedBox(height: 20),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.topLeft,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const SizedBox(height: 20),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    resData[index]['meal name'],
+                                    style: const TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    resData[index]['description'],
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.grey),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 17),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      resData[index]['meal name'],
+                                      lanProvider.texts('price') +
+                                          " " +
+                                          resData[index]['meal price'] +
+                                          " " +
+                                          lanProvider.texts('jd'),
                                       style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w800),
+                                          fontSize: 16, color: Colors.pink),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      resData[index]['description'],
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.grey),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.bottomLeft,
-                                    margin: const EdgeInsets.only(top: 17),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 7),
-                                      child: Text(
-                                        lanProvider.texts('price') +
-                                            " " +
-                                            resData[index]['meal price'] +
-                                            " " +
-                                            lanProvider.texts('jd'),
-                                        style: const TextStyle(
-                                            fontSize: 16, color: Colors.pink),
-                                      ),
-                                    ),
-                                  ),
-                                  // SizedBox(height: 50),
-                                ],
-                              ),
+                                ),
+                                // SizedBox(height: 50),
+                              ],
                             ),
                           ],
                         ),
@@ -493,23 +491,27 @@ class _SecondState extends State<Second> {
                       children: [
                         provider.existsInCart(resData[index].id)
                             ? IconButton(
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Colors.red,
-                          ),
-                          onPressed: () async{
-                            setState(() {
-                              provider.mealID = resData[index].id;
-                            });
-                            provider.removeFoodCart(resData[index]['meal name'],resData[index]['meal price']);
-                            provider.subtractPrice(
-                                double.parse(resData[index]['meal price']));
-                          },
-                        )
+                                icon: const Icon(
+                                  Icons.remove,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    provider.mealID = resData[index].id;
+                                  });
+                                  provider.removeFoodCart();
+                                  provider.subtractPrice(double.parse(
+                                      resData[index]['meal price']));
+                                },
+                              )
                             : Container(),
                         Text(provider.getIndex(resData[index].id) == -1
                             ? "0"
-                            : (provider.myCart[provider.getIndex(resData[index].id)].quantity).toString()),
+                            : (provider
+                                    .myCart[
+                                        provider.getIndex(resData[index].id)]
+                                    .quantity)
+                                .toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,
@@ -519,7 +521,8 @@ class _SecondState extends State<Second> {
                               setState(() {
                                 provider.mealID = resData[index].id;
                               });
-                              provider.addFoodCart(resData[index]['meal name'],resData[index]['meal price']);
+                              provider.addFoodCart(resData[index]['meal name'],
+                                  resData[index]['meal price']);
                               await provider.addPrice(
                                   double.parse(resData[index]['meal price']));
                             }),
@@ -543,7 +546,6 @@ class Third extends StatefulWidget {
 }
 
 class _ThirdState extends State<Third> {
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -635,51 +637,49 @@ class _ThirdState extends State<Third> {
                                   }
                                 },
                               ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  const SizedBox(height: 20),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.topLeft,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const SizedBox(height: 20),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    resData[index]['meal name'],
+                                    style: const TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    resData[index]['description'],
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.grey),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 17),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      resData[index]['meal name'],
+                                      lanProvider.texts('price') +
+                                          " " +
+                                          resData[index]['meal price'] +
+                                          " " +
+                                          lanProvider.texts('jd'),
                                       style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w800),
+                                          fontSize: 16, color: Colors.pink),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      resData[index]['description'],
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.grey),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.bottomLeft,
-                                    margin: const EdgeInsets.only(top: 17),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 7),
-                                      child: Text(
-                                        lanProvider.texts('price') +
-                                            " " +
-                                            resData[index]['meal price'] +
-                                            " " +
-                                            lanProvider.texts('jd'),
-                                        style: const TextStyle(
-                                            fontSize: 16, color: Colors.pink),
-                                      ),
-                                    ),
-                                  ),
-                                  // SizedBox(height: 50),
-                                ],
-                              ),
+                                ),
+                                // SizedBox(height: 50),
+                              ],
                             ),
                           ],
                         ),
@@ -689,23 +689,27 @@ class _ThirdState extends State<Third> {
                       children: [
                         provider.existsInCart(resData[index].id)
                             ? IconButton(
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Colors.red,
-                          ),
-                          onPressed: () async{
-                            setState(() {
-                              provider.mealID = resData[index].id;
-                            });
-                            provider.removeFoodCart(resData[index]['meal name'], resData[index]['meal price']);
-                            provider.subtractPrice(
-                                double.parse(resData[index]['meal price']));
-                          },
-                        )
+                                icon: const Icon(
+                                  Icons.remove,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    provider.mealID = resData[index].id;
+                                  });
+                                  provider.removeFoodCart();
+                                  provider.subtractPrice(double.parse(
+                                      resData[index]['meal price']));
+                                },
+                              )
                             : Container(),
                         Text(provider.getIndex(resData[index].id) == -1
                             ? "0"
-                            : (provider.myCart[provider.getIndex(resData[index].id)].quantity).toString()),
+                            : (provider
+                                    .myCart[
+                                        provider.getIndex(resData[index].id)]
+                                    .quantity)
+                                .toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,
@@ -715,7 +719,8 @@ class _ThirdState extends State<Third> {
                               setState(() {
                                 provider.mealID = resData[index].id;
                               });
-                              provider.addFoodCart(resData[index]['meal name'], resData[index]['meal price']);
+                              provider.addFoodCart(resData[index]['meal name'],
+                                  resData[index]['meal price']);
                               await provider.addPrice(
                                   double.parse(resData[index]['meal price']));
                             }),

@@ -20,14 +20,10 @@ class _MyFavouritesState extends State<MyFavourites> {
     super.initState();
   }
 
-  int _itemCount = 0;
-
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     var user = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
@@ -70,140 +66,153 @@ class _MyFavouritesState extends State<MyFavourites> {
               .collection('/favorites/${user!.uid}/myFavorites')
               .snapshots(),
           builder: (ctx, snapshot) {
-            // if (!snapshot.hasData)
-            //   return Center(child: Text(lanProvider.texts('no meals were added to favorites'),
-            //     style: TextStyle(fontSize: 17,fontStyle: FontStyle.italic)));
             if (snapshot.connectionState == ConnectionState.waiting)
               return Center(child: const CircularProgressIndicator());
             return Scrollbar(
               child: Stack(children: [
-                ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, int index) {
-                    var resData = snapshot.data!.docs;
-                    if (resData.length != 0)
-                      return Card(
-                        elevation: 2.5,
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                child: Row(
-                                  children: [
-                                    if (provider.isLoading)
-                                      const CircularProgressIndicator(),
-                                    if (!provider.isLoading)
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () async {
-                                          try {
-                                            setState(() {
-                                              provider.isLoading = true;
-                                              provider.mealID =
-                                                  resData[index].id;
-                                            });
-                                            await FirebaseFirestore.instance
-                                                .collection(
-                                                    'favorites/${user.uid}/myFavorites')
-                                                .doc(provider.mealID)
-                                                .delete()
-                                                .then((value) {
-                                              provider.myFavorites.removeWhere(
-                                                  (element) =>
-                                                      element.myFavoriteID ==
-                                                      provider.mealID);
-                                            });
-                                            setState(() {
-                                              provider.isLoading = false;
-                                            });
-                                          } on FirebaseException catch (e) {
-                                            setState(() {
-                                              provider.isLoading = false;
-                                            });
-                                            dialog(e.message);
-                                            print(e);
-                                          } catch (e) {
-                                            setState(() {
-                                              provider.isLoading = false;
-                                            });
-                                            dialog(lanProvider
-                                                .texts('Error occurred !'));
-                                            print(e);
-                                          }
-                                        },
-                                      ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          const SizedBox(height: 20),
-                                          Container(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              resData[index]['meal name'],
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ),
-                                          Container(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            alignment: Alignment.bottomLeft,
-                                            margin:
-                                                const EdgeInsets.only(top: 17),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 7),
-                                              child: Text(
-                                                lanProvider.texts('price') +
-                                                    " " +
-                                                    resData[index]
-                                                        ['meal price'] +
-                                                    " " +
-                                                    lanProvider.texts('jd'),
-                                                style: const TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.pink),
+                provider.myFavorites.length == 0
+                    ? Center(
+                        child: Text(
+                        lanProvider.texts('no meals were added to favorites'),
+                        style: TextStyle(
+                            fontSize: 18, fontStyle: FontStyle.italic),
+                      ))
+                    : ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, int index) {
+                          var resData = snapshot.data!.docs;
+                          if (resData.length != 0)
+                            return Card(
+                              elevation: 2.5,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          if (provider.isLoading)
+                                            const CircularProgressIndicator(),
+                                          if (!provider.isLoading)
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.favorite,
+                                                color: Colors.red,
                                               ),
+                                              onPressed: () async {
+                                                try {
+                                                  setState(() {
+                                                    provider.isLoading = true;
+                                                    provider.mealID =
+                                                        resData[index].id;
+                                                  });
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection(
+                                                          'favorites/${user.uid}/myFavorites')
+                                                      .doc(provider.mealID)
+                                                      .delete()
+                                                      .then((value) {
+                                                    provider.myFavorites
+                                                        .removeWhere((element) =>
+                                                            element
+                                                                .myFavoriteID ==
+                                                            provider.mealID);
+                                                  });
+                                                  setState(() {
+                                                    provider.isLoading = false;
+                                                  });
+                                                } on FirebaseException catch (e) {
+                                                  setState(() {
+                                                    provider.isLoading = false;
+                                                  });
+                                                  dialog(e.message);
+                                                  print(e);
+                                                } catch (e) {
+                                                  setState(() {
+                                                    provider.isLoading = false;
+                                                  });
+                                                  dialog(lanProvider.texts(
+                                                      'Error occurred !'));
+                                                  print(e);
+                                                }
+                                              },
+                                            ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                const SizedBox(height: 20),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(
+                                                    resData[index]['meal name'],
+                                                    style: TextStyle(
+                                                        fontSize: 17,
+                                                        fontWeight:
+                                                            FontWeight.w800),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  alignment:
+                                                      Alignment.bottomLeft,
+                                                  margin: const EdgeInsets.only(
+                                                      top: 17),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 7),
+                                                    child: Text(
+                                                      lanProvider
+                                                              .texts('price') +
+                                                          " " +
+                                                          resData[index]
+                                                              ['meal price'] +
+                                                          " " +
+                                                          lanProvider
+                                                              .texts('jd'),
+                                                      style: const TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.pink),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Row(children: [
+                                    Container(
+                                      child: Image.asset(
+                                        provider.restaurantName == "grill house"
+                                            ? 'file/grill_house.jpg'
+                                            : 'file/دلع_كرشك.jpg',
+                                        fit: BoxFit.fill,
+                                      ),
+                                      height: 80,
+                                    ),
+                                  ]),
+                                ],
                               ),
-                            ),
-                            Row(children: [
-                              Container(
-                                  child: Image.asset(
-                                    provider.restaurantName=="grill house"?
-                                    'file/grill_house.jpg':'file/دلع_كرشك.jpg',
-                                fit: BoxFit.fill,
-                              ),
-                                height: 80,
-                              ),
-                            ]),
-                          ],
-                        ),
-                      );
-                    return Center(
-                        child: Text(
-                            lanProvider
-                                .texts('no meals were added to favorites'),
-                            style: const TextStyle(
-                                fontSize: 17, fontStyle: FontStyle.italic)));
-                  },
-                ),
+                            );
+                          return Center(
+                              child: Text(
+                                  lanProvider.texts(
+                                      'no meals were added to favorites'),
+                                  style: const TextStyle(
+                                      fontSize: 17,
+                                      fontStyle: FontStyle.italic)));
+                        },
+                      ),
               ]),
             );
           },
