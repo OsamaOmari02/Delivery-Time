@@ -1,12 +1,15 @@
 // @dart=2.9
 import 'dart:developer';
 
+import 'package:app/AdminSweets.dart';
 import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
 import 'package:app/Settings.dart';
 import 'package:app/admin.dart';
 import 'package:app/res_screen.dart';
+import 'package:app/sweets.dart';
+import 'package:app/sweets_screen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Addaddress.dart';
+import 'AdminHomos.dart';
 import 'CheckOut.dart';
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
@@ -23,6 +27,7 @@ import 'LogIn.dart';
 import 'Myaddress.dart';
 import 'PassWord.dart';
 import 'ResetPassword.dart';
+import 'Shawarma.dart';
 import 'Shopping_cart.dart';
 import 'MyHistory.dart';
 import 'package:provider/provider.dart';
@@ -30,14 +35,16 @@ import 'package:provider/provider.dart';
 import 'SignUp.dart';
 import 'UserState.dart';
 import 'about.dart';
+import 'homos.dart';
+import 'homos_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider<MyProvider>(create: (ctx) => MyProvider()),
-      ChangeNotifierProvider<LanProvider>(create: (ctx) => LanProvider()),
+      ChangeNotifierProvider<MyProvider>(create: (_) => MyProvider()),
+      ChangeNotifierProvider<LanProvider>(create: (_) => LanProvider()),
     ],
     child: MyApp(),
   ));
@@ -83,10 +90,21 @@ class _MyAppState extends State<MyApp> {
         'Name': (context) => Name(),
         'about': (context) => About(),
         'admin': (context) => Admin(),
-        'edit': (context) => Edit(),
+        'editShawarma': (context) => Edit(),
+        'editSweets': (context) => EditSweets(),
+        'editHomos':(context) => EditHomos(),
         'addMeal': (context) => AddMeal(),
+        'addMealSweets':(context) => AddMealSweets(),
+        'addMealHomos':(context) => AddMealHomos(),
         'userState': (context) => UserState(),
-        'checkOut':(context)=>CheckOut(),
+        'checkOut': (context) => CheckOut(),
+        'homos':(context) => Homos(),
+        'homosScreen':(context) => HomosScreen(),
+        'sweets':(context) => Sweets(),
+        'sweetScreen':(context) => SweetScreen(),
+        'adminHomos':(context) => AdminHomos(),
+        'adminSweets':(context) => AdminSweets(),
+        'shawarmaScreen':(context) => Shawarma(),
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -115,67 +133,65 @@ class _MyHomepageState extends State<MyHomepage> {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    Widget content(image, title, Color color) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-            provider.restaurantName = title;
-            Navigator.of(context).pushNamed('resScreen');
-          },
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.white70)),
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Image.asset(image, fit: BoxFit.fill),
-              Text(
-                title,
-                style: TextStyle(
-                    fontSize: 16, fontStyle: FontStyle.italic, color: color),
+
+    Widget funImage(image,title) {
+      return Card(
+            color: Colors.white70,
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            elevation: 1.5,
+            child: ListTile(
+              onTap: () =>Navigator.of(context).pushNamed('resScreen'),
+              title: Image.asset(
+                image,
+                height: height * 0.14,
+                fit: BoxFit.fill,
               ),
-            ],
-          ),
-        ),
-      );
+              subtitle: Text(title,
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
+                  textAlign: TextAlign.center),
+          ));
     }
 
-    dialog() {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              content: Container(
-                height: 40,
-                width: 10,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-              backgroundColor: Colors.grey,
-            );
-          });
-    }
+    // dialog() {
+    //   return showDialog(
+    //       context: context,
+    //       builder: (BuildContext ctx) {
+    //         return AlertDialog(
+    //           content: Container(
+    //             height: 40,
+    //             width: 10,
+    //             child: Center(
+    //               child: CircularProgressIndicator(),
+    //             ),
+    //           ),
+    //           backgroundColor: Colors.grey,
+    //         );
+    //       });
+    // }
 
-    Widget funImage(route, String title) {
+    Widget content(image, String title,route) {
       return Container(
-        width: width * 0.41,
-        child: ListTile(
-          title: Image.asset(
-            route,
-            height: height * 0.12,
-            fit: BoxFit.fill,
-          ),
-          subtitle: Container(
-            padding: EdgeInsets.symmetric(vertical: height * 0.015),
-            child: Text(title,
-                style: const TextStyle(color: Colors.black, fontSize: 15),
-                textAlign: TextAlign.center),
-          ),
-        ),
-      );
+          width: width * 0.41,
+          child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            elevation: 1.5,
+            child: ListTile(
+              onTap: () =>Navigator.of(context).pushNamed(route),
+              title: Image.asset(
+                image,
+                height: height * 0.13,
+                fit: BoxFit.fill,
+              ),
+              subtitle: Container(
+                padding: EdgeInsets.symmetric(vertical: height * 0.015),
+                child: Text(lanProvider.texts(title),
+                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                    textAlign: TextAlign.center),
+              ),
+            ),
+          ));
     }
 
     return Directionality(
@@ -232,7 +248,9 @@ class _MyHomepageState extends State<MyHomepage> {
               print(e);
             }
           },
-          child: !provider.isLoading?Icon(Icons.my_location):CircularProgressIndicator(),
+          child: !provider.isLoading
+              ? Icon(Icons.my_location)
+              : CircularProgressIndicator(),
           backgroundColor: Theme.of(context).accentColor,
         ),
         body: Container(
@@ -278,12 +296,9 @@ class _MyHomepageState extends State<MyHomepage> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    funImage('file/shawarmah.jpg', "Shawarmah"),
-                    funImage('file/fahita.jpg', "Fahita"),
-                    funImage('file/burger.jpg', "Burgers"),
-                    funImage('file/grill_house.jpg', "Extra"),
-                    funImage('file/دلع_كرشك.jpg', "Extra"),
-                    funImage('file/snap_burger.jpg', "Extra"),
+                    content('file/shawarmah.jpg', "Shawarma & snacks",'shawarmaScreen'),
+                    content('file/حمص.jpg', "homos & falafel",'homos'),
+                    content('file/حلويات.png', "Sweets",'sweets'),
                   ],
                 ),
               ),
@@ -315,18 +330,18 @@ class _MyHomepageState extends State<MyHomepage> {
                       childAspectRatio: 3 / 2,
                     ),
                     children: [
-                      content(
-                          'file/grill_house.jpg', "grill house", Colors.black),
-                      content(
-                          'file/snap_burger.jpg', "Snap Burger", Colors.white),
-                      content('file/grill_house.jpg', "", Colors.black),
-                      content('file/grill_house.jpg', "", Colors.black),
-                      content('file/grill_house.jpg', "", Colors.black),
-                      content('file/grill_house.jpg', "", Colors.black),
-                      content('file/grill_house.jpg', "", Colors.black),
-                      content('file/دلع_كرشك.jpg', "", Colors.black),
-                      content('file/grill_house.jpg', "", Colors.black),
-                      content('file/grill_house.jpg', "", Colors.black),
+                      funImage(
+                          'file/grill_house.jpg', "Grill House"),
+                      funImage(
+                          'file/snap_burger.jpg', "Snap Burger"),
+                      funImage('file/grill_house.jpg', ""),
+                      funImage('file/grill_house.jpg', ""),
+                      funImage('file/grill_house.jpg', ""),
+                      funImage('file/grill_house.jpg', ""),
+                      funImage('file/grill_house.jpg', ""),
+                      funImage('file/دلع_كرشك.jpg', ""),
+                      funImage('file/grill_house.jpg', ""),
+                      funImage('file/grill_house.jpg', ""),
                     ],
                   ),
                 ),

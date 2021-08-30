@@ -56,6 +56,8 @@ class LanProvider with ChangeNotifier{
     'tab1':'شاورما',
     'tab2':'سناكات',
     'tab3':'غير ذلك',
+    'tab4':'كنافه',
+    'tab5':'كيك',
     'food cart':'سلة الطلبات',
     'total':'المجموع :',
     'jd':'د.أ',
@@ -104,6 +106,12 @@ class LanProvider with ChangeNotifier{
     'CheckOut':'تأكيد الطلب',
     'deliver to':'التوصيل الى :',
     'delivery price':'سعر التوصيل :',
+    'note':'اضف ملاحظاتك :',
+    'Shawarma & snacks':'شاورما وسناكات',
+    'homos & falafel':'حمص وفلافل',
+    'Sweets':'حلويات',
+    'choose ur sweet':'اختر محلك المفضل !',
+    'empty':'فارغ !',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -198,6 +206,12 @@ class LanProvider with ChangeNotifier{
     'CheckOut':'Confirm order',
     'deliver to':'Deliver to :',
     'delivery price':'Delivery price :',
+    'note':'Note :',
+    'Shawarma & snacks':'Shawarma & Snacks',
+    'homos & falafel':'Homos & Falafel',
+    'Sweets':'Sweets',
+    'choose ur sweet':'Choose your favorite !',
+    'empty':'Empty !',
   };
 
   texts(String txt){

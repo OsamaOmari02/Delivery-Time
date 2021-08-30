@@ -94,8 +94,8 @@ class MyProvider with ChangeNotifier {
   var restaurantName;
   List imageFun = [
     'file/burger.jpg',
-    'file/fahita.jpg',
-    'file/shawarmah.jpg',
+    'file/حمص.jpg',
+    'file/حلويات.png',
   ];
 
   List<String> areas = <String>[
@@ -123,7 +123,7 @@ class MyProvider with ChangeNotifier {
     'phoneNum': '',
   };
 
-  double deliveryPrice = 1.00;
+  double deliveryPrice = 1.00 ;
   // ---------------addresses----------------------
   List<Address> loc = [];
 
@@ -293,11 +293,10 @@ class MyProvider with ChangeNotifier {
   }
 
   //-----------------------admin----------------------------
-  String tabIndex = "shawarma";
-
-  Future<void> fetchMeals(title) async {
+  String tabIndex = "";
+  Future<void> fetchMealsShawarma(title) async {
     await FirebaseFirestore.instance
-        .collection('restaurants/$title/shawarma')
+        .collection('shawarma/$title/shawarma')
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -311,7 +310,7 @@ class MyProvider with ChangeNotifier {
       });
     });
     await FirebaseFirestore.instance
-        .collection('restaurants/$title/snacks')
+        .collection('shawarma/$title/snacks')
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -325,7 +324,69 @@ class MyProvider with ChangeNotifier {
       });
     });
     await FirebaseFirestore.instance
-        .collection('restaurants/$title/others')
+        .collection('shawarma/$title/others')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
+      });
+    });
+    notifyListeners();
+  }
+  Future<void> fetchMealsHomos(title) async {
+    await FirebaseFirestore.instance
+        .collection('homos/$title/meals')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
+      });
+    });
+    notifyListeners();
+  }
+  Future<void> fetchMealsSweets(title) async {
+    await FirebaseFirestore.instance
+        .collection('sweets/$title/kunafeh')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
+      });
+    });
+    await FirebaseFirestore.instance
+        .collection('sweets/$title/cake')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
+      });
+    });
+    await FirebaseFirestore.instance
+        .collection('sweets/$title/others')
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -341,11 +402,11 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addMeal(String mealName, String price, String desc, type) async {
+  Future<void> addMeal(String mealName, String price, String desc, type,tab) async {
     isLoading = true;
     var uuid = Uuid().v4();
     await FirebaseFirestore.instance
-        .collection('/restaurants/grill house/$type')
+        .collection('$type/$restaurantName/$tab')
         .doc(uuid)
         .set({
       'meal name': mealName,
@@ -358,23 +419,23 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  deleteMeal(type) async {
+  deleteMeal(type,tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     await FirebaseFirestore.instance
-        .collection('/restaurants/grill house/$type')
+        .collection('$type/$restaurantName/$tab')
         .doc(mealID)
         .delete();
     mealIDs.removeAt(mealIndex);
     notifyListeners();
   }
 
-  editMeal(String mealName, price, String desc, type) async {
+  editMeal(String mealName, price, String desc, type,tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     mealIDs.removeAt(mealIndex);
     await FirebaseFirestore.instance
-        .collection('/restaurants/grill house/$type')
+        .collection('$type/$restaurantName/$tab')
         .doc(mealID)
         .update({
       'meal name': mealName,

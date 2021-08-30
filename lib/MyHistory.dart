@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +17,21 @@ class _HistoryState extends State<History> {
     double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
     return Directionality(
-      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         drawer: MyDrawer(),
-        appBar: AppBar(title: Text(lanProvider.texts('orders history')),centerTitle: true,),
+        appBar: AppBar(
+          title: Text(lanProvider.texts('orders history')),
+          centerTitle: true,
+        ),
         body: ListView(
           children: [
-
+            ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed('adminSweets'),
+                child: Text("sweets")),
+            ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed('adminHomos'),
+                child: Text("homos"))
           ],
         ),
         // floatingActionButton: FloatingActionButton(
