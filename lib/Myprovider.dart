@@ -15,8 +15,11 @@ class Address {
   final String area;
   final String street;
   final String phoneNum;
-  Address(
-  {required this.area, required this.street, required this.phoneNum,
+
+  Address({
+    required this.area,
+    required this.street,
+    required this.phoneNum,
     required this.id,
   });
 }
@@ -26,9 +29,10 @@ class Meals {
   final String mealName;
   final String mealPrice;
   final String description;
+  final String resName;
 
-  Meals(
-      {required this.description,
+  Meals({ required this.resName,
+      required this.description,
       required this.mealName,
       required this.mealPrice,
       required this.id});
@@ -45,9 +49,11 @@ class FoodCart {
   var quantity;
   final mealName;
   final mealPrice;
+  final resName;
 
   FoodCart(
-      {required this.mealName,
+      {required this.resName,
+      required this.mealName,
       required this.mealPrice,
       required this.quantity,
       required this.foodID});
@@ -123,7 +129,8 @@ class MyProvider with ChangeNotifier {
     'phoneNum': '',
   };
 
-  double deliveryPrice = 1.00 ;
+  double deliveryPrice = 1.00;
+
   // ---------------addresses----------------------
   List<Address> loc = [];
 
@@ -135,7 +142,12 @@ class MyProvider with ChangeNotifier {
         .then((value) {
       value.docs.forEach((element) {
         bool exists = loc.any((e) => e.id == element.id);
-        if (!exists) loc.add(Address(id: element.id, area: element['area'], street: element['street'], phoneNum: element['phoneNum']));
+        if (!exists)
+          loc.add(Address(
+              id: element.id,
+              area: element['area'],
+              street: element['street'],
+              phoneNum: element['phoneNum']));
       });
     });
     notifyListeners();
@@ -151,7 +163,8 @@ class MyProvider with ChangeNotifier {
       'street': street,
       'phoneNum': phone,
     }).then((value) {
-      loc.add(Address(id: value.id, area: area, street: street, phoneNum: phone));
+      loc.add(
+          Address(id: value.id, area: area, street: street, phoneNum: phone));
       notifyListeners();
     });
   }
@@ -216,6 +229,10 @@ class MyProvider with ChangeNotifier {
     return myFavorites.any((element) => element.myFavoriteID == id);
   }
 
+  getIndexFav(i) {
+    return mealIDs.indexWhere((element) => element.id == i);
+  }
+
   //  -----------------------------------------food cart------------------------
 
   List<FoodCart> myCart = [];
@@ -245,7 +262,8 @@ class MyProvider with ChangeNotifier {
               quantity: element['quantity'],
               foodID: element.id,
               mealPrice: element['meal name'],
-              mealName: element['meal price']));
+              mealName: element['meal price'],
+              resName: restaurantName));
       });
     });
     notifyListeners();
@@ -255,31 +273,34 @@ class MyProvider with ChangeNotifier {
     bool exists = myCart.any((element) => element.foodID == mealID);
     if (!exists)
       myCart.add(FoodCart(
-          quantity: 1, foodID: mealID, mealName: mealName, mealPrice: price));
+          quantity: 1,
+          foodID: mealID,
+          mealName: mealName,
+          mealPrice: price,
+          resName: restaurantName));
     else {
       int index = myCart.indexWhere((element) => element.foodID == mealID);
       myCart[index].quantity++;
     }
     for (int i = 0; i < myCart.length; i++)
-      print(
-          "myCart foodID = ${myCart[i].foodID}\n"
-              "meal name = ${myCart[i].mealName}\n"
-              "quantity = ${myCart[i].quantity}");
+      print("myCart foodID = ${myCart[i].foodID}\n"
+          "meal name = ${myCart[i].mealName}\n"
+          "quantity = ${myCart[i].quantity}\n"
+          "restaurnat's name = ${myCart[i].resName}");
     notifyListeners();
   }
 
   Future<void> removeFoodCart() async {
-
-      int index = myCart.indexWhere((element) => element.foodID == mealID);
-      if (myCart[index].quantity==1)
-        myCart.removeAt(index);
-      else
-        myCart[index].quantity--;
+    int index = myCart.indexWhere((element) => element.foodID == mealID);
+    if (myCart[index].quantity == 1)
+      myCart.removeAt(index);
+    else
+      myCart[index].quantity--;
     for (int i = 0; i < myCart.length; i++)
-      print(
-          "myCart foodID = ${myCart[i].foodID}\n"
-              "meal name = ${myCart[i].mealName}\n"
-              "quantity = ${myCart[i].quantity}");
+      print("myCart foodID = ${myCart[i].foodID}\n"
+          "meal name = ${myCart[i].mealName}\n"
+          "quantity = ${myCart[i].quantity}\n"
+          "restaurnat's name = ${myCart[i].resName}");
     notifyListeners();
   }
 
@@ -294,6 +315,7 @@ class MyProvider with ChangeNotifier {
 
   //-----------------------admin----------------------------
   String tabIndex = "";
+
   Future<void> fetchMealsShawarma(title) async {
     await FirebaseFirestore.instance
         .collection('shawarma/$title/shawarma')
@@ -306,7 +328,7 @@ class MyProvider with ChangeNotifier {
               mealName: element.data()['meal name'],
               mealPrice: element.data()['meal price'],
               description: element.data()['description'],
-              id: element.id));
+              id: element.id, resName: title));
       });
     });
     await FirebaseFirestore.instance
@@ -320,7 +342,7 @@ class MyProvider with ChangeNotifier {
               mealName: element.data()['meal name'],
               mealPrice: element.data()['meal price'],
               description: element.data()['description'],
-              id: element.id));
+              id: element.id, resName: ''));
       });
     });
     await FirebaseFirestore.instance
@@ -334,11 +356,12 @@ class MyProvider with ChangeNotifier {
               mealName: element.data()['meal name'],
               mealPrice: element.data()['meal price'],
               description: element.data()['description'],
-              id: element.id));
+              id: element.id, resName: title));
       });
     });
     notifyListeners();
   }
+
   Future<void> fetchMealsHomos(title) async {
     await FirebaseFirestore.instance
         .collection('homos/$title/meals')
@@ -351,11 +374,12 @@ class MyProvider with ChangeNotifier {
               mealName: element.data()['meal name'],
               mealPrice: element.data()['meal price'],
               description: element.data()['description'],
-              id: element.id));
+              id: element.id, resName: ''));
       });
     });
     notifyListeners();
   }
+
   Future<void> fetchMealsSweets(title) async {
     await FirebaseFirestore.instance
         .collection('sweets/$title/kunafeh')
@@ -368,7 +392,7 @@ class MyProvider with ChangeNotifier {
               mealName: element.data()['meal name'],
               mealPrice: element.data()['meal price'],
               description: element.data()['description'],
-              id: element.id));
+              id: element.id, resName: title));
       });
     });
     await FirebaseFirestore.instance
@@ -382,7 +406,7 @@ class MyProvider with ChangeNotifier {
               mealName: element.data()['meal name'],
               mealPrice: element.data()['meal price'],
               description: element.data()['description'],
-              id: element.id));
+              id: element.id, resName: title));
       });
     });
     await FirebaseFirestore.instance
@@ -396,13 +420,14 @@ class MyProvider with ChangeNotifier {
               mealName: element.data()['meal name'],
               mealPrice: element.data()['meal price'],
               description: element.data()['description'],
-              id: element.id));
+              id: element.id, resName: title));
       });
     });
     notifyListeners();
   }
 
-  Future<void> addMeal(String mealName, String price, String desc, type,tab) async {
+  Future<void> addMeal(
+      String mealName, String price, String desc, type, tab) async {
     isLoading = true;
     var uuid = Uuid().v4();
     await FirebaseFirestore.instance
@@ -414,12 +439,12 @@ class MyProvider with ChangeNotifier {
       'description': desc,
     }).then((value) {
       mealIDs.add(Meals(
-          id: uuid, mealPrice: price, mealName: mealName, description: desc));
+          id: uuid, mealPrice: price, mealName: mealName, description: desc, resName: restaurantName));
     });
     notifyListeners();
   }
 
-  deleteMeal(type,tab) async {
+  deleteMeal(type, tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     await FirebaseFirestore.instance
@@ -430,7 +455,7 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  editMeal(String mealName, price, String desc, type,tab) async {
+  editMeal(String mealName, price, String desc, type, tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     mealIDs.removeAt(mealIndex);
@@ -443,7 +468,7 @@ class MyProvider with ChangeNotifier {
       'description': desc,
     }).then((value) {
       mealIDs.add(Meals(
-          mealName: mealName, mealPrice: price, id: mealID, description: desc));
+          mealName: mealName, mealPrice: price, id: mealID, description: desc, resName: restaurantName));
     });
     notifyListeners();
   }
@@ -513,5 +538,4 @@ class MyProvider with ChangeNotifier {
     //     throw 'could not launch url';
     //   }
   }
-
 }

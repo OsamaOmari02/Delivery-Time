@@ -26,7 +26,12 @@ class _SweetsState extends State<Sweets> {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 1.5,
           child: ListTile(
-            onTap: () =>Navigator.of(context).pushNamed('resScreen'),
+            onTap: () {
+              setState(() {
+                provider.restaurantName = title;
+              });
+              Navigator.of(context).pushNamed('sweetScreen');
+            },
             title: Image.asset(
               image,
               height: height * 0.14,
@@ -37,6 +42,7 @@ class _SweetsState extends State<Sweets> {
                 textAlign: TextAlign.center),
           ));
     }
+
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,

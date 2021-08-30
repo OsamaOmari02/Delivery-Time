@@ -138,53 +138,46 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                 }
                                               },
                                             ),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                const SizedBox(height: 20),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10),
-                                                  alignment: Alignment.topLeft,
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              const SizedBox(height: 20),
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  resData[index]['meal name'],
+                                                  style: TextStyle(
+                                                      fontSize: 17,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                alignment: Alignment.bottomLeft,
+                                                margin: const EdgeInsets.only(
+                                                    top: 17),
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 7),
                                                   child: Text(
-                                                    resData[index]['meal name'],
-                                                    style: TextStyle(
-                                                        fontSize: 17,
-                                                        fontWeight:
-                                                            FontWeight.w800),
+                                                    lanProvider.texts('price') +
+                                                        " " +
+                                                        resData[index]
+                                                            ['meal price'] +
+                                                        " " +
+                                                        lanProvider.texts('jd'),
+                                                    style: const TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.pink),
                                                   ),
                                                 ),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10),
-                                                  alignment:
-                                                      Alignment.bottomLeft,
-                                                  margin: const EdgeInsets.only(
-                                                      top: 17),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 7),
-                                                    child: Text(
-                                                      lanProvider
-                                                              .texts('price') +
-                                                          " " +
-                                                          resData[index]
-                                                              ['meal price'] +
-                                                          " " +
-                                                          lanProvider
-                                                              .texts('jd'),
-                                                      style: const TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.pink),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -192,13 +185,17 @@ class _MyFavouritesState extends State<MyFavourites> {
                                   ),
                                   Row(children: [
                                     Container(
-                                      child: Image.asset(
-                                        provider.restaurantName == "grill house"
-                                            ? 'file/grill_house.jpg'
-                                            : 'file/دلع_كرشك.jpg',
-                                        fit: BoxFit.fill,
+                                      child: Text(
+                                        provider
+                                            .mealIDs[provider
+                                                .getIndexFav(resData[index].id)]
+                                            .resName,
+                                        style: const TextStyle(fontSize: 15),
                                       ),
-                                      height: 80,
+                                    ),
+                                    const Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Icon(Icons.arrow_forward),
                                     ),
                                   ]),
                                 ],

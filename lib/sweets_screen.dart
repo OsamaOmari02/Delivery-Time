@@ -113,35 +113,7 @@ class _SweetScreenState extends State<SweetScreen> {
     );
   }
 }
-// -------------------------search-----------------------------
-// class Search extends SearchDelegate{
-//   @override
-//   List<Widget> buildActions(BuildContext context) {
-//     // TODO: implement buildActions
-//     throw UnimplementedError();
-//   }
-//
-//   @override
-//   Widget buildLeading(BuildContext context) {
-//     // TODO: implement buildLeading
-//     throw UnimplementedError();
-//   }
-//
-//   @override
-//   Widget buildResults(BuildContext context) {
-//     // TODO: implement buildResults
-//     throw UnimplementedError();
-//   }
-//
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     // TODO: implement buildSuggestions
-//     throw UnimplementedError();
-//   }
-//
-// }
 
-//-------------------------------1----------------------------
 class First extends StatefulWidget {
   @override
   _FirstState createState() => _FirstState();
@@ -184,15 +156,14 @@ class _FirstState extends State<First> {
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('/sweets/${provider.restaurantName}/kunafeh')
+          .collection('sweets/${provider.restaurantName}/kunafeh')
           .snapshots(),
       builder: (ctx, snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: lanProvider.texts('empty'));
-        if (snapshot.connectionState==ConnectionState.waiting)
-           return Center(child: const CircularProgressIndicator());
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return Center(child: CircularProgressIndicator());
         if (snapshot.hasError)
-          return Center(child: lanProvider.texts('something went wrong !'));
+          return Center(
+              child: Text(lanProvider.texts('something went wrong !')));
         return Scrollbar(
           child: ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -272,7 +243,7 @@ class _FirstState extends State<First> {
                                   margin: const EdgeInsets.only(top: 17),
                                   child: Padding(
                                     padding:
-                                    const EdgeInsets.symmetric(vertical: 7),
+                                        const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
                                       lanProvider.texts('price') +
                                           " " +
@@ -295,27 +266,27 @@ class _FirstState extends State<First> {
                       children: [
                         provider.existsInCart(resData[index].id)
                             ? IconButton(
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Colors.red,
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              provider.mealID = resData[index].id;
-                            });
-                            provider.removeFoodCart();
-                            provider.subtractPrice(double.parse(
-                                resData[index]['meal price']));
-                          },
-                        )
+                                icon: const Icon(
+                                  Icons.remove,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    provider.mealID = resData[index].id;
+                                  });
+                                  provider.removeFoodCart();
+                                  provider.subtractPrice(double.parse(
+                                      resData[index]['meal price']));
+                                },
+                              )
                             : Container(),
                         Text(provider.getIndex(resData[index].id) == -1
                             ? "0"
                             : (provider
-                            .myCart[
-                        provider.getIndex(resData[index].id)]
-                            .quantity)
-                            .toString()),
+                                    .myCart[
+                                        provider.getIndex(resData[index].id)]
+                                    .quantity)
+                                .toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,
@@ -350,7 +321,6 @@ class Second extends StatefulWidget {
 }
 
 class _SecondState extends State<Second> {
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -387,15 +357,14 @@ class _SecondState extends State<Second> {
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('/sweets/${provider.restaurantName}/cake')
+          .collection('sweets/${provider.restaurantName}/cake')
           .snapshots(),
       builder: (ctx, snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: lanProvider.texts('empty'));
-        if (snapshot.connectionState==ConnectionState.waiting)
-          return Center(child: const CircularProgressIndicator());
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return Center(child: CircularProgressIndicator());
         if (snapshot.hasError)
-          return Center(child: lanProvider.texts('something went wrong !'));
+          return Center(
+              child: Text(lanProvider.texts('something went wrong !')));
         return Scrollbar(
           child: ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -475,7 +444,7 @@ class _SecondState extends State<Second> {
                                   margin: const EdgeInsets.only(top: 17),
                                   child: Padding(
                                     padding:
-                                    const EdgeInsets.symmetric(vertical: 7),
+                                        const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
                                       lanProvider.texts('price') +
                                           " " +
@@ -498,27 +467,27 @@ class _SecondState extends State<Second> {
                       children: [
                         provider.existsInCart(resData[index].id)
                             ? IconButton(
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Colors.red,
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              provider.mealID = resData[index].id;
-                            });
-                            provider.removeFoodCart();
-                            provider.subtractPrice(double.parse(
-                                resData[index]['meal price']));
-                          },
-                        )
+                                icon: const Icon(
+                                  Icons.remove,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    provider.mealID = resData[index].id;
+                                  });
+                                  provider.removeFoodCart();
+                                  provider.subtractPrice(double.parse(
+                                      resData[index]['meal price']));
+                                },
+                              )
                             : Container(),
                         Text(provider.getIndex(resData[index].id) == -1
                             ? "0"
                             : (provider
-                            .myCart[
-                        provider.getIndex(resData[index].id)]
-                            .quantity)
-                            .toString()),
+                                    .myCart[
+                                        provider.getIndex(resData[index].id)]
+                                    .quantity)
+                                .toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,
@@ -589,15 +558,14 @@ class _ThirdState extends State<Third> {
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('/sweets/${provider.restaurantName}/others')
+          .collection('sweets/${provider.restaurantName}/others')
           .snapshots(),
       builder: (ctx, snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: lanProvider.texts('empty'));
-        if (snapshot.connectionState==ConnectionState.waiting)
-          return Center(child: const CircularProgressIndicator());
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return Center(child: CircularProgressIndicator());
         if (snapshot.hasError)
-          return Center(child: lanProvider.texts('something went wrong !'));
+          return Center(
+              child: Text(lanProvider.texts('something went wrong !')));
         return Scrollbar(
           child: ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -677,7 +645,7 @@ class _ThirdState extends State<Third> {
                                   margin: const EdgeInsets.only(top: 17),
                                   child: Padding(
                                     padding:
-                                    const EdgeInsets.symmetric(vertical: 7),
+                                        const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
                                       lanProvider.texts('price') +
                                           " " +
@@ -700,27 +668,27 @@ class _ThirdState extends State<Third> {
                       children: [
                         provider.existsInCart(resData[index].id)
                             ? IconButton(
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Colors.red,
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              provider.mealID = resData[index].id;
-                            });
-                            provider.removeFoodCart();
-                            provider.subtractPrice(double.parse(
-                                resData[index]['meal price']));
-                          },
-                        )
+                                icon: const Icon(
+                                  Icons.remove,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    provider.mealID = resData[index].id;
+                                  });
+                                  provider.removeFoodCart();
+                                  provider.subtractPrice(double.parse(
+                                      resData[index]['meal price']));
+                                },
+                              )
                             : Container(),
                         Text(provider.getIndex(resData[index].id) == -1
                             ? "0"
                             : (provider
-                            .myCart[
-                        provider.getIndex(resData[index].id)]
-                            .quantity)
-                            .toString()),
+                                    .myCart[
+                                        provider.getIndex(resData[index].id)]
+                                    .quantity)
+                                .toString()),
                         IconButton(
                             icon: const Icon(
                               Icons.add,

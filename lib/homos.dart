@@ -28,7 +28,12 @@ class _HomosState extends State<Homos> {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 1.5,
           child: ListTile(
-            onTap: () =>Navigator.of(context).pushNamed('resScreen'),
+            onTap: () {
+              setState(() {
+                provider.restaurantName = title;
+              });
+              Navigator.of(context).pushNamed('homosScreen');
+            },
             title: Image.asset(
               image,
               height: height * 0.14,

@@ -28,7 +28,12 @@ class _ShawarmaState extends State<Shawarma> {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 1.5,
           child: ListTile(
-            onTap: () =>Navigator.of(context).pushNamed('resScreen'),
+            onTap: () {
+              setState(() {
+                provider.restaurantName = title;
+              });
+              Navigator.of(context).pushNamed('resScreen');
+            },
             title: Image.asset(
               image,
               height: height * 0.14,
@@ -39,6 +44,7 @@ class _ShawarmaState extends State<Shawarma> {
                 textAlign: TextAlign.center),
           ));
     }
+
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
