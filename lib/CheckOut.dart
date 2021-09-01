@@ -1,7 +1,9 @@
 import 'package:app/LanguageProvider.dart';
 import 'package:app/Myprovider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class CheckOut extends StatefulWidget {
@@ -22,6 +24,44 @@ class _CheckOutState extends State<CheckOut> {
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
+    dialog(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  const SizedBox(width: 17),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
+              elevation: 24,
+              content: Container(
+                height: MediaQuery.of(context).size.height * 0.05,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                TextButton(
+                    child: Text(lanProvider.texts('ok'),
+                        style: const TextStyle(fontSize: 21)),
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
+
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -132,14 +172,52 @@ class _CheckOutState extends State<CheckOut> {
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 70),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text(lanProvider.texts('CheckOut'),
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold)),
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.green)),
-              ),
+              child: provider.isLoading
+                  ? const Center(
+                      child: const CircularProgressIndicator(),
+                    )
+                  : ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          setState(() {
+                            provider.isLoading = true;
+                          });
+                          await provider.addToDB(_note.text).then((value) {
+                            Navigator.of(context).pushReplacementNamed('MyHomepage');
+                            setState(() {
+                              provider.isLoading = false;
+                              provider.total = 0;
+                              provider.checkOut.clear();
+                              provider.myCart.clear();
+                            });
+                            // Fluttertoast.showToast(
+                            //     msg: lanProvider.texts('order confirmed'),
+                            //     toastLength: Toast.LENGTH_LONG,
+                            //     backgroundColor: Colors.grey,
+                            //     textColor: Colors.white,
+                            //     fontSize: 17.0);
+                          });
+                        } on FirebaseException catch (e) {
+                          dialog(lanProvider.texts('Error occurred !'));
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                          print(e.message);
+                        } catch (e) {
+                          dialog(lanProvider.texts('Error occurred !'));
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                          print(e);
+                        }
+                      },
+                      child: Text(lanProvider.texts('CheckOut'),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.green)),
+                    ),
             ),
           ],
         ),

@@ -167,12 +167,12 @@ class _MyAddressState extends State<MyAddress> {
                       });
                       delete(lanProvider.texts('delete this address?'));
                     },
-                    title: Text(userData[index]['area']),
+                    title: Text(userData[index]['area']??""),
                     subtitle: Text(lanProvider.texts('street:') +
-                        userData[index]['street'] +
+                        userData[index]['street']+
                         "\n" +
                         lanProvider.texts('phone:') +
-                        userData[index]['phoneNum']),
+                        userData[index]['phoneNum']??""),
                     isThreeLine: true,
                   );
               },

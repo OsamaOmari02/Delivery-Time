@@ -54,7 +54,7 @@ class _ShoppingState extends State<Shopping> {
           appBar: AppBar(
             centerTitle: true,
             title: Text(lanProvider.texts('choose address'),
-                style: TextStyle(color: Colors.black)),
+               ),
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 1,
             actions: [
@@ -144,10 +144,7 @@ class _ShoppingState extends State<Shopping> {
                                           fontSize: 19, color: Colors.red),
                                     ),
                                     onTap: () {
-                                      setState(() {
-                                        provider.myCart.clear();
-                                        provider.total = 0;
-                                      });
+                                      provider.myCartClear();
                                       Navigator.of(context).pop();
                                     },
                                   ),

@@ -186,10 +186,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                                   Row(children: [
                                     Container(
                                       child: Text(
-                                        provider
-                                            .mealIDs[provider
-                                                .getIndexFav(resData[index].id)]
-                                            .resName,
+                                        resData[index]['resName'],
                                         style: const TextStyle(fontSize: 15),
                                       ),
                                     ),

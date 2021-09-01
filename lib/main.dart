@@ -92,19 +92,19 @@ class _MyAppState extends State<MyApp> {
         'admin': (context) => Admin(),
         'editShawarma': (context) => Edit(),
         'editSweets': (context) => EditSweets(),
-        'editHomos':(context) => EditHomos(),
+        'editHomos': (context) => EditHomos(),
         'addMeal': (context) => AddMeal(),
-        'addMealSweets':(context) => AddMealSweets(),
-        'addMealHomos':(context) => AddMealHomos(),
+        'addMealSweets': (context) => AddMealSweets(),
+        'addMealHomos': (context) => AddMealHomos(),
         'userState': (context) => UserState(),
         'checkOut': (context) => CheckOut(),
-        'homos':(context) => Homos(),
-        'homosScreen':(context) => HomosScreen(),
-        'sweets':(context) => Sweets(),
-        'sweetScreen':(context) => SweetScreen(),
-        'adminHomos':(context) => AdminHomos(),
-        'adminSweets':(context) => AdminSweets(),
-        'shawarmaScreen':(context) => Shawarma(),
+        'homos': (context) => Homos(),
+        'homosScreen': (context) => HomosScreen(),
+        'sweets': (context) => Sweets(),
+        'sweetScreen': (context) => SweetScreen(),
+        'adminHomos': (context) => AdminHomos(),
+        'adminSweets': (context) => AdminSweets(),
+        'shawarmaScreen': (context) => Shawarma(),
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -134,48 +134,31 @@ class _MyHomepageState extends State<MyHomepage> {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
-    Widget funImage(image,title) {
+    Widget funImage(image, title) {
       return Card(
-            color: Colors.white70,
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            elevation: 1.5,
-            child: ListTile(
-              onTap: () {
-                setState(() {
-                  provider.restaurantName = title;
-                });
-                Navigator.of(context).pushNamed('resScreen');
-              },
-              title: Image.asset(
-                image,
-                height: height * 0.14,
-                fit: BoxFit.fill,
-              ),
-              subtitle: Text(title,
-                  style: const TextStyle(color: Colors.black, fontSize: 15),
-                  textAlign: TextAlign.center),
+          color: Colors.white70,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          elevation: 1.5,
+          child: ListTile(
+            onTap: () {
+              setState(() {
+                provider.restaurantName = title;
+              });
+              Navigator.of(context).pushNamed('resScreen');
+            },
+            title: Image.asset(
+              image,
+              height: height * 0.14,
+              fit: BoxFit.fill,
+            ),
+            subtitle: Text(title,
+                style: const TextStyle(color: Colors.black, fontSize: 15),
+                textAlign: TextAlign.center),
           ));
     }
 
-    // dialog() {
-    //   return showDialog(
-    //       context: context,
-    //       builder: (BuildContext ctx) {
-    //         return AlertDialog(
-    //           content: Container(
-    //             height: 40,
-    //             width: 10,
-    //             child: Center(
-    //               child: CircularProgressIndicator(),
-    //             ),
-    //           ),
-    //           backgroundColor: Colors.grey,
-    //         );
-    //       });
-    // }
-
-    Widget content(image, String title,route) {
+    Widget content(image, String title, route) {
       return Container(
           width: width * 0.41,
           child: Card(
@@ -183,7 +166,7 @@ class _MyHomepageState extends State<MyHomepage> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             elevation: 1.5,
             child: ListTile(
-              onTap: () =>Navigator.of(context).pushNamed(route),
+              onTap: () => Navigator.of(context).pushNamed(route),
               title: Image.asset(
                 image,
                 height: height * 0.13,
@@ -206,11 +189,21 @@ class _MyHomepageState extends State<MyHomepage> {
         appBar: AppBar(
           actions: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton(
-                onPressed: () => Navigator.of(context).pushNamed('Shopping'),
-                icon: const Icon(Icons.shopping_basket_outlined),
-              ),
+              padding: const EdgeInsets.all(7.0),
+              child: Stack(children: [
+                IconButton(
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed('Shopping'),
+                    icon: const Icon(Icons.shopping_cart)),
+                if (provider.myCart.length != 0)
+                  CircleAvatar(
+                      radius: 10,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        provider.myCart.length.toString(),
+                        style: TextStyle(color: Colors.white),
+                      )),
+              ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -233,12 +226,13 @@ class _MyHomepageState extends State<MyHomepage> {
               setState(() {
                 provider.isLoading = false;
               });
-              Fluttertoast.showToast(
-                  msg: lanProvider.texts('location'),
-                  toastLength: Toast.LENGTH_SHORT,
-                  backgroundColor: Colors.grey,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
+              if (provider.long!=0 && provider.lat!=0)
+                Fluttertoast.showToast(
+                    msg: lanProvider.texts('location'),
+                    toastLength: Toast.LENGTH_SHORT,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
               print('done');
             } catch (e) {
               setState(() {
@@ -301,9 +295,10 @@ class _MyHomepageState extends State<MyHomepage> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    content('file/shawarmah.jpg', "Shawarma & snacks",'shawarmaScreen'),
-                    content('file/حمص.jpg', "homos & falafel",'homos'),
-                    content('file/حلويات.png', "Sweets",'sweets'),
+                    content('file/shawarmah.jpg', "Shawarma & snacks",
+                        'shawarmaScreen'),
+                    content('file/حمص.jpg', "homos & falafel", 'homos'),
+                    content('file/حلويات.png', "Sweets", 'sweets'),
                   ],
                 ),
               ),
@@ -335,10 +330,8 @@ class _MyHomepageState extends State<MyHomepage> {
                       childAspectRatio: 3 / 2,
                     ),
                     children: [
-                      funImage(
-                          'file/grill_house.jpg', "Grill House"),
-                      funImage(
-                          'file/snap_burger.jpg', "Snap Burger"),
+                      funImage('file/grill_house.jpg', "Grill House"),
+                      funImage('file/snap_burger.jpg', "Snap Burger"),
                       funImage('file/grill_house.jpg', ""),
                       funImage('file/grill_house.jpg', ""),
                       funImage('file/grill_house.jpg', ""),

@@ -44,7 +44,6 @@ class _AboutState extends State<About> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
               Material(
-              color: Colors.white,
               child: Center(
                 child: Ink(
                   decoration: const ShapeDecoration(
@@ -62,7 +61,6 @@ class _AboutState extends State<About> {
             ),
                 SizedBox(width: width*0.15),
                 Material(
-                  color: Colors.white,
                   child: Center(
                     child: Ink(
                       decoration: const ShapeDecoration(
