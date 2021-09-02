@@ -87,9 +87,8 @@ class _CheckOutState extends State<CheckOut> {
               elevation: 2.0,
               color: Colors.white70,
               child: ListTile(
-                title: Text(provider.checkOut['area'] ?? ""),
-                subtitle: Text(lanProvider.texts('street:') +
-                    provider.checkOut['street'] +
+                title: Text(provider.checkOut['area']??""),
+                subtitle: Text(lanProvider.texts('street:')+ provider.checkOut['street'] +
                     "\n" +
                     lanProvider.texts('phone:') +
                     provider.checkOut['phoneNum']),
@@ -179,23 +178,21 @@ class _CheckOutState extends State<CheckOut> {
                   : ElevatedButton(
                       onPressed: () async {
                         try {
-                          setState(() {
-                            provider.isLoading = true;
-                          });
                           await provider.addToDB(_note.text).then((value) {
-                            Navigator.of(context).pushReplacementNamed('MyHomepage');
                             setState(() {
-                              provider.isLoading = false;
-                              provider.total = 0;
-                              provider.checkOut.clear();
+                              provider.total = 0.0;
+                              provider.checkOut['area'] = "";
+                              provider.checkOut['street'] = "";
+                              provider.checkOut['phoneNum'] = "";
                               provider.myCart.clear();
                             });
-                            // Fluttertoast.showToast(
-                            //     msg: lanProvider.texts('order confirmed'),
-                            //     toastLength: Toast.LENGTH_LONG,
-                            //     backgroundColor: Colors.grey,
-                            //     textColor: Colors.white,
-                            //     fontSize: 17.0);
+                            Navigator.of(context).pushReplacementNamed('MyHomepage');
+                            Fluttertoast.showToast(
+                                msg: lanProvider.texts('order confirmed'),
+                                toastLength: Toast.LENGTH_LONG,
+                                backgroundColor: Colors.grey,
+                                textColor: Colors.white,
+                                fontSize: 17.0);
                           });
                         } on FirebaseException catch (e) {
                           dialog(lanProvider.texts('Error occurred !'));

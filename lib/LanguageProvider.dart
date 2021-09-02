@@ -113,6 +113,7 @@ class LanProvider with ChangeNotifier{
     'choose ur sweet':'اختر محلك المفضل !',
     'empty':'فارغ !',
     'order confirmed':'تم تأكيد طلبك بنجاح',
+    'reorder':'إعادة الطلب',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -214,6 +215,7 @@ class LanProvider with ChangeNotifier{
     'choose ur sweet':'Choose your favorite !',
     'empty':'Empty !',
     'order confirmed':'Order Confirmed Successfully',
+    'reorder':'Reorder',
   };
 
   texts(String txt){

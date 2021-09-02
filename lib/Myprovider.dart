@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -82,19 +83,14 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // void setDarkMode(bool val) async{
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   pref.setBool('darkMode', val);
-  //   isDark = val;
-  //   notifyListeners();
-  // }
-  // void getDarkMode() async{
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   isDark = pref.getBool('darkMode')!;
-  //   notifyListeners();
-  // }
+  //----------------------intl package-----------------------
 
-  //----------------things---------------------
+  String dateTime(timeStamp){
+    var time = DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat('dd-mm-yyyy   hh:mm a').format(time);
+  }
+
+  //-----------------------things----------------------------
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
@@ -125,9 +121,9 @@ class MyProvider with ChangeNotifier {
   String street = '-';
 
   Map<String, String> checkOut = {
-    'area': '',
-    'street': '',
-    'phoneNum': '',
+    'area': ' ',
+    'street': ' ',
+    'phoneNum': ' ',
   };
 
   double deliveryPrice = 1.00;
@@ -311,6 +307,7 @@ class MyProvider with ChangeNotifier {
   }
 
   Future<void> addToDB(String note) async {
+    isLoading = true;
     var uuid = Uuid().v4();
     var user = FirebaseAuth.instance.currentUser;
         FirebaseFirestore.instance.collection('orders/${user!.uid}/myOrders').doc(uuid).set({
@@ -333,6 +330,8 @@ class MyProvider with ChangeNotifier {
               }
           ],
         });
+    isLoading = false;
+    print("Done to DB");
     notifyListeners();
   }
 

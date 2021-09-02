@@ -1,4 +1,3 @@
-
 import 'package:app/LanguageProvider.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'Myprovider.dart';
 
 class Homos extends StatefulWidget {
-
   @override
   _HomosState createState() => _HomosState();
 }
@@ -21,28 +19,29 @@ class _HomosState extends State<Homos> {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
-    Widget funImage(image,title) {
-      return Card(
-          color: Colors.white70,
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 1.5,
-          child: ListTile(
-            onTap: () {
-              setState(() {
-                provider.restaurantName = title;
-              });
-              Navigator.of(context).pushNamed('homosScreen');
-            },
-            title: Image.asset(
-              image,
-              height: height * 0.14,
-              fit: BoxFit.fill,
-            ),
-            subtitle: Text(title,
-                style: const TextStyle(color: Colors.black, fontSize: 15),
-                textAlign: TextAlign.center),
-          ));
+    Widget funImage(image, title) {
+      return ListTile(
+        onTap: () {
+          setState(() {
+            provider.restaurantName = title;
+          });
+          Navigator.of(context).pushNamed('homosScreen');
+        },
+        title: Image.asset(
+          image,
+          height: height * 0.14,
+          fit: BoxFit.fill,
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text(title,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center),
+        ),
+      );
     }
 
     return Directionality(
@@ -80,18 +79,15 @@ class _HomosState extends State<Homos> {
               height: height * 0.6,
               child: Scrollbar(
                 child: GridView(
-                  gridDelegate:
-                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
                     mainAxisSpacing: 15,
-                    crossAxisSpacing: 18,
+                    crossAxisSpacing: 2,
                     childAspectRatio: 3 / 2,
                   ),
                   children: [
-                    funImage(
-                        'file/grill_house.jpg', "hon wa bs"),
-                    funImage(
-                        'file/snap_burger.jpg', ""),
+                    funImage('file/grill_house.jpg', "hon wa bs"),
+                    funImage('file/snap_burger.jpg', ""),
                     funImage('file/grill_house.jpg', ""),
                     funImage('file/grill_house.jpg', ""),
                     funImage('file/grill_house.jpg', ""),

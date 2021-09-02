@@ -123,6 +123,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
             ),
+            OutlinedButton(
+                onPressed: () => Navigator.of(context).pushNamed('adminSweets'),
+                child: Text("sweets")),
+            ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed('adminHomos'),
+                child: Text("homos"))
           ],
         ),
       ),

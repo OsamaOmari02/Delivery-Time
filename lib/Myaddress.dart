@@ -108,7 +108,6 @@ class _MyAddressState extends State<MyAddress> {
                         dialog(e.message);
                         setState(() {
                           provider.isLoading = false;
-
                         });
                       } catch (e) {
                         dialog(lanProvider.texts('Error occurred !'));
@@ -133,6 +132,7 @@ class _MyAddressState extends State<MyAddress> {
       child: Scaffold(
         drawer: MyDrawer(),
         appBar: AppBar(
+          backgroundColor: Colors.blue,
           actions: [
             IconButton(
               icon: provider.isLoading
@@ -150,31 +150,41 @@ class _MyAddressState extends State<MyAddress> {
               .snapshots(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
-               Center(child: const CircularProgressIndicator());
+              return const Center(child: const CircularProgressIndicator());
+            if (snapshot.hasError)
+              return Center(
+                  child: Text(
+                lanProvider.texts('Error occurred !'),
+                style: TextStyle(color: Colors.red),
+              ));
             return ListView.builder(
               itemCount: provider.loc.length,
               itemBuilder: (BuildContext context, int index) {
                 var userData = snapshot.data!.docs;
-                if (provider.loc.isEmpty)
+                if (provider.loc.isEmpty || userData.isEmpty) {
                   return Center(
                       child: Text(lanProvider.texts('new address'),
                           style: const TextStyle(
                               fontSize: 17, fontStyle: FontStyle.italic)));
-                  return ListTile(
+                }
+                return Card(
+                  elevation: 1.2,
+                  child: ListTile(
                     onLongPress: () {
                       setState(() {
                         provider.iD = userData[index].id;
                       });
                       delete(lanProvider.texts('delete this address?'));
                     },
-                    title: Text(userData[index]['area']??""),
+                    title: Text(userData[index]['area']),
                     subtitle: Text(lanProvider.texts('street:') +
-                        userData[index]['street']+
+                        userData[index]['street'] +
                         "\n" +
                         lanProvider.texts('phone:') +
-                        userData[index]['phoneNum']??""),
+                        userData[index]['phoneNum']),
                     isThreeLine: true,
-                  );
+                  ),
+                );
               },
             );
           },

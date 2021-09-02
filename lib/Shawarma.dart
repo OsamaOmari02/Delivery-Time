@@ -21,28 +21,29 @@ class _ShawarmaState extends State<Shawarma> {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
-    Widget funImage(image,title) {
-      return Card(
-          color: Colors.white70,
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 1.5,
-          child: ListTile(
-            onTap: () {
-              setState(() {
-                provider.restaurantName = title;
-              });
-              Navigator.of(context).pushNamed('resScreen');
-            },
-            title: Image.asset(
-              image,
-              height: height * 0.14,
-              fit: BoxFit.fill,
-            ),
-            subtitle: Text(title,
-                style: const TextStyle(color: Colors.black, fontSize: 15),
-                textAlign: TextAlign.center),
-          ));
+    Widget funImage(image, title) {
+      return ListTile(
+        onTap: () {
+          setState(() {
+            provider.restaurantName = title;
+          });
+          Navigator.of(context).pushNamed('resScreen');
+        },
+        title: Image.asset(
+          image,
+          height: height * 0.14,
+          fit: BoxFit.fill,
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text(title,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center),
+        ),
+      );
     }
 
 
@@ -85,7 +86,7 @@ class _ShawarmaState extends State<Shawarma> {
                   const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
                     mainAxisSpacing: 15,
-                    crossAxisSpacing: 18,
+                    crossAxisSpacing: 2,
                     childAspectRatio: 3 / 2,
                   ),
                   children: [

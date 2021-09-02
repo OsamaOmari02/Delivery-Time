@@ -135,12 +135,7 @@ class _MyHomepageState extends State<MyHomepage> {
     var lanProvider = Provider.of<LanProvider>(context);
 
     Widget funImage(image, title) {
-      return Card(
-          color: Colors.white70,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 1.5,
-          child: ListTile(
+      return ListTile(
             onTap: () {
               setState(() {
                 provider.restaurantName = title;
@@ -149,13 +144,16 @@ class _MyHomepageState extends State<MyHomepage> {
             },
             title: Image.asset(
               image,
-              height: height * 0.14,
+              height: height * 0.135,
               fit: BoxFit.fill,
             ),
-            subtitle: Text(title,
-                style: const TextStyle(color: Colors.black, fontSize: 15),
-                textAlign: TextAlign.center),
-          ));
+            subtitle: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(title,
+                  style: const TextStyle(color: Colors.black, fontSize: 15,fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center),
+            ),
+          );
     }
 
     Widget content(image, String title, route) {
@@ -226,7 +224,7 @@ class _MyHomepageState extends State<MyHomepage> {
               setState(() {
                 provider.isLoading = false;
               });
-              if (provider.long!=0 && provider.lat!=0)
+              if (provider.long!=0 || provider.lat!=0)
                 Fluttertoast.showToast(
                     msg: lanProvider.texts('location'),
                     toastLength: Toast.LENGTH_SHORT,
@@ -324,10 +322,10 @@ class _MyHomepageState extends State<MyHomepage> {
                   child: GridView(
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 220,
+                      maxCrossAxisExtent: 240,
                       mainAxisSpacing: 15,
-                      crossAxisSpacing: 18,
-                      childAspectRatio: 3 / 2,
+                      crossAxisSpacing: 2,
+                      childAspectRatio: 1.5,
                     ),
                     children: [
                       funImage('file/grill_house.jpg', "Grill House"),

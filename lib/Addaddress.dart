@@ -49,7 +49,7 @@ class _AddAddressState extends State<AddAddress> {
 
     Widget area() {
       return Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: DropdownButton(
           isExpanded: true,
           value: provider.area,
@@ -70,7 +70,7 @@ class _AddAddressState extends State<AddAddress> {
 
     Widget street() {
       return Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -172,7 +172,7 @@ class _AddAddressState extends State<AddAddress> {
                           try {
                             if (provider.area=="اختر المنطقة")
                                return dialog(lanProvider.texts('Choose your area'));
-                            if (_formKey.currentState!.validate() ) {
+                            if (_formKey.currentState!.validate()) {
                               setState(() {
                                 provider.isLoading = true;
                               });
