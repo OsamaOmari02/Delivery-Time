@@ -21,6 +21,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'Addaddress.dart';
 import 'AdminHomos.dart';
 import 'CheckOut.dart';
+import 'Details.dart';
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
 import 'LogIn.dart';
@@ -35,6 +36,7 @@ import 'package:provider/provider.dart';
 import 'SignUp.dart';
 import 'UserState.dart';
 import 'about.dart';
+import 'callCenter.dart';
 import 'homos.dart';
 import 'homos_screen.dart';
 
@@ -56,6 +58,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    Provider.of<MyProvider>(context, listen: false).getDarkMode();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -105,6 +113,8 @@ class _MyAppState extends State<MyApp> {
         'adminHomos': (context) => AdminHomos(),
         'adminSweets': (context) => AdminSweets(),
         'shawarmaScreen': (context) => Shawarma(),
+        'callCenter':(context) => CallCenter(),
+        'details': (context) => Details(),
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -119,7 +129,6 @@ class MyHomepage extends StatefulWidget {
 class _MyHomepageState extends State<MyHomepage> {
   @override
   void initState() {
-    Provider.of<MyProvider>(context, listen: false).getDarkMode();
     Provider.of<LanProvider>(context, listen: false).getLanguage();
     Provider.of<MyProvider>(context, listen: false).fetch();
     Provider.of<MyProvider>(context, listen: false).fetchFav();

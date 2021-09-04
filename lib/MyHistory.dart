@@ -124,7 +124,7 @@ class _HistoryState extends State<History> {
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('/orders/${user!.uid}/myOrders')
+              .collection('/orders/${user!.uid}/myOrders').orderBy('date',descending: true)
               .snapshots(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)

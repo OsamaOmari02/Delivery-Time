@@ -155,6 +155,15 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                           FontWeight.w800),
                                                 ),
                                               ),
+                                              const SizedBox(height: 10),
+                                              Container(
+                                                padding: const EdgeInsets.only(left: 10,top: 5),
+                                                child: Text(
+                                                  resData[index]['description'],
+                                                  style: const TextStyle(
+                                                      fontSize: 15, color: Colors.grey),
+                                                ),
+                                              ),
                                               Container(
                                                 padding: const EdgeInsets.only(
                                                     left: 10),

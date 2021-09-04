@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Drawer.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -14,16 +15,18 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+
+  @override
+  void initState() {
+    Provider.of<MyProvider>(context,listen: false).getDarkMode();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var user = FirebaseAuth.instance.currentUser;
-    var res =  FirebaseFirestore.instance.collection('users');
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
-    double _long = 0;
-    double _lat = 0;
     dialog() {
       return showDialog(
           context: context,
@@ -37,13 +40,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       activeColor: Colors.blueAccent,
                       activeTrackColor: Colors.blue[200],
                       value: lanProvider.isEn,
-                      onChanged: (val) async{
-                        await res.doc(user!.uid).update({
-                          'Language':val,
+                      onChanged: (val) async {
+                        SharedPreferences pref = await SharedPreferences.getInstance();
+                        pref.setBool('language', val);
+                        setState(() {
+                          lanProvider.isEn = val;
                         });
-                        Provider.of<LanProvider>(context,listen: false).setLanguage(val);
                         Navigator.of(context).pop();
-                  }),
+                      }),
                   const Text("English", style: const TextStyle(fontSize: 20)),
                 ],
               ),
@@ -51,14 +55,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               elevation: 24,
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'), style: const TextStyle(fontSize: 21)),
+                    child: Text(lanProvider.texts('ok'),
+                        style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
           });
     }
+
     return Directionality(
-      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         drawer: MyDrawer(),
         appBar: AppBar(
@@ -72,10 +78,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               leading: Icon(Icons.language),
               title: InkWell(
-                  child: Text(lanProvider.texts('language'),
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                  onTap: ()=> dialog(),
+                child: Text(lanProvider.texts('language'),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: width * 0.055)),
+                onTap: () => dialog(),
               ),
             ),
             SizedBox(height: height * 0.013),
@@ -85,16 +91,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: TextStyle(
                       fontWeight: FontWeight.w600, fontSize: width * 0.055)),
               trailing: Switch(
-                activeColor: Colors.blueAccent,
-                activeTrackColor: Colors.blue[200],
-                value: Provider.of<MyProvider>(context).isDark,
-                onChanged: (bool val) async{
-                  await res.doc(user!.uid).update({
-                    'darkMode':val,
-                  });
-                    Provider.of<MyProvider>(context,listen: false).setDarkMode(val);
-                }
-              ),
+                  activeColor: Colors.blueAccent,
+                  activeTrackColor: Colors.blue[200],
+                  value: provider.isDark,
+                  onChanged: (bool val) async {
+                    await provider.setDarkMode(val);
+                  }),
             ),
             SizedBox(height: height * 0.013),
             ListTile(
@@ -114,13 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Text(lanProvider.texts('rate app'),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () async{
-                  await FirebaseFirestore.instance.collection('users').doc(user!.uid).get().then((value) {
-                    _lat = value.data()!['latitude']??=0;
-                    _long = value.data()!['longitude']??=0;
-                  });
-                  await provider.goToMaps(_long, _lat);
-                },
+                onTap: () {},
               ),
             ),
             OutlinedButton(
@@ -128,7 +124,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Text("sweets")),
             ElevatedButton(
                 onPressed: () => Navigator.of(context).pushNamed('adminHomos'),
-                child: Text("homos"))
+                child: Text("homos")),
+            ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed('callCenter'),
+                child: Text("CallCenter"))
           ],
         ),
       ),

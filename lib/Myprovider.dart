@@ -65,29 +65,54 @@ class FoodCart {
 class MyProvider with ChangeNotifier {
   bool isDark = false;
 
-  getDarkMode() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      isDark = value.data()!['darkMode'] ? true : false;
-      notifyListeners();
-    });
-
+  getDarkMode() async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    isDark = pref.getBool('darkMode')!;
     notifyListeners();
   }
 
-  void setDarkMode(bool val) async {
-    isDark = val;
+  setDarkMode(value) async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('darkMode',value);
+    isDark = value;
     notifyListeners();
   }
+
+  // getDarkMode() async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .get()
+  //       .then((value) {
+  //     isDark = value.data()!['darkMode'] ? true : false;
+  //     notifyListeners();
+  //   });
+  //
+  //   notifyListeners();
+  // }
+  //
+  // void setDarkMode(bool val) async {
+  //   isDark = val;
+  //   notifyListeners();
+  // }
+
+  // setCheckedBox(value) async{
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   pref.setBool('checkBox', value);
+  //   notifyListeners();
+  // }
+
+  getCheckedBox(value) async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getBool(value);
+  }
+
 
   //----------------------intl package-----------------------
 
   String dateTime(timeStamp){
     var time = DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
-    return DateFormat('dd-mm-yyyy   hh:mm a').format(time);
+    return DateFormat('dd-MM-yyyy    hh:mm a').format(time);
   }
 
   //-----------------------things----------------------------
@@ -126,6 +151,16 @@ class MyProvider with ChangeNotifier {
     'phoneNum': ' ',
   };
 
+  Map<String, String> details = {
+    'area': '',
+    'street': '',
+    'phoneNum': '',
+    'name': '',
+    'latitude': '',
+    'longitude': '',
+    'total': '',
+    'note': '',
+  };
   double deliveryPrice = 1.00;
 
   // ---------------addresses----------------------
@@ -210,6 +245,7 @@ class MyProvider with ChangeNotifier {
           .set({
         'meal name': mealIDs[mealIndex].mealName,
         'meal price': mealIDs[mealIndex].mealPrice,
+        'description':mealIDs[mealIndex].description,
         'resName': mealIDs[mealIndex].resName,
       });
       myFavorites.add(Favorites(myFavoriteID: mealID));
@@ -310,16 +346,16 @@ class MyProvider with ChangeNotifier {
     isLoading = true;
     var uuid = Uuid().v4();
     var user = FirebaseAuth.instance.currentUser;
-        FirebaseFirestore.instance.collection('orders/${user!.uid}/myOrders').doc(uuid).set({
+        await FirebaseFirestore.instance.collection('orders/${user!.uid}/myOrders').doc(uuid).set({
           'date': DateTime.now(),
           'total': total,
           'note': note,
           'details' : {
-            'location': GeoPoint(lat,long),
+            'latitude': lat,
+            'longitude':long,
             'area': checkOut['area'],
             'street': checkOut['street'],
             'phoneNum': checkOut['phoneNum'],
-            'name':authData['name'],
           },
           myCart[0].resName : [
             for (int i=0;i<myCart.length;i++)
@@ -330,6 +366,27 @@ class MyProvider with ChangeNotifier {
               }
           ],
         });
+    await FirebaseFirestore.instance.collection('allOrders').doc(uuid).set({
+      'date': DateTime.now(),
+      'total': total,
+      'note': note,
+      'details' : {
+        'latitude': lat,
+        'longitude':long,
+        'area': checkOut['area'],
+        'street': checkOut['street'],
+        'phoneNum': checkOut['phoneNum'],
+        'name':authData['name'],
+      },
+      myCart[0].resName : [
+        for (int i=0;i<myCart.length;i++)
+          {
+            'meal name':myCart[i].mealName,
+            'meal price':myCart[i].mealPrice,
+            'quantity':myCart[i].quantity,
+          }
+      ],
+    });
     isLoading = false;
     print("Done to DB");
     notifyListeners();

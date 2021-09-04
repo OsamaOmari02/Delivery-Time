@@ -222,27 +222,21 @@ class LanProvider with ChangeNotifier{
     if (isEn) return english[txt];
     return arabic[txt];
   }
-  void getLanguage() async{
-    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
-      isEn =  value.data()!['Language']?true:false;
-    });
-    notifyListeners();
-
-  }
-  void setLanguage(bool val){
-    isEn = val;
-    notifyListeners();
-    print(FirebaseAuth.instance.currentUser!.uid);
-  }
-  // void setDarkMode(bool lan) async{
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   pref.setBool('language', lan);
-  //   isEn = lan;
-  //   notifyListeners();
-  // }
   // void getLanguage() async{
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   isEn = pref.getBool('language')!;
+  //   await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+  //     isEn =  value.data()!['Language']?true:false;
+  //   });
   //   notifyListeners();
+  //
   // }
+  // void setLanguage(bool val){
+  //   isEn = val;
+  //   notifyListeners();
+  //   print(FirebaseAuth.instance.currentUser!.uid);
+  // }
+  void getLanguage() async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    isEn = pref.getBool('language')!;
+    notifyListeners();
+  }
 }
