@@ -152,7 +152,6 @@ class _MyDrawerState extends State<MyDrawer> {
             const Divider(thickness: 0.1,),
             ListTile(
               onTap: (){
-                // await provider.fetchFav();
                 Navigator.of(context).pushReplacementNamed('MyFavourites');
               },
               title: Text(

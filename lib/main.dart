@@ -24,6 +24,7 @@ import 'CheckOut.dart';
 import 'Details.dart';
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
+import 'Location.dart';
 import 'LogIn.dart';
 import 'Myaddress.dart';
 import 'PassWord.dart';
@@ -115,6 +116,7 @@ class _MyAppState extends State<MyApp> {
         'shawarmaScreen': (context) => Shawarma(),
         'callCenter':(context) => CallCenter(),
         'details': (context) => Details(),
+        'location': (context) => Locations(),
         // 'Phone':(context)=>Phone(),
       },
     );

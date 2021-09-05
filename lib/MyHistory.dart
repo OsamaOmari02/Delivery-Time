@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'Drawer.dart';
@@ -50,69 +51,72 @@ class _HistoryState extends State<History> {
           });
     }
 
-    bottomSheet() {
-      return Directionality(
-        textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              lanProvider.texts('choose address'),
-              style: TextStyle(
-                  color: CupertinoColors.black, fontWeight: FontWeight.bold),
-            ),
-            backgroundColor: Theme.of(context).canvasColor,
-            elevation: 1,
-            actions: [
-              IconButton(
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.blue,
-                ),
-                onPressed: () => Navigator.of(context).pushNamed('addAddress'),
+    delete(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                title,
+                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                style: const TextStyle(fontSize: 23),
               ),
-            ],
-          ),
-          body: ListView.builder(
-            itemCount: provider.loc.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (provider.loc.isEmpty)
-                return Center(
-                  child: TextButton(
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed('addAddress'),
-                      child: Text(lanProvider.texts('new address'),
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ))),
-                );
-              return Card(
-                elevation: 0.5,
-                child: ListTile(
-                  onTap: () {
-                    setState(() {
-                      provider.checkOut['area'] = provider.loc[index].area;
-                      provider.checkOut['street'] = provider.loc[index].street;
-                      provider.checkOut['phoneNum'] =
-                          provider.loc[index].phoneNum;
-                    });
-                    Navigator.of(context).pushNamed('checkOut');
-                  },
-                  title: Text(provider.loc[index].area),
-                  subtitle: Text(lanProvider.texts('street:') +
-                      provider.loc[index].street +
-                      "\n" +
-                      lanProvider.texts('phone:') +
-                      provider.loc[index].phoneNum),
-                  isThreeLine: true,
-                ),
-              );
-            },
-          ),
-        ),
-      );
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                InkWell(
+                    child: Text(
+                      lanProvider.texts('yes?'),
+                      style: const TextStyle(fontSize: 19, color: Colors.red),
+                    ),
+                    onTap: () async {
+                      try {
+                        setState(() {
+                          provider.isLoading = true;
+                        });
+                        await FirebaseFirestore.instance
+                            .collection('orders/${user!.uid}/myOrders')
+                            .doc(provider.mealID)
+                            .delete();
+                        Fluttertoast.showToast(
+                            msg: lanProvider.texts('order deleted'),
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        Navigator.of(context).pop();
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                      } on FirebaseException catch (e) {
+                        dialog(lanProvider.texts('Error occurred !'));
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                        print(e.message);
+                      } catch (e) {
+                        dialog(lanProvider.texts('Error occurred !'));
+                        setState(() {
+                          provider.isLoading = false;
+                        });
+                        print(e);
+                      }
+                    }),
+                const SizedBox(width: 11),
+                InkWell(
+                    child: Text(lanProvider.texts('cancel?'),
+                        style: const TextStyle(fontSize: 19)),
+                    onTap: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
     }
+
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -124,7 +128,8 @@ class _HistoryState extends State<History> {
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('/orders/${user!.uid}/myOrders').orderBy('date',descending: true)
+              .collection('/orders/${user!.uid}/myOrders')
+              .orderBy('date', descending: true)
               .snapshots(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
@@ -144,6 +149,13 @@ class _HistoryState extends State<History> {
                         Expanded(
                           flex: 2,
                           child: ListTile(
+                            onLongPress: () async{
+                              setState(() {
+                                provider.mealID = resData[index].id;
+                              });
+                                await delete(lanProvider.texts('delete order?'));
+                            },
+                            //-------------------------------------------
                             onTap: () => showModalBottomSheet(
                               context: context,
                               builder: (_) => Directionality(
@@ -155,42 +167,20 @@ class _HistoryState extends State<History> {
                                     backgroundColor:
                                         Theme.of(context).canvasColor,
                                     elevation: 1,
-                                    actions: [
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 7.0),
-                                            child: Text(
-                                              lanProvider.texts('reorder'),
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.restore_sharp,
-                                              color: Colors.blue,
-                                            ),
-                                            onPressed: () {
-                                              // ToDo reorder
-                                            },
-                                          ),
-                                        ],
-                                      )
-                                    ],
                                   ),
                                   body: ListView(
                                     padding: const EdgeInsets.all(6.0),
                                     children: [
-                                      Text(resData[index]['details']['name'])
+                                      Text(resData[index]['details']['phoneNum']),
+                                      Text(resData[index]['delivery'].toString()),
+                                      Text(resData[index]['total'].toString()),
+                                      Text(resData[index]['note']),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
+                            //---------------------------
                             trailing: InkWell(
                               onTap: () {
                                 // ToDo reorder

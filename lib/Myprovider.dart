@@ -349,6 +349,7 @@ class MyProvider with ChangeNotifier {
         await FirebaseFirestore.instance.collection('orders/${user!.uid}/myOrders').doc(uuid).set({
           'date': DateTime.now(),
           'total': total,
+          'delivery':deliveryPrice,
           'note': note,
           'details' : {
             'latitude': lat,

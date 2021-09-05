@@ -1,4 +1,6 @@
 import 'package:app/LogIn.dart';
+import 'package:app/Myprovider.dart';
+import 'package:app/callCenter.dart';
 import 'package:app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +12,7 @@ import 'LanguageProvider.dart';
 class UserState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -17,7 +20,7 @@ class UserState extends StatelessWidget {
           if (snapshot.data == null) {
             return Login();
           } else if (snapshot.hasData) {
-            return MyHomepage();
+              return MyHomepage();
           }
           if (snapshot.hasError) {
             return Center(
@@ -28,7 +31,8 @@ class UserState extends StatelessWidget {
           return Scaffold(
               body: Center(
                   child: Text(lanProvider.texts("something went wrong !"),
-                      style: const TextStyle(fontSize: 20, color: Colors.red))));
+                      style:
+                          const TextStyle(fontSize: 20, color: Colors.red))));
         });
   }
 }

@@ -114,6 +114,8 @@ class LanProvider with ChangeNotifier{
     'empty':'فارغ !',
     'order confirmed':'تم تأكيد طلبك بنجاح',
     'reorder':'إعادة الطلب',
+    'order deleted':'تم حذف الطلب بنجاح',
+    'delete order?':'هل تريد حذف هذا الطلب؟',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -216,6 +218,8 @@ class LanProvider with ChangeNotifier{
     'empty':'Empty !',
     'order confirmed':'Order Confirmed Successfully',
     'reorder':'Reorder',
+    'order deleted':'Order Deleted Successfully',
+    'delete order?':'Do you want to delete this order?',
   };
 
   texts(String txt){
