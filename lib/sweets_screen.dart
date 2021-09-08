@@ -296,10 +296,10 @@ class _FirstState extends State<First> {
                               setState(() {
                                 provider.mealID = resData[index].id;
                               });
-                              provider.addFoodCart(resData[index]['meal name'],
+                              if (provider.myCart.length!=0 && provider.restaurantName!=provider.myCart[0].resName)
+                                return dialog(lanProvider.texts('foodCart'));
+                              await provider.addFoodCart(resData[index]['meal name'],
                                   resData[index]['meal price']);
-                              await provider.addPrice(
-                                  double.parse(resData[index]['meal price']));
                             }),
                       ],
                     ),
@@ -331,26 +331,43 @@ class _SecondState extends State<Second> {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
+            return Directionality(
+              textDirection:
+              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              child: AlertDialog(
+                title: Text(
+                  title,
+                  style: const TextStyle(fontSize: 23),
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 7),
+                elevation: 24,
+                content: Container(
+                  height: 30,
+                  child: const Divider(),
+                  alignment: Alignment.topCenter,
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                        child: Text(lanProvider.texts('cancel?'),
+                            style: const TextStyle(
+                                fontSize: 19, color: Colors.red)),
+                        onTap: () => Navigator.of(context).pop()),
+                  ),
+                  const SizedBox(width: 11),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                        child: Text(lanProvider.texts('yes?'),
+                            style: const TextStyle(fontSize: 19)),
+                        onPressed: () {
+                          provider.myCartClear();
+                          Navigator.of(context).pop();
+                        }),
+                  ),
+                ],
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text(lanProvider.texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
             );
           });
     }

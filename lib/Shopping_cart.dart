@@ -304,16 +304,11 @@ class _ShoppingState extends State<Shopping> {
                                    setState(() {
                                      provider.isLoading = true;
                                    });
-                                   await provider.sendLocationToDB();
+                                   await provider.sendLocationToDB(context);
                                    setState(() {
                                      provider.isLoading = false;
                                    });
-                                   Fluttertoast.showToast(
-                                       msg: lanProvider.texts('location'),
-                                       toastLength: Toast.LENGTH_SHORT,
-                                       backgroundColor: Colors.grey,
-                                       textColor: Colors.white,
-                                       fontSize: 16.0);
+                                   if (provider.approved)
                                    showModalBottomSheet(
                                        context: context, builder: (_) => bottomSheet());
                                    print('done');

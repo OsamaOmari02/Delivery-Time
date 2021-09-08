@@ -117,7 +117,6 @@ class _HistoryState extends State<History> {
           });
     }
 
-
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -149,58 +148,40 @@ class _HistoryState extends State<History> {
                         Expanded(
                           flex: 2,
                           child: ListTile(
-                            onLongPress: () async{
+                            onLongPress: () async {
                               setState(() {
                                 provider.mealID = resData[index].id;
                               });
-                                await delete(lanProvider.texts('delete order?'));
+                              await delete(lanProvider.texts('delete order?'));
                             },
-                            //-------------------------------------------
-                            onTap: () => showModalBottomSheet(
-                              context: context,
-                              builder: (_) => Directionality(
-                                textDirection: lanProvider.isEn
-                                    ? TextDirection.ltr
-                                    : TextDirection.rtl,
-                                child: Scaffold(
-                                  appBar: AppBar(
-                                    backgroundColor:
-                                        Theme.of(context).canvasColor,
-                                    elevation: 1,
-                                  ),
-                                  body: ListView(
-                                    padding: const EdgeInsets.all(6.0),
-                                    children: [
-                                      Text(resData[index]['details']['phoneNum']),
-                                      Text(resData[index]['delivery'].toString()),
-                                      Text(resData[index]['total'].toString()),
-                                      Text(resData[index]['note']),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            //---------------------------
-                            trailing: InkWell(
-                              onTap: () {
-                                // ToDo reorder
-                              },
-                              child: Column(
-                                children: [
-                                  const Icon(Icons.restore_sharp),
-                                  Text(
-                                    lanProvider.texts('reorder'),
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 14.5),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            onTap: () {
+                              provider.details['area'] =
+                                  resData[index]['details']['area'];
+                              provider.details['street'] =
+                                  resData[index]['details']['street'];
+                              provider.details['phoneNum'] =
+                                  resData[index]['details']['phoneNum'];
+                              provider.details['total'] =
+                                  resData[index]['total'].toString();
+                              provider.details['note'] = resData[index]['note'];
+                              provider.details['delivery'] = resData[index]['delivery'].toString();
+                              provider.details['resName'] = resData[index]['resName'];
+                              for (int i = 0; i < resData[index]['length']; i++)
+                                provider.detailedCart.add(FoodCart(
+                                    resName: resData[index]['resName'],
+                                    mealName: resData[index]['meals'][i]
+                                        ['meal name'],
+                                    mealPrice: resData[index]['meals'][i]
+                                        ['meal price'],
+                                    quantity: resData[index]['meals'][i]
+                                        ['quantity'],
+                                    foodID: resData[index].id));
+                              Navigator.of(context).pushNamed('detailsHistory');
+                            },
+                            trailing: const Icon(Icons.arrow_forward),
                             title: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(resData[index]['details']['area'] +
-                                  " - " +
-                                  resData[index]['details']['street']),
+                              child: Text(resData[index]['resName']),
                             ),
                             subtitle: Padding(
                               padding: const EdgeInsets.all(8.0),

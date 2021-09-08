@@ -1,3 +1,4 @@
+import 'package:app/LanguageProvider.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
@@ -65,15 +67,15 @@ class FoodCart {
 class MyProvider with ChangeNotifier {
   bool isDark = false;
 
-  getDarkMode() async{
+  getDarkMode() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     isDark = pref.getBool('darkMode')!;
     notifyListeners();
   }
 
-  setDarkMode(value) async{
+  setDarkMode(value) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setBool('darkMode',value);
+    pref.setBool('darkMode', value);
     isDark = value;
     notifyListeners();
   }
@@ -102,15 +104,14 @@ class MyProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  getCheckedBox(value) async{
+  getCheckedBox(value) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getBool(value);
   }
 
-
   //----------------------intl package-----------------------
 
-  String dateTime(timeStamp){
+  String dateTime(timeStamp) {
     var time = DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
     return DateFormat('dd-MM-yyyy    hh:mm a').format(time);
   }
@@ -160,7 +161,12 @@ class MyProvider with ChangeNotifier {
     'longitude': '',
     'total': '',
     'note': '',
+    'resName': '',
+    'delivery':'',
   };
+
+  List<FoodCart> detailedCart = [];
+
   double deliveryPrice = 1.00;
 
   // ---------------addresses----------------------
@@ -245,7 +251,7 @@ class MyProvider with ChangeNotifier {
           .set({
         'meal name': mealIDs[mealIndex].mealName,
         'meal price': mealIDs[mealIndex].mealPrice,
-        'description':mealIDs[mealIndex].description,
+        'description': mealIDs[mealIndex].description,
         'resName': mealIDs[mealIndex].resName,
       });
       myFavorites.add(Favorites(myFavoriteID: mealID));
@@ -276,12 +282,12 @@ class MyProvider with ChangeNotifier {
   double total = 0.00;
   int numOfRestaurants = 0;
 
-  void numberOfRests(){
-    for (int i=0;i<myCart.length;i++)
-      {
+  void numberOfRests() {
+    for (int i = 0; i < myCart.length; i++) {
       //  TODO عدد المطاعم المختلفه
-      }
+    }
   }
+
   addPrice(price) {
     total += price;
     notifyListeners();
@@ -291,10 +297,11 @@ class MyProvider with ChangeNotifier {
     if (total != 0) total -= price;
     notifyListeners();
   }
-  myCartClear(){
+
+  myCartClear() {
     myCart.clear();
     total = 0;
-   notifyListeners();
+    notifyListeners();
   }
 
   Future<void> fetchCart() async {
@@ -330,6 +337,7 @@ class MyProvider with ChangeNotifier {
       int index = myCart.indexWhere((element) => element.foodID == mealID);
       myCart[index].quantity++;
     }
+    addPrice(double.parse(price));
     notifyListeners();
   }
 
@@ -346,50 +354,54 @@ class MyProvider with ChangeNotifier {
     isLoading = true;
     var uuid = Uuid().v4();
     var user = FirebaseAuth.instance.currentUser;
-        await FirebaseFirestore.instance.collection('orders/${user!.uid}/myOrders').doc(uuid).set({
-          'date': DateTime.now(),
-          'total': total,
-          'delivery':deliveryPrice,
-          'note': note,
-          'details' : {
-            'latitude': lat,
-            'longitude':long,
-            'area': checkOut['area'],
-            'street': checkOut['street'],
-            'phoneNum': checkOut['phoneNum'],
-          },
-          myCart[0].resName : [
-            for (int i=0;i<myCart.length;i++)
-              {
-                'meal name':myCart[i].mealName,
-                'meal price':myCart[i].mealPrice,
-                'quantity':myCart[i].quantity,
-              }
-          ],
-        });
+    await FirebaseFirestore.instance
+        .collection('orders/${user!.uid}/myOrders')
+        .doc(uuid)
+        .set({
+      'date': DateTime.now(),
+      'total': total,
+      'delivery': deliveryPrice,
+      'note': note,
+      'length': myCart.length,
+      'resName': myCart[0].resName,
+      'details': {
+        'area': checkOut['area'],
+        'street': checkOut['street'],
+        'phoneNum': checkOut['phoneNum'],
+      },
+      'meals': [
+        for (int i = 0; i < myCart.length; i++)
+          {
+            'meal name': myCart[i].mealName,
+            'meal price': myCart[i].mealPrice,
+            'quantity': myCart[i].quantity,
+          }
+      ],
+    });
     await FirebaseFirestore.instance.collection('allOrders').doc(uuid).set({
       'date': DateTime.now(),
       'total': total,
       'note': note,
-      'details' : {
+      'resName': myCart[0].resName,
+      'length': myCart.length,
+      'details': {
         'latitude': lat,
-        'longitude':long,
+        'longitude': long,
         'area': checkOut['area'],
         'street': checkOut['street'],
         'phoneNum': checkOut['phoneNum'],
-        'name':authData['name'],
+        'name': authData['name'],
       },
-      myCart[0].resName : [
-        for (int i=0;i<myCart.length;i++)
+      'meals': [
+        for (int i = 0; i < myCart.length; i++)
           {
-            'meal name':myCart[i].mealName,
-            'meal price':myCart[i].mealPrice,
-            'quantity':myCart[i].quantity,
+            'meal name': myCart[i].mealName,
+            'meal price': myCart[i].mealPrice,
+            'quantity': myCart[i].quantity,
           }
       ],
     });
     isLoading = false;
-    print("Done to DB");
     notifyListeners();
   }
 
@@ -603,32 +615,52 @@ class MyProvider with ChangeNotifier {
 
 //  ---------------------------location------------------------------------------
 
-  var lat ;
-  var long ;
+  var lat;
 
-  sendLocationToDB() async {
+  var long;
+  bool approved = false;
+  sendLocationToDB(BuildContext ctx) async {
     isLoading = true;
     var user = FirebaseAuth.instance.currentUser;
 
     var serviceEnabled = await Location().serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await Location().requestService();
-      if (!serviceEnabled) return;
+      if (!serviceEnabled)
+        return Fluttertoast.showToast(
+            msg: Provider.of<LanProvider>(ctx, listen: false).texts('must location on'),
+            toastLength: Toast.LENGTH_SHORT,
+            backgroundColor: Colors.grey,
+            textColor: Colors.white,
+            fontSize: 16.0);
     }
 
     var permission = await Location().hasPermission();
     if (permission == PermissionStatus.denied) {
       permission = await Location().requestPermission();
-      if (permission != PermissionStatus.granted) return;
+      if (permission != PermissionStatus.granted)
+        return Fluttertoast.showToast(
+            msg: Provider.of<LanProvider>(ctx, listen: false).texts('must location on'),
+            toastLength: Toast.LENGTH_SHORT,
+            backgroundColor: Colors.grey,
+            textColor: Colors.white,
+            fontSize: 16.0);
     }
     var location = await Location().getLocation();
     await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
       'latitude': location.latitude,
       'longitude': location.longitude,
     });
-    long = location.longitude;
     lat = location.latitude;
+    long = location.longitude;
+    Fluttertoast.showToast(
+        msg: Provider.of<LanProvider>(ctx, listen: false).texts('location'),
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0);
     isLoading = false;
+    approved = true;
     notifyListeners();
   }
 

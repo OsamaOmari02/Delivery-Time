@@ -116,6 +116,8 @@ class LanProvider with ChangeNotifier{
     'reorder':'إعادة الطلب',
     'order deleted':'تم حذف الطلب بنجاح',
     'delete order?':'هل تريد حذف هذا الطلب؟',
+    'must location on':'يجب تفعيل الموقع لتجربة افضل',
+    'foodCart':'هل تريد حذف محتويات سلة الطلبات خاصتك والبدأ بسلة طلبات جديدة؟',
   };
   Map<String,Object> english ={
     'order ur food..':'Order your food now and enjoy !',
@@ -220,6 +222,8 @@ class LanProvider with ChangeNotifier{
     'reorder':'Reorder',
     'order deleted':'Order Deleted Successfully',
     'delete order?':'Do you want to delete this order?',
+    'must location on':'Turn on location to continue',
+    'foodCart':'Do you want to delete the current food cart and start another one?',
   };
 
   texts(String txt){

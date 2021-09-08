@@ -45,6 +45,7 @@ class _CallCenterState extends State<CallCenter> {
         ),
       );
     }
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -101,6 +102,21 @@ class _CallCenterState extends State<CallCenter> {
                                     provider.details['latitude'] =
                                         resData[index]['details']['latitude']
                                             .toString();
+                                    for (int i=0;i<resData[index]['length'];i++)
+                                    provider.detailedCart.add(FoodCart(
+                                        resName: resData[index]['resName'],
+                                        mealName: resData[index]['meals']
+                                        [i]['meal name'],
+                                        mealPrice: resData[index]['meals']
+                                        [i]['meal price'],
+                                        quantity: resData[index]['meals']
+                                        [i]['quantity'],
+                                        foodID: resData[index].id));
+                                    for (int i=0;i<resData[index]['length'];i++)
+                                    print('meal name = ' + provider.detailedCart[i].mealName +
+                                        '\nmeal price = ' + provider.detailedCart[i].mealPrice.toString() +
+                                        '\nresName = ' + provider.detailedCart[i].resName +
+                                        '\nquantity = ' + provider.detailedCart[i].quantity.toString());
                                   });
                                   Navigator.of(context).pushNamed('details');
                                 },

@@ -22,6 +22,7 @@ import 'Addaddress.dart';
 import 'AdminHomos.dart';
 import 'CheckOut.dart';
 import 'Details.dart';
+import 'DetailsHistory.dart';
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
 import 'Location.dart';
@@ -117,6 +118,7 @@ class _MyAppState extends State<MyApp> {
         'callCenter':(context) => CallCenter(),
         'details': (context) => Details(),
         'location': (context) => Locations(),
+        'detailsHistory': (context) => DetailsHistory(),
         // 'Phone':(context)=>Phone(),
       },
     );
@@ -231,18 +233,10 @@ class _MyHomepageState extends State<MyHomepage> {
               setState(() {
                 provider.isLoading = true;
               });
-              await provider.sendLocationToDB();
+              await provider.sendLocationToDB(context);
               setState(() {
                 provider.isLoading = false;
               });
-              if (provider.long!=0 || provider.lat!=0)
-                Fluttertoast.showToast(
-                    msg: lanProvider.texts('location'),
-                    toastLength: Toast.LENGTH_SHORT,
-                    backgroundColor: Colors.grey,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              print('done');
             } catch (e) {
               setState(() {
                 provider.isLoading = false;

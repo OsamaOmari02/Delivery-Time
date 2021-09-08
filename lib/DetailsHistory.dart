@@ -1,26 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:app/LanguageProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'Myprovider.dart';
 
-class Details extends StatefulWidget {
+class DetailsHistory extends StatefulWidget {
+
   @override
-  _DetailsState createState() => _DetailsState();
+  _DetailsHistoryState createState() => _DetailsHistoryState();
 }
 
-class _DetailsState extends State<Details> {
-
-  @override
-  void dispose() {
-    Provider.of<MyProvider>(context,listen: false).detailedCart.clear();
-    super.dispose();
-  }
-
+class _DetailsHistoryState extends State<DetailsHistory> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
+    var lanProvider = Provider.of<LanProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(
@@ -33,12 +28,11 @@ class _DetailsState extends State<Details> {
         body: ListView(
           padding: const EdgeInsets.all(8.0),
           children: [
-            Text(
-              provider.details['name']!,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-            ),
             const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(lanProvider.texts('deliver to'),style: TextStyle(fontSize: 15),),
+            ),
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
@@ -57,14 +51,14 @@ class _DetailsState extends State<Details> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                provider.detailedCart[0].resName,
-                style: TextStyle(fontSize: 15),
+                provider.details['resName']!,
+                style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
             for (int i = 0; i < provider.detailedCart.length; i++)
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
@@ -101,6 +95,23 @@ class _DetailsState extends State<Details> {
             ),
             Padding(
               padding: const EdgeInsets.all(6.0),
+              child: Row(children: [
+                Text(
+                  'سعر التوصيل : ',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Text(
+                  provider.details['delivery'].toString() + " ",
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Text(
+                  'د.أ',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(6.0),
               child: Card(
                 color: Colors.greenAccent,
                 child: Padding(
@@ -120,27 +131,25 @@ class _DetailsState extends State<Details> {
               child: provider.isLoading
                   ? const Center(child: const CircularProgressIndicator())
                   : ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          setState(() {
-                            provider.isLoading = true;
-                          });
-                          await provider.goToMaps(
-                              double.parse(provider.details['longitude']!),
-                              double.parse(provider.details['latitude']!));
-                          setState(() {
-                            provider.isLoading = false;
-                          });
-                        } catch (e) {
-                          setState(() {
-                            provider.isLoading = false;
-                          });
-                        }
-                      },
-                      child: Text(
-                        'الموقع',
-                        style: const TextStyle(fontSize: 16),
-                      )),
+                  onPressed: () async {
+                    try {
+                      setState(() {
+                        provider.isLoading = true;
+                      });
+                      // TODO reorder
+                      setState(() {
+                        provider.isLoading = false;
+                      });
+                    } catch (e) {
+                      setState(() {
+                        provider.isLoading = false;
+                      });
+                    }
+                  },
+                  child: Text(
+                    lanProvider.texts('reorder'),
+                    style: const TextStyle(fontSize: 16),
+                  )),
             ),
           ],
         ),
