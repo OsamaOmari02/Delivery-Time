@@ -1,3 +1,4 @@
+import 'package:app/Drawer.dart';
 import 'package:app/LanguageProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,13 +6,14 @@ import 'package:provider/provider.dart';
 
 import 'Myprovider.dart';
 
-class DetailsHistory extends StatefulWidget {
+class DetailsHistory extends StatefulWidget  {
 
   @override
   _DetailsHistoryState createState() => _DetailsHistoryState();
 }
 
 class _DetailsHistoryState extends State<DetailsHistory> {
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -25,6 +27,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
           title: const Text('التفاصيل'),
           centerTitle: true,
         ),
+        drawer: MyDrawer(),
         body: ListView(
           padding: const EdgeInsets.all(8.0),
           children: [
@@ -136,7 +139,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                       setState(() {
                         provider.isLoading = true;
                       });
-                      // TODO reorder
+                      // provider.addToDB();
                       setState(() {
                         provider.isLoading = false;
                       });

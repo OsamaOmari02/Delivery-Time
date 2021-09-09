@@ -94,6 +94,8 @@ class _MyDrawerState extends State<MyDrawer> {
                         Provider.of<MyProvider>(context,listen: false).myFavorites.clear();
                         Provider.of<MyProvider>(context,listen: false).loc.clear();
                         Provider.of<MyProvider>(context,listen: false).mealIDs.clear();
+                        Provider.of<MyProvider>(context,listen: false).myCart.clear();
+                        Provider.of<MyProvider>(context,listen: false).details.clear();
                       });
                     } on FirebaseException catch (e){
                       dialog(e.message);

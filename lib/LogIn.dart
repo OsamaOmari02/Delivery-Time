@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Myprovider.dart';
 
@@ -14,12 +15,20 @@ class _LoginViewState extends State<Login> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    Provider.of<MyProvider>(context, listen: false).getAdmin();
+    super.initState();
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
@@ -31,28 +40,32 @@ class _LoginViewState extends State<Login> {
           builder: (BuildContext ctx) {
             return AlertDialog(
               title: Row(
-                children:
-                [
-                  const Icon(Icons.error_outline,size: 30,color: Colors.red,),
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 30,
+                    color: Colors.red,
+                  ),
                   const SizedBox(width: 17),
                   Expanded(
                     child: Text(
-                        title,
-                        style: const TextStyle(fontSize: 23,color: Colors.red),
-                      ),
+                      title,
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
+                    ),
                   ),
                 ],
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               content: Container(
-                height: MediaQuery.of(context).size.height*0.05,
+                height: MediaQuery.of(context).size.height * 0.05,
                 child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
                 TextButton(
-                    child: const Text("ok", style: const TextStyle(fontSize: 21)),
+                    child:
+                        const Text("ok", style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -67,7 +80,7 @@ class _LoginViewState extends State<Login> {
       ),
       cursorColor: Colors.white,
       decoration: InputDecoration(
-        icon: const Icon(Icons.alternate_email_outlined,color: Colors.white),
+        icon: const Icon(Icons.alternate_email_outlined, color: Colors.white),
         focusedBorder: UnderlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.white,
@@ -94,7 +107,7 @@ class _LoginViewState extends State<Login> {
           ),
           cursorColor: Colors.white,
           decoration: const InputDecoration(
-            icon: const Icon(Icons.lock,color: Colors.white),
+            icon: const Icon(Icons.lock, color: Colors.white),
             focusedBorder: const UnderlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.white,
@@ -113,22 +126,23 @@ class _LoginViewState extends State<Login> {
         Padding(
           padding: const EdgeInsets.all(2.0),
         ),
-        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            MaterialButton(
-                child: Text(
-                  "Forgot Password",
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(color: Colors.white),
-                ),
-                onPressed: ()=> Navigator.of(context).pushReplacementNamed('resetPassword')
-            ),
-          ],
-        ),
+        if (provider.authState == authStatus.unAuthenticated ||
+            provider.authState == authStatus.Authenticated)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              MaterialButton(
+                  child: Text(
+                    "Forgot Password",
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
+                        .copyWith(color: Colors.white),
+                  ),
+                  onPressed: () => Navigator.of(context)
+                      .pushReplacementNamed('resetPassword')),
+            ],
+          ),
       ],
     );
 
@@ -165,25 +179,34 @@ class _LoginViewState extends State<Login> {
               provider.authState = authStatus.Authenticating;
             });
             var auth = (await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email:_emailController.text.trim(),
+              email: _emailController.text.trim(),
               password: _passwordController.text,
-            )).user;
+            ))
+                .user;
             if (auth != null) {
               if (!mounted) return;
               setState(() {
                 provider.fetch();
                 provider.authState = authStatus.Authenticated;
               });
-              Navigator.of(context).pushReplacementNamed('MyHomepage');
+              if (_emailController.text.trim() != "admin@gmail.com" &&
+                  _passwordController.text != "delivery.time123") {
+                provider.setAdmin(false);
+                Navigator.of(context).pushReplacementNamed('MyHomepage');
+              } else {
+                provider.setAdmin(true);
+                Navigator.of(context).pushReplacementNamed('callCenter');
+              }
             }
           } on FirebaseAuthException catch (e) {
-            e.message=='Given String is empty or null'?dialog('Empty field!'):
-            dialog(e.message);
+            e.message == 'Given String is empty or null'
+                ? dialog('Empty field!')
+                : dialog(e.message);
             setState(() {
               provider.authState = authStatus.unAuthenticated;
             });
             _passwordController.clear();
-          } catch(e){
+          } catch (e) {
             print(e);
             setState(() {
               provider.authState = authStatus.unAuthenticated;
@@ -195,37 +218,39 @@ class _LoginViewState extends State<Login> {
 
     final bottom = Column(
       children: <Widget>[
-        if (provider.authState==authStatus.Authenticating)
+        if (provider.authState == authStatus.Authenticating)
           const CircularProgressIndicator(color: Colors.white),
-        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
-        loginButton,
+        if (provider.authState == authStatus.unAuthenticated ||
+            provider.authState == authStatus.Authenticated)
+          loginButton,
         const Padding(
           padding: EdgeInsets.all(8.0),
         ),
-        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              "Not a member?",
-              style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                    color: Colors.white,
-                  ),
-            ),
-            MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed('Signup');
-              },
-              child: Text(
-                "Sign Up",
+        if (provider.authState == authStatus.unAuthenticated ||
+            provider.authState == authStatus.Authenticated)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Not a member?",
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(
                       color: Colors.white,
-                      decoration: TextDecoration.underline,
                     ),
               ),
-            ),
-          ],
-        ),
+              MaterialButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed('Signup');
+                },
+                child: Text(
+                  "Sign Up",
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        color: Colors.white,
+                        decoration: TextDecoration.underline,
+                      ),
+                ),
+              ),
+            ],
+          ),
       ],
     );
 
@@ -254,7 +279,8 @@ class _LoginViewState extends State<Login> {
                             offset: const Offset(0, 2)),
                       ],
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 60),
                     child: const Text(
                       "Delivery Time",
                       style: const TextStyle(

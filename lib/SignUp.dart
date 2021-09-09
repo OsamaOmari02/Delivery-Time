@@ -16,9 +16,7 @@ class _RegisterViewState extends State<Register> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _repasswordController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
   FocusNode nameNode = FocusNode();
-  FocusNode phoneNode = FocusNode();
   FocusNode emailNode = FocusNode();
   FocusNode passNode = FocusNode();
   FocusNode repassNode = FocusNode();
@@ -26,7 +24,6 @@ class _RegisterViewState extends State<Register> {
   @override
   void initState() {
     nameNode = FocusNode();
-    phoneNode = FocusNode();
     emailNode = FocusNode();
     passNode = FocusNode();
     repassNode = FocusNode();
@@ -38,9 +35,7 @@ class _RegisterViewState extends State<Register> {
     _emailController.dispose();
     _passwordController.dispose();
     _repasswordController.dispose();
-    _phoneController.dispose();
     nameNode.dispose();
-    phoneNode.dispose();
     emailNode.dispose();
     passNode.dispose();
     repassNode.dispose();
@@ -91,7 +86,7 @@ class _RegisterViewState extends State<Register> {
     }
     final usernameField = TextFormField(
       focusNode: nameNode,
-      onEditingComplete: ()=>requestNode(context,phoneNode),
+      onEditingComplete: ()=>requestNode(context,emailNode),
       textInputAction: TextInputAction.next,
       controller: _usernameController,
       keyboardType: TextInputType.text,
@@ -113,32 +108,6 @@ class _RegisterViewState extends State<Register> {
       ),
     );
 
-    final phoneField = TextFormField(
-      focusNode: phoneNode,
-      onEditingComplete: ()=>requestNode(context,emailNode),
-      textInputAction: TextInputAction.next,
-      controller: _phoneController,
-      keyboardType: TextInputType.phone,
-      style: TextStyle(
-        color: Colors.white,
-      ),
-      cursorColor: Colors.white,
-      decoration: InputDecoration(
-        icon: Icon(Icons.phone,color: Colors.white),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.white,
-          ),
-        ),
-        labelText: "Phone Number",
-        labelStyle: TextStyle(
-          color: Colors.white,
-        ),
-        hintStyle: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-    );
 
     final emailField = TextFormField(
       focusNode: emailNode,
@@ -234,7 +203,6 @@ class _RegisterViewState extends State<Register> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           usernameField,
-          phoneField,
           emailField,
           passwordField,
           repasswordField,
@@ -261,8 +229,6 @@ class _RegisterViewState extends State<Register> {
         onPressed: () async {
           if (_usernameController.text.isEmpty)
             return LogoutFun("Empty field!");
-          if (_phoneController.text.length!=10 || !_phoneController.text.startsWith("07"))
-            return LogoutFun("Invalid phone number");
           if (_passwordController.text!=_repasswordController.text)
             return LogoutFun("Passwords do not match");
           try {
@@ -276,11 +242,8 @@ class _RegisterViewState extends State<Register> {
                   await FirebaseFirestore.instance.collection('users')
                       .doc(authRes.user!.uid).set({
                     'email': _emailController.text.trim(),
-                    'phone':_phoneController.text,
                     'username':_usernameController.text,
                     'password':_passwordController.text,
-                    'darkMode':false,
-                    'Language':false,
                   });
                   setState(() {
                     provider.authState = authStatus.Authenticated;

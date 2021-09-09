@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'LanguageProvider.dart';
 
 class UserState extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -20,6 +21,9 @@ class UserState extends StatelessWidget {
           if (snapshot.data == null) {
             return Login();
           } else if (snapshot.hasData) {
+            if (provider.admin)
+              return CallCenter();
+            else
               return MyHomepage();
           }
           if (snapshot.hasError) {

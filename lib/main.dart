@@ -64,6 +64,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).getDarkMode();
+    Provider.of<MyProvider>(context,listen: false).getAdmin();
     super.initState();
   }
   @override
@@ -119,7 +120,6 @@ class _MyAppState extends State<MyApp> {
         'details': (context) => Details(),
         'location': (context) => Locations(),
         'detailsHistory': (context) => DetailsHistory(),
-        // 'Phone':(context)=>Phone(),
       },
     );
   }

@@ -117,6 +117,17 @@ class MyProvider with ChangeNotifier {
   }
 
   //-----------------------things----------------------------
+  bool admin = false;
+  setAdmin(val) async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('admin', val);
+    notifyListeners();
+  }
+  getAdmin() async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    admin = pref.getBool('admin')!;
+    notifyListeners();
+  }
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
@@ -593,7 +604,6 @@ class MyProvider with ChangeNotifier {
   Map<String, String> authData = {
     'email': '',
     'password': '',
-    'phone': '',
     'name': '',
   };
 
@@ -606,7 +616,6 @@ class MyProvider with ChangeNotifier {
           .get()
           .then((val) {
         authData['email'] = val.data()?['email'];
-        authData['phone'] = val.data()?['phone'];
         authData['password'] = val.data()?['password'];
         authData['name'] = val.data()?['username'];
         notifyListeners();
