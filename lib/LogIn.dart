@@ -256,7 +256,7 @@ class _LoginViewState extends State<Login> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.orangeAccent,
         body: Form(
           key: _formKey,
           child: SingleChildScrollView(

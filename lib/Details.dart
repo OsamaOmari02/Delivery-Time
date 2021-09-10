@@ -125,6 +125,7 @@ class _DetailsState extends State<Details> {
         drawer: Drawer(
           child: ListView(
             children: [
+              const SizedBox(height: 20),
               listTile('صفحة الطلبات', Icons.home, 'callCenter', context),
               listTile('الموقع', Icons.location_on, 'location', context),
               ListTile(
@@ -213,7 +214,7 @@ class _DetailsState extends State<Details> {
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Card(
-                color: Colors.greenAccent,
+                color: Colors.lightGreen,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(

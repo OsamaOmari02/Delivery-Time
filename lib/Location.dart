@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -114,10 +115,14 @@ class _LocationsState extends State<Locations> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text('الموقع'),
+          centerTitle: true,
+        ),
         drawer: Drawer(
           child: ListView(
             children: [
+              const SizedBox(height: 20),
               listTile('صفحة الطلبات', Icons.home, 'callCenter', context),
               listTile('الموقع', Icons.location_on, 'location', context),
               ListTile(
@@ -134,7 +139,7 @@ class _LocationsState extends State<Locations> {
             ],
           ),
         ),
-        body: null,
+        body: Center(child: Text('قيد الإنشاء ...',style: const TextStyle(fontSize: 20)),),
       ),
     );
   }

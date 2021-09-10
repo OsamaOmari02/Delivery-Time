@@ -1,25 +1,20 @@
 // @dart=2.9
 import 'dart:developer';
 
-import 'package:app/AdminSweets.dart';
 import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
 import 'package:app/Settings.dart';
-import 'package:app/admin.dart';
 import 'package:app/res_screen.dart';
 import 'package:app/sweets.dart';
 import 'package:app/sweets_screen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Addaddress.dart';
-import 'AdminHomos.dart';
 import 'CheckOut.dart';
 import 'Details.dart';
 import 'DetailsHistory.dart';
@@ -100,21 +95,12 @@ class _MyAppState extends State<MyApp> {
         'Email': (context) => Email(),
         'Name': (context) => Name(),
         'about': (context) => About(),
-        'admin': (context) => Admin(),
-        'editShawarma': (context) => Edit(),
-        'editSweets': (context) => EditSweets(),
-        'editHomos': (context) => EditHomos(),
-        'addMeal': (context) => AddMeal(),
-        'addMealSweets': (context) => AddMealSweets(),
-        'addMealHomos': (context) => AddMealHomos(),
         'userState': (context) => UserState(),
         'checkOut': (context) => CheckOut(),
         'homos': (context) => Homos(),
         'homosScreen': (context) => HomosScreen(),
         'sweets': (context) => Sweets(),
         'sweetScreen': (context) => SweetScreen(),
-        'adminHomos': (context) => AdminHomos(),
-        'adminSweets': (context) => AdminSweets(),
         'shawarmaScreen': (context) => Shawarma(),
         'callCenter':(context) => CallCenter(),
         'details': (context) => Details(),
@@ -215,13 +201,6 @@ class _MyHomepageState extends State<MyHomepage> {
                         style: TextStyle(color: Colors.white),
                       )),
               ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton(
-                onPressed: () => Navigator.of(context).pushNamed('admin'),
-                icon: const Icon(Icons.search),
-              ),
             ),
           ],
           centerTitle: true,

@@ -136,6 +136,7 @@ class _CallCenterState extends State<CallCenter> {
         drawer: Drawer(
           child: ListView(
             children: [
+              const SizedBox(height: 20),
               listTile('صفحة الطلبات', Icons.home, 'callCenter', context),
               listTile('الموقع', Icons.location_on, 'location', context),
               ListTile(
@@ -207,11 +208,6 @@ class _CallCenterState extends State<CallCenter> {
                                         quantity: resData[index]['meals']
                                         [i]['quantity'],
                                         foodID: resData[index].id));
-                                    for (int i=0;i<resData[index]['length'];i++)
-                                    print('meal name = ' + provider.detailedCart[i].mealName +
-                                        '\nmeal price = ' + provider.detailedCart[i].mealPrice.toString() +
-                                        '\nresName = ' + provider.detailedCart[i].resName +
-                                        '\nquantity = ' + provider.detailedCart[i].quantity.toString());
                                   });
                                   Navigator.of(context).pushReplacementNamed('details');
                                 },

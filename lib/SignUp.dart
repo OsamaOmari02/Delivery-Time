@@ -52,30 +52,30 @@ class _RegisterViewState extends State<Register> {
             return AlertDialog(
               title: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     size: 30,
                     color: Colors.red,
                   ),
-                  SizedBox(width: 17),
+                  const SizedBox(width: 17),
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 23, color: Colors.red),
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
                     ),
                   ),
                 ],
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               content: Container(
                 height: MediaQuery.of(context).size.height * 0.05,
-                child: Divider(),
+                child: const Divider(),
                 alignment: Alignment.topCenter,
               ),
               actions: [
                 TextButton(
-                    child: Text("OK", style: TextStyle(fontSize: 21)),
+                    child: Text("OK", style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -90,19 +90,19 @@ class _RegisterViewState extends State<Register> {
       textInputAction: TextInputAction.next,
       controller: _usernameController,
       keyboardType: TextInputType.text,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white,
       ),
       cursorColor: Colors.white,
-      decoration: InputDecoration(
-        icon: Icon(Icons.person,color: Colors.white),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
+      decoration: const InputDecoration(
+        icon: const Icon(Icons.person,color: Colors.white),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: const BorderSide(
             color: Colors.white,
           ),
         ),
         labelText: "First Name",
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: Colors.white,
         ),
       ),
@@ -116,23 +116,23 @@ class _RegisterViewState extends State<Register> {
       controller: _emailController,
       // key: ValueKey('email'),
       keyboardType: TextInputType.emailAddress,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white,
       ),
       cursorColor: Colors.white,
-      decoration: InputDecoration(
-        icon: Icon(Icons.alternate_email_outlined,color: Colors.white),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
+      decoration: const InputDecoration(
+        icon: const Icon(Icons.alternate_email_outlined,color: Colors.white),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: const BorderSide(
             color: Colors.white,
           ),
         ),
         hintText: "something@example.com",
         labelText: "Email",
-        labelStyle: TextStyle(
+        labelStyle:const TextStyle(
           color: Colors.white,
         ),
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Colors.white,
         ),
       ),
@@ -146,14 +146,14 @@ class _RegisterViewState extends State<Register> {
         controller: _passwordController,
         obscureText: isVisible,
         keyboardType: TextInputType.visiblePassword,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
         ),
         cursorColor: Colors.white,
         decoration: InputDecoration(
-          icon: Icon(Icons.lock,color: Colors.white),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
+          icon: const Icon(Icons.lock,color: Colors.white),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: const BorderSide(
               color: Colors.white,
             ),
           ),
@@ -165,7 +165,7 @@ class _RegisterViewState extends State<Register> {
             },
             icon: Icon(isVisible ? Icons.visibility : Icons.visibility_off),color: Colors.white,),
           labelText: "Password",
-          labelStyle: TextStyle(
+          labelStyle: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -176,29 +176,29 @@ class _RegisterViewState extends State<Register> {
       focusNode: repassNode,
       obscureText: true,
       controller: _repasswordController,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white,
       ),
       cursorColor: Colors.white,
-      decoration: InputDecoration(
-        icon: Icon(Icons.lock,color: Colors.white),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
+      decoration: const InputDecoration(
+        icon: const Icon(Icons.lock,color: Colors.white),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: const BorderSide(
             color: Colors.white,
           ),
         ),
         hintText: "password",
         labelText: "Re-enter Password",
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: Colors.white,
         ),
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Colors.white,
         ),
       ),
     );
     final fields = Padding(
-      padding: EdgeInsets.only(top: 10.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -220,7 +220,7 @@ class _RegisterViewState extends State<Register> {
         child: Text(
           "Register",
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 20.0,
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -271,8 +271,6 @@ class _RegisterViewState extends State<Register> {
     );
 
     final bottom = Column(
-      // mainAxisAlignment: MainAxisAlignment.start,
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         SizedBox(height: MediaQuery.of(context).size.height*0.05),
         if (provider.authState==authStatus.Authenticating)
@@ -310,17 +308,17 @@ class _RegisterViewState extends State<Register> {
     );
 
     return Scaffold(
-      backgroundColor: Color.fromRGBO(20, 200, 140, 1).withOpacity(0.65),
+      backgroundColor: Colors.blue,
       body: Form(
         key: _formKey,
           child: Container(
             height: mq.size.height,
-            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+            padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: ListView(
               children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height*0.08),
+                SizedBox(height: MediaQuery.of(context).size.height*0.15),
                 Container(
-                  margin: EdgeInsets.only(bottom: 20),
+                  margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.deepOrange,
@@ -328,13 +326,13 @@ class _RegisterViewState extends State<Register> {
                       BoxShadow(
                           blurRadius: 8,
                           color: Colors.black,
-                          offset: Offset(0, 2)),
+                          offset: const Offset(0, 2)),
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 70),
-                    child: Text(
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+                    child: const Text(
                       "Delivery Time",
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 27,
                           fontWeight: FontWeight.bold,
@@ -343,7 +341,7 @@ class _RegisterViewState extends State<Register> {
                   ),
                 fields,
                 Padding(
-                  padding: EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: bottom,
                 ),
               ],
