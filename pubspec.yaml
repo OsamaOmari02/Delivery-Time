@@ -46,8 +46,8 @@ dev_dependencies:
     sdk: flutter
 
 flutter_native_splash:
-  color: "#FFFFFF"
-  image: file/launch_image.png
+  color: "#E5E5E5"
+  image: file/DT.png
   android_gravity: center
   android: true
   ios: true

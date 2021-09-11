@@ -15,18 +15,19 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-
   @override
   void initState() {
-    Provider.of<MyProvider>(context,listen: false).getDarkMode();
+    Provider.of<MyProvider>(context, listen: false).getDarkMode();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
+
     dialog() {
       return showDialog(
           context: context,
@@ -41,7 +42,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       activeTrackColor: Colors.blue[200],
                       value: lanProvider.isEn,
                       onChanged: (val) async {
-                        SharedPreferences pref = await SharedPreferences.getInstance();
+                        SharedPreferences pref =
+                            await SharedPreferences.getInstance();
                         pref.setBool('language', val);
                         setState(() {
                           lanProvider.isEn = val;
@@ -56,6 +58,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
               actions: [
                 TextButton(
                     child: Text(lanProvider.texts('ok'),
+                        style: const TextStyle(fontSize: 21)),
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
+    dialog2() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Column(
+                  children: [
+                    TextButton(
+                        onPressed: () async =>
+                            await FlutterPhoneDirectCaller.callNumber(
+                                0789259915.toString()),
+                        child: const Text(
+                          "0789259915",
+                          style: const TextStyle(fontSize: 18),
+                        )),
+                    TextButton(
+                        onPressed: () async =>
+                            await FlutterPhoneDirectCaller.callNumber(
+                                0789259915.toString()),
+                        child: const Text(
+                          "0789259915",
+                          style: const TextStyle(fontSize: 18),
+                        )),
+                  ],
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              elevation: 24,
+              actions: [
+                TextButton(
+                    child: Text(lanProvider.texts('cancel?'),
                         style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
@@ -105,8 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Text(lanProvider.texts('call us'),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () =>
-                    FlutterPhoneDirectCaller.callNumber(0789259915.toString()),
+                onTap: () => dialog2(),
               ),
             ),
             Divider(thickness: 0.6),
@@ -116,7 +156,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Text(lanProvider.texts('rate app'),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () {},
+                onTap: () {
+                  //  TODO add the link of the application
+                },
               ),
             ),
           ],

@@ -58,62 +58,6 @@ class _HistoryState extends State<History> {
           });
     }
 
-    dialog2() {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                lanProvider.texts('reorder'),
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                InkWell(
-                    child: Text(
-                      lanProvider.texts('yes?'),
-                      style: const TextStyle(fontSize: 19, color: Colors.red),
-                    ),
-                    onTap: () async {
-                      try {
-                        setState(() {
-                          provider.isLoading = true;
-                        });
-
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                      } on FirebaseException catch (e) {
-                        dialog(lanProvider.texts('Error occurred !'));
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                        print(e.message);
-                      } catch (e) {
-                        dialog(lanProvider.texts('Error occurred !'));
-                        print(e);
-                        setState(() {
-                          provider.isLoading = false;
-                        });
-                      }
-                    }),
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text(lanProvider.texts('cancel?'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
     delete(title) {
       return showDialog(
           context: context,
@@ -180,6 +124,39 @@ class _HistoryState extends State<History> {
           });
     }
 
+    final snackBar = SnackBar(
+      content: Container(
+        height: height * 0.08,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Text(
+                  lanProvider.texts('order confirmed'),
+                  style: TextStyle(fontSize: width * 0.04),
+                ),
+                Text(
+                  lanProvider.texts('will reach out to u'),
+                  style: TextStyle(fontSize: width * 0.04),
+                ),
+              ],
+            ),
+            SizedBox(width: width * 0.1),
+            Icon(
+              Icons.check_circle_outline,
+              color: Colors.white,
+              size: 30,
+            ),
+          ],
+        ),
+      ),
+      duration: Duration(seconds: 5),
+      backgroundColor: Colors.green,
+      elevation: 5,
+    );
+     showSnackBar()=> ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -205,6 +182,14 @@ class _HistoryState extends State<History> {
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, int index) {
                   var resData = snapshot.data!.docs;
+                  if (resData.isEmpty)
+                    return Center(
+                      child: Text(
+                        lanProvider.texts('no orders'),
+                        style: TextStyle(
+                            fontSize: 17, fontStyle: FontStyle.italic),
+                      ),
+                    );
                   return Card(
                     elevation: 2.5,
                     child: Row(
@@ -247,11 +232,11 @@ class _HistoryState extends State<History> {
                             },
                             trailing: TextButton(
                               onPressed: () => showDialog(
-                                  context: context,
+                                  context: ctx,
                                   builder: (BuildContext ctx) {
                                     return AlertDialog(
                                       title: Text(
-                                        lanProvider.texts('reorder'),
+                                        lanProvider.texts('reorder?'),
                                         textAlign: lanProvider.isEn
                                             ? TextAlign.start
                                             : TextAlign.end,
@@ -279,93 +264,49 @@ class _HistoryState extends State<History> {
                                                 setState(() {
                                                   provider.isLoading = true;
                                                 });
-                                                //TODO reorder
-                                                // var uuid = Uuid().v4();
-                                                // var user = FirebaseAuth
-                                                //     .instance.currentUser;
-                                                // await FirebaseFirestore.instance
-                                                //     .collection(
-                                                //         'orders/${user!.uid}/myOrders')
-                                                //     .doc(uuid)
-                                                //     .set({
-                                                //   'date': DateTime.now(),
-                                                //   'total': resData[index]
-                                                //           ['total']
-                                                //       .toString(),
-                                                //   'delivery': resData[index]
-                                                //           ['delivery']
-                                                //       .toString(),
-                                                //   'note': resData[index]
-                                                //       ['note'],
-                                                //   'length': resData[index]
-                                                //           ['length']
-                                                //       .toString(),
-                                                //   'resName': resData[index]
-                                                //       ['resName'],
-                                                //   'details': {
-                                                //     'area': resData[index]
-                                                //         ['details']['area'],
-                                                //     'street': resData[index]
-                                                //         ['details']['street'],
-                                                //     'phoneNum': resData[index]
-                                                //                 ['details']
-                                                //             ['phoneNum']
-                                                //         .toString(),
-                                                //   },
-                                                //   'meals': [
-                                                //     for (int i = 0;
-                                                //         i <
-                                                //             resData[index]
-                                                //                 ['length'];
-                                                //         i++)
-                                                //       {
-                                                //         'meal name':
-                                                //             resData[index]
-                                                //                     ['meals'][i]
-                                                //                 ['meal name'],
-                                                //         'meal price':
-                                                //             resData[index]
-                                                //                     ['meals'][i]
-                                                //                 ['meal price'],
-                                                //         'quantity':
-                                                //             resData[index]
-                                                //                     ['meals'][i]
-                                                //                 ['quantity'],
-                                                //       }
-                                                //   ],
-                                                // });
-                                                // await FirebaseFirestore.instance.collection('allOrders').doc(uuid).set({
-                                                // 'date': DateTime.now(),
-                                                // 'total': total,
-                                                // 'note': note,
-                                                // 'resName': myCart[0].resName,
-                                                // 'length': myCart.length,
-                                                // 'details': {
-                                                // 'latitude': lat,
-                                                // 'longitude': long,
-                                                // 'area': checkOut['area'],
-                                                // 'street': checkOut['street'],
-                                                // 'phoneNum': checkOut['phoneNum'],
-                                                // 'name': authData['name'],
-                                                // },
-                                                // 'meals': [
-                                                // for (int i = 0; i < myCart.length; i++)
-                                                // {
-                                                // 'meal name': myCart[i].mealName,
-                                                // 'meal price': myCart[i].mealPrice,
-                                                // 'quantity': myCart[i].quantity,
-                                                // }
-                                                // ],
-                                                // });
+                                                for (int i = 0;
+                                                    i <
+                                                        resData[index]
+                                                            ['length'];
+                                                    i++)
+                                                  provider.myCart.add(FoodCart(
+                                                      resName: resData[index]
+                                                          ['resName'],
+                                                      mealName: resData[index]
+                                                              ['meals'][i]
+                                                          ['meal name'],
+                                                      mealPrice: resData[index]
+                                                              ['meals'][i]
+                                                          ['meal price'],
+                                                      quantity: resData[index]
+                                                              ['meals'][i]
+                                                          ['quantity'],
+                                                      foodID: resData[index].id));
+                                                Navigator.of(context).pop();
+                                                await provider.reorder(
+                                                  resData[index]['total'],
+                                                  resData[index]['delivery'],
+                                                  resData[index]['note'],
+                                                  resData[index]['length'],
+                                                  resData[index]['resName'],
+                                                  resData[index]['details']
+                                                      ['area'],
+                                                  resData[index]['details']
+                                                      ['street'],
+                                                  resData[index]['details']
+                                                      ['phoneNum'],
+                                                );
+                                                showSnackBar();
                                                 setState(() {
                                                   provider.isLoading = false;
+                                                  provider.myCart.clear();
                                                 });
-                                                Navigator.of(context).pop();
                                               } on FirebaseException catch (e) {
                                                 dialog(lanProvider
                                                     .texts('Error occurred !'));
                                                 setState(() {
                                                   provider.isLoading = false;
+                                                  provider.myCart.clear();
                                                 });
                                                 print(e.message);
                                               } catch (e) {
@@ -374,6 +315,7 @@ class _HistoryState extends State<History> {
                                                 print(e);
                                                 setState(() {
                                                   provider.isLoading = false;
+                                                  provider.myCart.clear();
                                                 });
                                               }
                                             }),

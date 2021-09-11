@@ -93,8 +93,9 @@ class _MyAddressState extends State<MyAddress> {
                         setState(() {
                           provider.isLoading = true;
                         });
-                        await provider.delete();
                         Navigator.of(context).pop();
+                        await provider.delete();
+                        print("length = after in dialog " + provider.loc.length.toString());
                         Fluttertoast.showToast(
                             msg: lanProvider.texts('Address Deleted'),
                             toastLength: Toast.LENGTH_SHORT,
@@ -108,12 +109,16 @@ class _MyAddressState extends State<MyAddress> {
                         dialog(e.message);
                         setState(() {
                           provider.isLoading = false;
+                          final addressObj = provider.loc.firstWhere((element) => element.id == provider.iD);
+                          provider.loc.add(addressObj);
                         });
                       } catch (e) {
                         dialog(lanProvider.texts('Error occurred !'));
                         print(e);
                         setState(() {
                           provider.isLoading = false;
+                          final addressObj = provider.loc.firstWhere((element) => element.id == provider.iD);
+                          provider.loc.add(addressObj);
                         });
                       }
                     }),
@@ -140,6 +145,10 @@ class _MyAddressState extends State<MyAddress> {
                   : Icon(Icons.add),
               onPressed: () => Navigator.of(context).pushNamed('addAddress'),
             ),
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () => print("length = " + provider.loc.length.toString()),
+            ),
           ],
           title: Text(lanProvider.texts('my addresses')),
           centerTitle: true,
@@ -157,36 +166,36 @@ class _MyAddressState extends State<MyAddress> {
                 lanProvider.texts('Error occurred !'),
                 style: TextStyle(color: Colors.red),
               ));
-            return ListView.builder(
-              itemCount: provider.loc.length,
-              itemBuilder: (BuildContext context, int index) {
-                var userData = snapshot.data!.docs;
-                if (provider.loc.isEmpty || userData.isEmpty) {
-                  return Center(
-                      child: Text(lanProvider.texts('new address'),
-                          style: const TextStyle(
-                              fontSize: 17, fontStyle: FontStyle.italic)));
-                }
-                return Card(
-                  elevation: 1.2,
-                  child: ListTile(
-                    onLongPress: () {
-                      setState(() {
-                        provider.iD = userData[index].id;
-                      });
-                      delete(lanProvider.texts('delete this address?'));
-                    },
-                    title: Text(userData[index]['area']),
-                    subtitle: Text(lanProvider.texts('street:') +
-                        userData[index]['street'] +
-                        "\n" +
-                        lanProvider.texts('phone:') +
-                        userData[index]['phoneNum']),
-                    isThreeLine: true,
-                  ),
-                );
-              },
-            );
+              return ListView.builder(
+                itemCount: provider.loc.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var userData = snapshot.data!.docs;
+                  if (provider.loc.isEmpty || userData.isEmpty) {
+                    return Center(
+                        child: Text(lanProvider.texts('new address'),
+                            style: const TextStyle(
+                                fontSize: 17, fontStyle: FontStyle.italic)));
+                  }
+                  return Card(
+                    elevation: 1.5,
+                    child: ListTile(
+                      onLongPress: () async {
+                        setState(() {
+                          provider.iD = userData[index].id;
+                        });
+                        await delete(lanProvider.texts('delete this address?'));
+                      },
+                      title: Text(userData[index]['area']??""),
+                      subtitle: Text(lanProvider.texts('street:') +
+                          userData[index]['street']+
+                          "\n" +
+                          lanProvider.texts('phone:') +
+                          userData[index]['phoneNum']),
+                      isThreeLine: true,
+                    ),
+                  );
+                },
+              );
           },
         ),
       ),

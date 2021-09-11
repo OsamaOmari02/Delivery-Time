@@ -118,16 +118,19 @@ class MyProvider with ChangeNotifier {
 
   //-----------------------things----------------------------
   bool admin = false;
-  setAdmin(val) async{
+
+  setAdmin(val) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setBool('admin', val);
     notifyListeners();
   }
-  getAdmin() async{
+
+  getAdmin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     admin = pref.getBool('admin')!;
     notifyListeners();
   }
+
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
@@ -173,7 +176,7 @@ class MyProvider with ChangeNotifier {
     'total': '',
     'note': '',
     'resName': '',
-    'delivery':'',
+    'delivery': '',
   };
 
   List<FoodCart> detailedCart = [];
@@ -223,12 +226,12 @@ class MyProvider with ChangeNotifier {
   delete() async {
     isLoading = true;
     var user = FirebaseAuth.instance.currentUser;
+    final addressIndex = loc.indexWhere((element) => element.id == iD);
+    loc.removeAt(addressIndex);
     await FirebaseFirestore.instance
         .collection('/address/${user!.uid}/addresses')
         .doc(iD)
         .delete();
-    final addressIndex = loc.indexWhere((element) => element.id == iD);
-    loc.removeAt(addressIndex);
     notifyListeners();
   }
 
@@ -412,6 +415,63 @@ class MyProvider with ChangeNotifier {
           }
       ],
     });
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> reorder(total1, dp, note, length, resName, area1, street1,
+      phoneNum) async {
+    isLoading = true;
+    var uuid = Uuid().v4();
+    var user = FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance
+        .collection('orders/${user!.uid}/myOrders')
+        .doc(uuid)
+        .set({
+      'date': DateTime.now(),
+      'total': total1.toString(),
+      'delivery': dp.toString(),
+      'note': note,
+      'length': length,
+      'resName': resName,
+      'details': {
+        'area': area1,
+        'street': street1,
+        'phoneNum': phoneNum,
+      },
+      'meals': [
+        for (int i = 0; i < length; i++)
+          {
+            'meal name': myCart[i].mealName,
+            'meal price': myCart[i].mealPrice,
+            'quantity': myCart[i].quantity,
+          }
+      ],
+    });
+    await FirebaseFirestore.instance.collection('allOrders').doc(uuid).set({
+      'date': DateTime.now(),
+      'total': total1,
+      'note': note,
+      'resName': resName,
+      'length': length,
+      'details': {
+        'latitude': lat,
+        'longitude': long,
+        'area': area1,
+        'street': street1,
+        'phoneNum': phoneNum,
+        'name': authData['name'],
+      },
+      'meals': [
+        for (int i = 0; i < length; i++)
+          {
+            'meal name': myCart[i].mealName,
+            'meal price': myCart[i].mealPrice,
+            'quantity': myCart[i].quantity,
+          }
+      ],
+    });
+
     isLoading = false;
     notifyListeners();
   }
@@ -605,6 +665,8 @@ class MyProvider with ChangeNotifier {
     'email': '',
     'password': '',
     'name': '',
+    'latitude': '',
+    'longitude': '',
   };
 
   fetch() async {
@@ -618,6 +680,8 @@ class MyProvider with ChangeNotifier {
         authData['email'] = val.data()?['email'];
         authData['password'] = val.data()?['password'];
         authData['name'] = val.data()?['username'];
+        authData['latitude'] = val.data()?['latitude'].toString()??"0";
+        authData['longitude'] = val.data()?['longitude'].toString()??"0";
         notifyListeners();
       });
   }
@@ -628,6 +692,7 @@ class MyProvider with ChangeNotifier {
 
   var long;
   bool approved = false;
+
   sendLocationToDB(BuildContext ctx) async {
     isLoading = true;
     var user = FirebaseAuth.instance.currentUser;
@@ -637,7 +702,8 @@ class MyProvider with ChangeNotifier {
       serviceEnabled = await Location().requestService();
       if (!serviceEnabled)
         return Fluttertoast.showToast(
-            msg: Provider.of<LanProvider>(ctx, listen: false).texts('must location on'),
+            msg: Provider.of<LanProvider>(ctx, listen: false)
+                .texts('must location on'),
             toastLength: Toast.LENGTH_SHORT,
             backgroundColor: Colors.grey,
             textColor: Colors.white,
@@ -649,7 +715,8 @@ class MyProvider with ChangeNotifier {
       permission = await Location().requestPermission();
       if (permission != PermissionStatus.granted)
         return Fluttertoast.showToast(
-            msg: Provider.of<LanProvider>(ctx, listen: false).texts('must location on'),
+            msg: Provider.of<LanProvider>(ctx, listen: false)
+                .texts('must location on'),
             toastLength: Toast.LENGTH_SHORT,
             backgroundColor: Colors.grey,
             textColor: Colors.white,

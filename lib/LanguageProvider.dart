@@ -16,7 +16,7 @@ class LanProvider with ChangeNotifier {
     'Drawer2': 'حسابي',
     'Drawer3': 'المفضلة',
     'Drawer4': 'عناوين التوصيل',
-    'Drawer5': 'طلباتي',
+    'Drawer5': 'طلباتي السابقة',
     'Drawer6': 'الإعدادات',
     'Drawer7': 'حول التطبيق',
     'Drawer8': 'تسجيل الخروج',
@@ -43,7 +43,7 @@ class LanProvider with ChangeNotifier {
     'phone:': 'رقم الهاتف: ',
     'add': 'اضافه',
     'save': 'احفظ',
-    'orders history': 'طلباتي',
+    'orders history': 'طلباتي السابقة',
     'language': 'اللغة',
     'dark mode': 'الوضع الليلي',
     'call us': 'إتصل بنا',
@@ -111,12 +111,15 @@ class LanProvider with ChangeNotifier {
     'choose ur sweet': 'اختر محلك المفضل !',
     'empty': 'فارغ !',
     'order confirmed': 'تم تأكيد طلبك بنجاح',
-    'reorder': 'إعادة الطلب',
+    'reorder?': 'هل تريد إعادة الطلب؟',
+    'reorder':'إعادة الطلب',
     'order deleted': 'تم حذف الطلب بنجاح',
     'delete order?': 'هل تريد حذف هذا الطلب؟',
     'must location on': 'يجب تفعيل الموقع لتجربة افضل',
     'foodCart':
         'هل تريد حذف محتويات سلة الطلبات خاصتك والبدأ بسلة طلبات جديدة؟',
+    'no orders':'لا يوجد لديك طلبات مسبقة',
+    'will reach out to u':'سيتم التواصل معك قريباً',
   };
   Map<String, Object> english = {
     'order ur food..': 'Order your food now and enjoy !',
@@ -222,12 +225,15 @@ class LanProvider with ChangeNotifier {
     'choose ur sweet': 'Choose your favorite !',
     'empty': 'Empty !',
     'order confirmed': 'Order Confirmed Successfully',
-    'reorder': 'Reorder',
+    'reorder?': 'Do you want to reorder this order?',
+    'reorder':'Reorder',
     'order deleted': 'Order Deleted Successfully',
     'delete order?': 'Do you want to delete this order?',
     'must location on': 'Turn on location to continue',
     'foodCart':
         'Do you want to delete the current food cart and start another one?',
+    'no orders':'No previous orders',
+    'will reach out to u':'We will reach out to you soon !',
   };
 
   texts(String txt) {

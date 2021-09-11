@@ -22,6 +22,8 @@ class _CheckOutState extends State<CheckOut> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
     dialog(title) {
@@ -61,6 +63,39 @@ class _CheckOutState extends State<CheckOut> {
             );
           });
     }
+
+    final snackBar = SnackBar(
+        content: Container(
+          height: height * 0.08,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    lanProvider.texts('order confirmed'),
+                    style: TextStyle(fontSize: width * 0.04),
+                  ),
+                  Text(
+                    lanProvider.texts('will reach out to u'),
+                    style: TextStyle(fontSize: width * 0.04),
+                  ),
+                ],
+              ),
+              SizedBox(width: width * 0.1),
+              Icon(
+                Icons.check_circle_outline,
+                color: Colors.white,
+                size: 30,
+              ),
+            ],
+          ),
+        ),
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.green,
+        elevation: 5,
+      );
+     showSnackBar() => ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -178,22 +213,20 @@ class _CheckOutState extends State<CheckOut> {
                   : ElevatedButton(
                       onPressed: () async {
                         try {
-                          await provider.addToDB(_note.text).then((value) {
+                          setState(() {
+                            provider.isLoading = true;
+                          });
+                          await provider.addToDB(_note.text);
+                            Navigator.of(context).pushReplacementNamed('MyHomepage');
                             setState(() {
+                              provider.isLoading = false;
                               provider.total = 0.0;
                               provider.checkOut['area'] = "";
                               provider.checkOut['street'] = "";
                               provider.checkOut['phoneNum'] = "";
                               provider.myCart.clear();
                             });
-                            Navigator.of(context).pushReplacementNamed('MyHomepage');
-                            Fluttertoast.showToast(
-                                msg: lanProvider.texts('order confirmed'),
-                                toastLength: Toast.LENGTH_LONG,
-                                backgroundColor: Colors.grey,
-                                textColor: Colors.white,
-                                fontSize: 17.0);
-                          });
+                            showSnackBar();
                         } on FirebaseException catch (e) {
                           dialog(lanProvider.texts('Error occurred !'));
                           setState(() {
