@@ -30,72 +30,140 @@ class _CheckOutState extends State<CheckOut> {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Row(
-                children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 30,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 17),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontSize: 23, color: Colors.red),
+            return Directionality(
+              textDirection:
+                  lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              child: AlertDialog(
+                title: Row(
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      size: 30,
+                      color: Colors.red,
                     ),
-                  ),
+                    const SizedBox(width: 17),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: const TextStyle(fontSize: 23, color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                elevation: 24,
+                content: Container(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  child: const Divider(),
+                  alignment: Alignment.topCenter,
+                ),
+                actions: [
+                  TextButton(
+                      child: Text(lanProvider.texts('ok'),
+                          style: const TextStyle(fontSize: 21)),
+                      onPressed: () => Navigator.of(context).pop()),
                 ],
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 24,
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.05,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                TextButton(
-                    child: Text(lanProvider.texts('ok'),
-                        style: const TextStyle(fontSize: 21)),
-                    onPressed: () => Navigator.of(context).pop()),
-              ],
             );
           });
     }
 
     final snackBar = SnackBar(
-        content: Container(
-          height: height * 0.08,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    lanProvider.texts('order confirmed'),
-                    style: TextStyle(fontSize: width * 0.04),
-                  ),
-                  Text(
-                    lanProvider.texts('will reach out to u'),
-                    style: TextStyle(fontSize: width * 0.04),
-                  ),
-                ],
-              ),
-              SizedBox(width: width * 0.1),
-              Icon(
-                Icons.check_circle_outline,
-                color: Colors.white,
-                size: 30,
-              ),
-            ],
-          ),
+      content: Container(
+        height: height * 0.08,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Text(
+                  lanProvider.texts('order confirmed'),
+                  style: TextStyle(fontSize: width * 0.04),
+                ),
+                Text(
+                  lanProvider.texts('will reach out to u'),
+                  style: TextStyle(fontSize: width * 0.04),
+                ),
+              ],
+            ),
+            SizedBox(width: width * 0.1),
+            Icon(
+              Icons.check_circle_outline,
+              color: Colors.white,
+              size: 30,
+            ),
+          ],
         ),
-        duration: Duration(seconds: 5),
-        backgroundColor: Colors.green,
-        elevation: 5,
-      );
-     showSnackBar() => ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      ),
+      duration: Duration(seconds: 5),
+      backgroundColor: Colors.green,
+      elevation: 5,
+    );
+    showSnackBar() => ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    // lastNote() {
+    //   return showDialog(
+    //       context: context,
+    //       builder: (ctx) {
+    //         return AlertDialog(
+    //           title: Row(
+    //             mainAxisAlignment: MainAxisAlignment.end,
+    //             children: [
+    //               const Icon(Icons.error_outline),
+    //               Expanded(
+    //                 child: Text(
+    //                   lanProvider.texts('alert'),
+    //                   textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+    //                   style: const TextStyle(fontSize: 23, color: Colors.red),
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //           contentPadding: const EdgeInsets.symmetric(vertical: 7),
+    //           elevation: 24,
+    //           content: Container(
+    //             padding: EdgeInsets.all(8),
+    //             height: height * 0.4,
+    //             child: Text(
+    //               lanProvider.texts('last note'),
+    //               style: TextStyle(fontSize: 23),
+    //               textAlign:
+    //                   lanProvider.isEn ? TextAlign.start : TextAlign.end,
+    //             ),
+    //             alignment: Alignment.topCenter,
+    //           ),
+    //           actions: [
+    //             InkWell(
+    //               child: Text(
+    //                 lanProvider.texts('yes?'),
+    //                 style: const TextStyle(fontSize: 19, color: Colors.blue),
+    //               ),
+    //               onTap: () async {
+    //                 setState(() {
+    //                   provider.isLoading = true;
+    //                 });
+    //                 await provider.addToDB(_note.text);
+    //                 Navigator.of(context).pushReplacementNamed('MyHomepage');
+    //                 setState(() {
+    //                   provider.isLoading = false;
+    //                   provider.total = 0.0;
+    //                   provider.checkOut['area'] = "";
+    //                   provider.checkOut['street'] = "";
+    //                   provider.checkOut['phoneNum'] = "";
+    //                   provider.myCart.clear();
+    //                 });
+    //                 showSnackBar();
+    //               },
+    //             ),
+    //             const SizedBox(width: 11),
+    //             InkWell(
+    //                 child: Text(lanProvider.texts('cancel?'),
+    //                     style: const TextStyle(fontSize: 19)),
+    //                 onTap: () => Navigator.of(context).pop()),
+    //           ],
+    //         );
+    //       });
+    // }
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -106,8 +174,9 @@ class _CheckOutState extends State<CheckOut> {
           title: Text(lanProvider.texts('CheckOut')),
         ),
         body: ListView(
+          padding: const EdgeInsets.all(6.0),
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -122,8 +191,9 @@ class _CheckOutState extends State<CheckOut> {
               elevation: 2.0,
               color: Colors.white70,
               child: ListTile(
-                title: Text(provider.checkOut['area']??""),
-                subtitle: Text(lanProvider.texts('street:')+ provider.checkOut['street'] +
+                title: Text(provider.checkOut['area'] ?? ""),
+                subtitle: Text(lanProvider.texts('street:') +
+                    provider.checkOut['street'] +
                     "\n" +
                     lanProvider.texts('phone:') +
                     provider.checkOut['phoneNum']),
@@ -163,6 +233,8 @@ class _CheckOutState extends State<CheckOut> {
                   lanProvider.texts('jd'),
                   style: const TextStyle(fontSize: 16),
                 ),
+                SizedBox(width: width*0.05),
+                Icon(Icons.motorcycle)
               ]),
             ),
             const Divider(thickness: 1),
@@ -203,9 +275,9 @@ class _CheckOutState extends State<CheckOut> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 70),
+              padding: const EdgeInsets.symmetric(horizontal: 80),
               child: provider.isLoading
                   ? const Center(
                       child: const CircularProgressIndicator(),
@@ -217,16 +289,17 @@ class _CheckOutState extends State<CheckOut> {
                             provider.isLoading = true;
                           });
                           await provider.addToDB(_note.text);
-                            Navigator.of(context).pushReplacementNamed('MyHomepage');
-                            setState(() {
-                              provider.isLoading = false;
-                              provider.total = 0.0;
-                              provider.checkOut['area'] = "";
-                              provider.checkOut['street'] = "";
-                              provider.checkOut['phoneNum'] = "";
-                              provider.myCart.clear();
-                            });
-                            showSnackBar();
+                          Navigator.of(context)
+                              .pushReplacementNamed('MyHomepage');
+                          setState(() {
+                            provider.isLoading = false;
+                            provider.total = 0.0;
+                            provider.checkOut['area'] = "";
+                            provider.checkOut['street'] = "";
+                            provider.checkOut['phoneNum'] = "";
+                            provider.myCart.clear();
+                          });
+                          showSnackBar();
                         } on FirebaseException catch (e) {
                           dialog(lanProvider.texts('Error occurred !'));
                           setState(() {
@@ -248,6 +321,10 @@ class _CheckOutState extends State<CheckOut> {
                           backgroundColor:
                               MaterialStateProperty.all(Colors.green)),
                     ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(child: Text(lanProvider.texts('last note'))),
             ),
           ],
         ),

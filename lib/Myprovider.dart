@@ -139,26 +139,78 @@ class MyProvider with ChangeNotifier {
     'file/burger.jpg',
     'file/حمص.jpg',
     'file/حلويات.png',
+    'file/drinks.jpg',
   ];
 
   List<String> areas = <String>[
-    'اختر المنطقة',
-    'حي المستشفى',
-    'حي الزهور',
+    '---اختر المنطقة---',
     'حي الحسين',
-    'الضاحيه',
+    'حي الضباط',
+    'حي الزهور',
+    'حي الأمير حمزة',
+    'حي الحسبان',
+    'شويكة الشرقية',
+    'شويكة الغربية',
+    'السوق',
+    'اول الضاحية',
+    'نص الضاحية',
+    'آخر الضاحية',
+    'حي المعانية',
+    'حي الفدين',
+    'حي المستشفى',
+    'حي نوارة',
     'حي الحياك',
+    'الحي الجنوبي',
+    'الإسكان العسكري',
+    //----
+    'إسكان الجامعة',
+    'إسكان البوابة الجنوبية',
+    //----
+    'إسكان الفقراء',
+    'حي كلثوم',
+    'حي الكويتية',
+    'الحرفية',
+    'الصناعية',
   ];
-  String area = 'اختر المنطقة';
-  List<String> streets = <String>[
-    '-',
-    'شارع احمد',
-    'شارع الزهور',
-    'شارع الحسين',
-    'الضاحيه شارع',
-    'شارع الحياك',
-  ];
-  String street = '-';
+  String area = '---اختر المنطقة---';
+
+  // deliveryPriceOnArea() {
+  //   if (checkOut['area'] == "حي الحسين" ||
+  //       checkOut['area'] == "حي الفدين" ||
+  //       checkOut['area'] == "الحي الجنوبي" ||
+  //       checkOut['area'] == "حي الضباط" ||
+  //       checkOut['area'] == "حي الزهور" ||
+  //       checkOut['area'] == "حي نوارة" ||
+  //       checkOut['area'] == "اول الضاحية" ||
+  //       checkOut['area'] == "حي المستشفى" ||
+  //       checkOut['area'] == "السوق" ||
+  //       checkOut['area'] == "حي المعانية" ||
+  //       checkOut['area'] == "إسكان الفقراء")
+  //     deliveryPrice = 1.00;
+  //   else if (checkOut['area'] == "شويكة الشرقية" ||
+  //       checkOut['area'] == "حي الأمير حمزة" ||
+  //       checkOut['area'] == "نص الضاحية" ||
+  //       checkOut['area'] == "حي الحسبان" ||
+  //       checkOut['area'] == "؟؟؟؟؟" ||
+  //       checkOut['area'] == "حي الحياك" ||
+  //       checkOut['area'] == "الإسكان العسكري")
+  //     deliveryPrice = 1.25;
+  //   else if (checkOut['area'] == "شويكة الغربية" ||
+  //       checkOut['area'] == "آخر الضاحية" ||
+  //       checkOut['area'] == "حي المقام" ||
+  //       checkOut['area'] == "الصناعية" ||
+  //       checkOut['area'] == "المدفعية 12" ||
+  //       checkOut['area'] == "الحرفية" ||
+  //       checkOut['area'] == "مستشفى سارة" ||
+  //       checkOut['area'] == "مستشفى النسائية" ||
+  //       checkOut['area'] == "حي الكويتية" ||
+  //       checkOut['area'] == "اول شارع المنشية" ||
+  //       checkOut['area'] == "حي كلثوم")
+  //     deliveryPrice = 1.50;
+  //   else if (checkOut['area'] == "بير عقلة") deliveryPrice = 2.00;
+  //   notifyListeners();
+  // }
+
 
   Map<String, String> checkOut = {
     'area': ' ',
@@ -419,8 +471,8 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> reorder(total1, dp, note, length, resName, area1, street1,
-      phoneNum) async {
+  Future<void> reorder(
+      total1, dp, note, length, resName, area1, street1, phoneNum) async {
     isLoading = true;
     var uuid = Uuid().v4();
     var user = FirebaseAuth.instance.currentUser;
@@ -680,8 +732,8 @@ class MyProvider with ChangeNotifier {
         authData['email'] = val.data()?['email'];
         authData['password'] = val.data()?['password'];
         authData['name'] = val.data()?['username'];
-        authData['latitude'] = val.data()?['latitude'].toString()??"0";
-        authData['longitude'] = val.data()?['longitude'].toString()??"0";
+        authData['latitude'] = val.data()?['latitude'].toString() ?? "0";
+        authData['longitude'] = val.data()?['longitude'].toString() ?? "0";
         notifyListeners();
       });
   }

@@ -145,10 +145,6 @@ class _MyAddressState extends State<MyAddress> {
                   : Icon(Icons.add),
               onPressed: () => Navigator.of(context).pushNamed('addAddress'),
             ),
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () => print("length = " + provider.loc.length.toString()),
-            ),
           ],
           title: Text(lanProvider.texts('my addresses')),
           centerTitle: true,

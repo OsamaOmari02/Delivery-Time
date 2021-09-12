@@ -89,17 +89,15 @@ class _SweetsState extends State<Sweets> {
                   ),
                   children: [
                     funImage(
-                        'file/grill_house.jpg', "Nafesa"),
+                        'file/نفيسة.jpg', "نفيسة"),
                     funImage(
-                        'file/snap_burger.jpg', "saloon al akhder"),
-                    funImage('file/grill_house.jpg', ""),
-                    funImage('file/grill_house.jpg', ""),
-                    funImage('file/grill_house.jpg', ""),
-                    funImage('file/grill_house.jpg', ""),
-                    funImage('file/grill_house.jpg', ""),
-                    funImage('file/دلع_كرشك.jpg', ""),
-                    funImage('file/grill_house.jpg', ""),
-                    funImage('file/grill_house.jpg', ""),
+                        'file/الصالون الاخضر سوق.jpg', "الصالون الأخضر-السوق"),
+                    funImage(
+                        'file/الصالون الاخضر.jpg', "الصالون الأخضر-شويكة"),
+                    funImage('file/مارشميلو كيك.jpg', "مارشميلو كيك"),
+                    funImage('file/لبناني الشمال.jpg', "لبناني الشمال"),
+                    funImage('file/grill_house.jpg', "انجل"),
+                    funImage('file/كارمن كيك.jpg', "كارمن كيك"),
                   ],
                 ),
               ),

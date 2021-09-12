@@ -15,11 +15,18 @@ class AddAddress extends StatefulWidget {
 class _AddAddressState extends State<AddAddress> {
 
   var _phone = TextEditingController();
+  var _street = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
     _phone.dispose();
+    _street.dispose();
     super.dispose();
+  }
+  @override
+  void initState() {
+    Provider.of<MyProvider>(context,listen: false).area='---اختر المنطقة---';
+    super.initState();
   }
 
   @override
@@ -28,69 +35,98 @@ class _AddAddressState extends State<AddAddress> {
     var provider = Provider.of<MyProvider>(context);
 
     requiredPhone(title, keyboard, value) {
-      return TextFormField(
-        controller: value,
-        validator: (val) {
-          if (val.toString().isEmpty ||
-              !val.toString().startsWith("07") ||
-              val!.length != 10)
-            return lanProvider.texts('invalid');
-          else {
-            return null;
-          }
-        },
-        decoration: InputDecoration(
-          labelText: title,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 9),
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextFormField(
+          controller: value,
+          validator: (val) {
+            if (val.toString().isEmpty ||
+                !val.toString().startsWith("07") ||
+                val!.length != 10)
+              return lanProvider.texts('invalid');
+            else {
+              return null;
+            }
+          },
+          decoration: InputDecoration(
+            labelText: title,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 9),
+            border: OutlineInputBorder(
+                gapPadding: 5, borderRadius: BorderRadius.circular(10)),
+          ),
+          keyboardType: keyboard,
         ),
-        keyboardType: keyboard,
       );
     }
 
     Widget area() {
-      return Container(
-        padding: const EdgeInsets.all(12),
-        child: DropdownButton(
-          isExpanded: true,
-          value: provider.area,
-          items: provider.areas.map((value) {
-            return DropdownMenuItem(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              provider.area = newValue!;
-            });
-          },
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: DropdownButton(
+            iconSize: 30,
+            underline: const SizedBox(),
+            borderRadius: BorderRadius.circular(12),
+            isExpanded: true,
+            value: provider.area,
+            items: provider.areas.map((value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                provider.area = newValue!;
+              });
+            },
+          ),
         ),
       );
     }
 
-    Widget street() {
-      return Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: DropdownButton(
-          isExpanded: true,
-          value: provider.street,
-          items: provider.streets.map((value) {
-            return DropdownMenuItem(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              provider.street = newValue!;
-            });
-          },
+    street(title, keyboard, value) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextFormField(
+          controller: value,
+          decoration: InputDecoration(
+            labelText: title,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 9),
+            border: OutlineInputBorder(
+                gapPadding: 5, borderRadius: BorderRadius.circular(10)),
+          ),
+          keyboardType: keyboard,
         ),
       );
     }
+    // Widget street() {
+    //   return Container(
+    //     padding: const EdgeInsets.all(10),
+    //     decoration: BoxDecoration(
+    //       borderRadius: BorderRadius.circular(12),
+    //     ),
+    //     child: DropdownButton(
+    //       isExpanded: true,
+    //       value: provider.street,
+    //       items: provider.streets.map((value) {
+    //         return DropdownMenuItem(
+    //           value: value,
+    //           child: Text(value),
+    //         );
+    //       }).toList(),
+    //       onChanged: (String? newValue) {
+    //         setState(() {
+    //           provider.street = newValue!;
+    //         });
+    //       },
+    //     ),
+    //   );
+    // }
 
     dialog(title) {
       return showDialog(
@@ -137,6 +173,7 @@ class _AddAddressState extends State<AddAddress> {
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blue,
           centerTitle: true,
           title: Text(lanProvider.texts('new address')),
         ),
@@ -150,11 +187,8 @@ class _AddAddressState extends State<AddAddress> {
                 padding: EdgeInsets.fromLTRB(12,12,12,0),
               ),
               area(),
-              Container(
-                child: Text(lanProvider.texts('street'),style: TextStyle(fontSize: 16),),
-                padding: EdgeInsets.fromLTRB(12,12,12,0),
-              ),
-              street(),
+              street(lanProvider.texts('street'),
+                  TextInputType.text, _street),
               const SizedBox(height: 10),
               requiredPhone(lanProvider.texts('phone number'),
                   TextInputType.number, _phone),
@@ -170,14 +204,14 @@ class _AddAddressState extends State<AddAddress> {
                     : ElevatedButton(
                         onPressed: () async {
                           try {
-                            if (provider.area=="اختر المنطقة")
+                            if (provider.area=="---اختر المنطقة---")
                                return dialog(lanProvider.texts('Choose your area'));
                             if (_formKey.currentState!.validate()) {
                               setState(() {
                                 provider.isLoading = true;
                               });
                               await provider
-                                  .add(provider.area, provider.street, _phone.text)
+                                  .add(provider.area, _street.text, _phone.text)
                                   .then((_) => Navigator.of(context).pop());
                               Fluttertoast.showToast(
                                   msg: lanProvider.texts('Address Added'),

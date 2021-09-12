@@ -21,10 +21,10 @@ class _DetailsHistoryState extends State<DetailsHistory> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('التفاصيل'),
+          title: Text(lanProvider.texts('details')),
           centerTitle: true,
         ),
         drawer: MyDrawer(),
@@ -43,10 +43,10 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               color: Colors.white70,
               child: ListTile(
                 title: Text(provider.details['area'] ?? ""),
-                subtitle: Text('الشارع : ' +
+                subtitle: Text(lanProvider.texts('street') +
                     provider.details['street']! +
                     "\n" +
-                    'رقم الهاتف : ' +
+                    lanProvider.texts('phone:') +
                     provider.details['phoneNum']!),
                 isThreeLine: true,
               ),
@@ -68,11 +68,11 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                   elevation: 3.0,
                   child: ListTile(
                     title: Text(
-                        'اسم الوجبة : ' + provider.detailedCart[i].mealName),
-                    subtitle: Text('سعر الوجبة : ' +
+                        provider.detailedCart[i].mealName),
+                    subtitle: Text(lanProvider.texts('meal price : ') +
                         provider.detailedCart[i].mealPrice.toString() +
-                        " د.أ\n" +
-                        'الكمية : ' +
+                        " ${lanProvider.texts('jd')}\n" +
+                        lanProvider.texts('quantity : ') +
                         provider.detailedCart[i].quantity.toString()),
                     isThreeLine: true,
                   ),
@@ -83,7 +83,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
-                  'سعر الوجبات : ',
+                  lanProvider.texts('cart total :'),
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -91,7 +91,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  'د.أ',
+                  lanProvider.texts('jd'),
                   style: const TextStyle(fontSize: 16),
                 ),
               ]),
@@ -100,7 +100,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
-                  'سعر التوصيل : ',
+                  lanProvider.texts('delivery price'),
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -108,7 +108,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  'د.أ',
+                  lanProvider.texts('jd'),
                   style: const TextStyle(fontSize: 16),
                 ),
               ]),
@@ -121,7 +121,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      const Text('الملاحظات : '),
+                      Text(lanProvider.texts('note')),
                       Expanded(child: Text(provider.details['note']!)),
                     ],
                   ),

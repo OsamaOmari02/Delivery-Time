@@ -244,6 +244,7 @@ class _RegisterViewState extends State<Register> {
                     'email': _emailController.text.trim(),
                     'username':_usernameController.text,
                     'password':_passwordController.text,
+                    'isAdmin':false,
                   });
                   setState(() {
                     provider.authState = authStatus.Authenticated;

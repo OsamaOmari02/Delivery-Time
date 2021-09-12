@@ -6,12 +6,12 @@ import 'package:provider/provider.dart';
 
 import 'Myprovider.dart';
 
-class Homos extends StatefulWidget {
+class Drinks extends StatefulWidget {
   @override
-  _HomosState createState() => _HomosState();
+  _DrinksState createState() => _DrinksState();
 }
 
-class _HomosState extends State<Homos> {
+class _DrinksState extends State<Drinks> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -48,7 +48,7 @@ class _HomosState extends State<Homos> {
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(lanProvider.texts('homos & falafel')),
+          title: Text(lanProvider.texts('drinks')),
           centerTitle: true,
         ),
         body: ListView(
@@ -57,7 +57,7 @@ class _HomosState extends State<Homos> {
               height: height * 0.3,
               width: double.infinity,
               child: Container(
-                child: Image.asset(provider.imageFun[1], fit: BoxFit.cover),
+                child: Image.asset(provider.imageFun[3], fit: BoxFit.fill),
               ),
             ),
             SizedBox(height: height * 0.03),
@@ -66,7 +66,7 @@ class _HomosState extends State<Homos> {
                 SizedBox(width: width * 0.03),
                 Expanded(
                   child: Text(
-                    lanProvider.texts('choose ur..'),
+                    lanProvider.texts('choose ur sweet'),
                     maxLines: 2,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: width * 0.055),
@@ -86,16 +86,10 @@ class _HomosState extends State<Homos> {
                     childAspectRatio: 3 / 2,
                   ),
                   children: [
-                    funImage('file/grill_house.jpg', "هون وبس"),
-                    funImage('file/snap_burger.jpg', "زورونا"),
-                    // funImage('file/grill_house.jpg', ""),
-                    // funImage('file/grill_house.jpg', ""),
-                    // funImage('file/grill_house.jpg', ""),
-                    // funImage('file/grill_house.jpg', ""),
-                    // funImage('file/grill_house.jpg', ""),
-                    // funImage('file/دلع_كرشك.jpg', ""),
-                    // funImage('file/grill_house.jpg', ""),
-                    // funImage('file/grill_house.jpg', ""),
+                    funImage('file/grill_house.jpg', "الحفرة"),
+                    funImage('file/snap_burger.jpg', "الحايك"),
+                    funImage('file/شريان.jpg', "شريان"),
+                    funImage('file/تريند.jpg', "ترند"),
                   ],
                 ),
               ),

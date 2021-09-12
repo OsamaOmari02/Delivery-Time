@@ -1,5 +1,4 @@
 // @dart=2.9
-import 'dart:developer';
 
 import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
@@ -14,6 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+
 import 'Addaddress.dart';
 import 'CheckOut.dart';
 import 'Details.dart';
@@ -22,18 +23,17 @@ import 'Drawer.dart';
 import 'LanguageProvider.dart';
 import 'Location.dart';
 import 'LogIn.dart';
+import 'MyHistory.dart';
 import 'Myaddress.dart';
 import 'PassWord.dart';
 import 'ResetPassword.dart';
 import 'Shawarma.dart';
 import 'Shopping_cart.dart';
-import 'MyHistory.dart';
-import 'package:provider/provider.dart';
-
 import 'SignUp.dart';
 import 'UserState.dart';
 import 'about.dart';
 import 'callCenter.dart';
+import 'drinks.dart';
 import 'homos.dart';
 import 'homos_screen.dart';
 
@@ -106,6 +106,7 @@ class _MyAppState extends State<MyApp> {
         'details': (context) => Details(),
         'location': (context) => Locations(),
         'detailsHistory': (context) => DetailsHistory(),
+        'drinks': (context) => Drinks(),
       },
     );
   }
@@ -246,6 +247,7 @@ class _MyHomepageState extends State<MyHomepage> {
                     Image.asset(provider.imageFun[0], fit: BoxFit.cover),
                     Image.asset(provider.imageFun[1], fit: BoxFit.cover),
                     Image.asset(provider.imageFun[2], fit: BoxFit.cover),
+                    Image.asset(provider.imageFun[3], fit: BoxFit.fill),
                   ],
                   dotColor: Colors.white,
                   dotSize: 5,
@@ -281,6 +283,7 @@ class _MyHomepageState extends State<MyHomepage> {
                         'shawarmaScreen'),
                     content('file/حمص.jpg', "homos & falafel", 'homos'),
                     content('file/حلويات.png', "Sweets", 'sweets'),
+                    content('file/drinks.jpg', "drinks", 'drinks'),
                   ],
                 ),
               ),
@@ -312,16 +315,17 @@ class _MyHomepageState extends State<MyHomepage> {
                       childAspectRatio: 1.5,
                     ),
                     children: [
-                      funImage('file/grill_house.jpg', "Grill House"),
-                      funImage('file/snap_burger.jpg', "Snap Burger"),
-                      funImage('file/grill_house.jpg', ""),
-                      funImage('file/grill_house.jpg', ""),
-                      funImage('file/grill_house.jpg', ""),
-                      funImage('file/grill_house.jpg', ""),
-                      funImage('file/grill_house.jpg', ""),
-                      funImage('file/دلع_كرشك.jpg', ""),
-                      funImage('file/grill_house.jpg', ""),
-                      funImage('file/grill_house.jpg', ""),
+                      funImage('file/بيتزا المفرق.jpg', "بيتزا المفرق"),
+                      funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
+                      funImage('file/قايد حضر موت.jpg', "قايد حضر موت"),
+                      funImage('file/ارزه لبنان.jpg', "ارزه لبنان"),
+                      funImage('file/grill_house.jpg', "الغزاوي"),
+                      funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
+                      funImage('file/الدويري.jpg', "الدويري"),
+                      funImage('file/دلع_كرشك.jpg', "مطعم ابو جمال"),
+                      funImage('file/ابو قاسم.jpg', "ابو قاسم"),
+                      funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
+                      funImage('file/دلع_كرشك.jpg', "دلع كرشك"),
                     ],
                   ),
                 ),
