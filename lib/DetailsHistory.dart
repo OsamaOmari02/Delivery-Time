@@ -40,7 +40,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               elevation: 2.0,
-              color: Colors.white70,
+              color: provider.isDark? Colors.grey[170]:Colors.white70,
               child: ListTile(
                 title: Text(provider.details['area'] ?? ""),
                 subtitle: Text(lanProvider.texts('street') +
@@ -116,7 +116,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Card(
-                color: Colors.greenAccent,
+                color: provider.isDark? Colors.grey[170]:Colors.greenAccent,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(

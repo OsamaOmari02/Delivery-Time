@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'LanguageProvider.dart';
 
-class Store extends StatefulWidget {
+class ShawarmaScreen extends StatefulWidget {
   @override
-  _StoreState createState() => _StoreState();
+  _ShawarmaScreenState createState() => _ShawarmaScreenState();
 }
 
-class _StoreState extends State<Store> {
+class _ShawarmaScreenState extends State<ShawarmaScreen> {
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {

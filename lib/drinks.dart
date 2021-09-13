@@ -25,7 +25,7 @@ class _DrinksState extends State<Drinks> {
           setState(() {
             provider.restaurantName = title;
           });
-          Navigator.of(context).pushNamed('homosScreen');
+          Navigator.of(context).pushNamed('drinksScreen');
         },
         title: Image.asset(
           image,
@@ -35,9 +35,9 @@ class _DrinksState extends State<Drinks> {
         subtitle: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Text(title,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
+              style: TextStyle(
+                  color: provider.isDark? Colors.white:Colors.black,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.center),
         ),
@@ -86,8 +86,8 @@ class _DrinksState extends State<Drinks> {
                     childAspectRatio: 3 / 2,
                   ),
                   children: [
-                    funImage('file/grill_house.jpg', "الحفرة"),
-                    funImage('file/snap_burger.jpg', "الحايك"),
+                    funImage('file/الحفره.jpg', "الحفرة"),
+                    funImage('file/الحايك.jpg', "الحايك"),
                     funImage('file/شريان.jpg', "شريان"),
                     funImage('file/تريند.jpg', "ترند"),
                   ],

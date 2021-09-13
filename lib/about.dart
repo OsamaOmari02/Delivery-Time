@@ -78,8 +78,6 @@ class _AboutState extends State<About> {
                 ),
               ],
             ),
-            SizedBox(height: height*0.4),
-            Text("Developed by: Osama Bassam Omari",style: const TextStyle(color: Colors.grey)),
           ]),
         ),
       ),

@@ -155,7 +155,7 @@ class _HistoryState extends State<History> {
       backgroundColor: Colors.green,
       elevation: 5,
     );
-     showSnackBar()=> ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    showSnackBar() => ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -257,7 +257,7 @@ class _HistoryState extends State<History> {
                                               lanProvider.texts('yes?'),
                                               style: const TextStyle(
                                                   fontSize: 19,
-                                                  color: Colors.red),
+                                                  color: Colors.blue),
                                             ),
                                             onTap: () async {
                                               try {
@@ -324,6 +324,7 @@ class _HistoryState extends State<History> {
                                             child: Text(
                                                 lanProvider.texts('cancel?'),
                                                 style: const TextStyle(
+                                                    color: Colors.red,
                                                     fontSize: 19)),
                                             onTap: () =>
                                                 Navigator.of(context).pop()),

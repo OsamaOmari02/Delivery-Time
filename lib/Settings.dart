@@ -150,17 +150,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             Divider(thickness: 0.6),
-            ListTile(
-              leading: const Icon(Icons.star_rate_outlined),
-              title: InkWell(
-                child: Text(lanProvider.texts('rate app'),
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () {
-                  //  TODO add the link of the application
-                },
-              ),
-            ),
+            // ListTile(
+            //   leading: const Icon(Icons.star_rate_outlined),
+            //   title: InkWell(
+            //     child: Text(lanProvider.texts('rate app'),
+            //         style: TextStyle(
+            //             fontWeight: FontWeight.w600, fontSize: width * 0.055)),
+            //     onTap: () {
+            //       //  TODO add the link of the application
+            //     },
+            //   ),
+            // ),
+            // ListTile(
+            //   leading: const Icon(Icons.share),
+            //   title: InkWell(
+            //     child: Text(lanProvider.texts('share app'),
+            //         style: TextStyle(
+            //             fontWeight: FontWeight.w600, fontSize: width * 0.055)),
+            //     onTap: () {
+            //       //  TODO share app
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

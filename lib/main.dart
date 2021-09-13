@@ -4,7 +4,7 @@ import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
 import 'package:app/Settings.dart';
-import 'package:app/res_screen.dart';
+import 'package:app/shawarma_screen.dart';
 import 'package:app/sweets.dart';
 import 'package:app/sweets_screen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -26,6 +26,7 @@ import 'LogIn.dart';
 import 'MyHistory.dart';
 import 'Myaddress.dart';
 import 'PassWord.dart';
+import 'ResScreen.dart';
 import 'ResetPassword.dart';
 import 'Shawarma.dart';
 import 'Shopping_cart.dart';
@@ -34,6 +35,7 @@ import 'UserState.dart';
 import 'about.dart';
 import 'callCenter.dart';
 import 'drinks.dart';
+import 'drinks_screen.dart';
 import 'homos.dart';
 import 'homos_screen.dart';
 
@@ -55,13 +57,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).getDarkMode();
-    Provider.of<MyProvider>(context,listen: false).getAdmin();
+    Provider.of<MyProvider>(context, listen: false).getAdmin();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -73,11 +75,12 @@ class _MyAppState extends State<MyApp> {
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
         canvasColor: Colors.white,
-        accentColor: Colors.orangeAccent,
         floatingActionButtonTheme:
             FloatingActionButtonThemeData(backgroundColor: Colors.blue),
+        colorScheme:
+            ColorScheme.fromSwatch().copyWith(secondary: Colors.orangeAccent),
       ),
-      darkTheme: ThemeData(brightness: Brightness.dark),
+      darkTheme: ThemeData(brightness: Brightness.dark,accentColor: Colors.white),
       routes: {
         'MyHomepage': (context) => MyHomepage(),
         'Signup': (context) => Register(),
@@ -91,7 +94,6 @@ class _MyAppState extends State<MyApp> {
         'Shopping': (context) => Shopping(),
         'myHistory': (context) => History(),
         'addAddress': (context) => AddAddress(),
-        'resScreen': (context) => Store(),
         'Email': (context) => Email(),
         'Name': (context) => Name(),
         'about': (context) => About(),
@@ -101,12 +103,15 @@ class _MyAppState extends State<MyApp> {
         'homosScreen': (context) => HomosScreen(),
         'sweets': (context) => Sweets(),
         'sweetScreen': (context) => SweetScreen(),
-        'shawarmaScreen': (context) => Shawarma(),
-        'callCenter':(context) => CallCenter(),
+        'shawarma': (context) => Shawarma(),
+        'shawarmaScreen': (context) => ShawarmaScreen(),
+        'drinks': (context) => Drinks(),
+        'drinksScreen': (context) => DrinksScreen(),
+        'resScreen': (context) => MainResScreen(),
+        'callCenter': (context) => CallCenter(),
         'details': (context) => Details(),
         'location': (context) => Locations(),
         'detailsHistory': (context) => DetailsHistory(),
-        'drinks': (context) => Drinks(),
       },
     );
   }
@@ -136,24 +141,28 @@ class _MyHomepageState extends State<MyHomepage> {
 
     Widget funImage(image, title) {
       return ListTile(
-            onTap: () {
-              setState(() {
-                provider.restaurantName = title;
-              });
-              Navigator.of(context).pushNamed('resScreen');
-            },
-            title: Image.asset(
-              image,
-              height: height * 0.135,
-              fit: BoxFit.fill,
-            ),
-            subtitle: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Text(title,
-                  style: const TextStyle(color: Colors.black, fontSize: 15,fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center),
-            ),
-          );
+        onTap: () {
+          setState(() {
+            provider.restaurantName = title;
+          });
+          Navigator.of(context).pushNamed('resScreen');
+        },
+        title: Image.asset(
+          image,
+          height: height * 0.135,
+          fit: BoxFit.fill,
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text(title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: provider.isDark ? Colors.white : Colors.black,
+              ),
+              textAlign: TextAlign.center),
+        ),
+      );
     }
 
     Widget content(image, String title, route) {
@@ -173,7 +182,9 @@ class _MyHomepageState extends State<MyHomepage> {
               subtitle: Container(
                 padding: EdgeInsets.symmetric(vertical: height * 0.015),
                 child: Text(lanProvider.texts(title),
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                    style: TextStyle(
+                        color: provider.isDark ? Colors.white : Colors.black,
+                        fontSize: 17),
                     textAlign: TextAlign.center),
               ),
             ),
@@ -279,8 +290,8 @@ class _MyHomepageState extends State<MyHomepage> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    content('file/shawarmah.jpg', "Shawarma & snacks",
-                        'shawarmaScreen'),
+                    content(
+                        'file/shawarmah.jpg', "Shawarma & snacks", 'shawarma'),
                     content('file/حمص.jpg', "homos & falafel", 'homos'),
                     content('file/حلويات.png', "Sweets", 'sweets'),
                     content('file/drinks.jpg', "drinks", 'drinks'),
@@ -319,10 +330,10 @@ class _MyHomepageState extends State<MyHomepage> {
                       funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
                       funImage('file/قايد حضر موت.jpg', "قايد حضر موت"),
                       funImage('file/ارزه لبنان.jpg', "ارزه لبنان"),
-                      funImage('file/grill_house.jpg', "الغزاوي"),
+                      funImage('file/الغزاوي.jpg', " الرائد الغزاوي"),
                       funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
                       funImage('file/الدويري.jpg', "الدويري"),
-                      funImage('file/دلع_كرشك.jpg', "مطعم ابو جمال"),
+                      funImage('file/ابو جمال.jpg', "مطعم ابو جمال"),
                       funImage('file/ابو قاسم.jpg', "ابو قاسم"),
                       funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
                       funImage('file/دلع_كرشك.jpg', "دلع كرشك"),

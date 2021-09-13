@@ -35,9 +35,9 @@ class _HomosState extends State<Homos> {
         subtitle: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Text(title,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
+              style: TextStyle(
+                  color: provider.isDark? Colors.white:Colors.black,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.center),
         ),
@@ -86,8 +86,8 @@ class _HomosState extends State<Homos> {
                     childAspectRatio: 3 / 2,
                   ),
                   children: [
-                    funImage('file/grill_house.jpg', "هون وبس"),
-                    funImage('file/snap_burger.jpg', "زورونا"),
+                    funImage('file/هون وبس.jpg', "هون وبس"),
+                    funImage('file/زورونا.jpg', "زورونا"),
                     // funImage('file/grill_house.jpg', ""),
                     // funImage('file/grill_house.jpg', ""),
                     // funImage('file/grill_house.jpg', ""),
