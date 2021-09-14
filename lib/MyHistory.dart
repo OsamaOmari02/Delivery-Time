@@ -126,7 +126,7 @@ class _HistoryState extends State<History> {
 
     final snackBar = SnackBar(
       content: Container(
-        height: height * 0.08,
+        height: height * 0.081,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -134,11 +134,11 @@ class _HistoryState extends State<History> {
               children: [
                 Text(
                   lanProvider.texts('order confirmed'),
-                  style: TextStyle(fontSize: width * 0.04),
+                  style: TextStyle(fontSize: width * 0.032),
                 ),
                 Text(
                   lanProvider.texts('will reach out to u'),
-                  style: TextStyle(fontSize: width * 0.04),
+                  style: TextStyle(fontSize: width * 0.03),
                 ),
               ],
             ),
@@ -226,7 +226,9 @@ class _HistoryState extends State<History> {
                                         ['meal price'],
                                     quantity: resData[index]['meals'][i]
                                         ['quantity'],
-                                    foodID: resData[index].id));
+                                    foodID: resData[index].id,
+                                    description: resData[index]['meals'][i]
+                                    ['description'],));
                               Navigator.of(context)
                                   .pushReplacementNamed('detailsHistory');
                             },
@@ -281,7 +283,10 @@ class _HistoryState extends State<History> {
                                                       quantity: resData[index]
                                                               ['meals'][i]
                                                           ['quantity'],
-                                                      foodID: resData[index].id));
+                                                      foodID: resData[index].id,
+                                                      description: resData[index]
+                                                      ['meals'][i]
+                                                      ['description']));
                                                 Navigator.of(context).pop();
                                                 await provider.reorder(
                                                   resData[index]['total'],

@@ -54,9 +54,11 @@ class FoodCart {
   final mealName;
   final mealPrice;
   final resName;
+  final description;
 
   FoodCart(
-      {required this.resName,
+      {required this.description,
+      required this.resName,
       required this.mealName,
       required this.mealPrice,
       required this.quantity,
@@ -80,34 +82,6 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // getDarkMode() async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .get()
-  //       .then((value) {
-  //     isDark = value.data()!['darkMode'] ? true : false;
-  //     notifyListeners();
-  //   });
-  //
-  //   notifyListeners();
-  // }
-  //
-  // void setDarkMode(bool val) async {
-  //   isDark = val;
-  //   notifyListeners();
-  // }
-
-  // setCheckedBox(value) async{
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   pref.setBool('checkBox', value);
-  //   notifyListeners();
-  // }
-
-  getCheckedBox(value) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getBool(value);
-  }
 
   //----------------------intl package-----------------------
 
@@ -210,7 +184,6 @@ class MyProvider with ChangeNotifier {
   //   else if (checkOut['area'] == "بير عقلة") deliveryPrice = 2.00;
   //   notifyListeners();
   // }
-
 
   Map<String, String> checkOut = {
     'area': ' ',
@@ -346,13 +319,6 @@ class MyProvider with ChangeNotifier {
   List<FoodCart> myCart = [];
 
   double total = 0.00;
-  int numOfRestaurants = 0;
-
-  void numberOfRests() {
-    for (int i = 0; i < myCart.length; i++) {
-      //  TODO عدد المطاعم المختلفه
-    }
-  }
 
   addPrice(price) {
     total += price;
@@ -384,13 +350,14 @@ class MyProvider with ChangeNotifier {
               foodID: element.id,
               mealPrice: element['meal name'],
               mealName: element['meal price'],
-              resName: restaurantName));
+              resName: restaurantName,
+              description: element['description']));
       });
     });
     notifyListeners();
   }
 
-  Future<void> addFoodCart(String mealName, String price) async {
+  Future<void> addFoodCart(String mealName, String price,desc) async {
     bool exists = myCart.any((element) => element.foodID == mealID);
     if (!exists)
       myCart.add(FoodCart(
@@ -398,7 +365,8 @@ class MyProvider with ChangeNotifier {
           foodID: mealID,
           mealName: mealName,
           mealPrice: price,
-          resName: restaurantName));
+          resName: restaurantName,
+          description: desc));
     else {
       int index = myCart.indexWhere((element) => element.foodID == mealID);
       myCart[index].quantity++;
@@ -407,12 +375,13 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> removeFoodCart() async {
+  Future<void> removeFoodCart(price) async {
     int index = myCart.indexWhere((element) => element.foodID == mealID);
     if (myCart[index].quantity == 1)
       myCart.removeAt(index);
     else
       myCart[index].quantity--;
+    subtractPrice(double.parse(price));
     notifyListeners();
   }
 
@@ -441,6 +410,7 @@ class MyProvider with ChangeNotifier {
             'meal name': myCart[i].mealName,
             'meal price': myCart[i].mealPrice,
             'quantity': myCart[i].quantity,
+            'description': myCart[i].description,
           }
       ],
     });
@@ -448,6 +418,7 @@ class MyProvider with ChangeNotifier {
       'date': DateTime.now(),
       'total': total,
       'note': note,
+      'isChecked': false,
       'resName': myCart[0].resName,
       'length': myCart.length,
       'details': {
@@ -464,6 +435,7 @@ class MyProvider with ChangeNotifier {
             'meal name': myCart[i].mealName,
             'meal price': myCart[i].mealPrice,
             'quantity': myCart[i].quantity,
+            'description': myCart[i].description,
           }
       ],
     });
@@ -497,6 +469,7 @@ class MyProvider with ChangeNotifier {
             'meal name': myCart[i].mealName,
             'meal price': myCart[i].mealPrice,
             'quantity': myCart[i].quantity,
+            'description': myCart[i].description,
           }
       ],
     });
@@ -504,6 +477,7 @@ class MyProvider with ChangeNotifier {
       'date': DateTime.now(),
       'total': total1,
       'note': note,
+      'isChecked': false,
       'resName': resName,
       'length': length,
       'details': {
@@ -520,6 +494,7 @@ class MyProvider with ChangeNotifier {
             'meal name': myCart[i].mealName,
             'meal price': myCart[i].mealPrice,
             'quantity': myCart[i].quantity,
+            'description': myCart[i].description,
           }
       ],
     });
@@ -607,6 +582,7 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
+
   Future<void> fetchMealsDrinks(title) async {
     await FirebaseFirestore.instance
         .collection('drinks/$title/meals')
@@ -625,6 +601,7 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
+
   Future<void> fetchMealsMain(title) async {
     await FirebaseFirestore.instance
         .collection('mainRes/$title/meals')
@@ -689,60 +666,6 @@ class MyProvider with ChangeNotifier {
               id: element.id,
               resName: title));
       });
-    });
-    notifyListeners();
-  }
-
-  Future<void> addMeal(
-      String mealName, String price, String desc, type, tab) async {
-    isLoading = true;
-    var uuid = Uuid().v4();
-    await FirebaseFirestore.instance
-        .collection('$type/$restaurantName/$tab')
-        .doc(uuid)
-        .set({
-      'meal name': mealName,
-      'meal price': price,
-      'description': desc,
-      'resName': restaurantName,
-    }).then((value) {
-      mealIDs.add(Meals(
-          id: uuid,
-          mealPrice: price,
-          mealName: mealName,
-          description: desc,
-          resName: restaurantName));
-    });
-    notifyListeners();
-  }
-
-  deleteMeal(type, tab) async {
-    isLoading = true;
-    final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
-    await FirebaseFirestore.instance
-        .collection('$type/$restaurantName/$tab')
-        .doc(mealID)
-        .delete()
-        .then((value) {
-      mealIDs.removeAt(mealIndex);
-    });
-    notifyListeners();
-  }
-
-  editMeal(String mealName, price, String desc, type, tab) async {
-    isLoading = true;
-    final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
-    await FirebaseFirestore.instance
-        .collection('$type/$restaurantName/$tab')
-        .doc(mealID)
-        .update({
-      'meal name': mealName,
-      'meal price': price,
-      'description': desc,
-    }).then((value) {
-      mealIDs[mealIndex].mealName = mealName;
-      mealIDs[mealIndex].mealPrice = price;
-      mealIDs[mealIndex].description = desc;
     });
     notifyListeners();
   }

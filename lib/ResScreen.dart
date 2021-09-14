@@ -81,14 +81,14 @@ class _MainResScreenState extends State<MainResScreen> {
               .collection('/mainRes/${provider.restaurantName}/meals')
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return Center(child: const CircularProgressIndicator());
+            // if (snapshot.connectionState == ConnectionState.waiting)
+            //   return Center(child: const CircularProgressIndicator());
             if (snapshot.hasError)
               return Center(
                   child: Text(lanProvider.texts('something went wrong !')));
             return Scrollbar(
               child: ListView.builder(
-                itemCount: snapshot.data!.docs.length,
+                itemCount: snapshot.data?.docs.length??0,
                 itemBuilder: (context, int index) {
                   var resData = snapshot.data!.docs;
                   return Card(
@@ -116,7 +116,7 @@ class _MainResScreenState extends State<MainResScreen> {
                                           provider.isLoading = true;
                                           provider.mealID = resData[index].id;
                                         });
-                                        provider.toggleFavourite();
+                                        await provider.toggleFavourite();
                                         setState(() {
                                           provider.isLoading = false;
                                         });
@@ -196,9 +196,7 @@ class _MainResScreenState extends State<MainResScreen> {
                                 setState(() {
                                   provider.mealID = resData[index].id;
                                 });
-                                provider.removeFoodCart();
-                                provider.subtractPrice(double.parse(
-                                    resData[index]['meal price']));
+                                await provider.removeFoodCart(resData[index]['meal price']);
                               },
                             )
                                 : Container(),
@@ -225,7 +223,7 @@ class _MainResScreenState extends State<MainResScreen> {
                                         lanProvider.texts('foodCart'));
                                   provider.addFoodCart(
                                       resData[index]['meal name'],
-                                      resData[index]['meal price']);
+                                      resData[index]['meal price'],resData[index]['description']);
                                 }),
                           ],
                         ),

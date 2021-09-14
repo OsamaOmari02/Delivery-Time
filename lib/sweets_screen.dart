@@ -159,14 +159,14 @@ class _FirstState extends State<First> {
           .collection('sweets/${provider.restaurantName}/kunafeh')
           .snapshots(),
       builder: (ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return Center(child: CircularProgressIndicator());
+        // if (snapshot.connectionState == ConnectionState.waiting)
+        //   return Center(child: CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(
               child: Text(lanProvider.texts('something went wrong !')));
         return Scrollbar(
           child: ListView.builder(
-            itemCount: snapshot.data!.docs.length,
+            itemCount: snapshot.data?.docs.length??0,
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return Card(
@@ -194,7 +194,7 @@ class _FirstState extends State<First> {
                                       provider.isLoading = true;
                                       provider.mealID = resData[index].id;
                                     });
-                                    provider.toggleFavourite();
+                                    await provider.toggleFavourite();
                                     setState(() {
                                       provider.isLoading = false;
                                     });
@@ -274,9 +274,7 @@ class _FirstState extends State<First> {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  provider.removeFoodCart();
-                                  provider.subtractPrice(double.parse(
-                                      resData[index]['meal price']));
+                                  await provider.removeFoodCart(resData[index]['meal price']);
                                 },
                               )
                             : Container(),
@@ -299,7 +297,7 @@ class _FirstState extends State<First> {
                               if (provider.myCart.length!=0 && provider.restaurantName!=provider.myCart[0].resName)
                                 return dialog(lanProvider.texts('foodCart'));
                               await provider.addFoodCart(resData[index]['meal name'],
-                                  resData[index]['meal price']);
+                                  resData[index]['meal price'],resData[index]['description']);
                             }),
                       ],
                     ),
@@ -377,14 +375,14 @@ class _SecondState extends State<Second> {
           .collection('sweets/${provider.restaurantName}/cake')
           .snapshots(),
       builder: (ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return Center(child: CircularProgressIndicator());
+        // if (snapshot.connectionState == ConnectionState.waiting)
+        //   return Center(child: CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(
               child: Text(lanProvider.texts('something went wrong !')));
         return Scrollbar(
           child: ListView.builder(
-            itemCount: snapshot.data!.docs.length,
+            itemCount: snapshot.data?.docs.length??0,
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return Card(
@@ -412,7 +410,7 @@ class _SecondState extends State<Second> {
                                       provider.isLoading = true;
                                       provider.mealID = resData[index].id;
                                     });
-                                    provider.toggleFavourite();
+                                    await provider.toggleFavourite();
                                     setState(() {
                                       provider.isLoading = false;
                                     });
@@ -492,9 +490,7 @@ class _SecondState extends State<Second> {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  provider.removeFoodCart();
-                                  provider.subtractPrice(double.parse(
-                                      resData[index]['meal price']));
+                                  await provider.removeFoodCart(resData[index]['meal price']);
                                 },
                               )
                             : Container(),
@@ -514,10 +510,8 @@ class _SecondState extends State<Second> {
                               setState(() {
                                 provider.mealID = resData[index].id;
                               });
-                              provider.addFoodCart(resData[index]['meal name'],
-                                  resData[index]['meal price']);
-                              await provider.addPrice(
-                                  double.parse(resData[index]['meal price']));
+                              await provider.addFoodCart(resData[index]['meal name'],
+                                  resData[index]['meal price'],resData[index]['description']);
                             }),
                       ],
                     ),
@@ -578,14 +572,14 @@ class _ThirdState extends State<Third> {
           .collection('sweets/${provider.restaurantName}/others')
           .snapshots(),
       builder: (ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return Center(child: CircularProgressIndicator());
+        // if (snapshot.connectionState == ConnectionState.waiting)
+        //   return Center(child: CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(
               child: Text(lanProvider.texts('something went wrong !')));
         return Scrollbar(
           child: ListView.builder(
-            itemCount: snapshot.data!.docs.length,
+            itemCount: snapshot.data?.docs.length??0,
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return Card(
@@ -613,7 +607,7 @@ class _ThirdState extends State<Third> {
                                       provider.isLoading = true;
                                       provider.mealID = resData[index].id;
                                     });
-                                    provider.toggleFavourite();
+                                    await provider.toggleFavourite();
                                     setState(() {
                                       provider.isLoading = false;
                                     });
@@ -693,9 +687,7 @@ class _ThirdState extends State<Third> {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  provider.removeFoodCart();
-                                  provider.subtractPrice(double.parse(
-                                      resData[index]['meal price']));
+                                  await provider.removeFoodCart(resData[index]['meal price']);
                                 },
                               )
                             : Container(),
@@ -715,10 +707,8 @@ class _ThirdState extends State<Third> {
                               setState(() {
                                 provider.mealID = resData[index].id;
                               });
-                              provider.addFoodCart(resData[index]['meal name'],
-                                  resData[index]['meal price']);
-                              await provider.addPrice(
-                                  double.parse(resData[index]['meal price']));
+                              await provider.addFoodCart(resData[index]['meal name'],
+                                  resData[index]['meal price'],resData[index]['description']);
                             }),
                       ],
                     ),

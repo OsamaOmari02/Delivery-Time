@@ -86,6 +86,7 @@ class _DrinksState extends State<Drinks> {
                     childAspectRatio: 3 / 2,
                   ),
                   children: [
+                    funImage('file/لبناني الشمال.jpg', "لبناني الشمال"),
                     funImage('file/الحفره.jpg', "الحفرة"),
                     funImage('file/الحايك.jpg', "الحايك"),
                     funImage('file/شريان.jpg', "شريان"),

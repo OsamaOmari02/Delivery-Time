@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'Drawer.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -75,16 +75,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     TextButton(
                         onPressed: () async =>
-                            await FlutterPhoneDirectCaller.callNumber(
-                                0789259915.toString()),
+                            await launch('tel://${0789259915}'),
                         child: const Text(
                           "0789259915",
                           style: const TextStyle(fontSize: 18),
                         )),
                     TextButton(
                         onPressed: () async =>
-                            await FlutterPhoneDirectCaller.callNumber(
-                                0789259915.toString()),
+                            await launch('tel://${0789259915}'),
                         child: const Text(
                           "0789259915",
                           style: const TextStyle(fontSize: 18),

@@ -78,11 +78,11 @@ class _CheckOutState extends State<CheckOut> {
               children: [
                 Text(
                   lanProvider.texts('order confirmed'),
-                  style: TextStyle(fontSize: width * 0.04),
+                  style: TextStyle(fontSize: width * 0.033),
                 ),
                 Text(
                   lanProvider.texts('will reach out to u'),
-                  style: TextStyle(fontSize: width * 0.04),
+                  style: TextStyle(fontSize: width * 0.032),
                 ),
               ],
             ),
@@ -95,75 +95,11 @@ class _CheckOutState extends State<CheckOut> {
           ],
         ),
       ),
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 4),
       backgroundColor: Colors.green,
       elevation: 5,
     );
     showSnackBar() => ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-    // lastNote() {
-    //   return showDialog(
-    //       context: context,
-    //       builder: (ctx) {
-    //         return AlertDialog(
-    //           title: Row(
-    //             mainAxisAlignment: MainAxisAlignment.end,
-    //             children: [
-    //               const Icon(Icons.error_outline),
-    //               Expanded(
-    //                 child: Text(
-    //                   lanProvider.texts('alert'),
-    //                   textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-    //                   style: const TextStyle(fontSize: 23, color: Colors.red),
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //           contentPadding: const EdgeInsets.symmetric(vertical: 7),
-    //           elevation: 24,
-    //           content: Container(
-    //             padding: EdgeInsets.all(8),
-    //             height: height * 0.4,
-    //             child: Text(
-    //               lanProvider.texts('last note'),
-    //               style: TextStyle(fontSize: 23),
-    //               textAlign:
-    //                   lanProvider.isEn ? TextAlign.start : TextAlign.end,
-    //             ),
-    //             alignment: Alignment.topCenter,
-    //           ),
-    //           actions: [
-    //             InkWell(
-    //               child: Text(
-    //                 lanProvider.texts('yes?'),
-    //                 style: const TextStyle(fontSize: 19, color: Colors.blue),
-    //               ),
-    //               onTap: () async {
-    //                 setState(() {
-    //                   provider.isLoading = true;
-    //                 });
-    //                 await provider.addToDB(_note.text);
-    //                 Navigator.of(context).pushReplacementNamed('MyHomepage');
-    //                 setState(() {
-    //                   provider.isLoading = false;
-    //                   provider.total = 0.0;
-    //                   provider.checkOut['area'] = "";
-    //                   provider.checkOut['street'] = "";
-    //                   provider.checkOut['phoneNum'] = "";
-    //                   provider.myCart.clear();
-    //                 });
-    //                 showSnackBar();
-    //               },
-    //             ),
-    //             const SizedBox(width: 11),
-    //             InkWell(
-    //                 child: Text(lanProvider.texts('cancel?'),
-    //                     style: const TextStyle(fontSize: 19)),
-    //                 onTap: () => Navigator.of(context).pop()),
-    //           ],
-    //         );
-    //       });
-    // }
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,

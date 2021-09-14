@@ -6,14 +6,12 @@ import 'package:provider/provider.dart';
 
 import 'Myprovider.dart';
 
-class DetailsHistory extends StatefulWidget  {
-
+class DetailsHistory extends StatefulWidget {
   @override
   _DetailsHistoryState createState() => _DetailsHistoryState();
 }
 
 class _DetailsHistoryState extends State<DetailsHistory> {
-
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -34,13 +32,16 @@ class _DetailsHistoryState extends State<DetailsHistory> {
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(lanProvider.texts('deliver to'),style: TextStyle(fontSize: 15),),
+              child: Text(
+                lanProvider.texts('deliver to'),
+                style: TextStyle(fontSize: 15),
+              ),
             ),
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               elevation: 2.0,
-              color: provider.isDark? Colors.grey[170]:Colors.white70,
+              color: provider.isDark ? Colors.grey[170] : Colors.white70,
               child: ListTile(
                 title: Text(provider.details['area'] ?? ""),
                 subtitle: Text(lanProvider.texts('street') +
@@ -55,7 +56,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 provider.details['resName']!,
-                style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -67,9 +68,9 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                       borderRadius: BorderRadius.circular(12)),
                   elevation: 3.0,
                   child: ListTile(
-                    title: Text(
-                        provider.detailedCart[i].mealName),
-                    subtitle: Text(lanProvider.texts('meal price : ') +
+                    title: Text(provider.detailedCart[i].mealName),
+                    subtitle: Text(provider.detailedCart[i].description +"\n"+
+                        lanProvider.texts('meal price : ') +
                         provider.detailedCart[i].mealPrice.toString() +
                         " ${lanProvider.texts('jd')}\n" +
                         lanProvider.texts('quantity : ') +
@@ -116,7 +117,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Card(
-                color: provider.isDark? Colors.grey[170]:Colors.greenAccent,
+                color: provider.isDark ? Colors.grey[170] : Colors.greenAccent,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -134,25 +135,25 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               child: provider.isLoading
                   ? const Center(child: const CircularProgressIndicator())
                   : ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      setState(() {
-                        provider.isLoading = true;
-                      });
-                      // provider.addToDB();
-                      setState(() {
-                        provider.isLoading = false;
-                      });
-                    } catch (e) {
-                      setState(() {
-                        provider.isLoading = false;
-                      });
-                    }
-                  },
-                  child: Text(
-                    lanProvider.texts('reorder'),
-                    style: const TextStyle(fontSize: 16),
-                  )),
+                      onPressed: () async {
+                        try {
+                          setState(() {
+                            provider.isLoading = true;
+                          });
+                          // provider.addToDB();
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                        } catch (e) {
+                          setState(() {
+                            provider.isLoading = false;
+                          });
+                        }
+                      },
+                      child: Text(
+                        lanProvider.texts('reorder'),
+                        style: const TextStyle(fontSize: 16),
+                      )),
             ),
           ],
         ),

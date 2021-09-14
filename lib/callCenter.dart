@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Myprovider.dart';
 
@@ -13,18 +12,8 @@ class CallCenter extends StatefulWidget {
 }
 
 class _CallCenterState extends State<CallCenter> {
-  bool checked = false;
-
-  // getCheckBox() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     checked = pref.getBool('checkBox')!;
-  //   });
-  // }
-
   @override
   void initState() {
-    // getCheckBox();
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
     super.initState();
   }
@@ -52,8 +41,7 @@ class _CallCenterState extends State<CallCenter> {
               actions: [
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text("حسناً",
-                        style: const TextStyle(fontSize: 19)),
+                    child: Text("حسناً", style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -83,33 +71,33 @@ class _CallCenterState extends State<CallCenter> {
                       "نعم",
                       style: const TextStyle(fontSize: 19, color: Colors.red),
                     ),
-                    onTap: () async{
+                    onTap: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
                           provider.authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
-                          Provider.of<MyProvider>(context,listen: false).details.clear();
+                          Provider.of<MyProvider>(context, listen: false)
+                              .details
+                              .clear();
                         });
-                      } on FirebaseException catch (e){
+                      } on FirebaseException catch (e) {
                         dialog("حدث خطأ !");
                         setState(() {
                           provider.authState = authStatus.unAuthenticated;
                         });
                         print(e.message);
-                      } catch (e){
+                      } catch (e) {
                         dialog("حدث خطأ !");
                         print(e);
                         setState(() {
                           provider.authState = authStatus.unAuthenticated;
                         });
                       }
-                    }
-                ),
+                    }),
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text("إلغاء",
-                        style: const TextStyle(fontSize: 19)),
+                    child: Text("إلغاء", style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -198,27 +186,31 @@ class _CallCenterState extends State<CallCenter> {
                                     provider.details['latitude'] =
                                         resData[index]['details']['latitude']
                                             .toString();
-                                    for (int i=0;i<resData[index]['length'];i++)
-                                    provider.detailedCart.add(FoodCart(
-                                        resName: resData[index]['resName'],
-                                        mealName: resData[index]['meals']
-                                        [i]['meal name'],
-                                        mealPrice: resData[index]['meals']
-                                        [i]['meal price'],
-                                        quantity: resData[index]['meals']
-                                        [i]['quantity'],
-                                        foodID: resData[index].id));
+                                    for (int i = 0;
+                                        i < resData[index]['length'];
+                                        i++)
+                                      provider.detailedCart.add(FoodCart(
+                                          resName: resData[index]['resName'],
+                                          mealName: resData[index]['meals'][i]
+                                              ['meal name'],
+                                          mealPrice: resData[index]['meals'][i]
+                                              ['meal price'],
+                                          quantity: resData[index]['meals'][i]
+                                              ['quantity'],
+                                          foodID: resData[index].id,
+                                          description: resData[index]['meals']
+                                              [i]['description']));
                                   });
-                                  Navigator.of(context).pushReplacementNamed('details');
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('details');
                                 },
                                 trailing: Checkbox(
-                                  value: checked,
+                                  value: resData[index]['isChecked'],
                                   onChanged: (bool? value) async {
-                                    SharedPreferences pref =
-                                        await SharedPreferences.getInstance();
-                                    setState(() {
-                                      pref.setBool(resData[index].id, value!);
-                                      checked = value;
+                                    await FirebaseFirestore.instance
+                                        .collection('allOrders')
+                                        .doc(resData[index].id).update({
+                                      'isChecked':value,
                                     });
                                   },
                                   checkColor: Colors.white,
@@ -231,9 +223,7 @@ class _CallCenterState extends State<CallCenter> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(resData[index]['details']['name']),
-                                      Text(resData[index]['details']['area'] +
-                                          " - " +
-                                          resData[index]['details']['street']),
+                                      Text(resData[index]['details']['area']),
                                     ],
                                   ),
                                 ),

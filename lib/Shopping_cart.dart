@@ -52,13 +52,19 @@ class _ShoppingState extends State<Shopping> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(lanProvider.texts('choose address'),
-               style: TextStyle(color: CupertinoColors.black,fontWeight: FontWeight.bold),),
+            title: Text(
+              lanProvider.texts('choose address'),
+              style: TextStyle(
+                  color: CupertinoColors.black, fontWeight: FontWeight.bold),
+            ),
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 1,
             actions: [
               IconButton(
-                icon: Icon(Icons.add,color: Colors.blue,),
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.blue,
+                ),
                 onPressed: () => Navigator.of(context).pushNamed('addAddress'),
               ),
             ],
@@ -84,7 +90,8 @@ class _ShoppingState extends State<Shopping> {
                     setState(() {
                       provider.checkOut['area'] = provider.loc[index].area;
                       provider.checkOut['street'] = provider.loc[index].street;
-                      provider.checkOut['phoneNum'] = provider.loc[index].phoneNum;
+                      provider.checkOut['phoneNum'] =
+                          provider.loc[index].phoneNum;
                     });
                     Navigator.of(context).pushNamed('checkOut');
                   },
@@ -182,8 +189,10 @@ class _ShoppingState extends State<Shopping> {
                                 children: <Widget>[
                                   const SizedBox(height: 20),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.topLeft,
+                                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                    alignment: lanProvider.isEn
+                                        ? Alignment.topLeft
+                                        : Alignment.topRight,
                                     child: Text(
                                       provider.myCart[index].mealName,
                                       style: const TextStyle(
@@ -192,9 +201,22 @@ class _ShoppingState extends State<Shopping> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.bottomLeft,
-                                    margin: const EdgeInsets.only(top: 17),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    alignment: lanProvider.isEn
+                                        ? Alignment.topLeft
+                                        : Alignment.topRight,
+                                    child: Text(
+                                      provider.myCart[index].description,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                    alignment: lanProvider.isEn
+                                        ? Alignment.bottomLeft
+                                        : Alignment.bottomRight,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 7),
@@ -227,9 +249,7 @@ class _ShoppingState extends State<Shopping> {
                                       provider.mealID =
                                           provider.myCart[index].foodID;
                                     });
-                                    provider.subtractPrice(double.parse(
-                                        provider.myCart[index].mealPrice));
-                                    provider.removeFoodCart();
+                                    await provider.removeFoodCart(provider.myCart[index].mealPrice);
                                   } catch (e) {
                                     dialog(
                                         lanProvider.texts('Error occurred !'));
@@ -249,11 +269,10 @@ class _ShoppingState extends State<Shopping> {
                                       provider.mealID =
                                           provider.myCart[index].foodID;
                                     });
-                                    provider.addFoodCart(
+                                    await provider.addFoodCart(
                                         provider.myCart[index].mealName,
-                                        provider.myCart[index].mealPrice);
-                                    provider.addPrice(double.parse(
-                                        provider.myCart[index].mealPrice));
+                                        provider.myCart[index].mealPrice,
+                                        provider.myCart[index].description);
                                   } catch (e) {
                                     dialog(
                                         lanProvider.texts('Error occurred !'));
@@ -270,78 +289,77 @@ class _ShoppingState extends State<Shopping> {
           bottomNavigationBar: Container(
             height: 100,
             child: Column(children: [
-              if (provider.myCart.isNotEmpty) Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(lanProvider.texts('cart total :'),
+              if (provider.myCart.isNotEmpty)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(lanProvider.texts('cart total :'),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                    Text(provider.total.toString() + " ",
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         )),
-                  ),
-                  Text(provider.total.toString() + " ",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Text(lanProvider.texts('jd'),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ],
-              ),
-                   if (provider.myCart.isNotEmpty)
-                       provider.isLoading?
-                         Center(child: CircularProgressIndicator(),)
-                         :
-                         TextButton(
-                             onPressed: () async {
-                               if (provider.long ==null && provider.lat ==null) {
-                                 try {
-                                   setState(() {
-                                     provider.isLoading = true;
-                                   });
-                                   await provider.sendLocationToDB(context);
-                                   setState(() {
-                                     provider.isLoading = false;
-                                   });
-                                   if (provider.approved)
-                                   showModalBottomSheet(
-                                       context: context, builder: (_) => bottomSheet());
-                                   print('done');
-                                 } on FirebaseException catch (e)
-                                 {
-                                   setState(() {
-                                     provider.isLoading = false;
-                                   });
-                                   dialog(lanProvider.texts('Error occurred !'));
-                                   print(e.message);
-                                 }
-                                 catch (e) {
-                                   setState(() {
-                                     provider.isLoading = false;
-                                   });
-                                   dialog(lanProvider.texts('Error occurred !'));
-                                   print(e);
-                                 }
-                               }
-                               else {
-                                 showModalBottomSheet(
-                                     context: context, builder: (_) => bottomSheet());
-                               }
-                             },
-                             child: Text(lanProvider.texts('Next'),
-                                 style: TextStyle(
-                                   fontSize: 17,
-                                   fontWeight: FontWeight.bold,
-                                 ))),
-
+                    Text(lanProvider.texts('jd'),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+              if (provider.myCart.isNotEmpty)
+                provider.isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : TextButton(
+                        onPressed: () async {
+                          if (provider.long == null && provider.lat == null) {
+                            try {
+                              setState(() {
+                                provider.isLoading = true;
+                              });
+                              await provider.sendLocationToDB(context);
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                              if (provider.approved)
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (_) => bottomSheet());
+                              print('done');
+                            } on FirebaseException catch (e) {
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                              dialog(lanProvider.texts('Error occurred !'));
+                              print(e.message);
+                            } catch (e) {
+                              setState(() {
+                                provider.isLoading = false;
+                              });
+                              dialog(lanProvider.texts('Error occurred !'));
+                              print(e);
+                            }
+                          } else {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (_) => bottomSheet());
+                          }
+                        },
+                        child: Text(lanProvider.texts('Next'),
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ))),
             ]),
           ),
         ));
   }
 }
-

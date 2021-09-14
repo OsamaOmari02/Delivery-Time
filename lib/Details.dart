@@ -12,7 +12,6 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
-
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -38,8 +37,7 @@ class _DetailsState extends State<Details> {
               actions: [
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text("حسناً",
-                        style: const TextStyle(fontSize: 19)),
+                    child: Text("حسناً", style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -69,33 +67,33 @@ class _DetailsState extends State<Details> {
                       "نعم",
                       style: const TextStyle(fontSize: 19, color: Colors.red),
                     ),
-                    onTap: () async{
+                    onTap: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
                           provider.authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
-                          Provider.of<MyProvider>(context,listen: false).details.clear();
+                          Provider.of<MyProvider>(context, listen: false)
+                              .details
+                              .clear();
                         });
-                      } on FirebaseException catch (e){
+                      } on FirebaseException catch (e) {
                         dialog("حدث خطأ !");
                         setState(() {
                           provider.authState = authStatus.unAuthenticated;
                         });
                         print(e.message);
-                      } catch (e){
+                      } catch (e) {
                         dialog("حدث خطأ !");
                         print(e);
                         setState(() {
                           provider.authState = authStatus.unAuthenticated;
                         });
                       }
-                    }
-                ),
+                    }),
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text("إلغاء",
-                        style: const TextStyle(fontSize: 19)),
+                    child: Text("إلغاء", style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -115,6 +113,7 @@ class _DetailsState extends State<Details> {
         ),
       );
     }
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -184,7 +183,10 @@ class _DetailsState extends State<Details> {
                   child: ListTile(
                     title: Text(
                         'اسم الوجبة : ' + provider.detailedCart[i].mealName),
-                    subtitle: Text('سعر الوجبة : ' +
+                    subtitle: Text('الوصف : ' +
+                        provider.detailedCart[i].description +
+                        "\n" +
+                        'سعر الوجبة : ' +
                         provider.detailedCart[i].mealPrice.toString() +
                         " د.أ\n" +
                         'الكمية : ' +

@@ -74,11 +74,10 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
+        accentColor: Colors.orangeAccent,
         canvasColor: Colors.white,
         floatingActionButtonTheme:
             FloatingActionButtonThemeData(backgroundColor: Colors.blue),
-        colorScheme:
-            ColorScheme.fromSwatch().copyWith(secondary: Colors.orangeAccent),
       ),
       darkTheme: ThemeData(brightness: Brightness.dark,accentColor: Colors.white),
       routes: {
@@ -123,6 +122,7 @@ class MyHomepage extends StatefulWidget {
 }
 
 class _MyHomepageState extends State<MyHomepage> {
+
   @override
   void initState() {
     Provider.of<LanProvider>(context, listen: false).getLanguage();
@@ -330,7 +330,7 @@ class _MyHomepageState extends State<MyHomepage> {
                       funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
                       funImage('file/قايد حضر موت.jpg', "قايد حضر موت"),
                       funImage('file/ارزه لبنان.jpg', "ارزه لبنان"),
-                      funImage('file/الغزاوي.jpg', " الرائد الغزاوي"),
+                      funImage('file/الغزاوي.jpg', "الرائد الغزاوي"),
                       funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
                       funImage('file/الدويري.jpg', "الدويري"),
                       funImage('file/ابو جمال.jpg', "مطعم ابو جمال"),

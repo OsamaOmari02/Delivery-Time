@@ -94,7 +94,7 @@ class _ShawarmaState extends State<Shawarma> {
                     funImage(
                         'file/snap_burger.jpg', "Snap Burger"),
                     funImage('file/بيان سناك.jpg', "بيان سناك"),
-                    funImage('file/شاورما الاشاره.jpg', "شاورما الإشارة"),
+                    funImage('file/الإشارة.jpg', "شاورما الإشارة"),
                     funImage('file/هم هم.jpg', "هم هم بشاير"),
                     funImage('file/جيت بوئتك.jpg', "جيت بوئتك"),
                     funImage('file/شاورما هنية.jpg', "شاورما هنية"),

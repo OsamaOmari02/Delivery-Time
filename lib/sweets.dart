@@ -95,7 +95,6 @@ class _SweetsState extends State<Sweets> {
                     funImage(
                         'file/الصالون الاخضر.jpg', "الصالون الأخضر-شويكة"),
                     funImage('file/مارشميلو كيك.jpg', "مارشميلو كيك"),
-                    funImage('file/لبناني الشمال.jpg', "لبناني الشمال"),
                     funImage('file/angel.jpg', "آنجل"),
                     funImage('file/كارمن كيك.jpg', "كارمن كيك"),
                   ],
