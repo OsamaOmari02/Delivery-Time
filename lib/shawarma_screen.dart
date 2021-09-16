@@ -76,7 +76,7 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
                           style: const TextStyle(
                               fontSize: 17, color: Colors.white),
                         ),
-                        SizedBox(width: width * 0.23),
+                        SizedBox(width: width * 0.16),
                         Text(
                           lanProvider.texts('total'),
                           style: const TextStyle(

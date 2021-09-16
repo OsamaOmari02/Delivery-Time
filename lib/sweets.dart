@@ -55,7 +55,7 @@ class _SweetsState extends State<Sweets> {
         body: ListView(
           children: [
             SizedBox(
-              height: height * 0.3,
+              height: height * 0.27,
               width: double.infinity,
               child: Container(
                 child: Image.asset(provider.imageFun[2], fit: BoxFit.cover),
@@ -83,8 +83,8 @@ class _SweetsState extends State<Sweets> {
                   gridDelegate:
                   const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 3,
                     childAspectRatio: 3 / 2,
                   ),
                   children: [

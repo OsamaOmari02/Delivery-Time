@@ -57,6 +57,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).getDarkMode();
@@ -315,14 +316,14 @@ class _MyHomepageState extends State<MyHomepage> {
               SizedBox(height: height * 0.02),
               Container(
                 padding: const EdgeInsets.all(10),
-                height: height * 0.6,
+                height: height * 0.5,
                 child: Scrollbar(
                   child: GridView(
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 240,
-                      mainAxisSpacing: 15,
-                      crossAxisSpacing: 2,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 3,
                       childAspectRatio: 1.5,
                     ),
                     children: [

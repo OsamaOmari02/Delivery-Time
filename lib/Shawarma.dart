@@ -56,13 +56,13 @@ class _ShawarmaState extends State<Shawarma> {
         body: ListView(
           children: [
             SizedBox(
-              height: height * 0.3,
+              height: height * 0.27,
               width: double.infinity,
               child: Container(
                 child: Image.asset('file/shawarmah.jpg', fit: BoxFit.fill),
               ),
             ),
-            SizedBox(height: height * 0.03),
+            SizedBox(height: height * 0.025),
             Row(
               children: [
                 SizedBox(width: width * 0.03),
@@ -84,8 +84,8 @@ class _ShawarmaState extends State<Shawarma> {
                   gridDelegate:
                   const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 3,
                     childAspectRatio: 3 / 2,
                   ),
                   children: [

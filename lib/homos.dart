@@ -76,13 +76,13 @@ class _HomosState extends State<Homos> {
             ),
             Container(
               padding: const EdgeInsets.all(10),
-              height: height * 0.6,
+              height: height * 0.5,
               child: Scrollbar(
                 child: GridView(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 3,
                     childAspectRatio: 3 / 2,
                   ),
                   children: [

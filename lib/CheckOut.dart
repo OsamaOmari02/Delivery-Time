@@ -70,7 +70,7 @@ class _CheckOutState extends State<CheckOut> {
 
     final snackBar = SnackBar(
       content: Container(
-        height: height * 0.08,
+        height: height * 0.081,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -78,11 +78,11 @@ class _CheckOutState extends State<CheckOut> {
               children: [
                 Text(
                   lanProvider.texts('order confirmed'),
-                  style: TextStyle(fontSize: width * 0.033),
+                  style: TextStyle(fontSize: width * 0.034),
                 ),
                 Text(
                   lanProvider.texts('will reach out to u'),
-                  style: TextStyle(fontSize: width * 0.032),
+                  style: TextStyle(fontSize: width * 0.034),
                 ),
               ],
             ),

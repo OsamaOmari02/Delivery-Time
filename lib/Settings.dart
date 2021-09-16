@@ -77,14 +77,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onPressed: () async =>
                             await launch('tel://${0789259915}'),
                         child: const Text(
-                          "0789259915",
+                          "0779434462",
                           style: const TextStyle(fontSize: 18),
                         )),
                     TextButton(
                         onPressed: () async =>
-                            await launch('tel://${0789259915}'),
+                            await launch('tel://${0795143290}'),
                         child: const Text(
-                          "0789259915",
+                          "0795143290",
                           style: const TextStyle(fontSize: 18),
                         )),
                   ],

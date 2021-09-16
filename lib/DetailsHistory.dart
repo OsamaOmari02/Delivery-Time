@@ -129,32 +129,6 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.3, vertical: height * 0.04),
-              child: provider.isLoading
-                  ? const Center(child: const CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          setState(() {
-                            provider.isLoading = true;
-                          });
-                          // provider.addToDB();
-                          setState(() {
-                            provider.isLoading = false;
-                          });
-                        } catch (e) {
-                          setState(() {
-                            provider.isLoading = false;
-                          });
-                        }
-                      },
-                      child: Text(
-                        lanProvider.texts('reorder'),
-                        style: const TextStyle(fontSize: 16),
-                      )),
-            ),
           ],
         ),
       ),

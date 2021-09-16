@@ -217,6 +217,8 @@ class _HistoryState extends State<History> {
                                   resData[index]['delivery'].toString();
                               provider.details['resName'] =
                                   resData[index]['resName'];
+                              provider.details['length'] =
+                              resData[index]['length'].toString();
                               for (int i = 0; i < resData[index]['length']; i++)
                                 provider.detailedCart.add(FoodCart(
                                     resName: resData[index]['resName'],
