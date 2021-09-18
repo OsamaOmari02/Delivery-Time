@@ -44,7 +44,7 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
             ),
           ),
           bottomNavigationBar: Container(
-            height: 65,
+            height: height*0.1,
             child: Opacity(
               opacity: provider.total == 0 ? 0.4 : 1,
               child: Container(
@@ -70,25 +70,23 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
                           Icons.shopping_basket_outlined,
                           color: Colors.white,
                         ),
-                        const SizedBox(width: 7),
+                        SizedBox(width: width*0.02),
                         Text(
                           lanProvider.texts('food cart'),
                           style: const TextStyle(
                               fontSize: 17, color: Colors.white),
                         ),
-                        SizedBox(width: width * 0.16),
+                        Spacer(),
                         Text(
                           lanProvider.texts('total'),
                           style: const TextStyle(
                               fontSize: 17, color: Colors.white),
                         ),
-                        const SizedBox(width: 5),
                         Text(
-                          "${provider.total}",
+                          " ${provider.total} ",
                           style: const TextStyle(
                               fontSize: 16, color: Colors.white),
                         ),
-                        const SizedBox(width: 5),
                         Text(
                           lanProvider.texts('jd'),
                           style: const TextStyle(
@@ -193,7 +191,7 @@ class _FirstState extends State<First> {
                         child: Row(
                           children: [
                             if (provider.isLoading)
-                              Center(child: const CircularProgressIndicator()),
+                              const Center(child: const CircularProgressIndicator()),
                             if (!provider.isLoading)
                               IconButton(
                                 icon: Icon(
@@ -216,7 +214,8 @@ class _FirstState extends State<First> {
                                     setState(() {
                                       provider.isLoading = false;
                                     });
-                                    dialog(e.message);
+                                    dialog(
+                                        lanProvider.texts('Error occurred !'));
                                     print(e.message);
                                   } catch (e) {
                                     setState(() {
@@ -231,9 +230,8 @@ class _FirstState extends State<First> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const SizedBox(height: 20),
+                                SizedBox(height: height*0.02),
                                 Container(
-                                  padding: const EdgeInsets.only(left: 10),
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     resData[index]['meal name'],
@@ -242,22 +240,19 @@ class _FirstState extends State<First> {
                                         fontWeight: FontWeight.w800),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
+                                SizedBox(height: height*0.015),
                                 Container(
-                                  padding: const EdgeInsets.only(left: 10),
                                   child: Text(
                                     resData[index]['description'],
                                     style: const TextStyle(
-                                        fontSize: 15, color: Colors.grey),
+                                        fontSize: 14, color: Colors.grey),
                                   ),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  alignment: Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(top: 17),
+                                  margin: EdgeInsets.only(top: height*0.015),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
+                                        const EdgeInsets.symmetric(vertical: 5),
                                     child: Text(
                                       lanProvider.texts('price') +
                                           " " +
@@ -430,7 +425,7 @@ class _SecondState extends State<Second> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const SizedBox(height: 20),
+                                SizedBox(height: height*0.02),
                                 Container(
                                   padding: const EdgeInsets.only(left: 10),
                                   alignment: Alignment.topLeft,
@@ -456,7 +451,7 @@ class _SecondState extends State<Second> {
                                   margin: const EdgeInsets.only(top: 17),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
+                                    const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
                                       lanProvider.texts('price') +
                                           " " +
@@ -626,7 +621,7 @@ class _ThirdState extends State<Third> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const SizedBox(height: 20),
+                                SizedBox(height: height*0.02),
                                 Container(
                                   padding: const EdgeInsets.only(left: 10),
                                   alignment: Alignment.topLeft,
@@ -652,7 +647,7 @@ class _ThirdState extends State<Third> {
                                   margin: const EdgeInsets.only(top: 17),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
+                                    const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
                                       lanProvider.texts('price') +
                                           " " +

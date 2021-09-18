@@ -33,6 +33,8 @@ class _AddAddressState extends State<AddAddress> {
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     requiredPhone(title, keyboard, value) {
       return Padding(
@@ -104,29 +106,6 @@ class _AddAddressState extends State<AddAddress> {
         ),
       );
     }
-    // Widget street() {
-    //   return Container(
-    //     padding: const EdgeInsets.all(10),
-    //     decoration: BoxDecoration(
-    //       borderRadius: BorderRadius.circular(12),
-    //     ),
-    //     child: DropdownButton(
-    //       isExpanded: true,
-    //       value: provider.street,
-    //       items: provider.streets.map((value) {
-    //         return DropdownMenuItem(
-    //           value: value,
-    //           child: Text(value),
-    //         );
-    //       }).toList(),
-    //       onChanged: (String? newValue) {
-    //         setState(() {
-    //           provider.street = newValue!;
-    //         });
-    //       },
-    //     ),
-    //   );
-    // }
 
     dialog(title) {
       return showDialog(
@@ -181,7 +160,7 @@ class _AddAddressState extends State<AddAddress> {
           key: _formKey,
           child: ListView(
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: height*0.03),
               Container(
                 child: Text(lanProvider.texts('area'),style: TextStyle(fontSize: 16),),
                 padding: EdgeInsets.fromLTRB(12,12,12,0),
@@ -189,10 +168,9 @@ class _AddAddressState extends State<AddAddress> {
               area(),
               street(lanProvider.texts('street'),
                   TextInputType.text, _street),
-              const SizedBox(height: 10),
               requiredPhone(lanProvider.texts('phone number'),
                   TextInputType.number, _phone),
-              const SizedBox(height: 40),
+              SizedBox(height: height*0.06),
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.33,

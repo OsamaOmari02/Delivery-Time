@@ -29,7 +29,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
         body: ListView(
           padding: const EdgeInsets.all(8.0),
           children: [
-            const SizedBox(height: 10),
+            SizedBox(height: height * 0.005),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -69,7 +69,8 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                   elevation: 3.0,
                   child: ListTile(
                     title: Text(provider.detailedCart[i].mealName),
-                    subtitle: Text(provider.detailedCart[i].description +"\n"+
+                    subtitle: Text(provider.detailedCart[i].description +
+                        "\n" +
                         lanProvider.texts('meal price : ') +
                         provider.detailedCart[i].mealPrice.toString() +
                         " ${lanProvider.texts('jd')}\n" +
@@ -79,21 +80,21 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                   ),
                 ),
               ),
-            const SizedBox(height: 10),
+            SizedBox(height: height * 0.01),
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
                   lanProvider.texts('cart total :'),
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 15),
                 ),
                 Text(
                   provider.details['total'].toString() + " ",
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 15),
                 ),
                 Text(
                   lanProvider.texts('jd'),
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ]),
             ),
@@ -102,13 +103,33 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               child: Row(children: [
                 Text(
                   lanProvider.texts('delivery price'),
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 15),
                 ),
                 Text(
                   provider.details['delivery'].toString() + " ",
+                  style: const TextStyle(fontSize: 15),
+                ),
+                Text(
+                  lanProvider.texts('jd'),
+                  style: const TextStyle(fontSize: 15),
+                ),
+              ]),
+            ),
+            const Divider(thickness: 1),
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Row(children: [
+                Text(
+                  lanProvider.texts('total'),
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
+                  (double.parse(provider.details['delivery']!) +
+                          double.parse(provider.details['total']!))
+                      .toString(),
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Text(" " +
                   lanProvider.texts('jd'),
                   style: const TextStyle(fontSize: 16),
                 ),

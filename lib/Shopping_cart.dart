@@ -18,6 +18,8 @@ class _ShoppingState extends State<Shopping> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
           context: context,
@@ -54,14 +56,14 @@ class _ShoppingState extends State<Shopping> {
             centerTitle: true,
             title: Text(
               lanProvider.texts('choose address'),
-              style: TextStyle(
+              style: const TextStyle(
                   color: CupertinoColors.black, fontWeight: FontWeight.bold),
             ),
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 1,
             actions: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.add,
                   color: Colors.blue,
                 ),
@@ -78,7 +80,7 @@ class _ShoppingState extends State<Shopping> {
                       onPressed: () =>
                           Navigator.of(context).pushNamed('addAddress'),
                       child: Text(lanProvider.texts('new address'),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ))),
@@ -138,7 +140,7 @@ class _ShoppingState extends State<Shopping> {
                                     const EdgeInsets.symmetric(vertical: 7),
                                 elevation: 24,
                                 content: Container(
-                                  height: 46,
+                                  height: height*0.05,
                                   child: const Divider(),
                                   alignment: Alignment.topCenter,
                                 ),
@@ -173,7 +175,7 @@ class _ShoppingState extends State<Shopping> {
               ? Center(
                   child: Text(
                   lanProvider.texts('empty cart'),
-                  style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
+                  style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
                 ))
               : ListView.builder(
                   itemCount: provider.myCart.length,
@@ -187,7 +189,7 @@ class _ShoppingState extends State<Shopping> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: height*0.02),
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                                     alignment: lanProvider.isEn
@@ -287,7 +289,7 @@ class _ShoppingState extends State<Shopping> {
                     );
                   }),
           bottomNavigationBar: Container(
-            height: 100,
+            height: height*0.15,
             child: Column(children: [
               if (provider.myCart.isNotEmpty)
                 Row(
@@ -296,18 +298,18 @@ class _ShoppingState extends State<Shopping> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(lanProvider.texts('cart total :'),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
                     Text(provider.total.toString() + " ",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         )),
                     Text(lanProvider.texts('jd'),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         )),
@@ -315,8 +317,8 @@ class _ShoppingState extends State<Shopping> {
                 ),
               if (provider.myCart.isNotEmpty)
                 provider.isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
+                    ? const Center(
+                        child: const CircularProgressIndicator(),
                       )
                     : TextButton(
                         onPressed: () async {
@@ -354,7 +356,7 @@ class _ShoppingState extends State<Shopping> {
                           }
                         },
                         child: Text(lanProvider.texts('Next'),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                             ))),

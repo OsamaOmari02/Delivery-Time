@@ -55,7 +55,7 @@ class _SweetsState extends State<Sweets> {
         body: ListView(
           children: [
             SizedBox(
-              height: height * 0.27,
+              height: height * 0.3,
               width: double.infinity,
               child: Container(
                 child: Image.asset(provider.imageFun[2], fit: BoxFit.cover),
@@ -77,7 +77,7 @@ class _SweetsState extends State<Sweets> {
             ),
             Container(
               padding: const EdgeInsets.all(10),
-              height: height * 0.6,
+              height: height * 0.8,
               child: Scrollbar(
                 child: GridView(
                   gridDelegate:

@@ -340,7 +340,7 @@ class _HistoryState extends State<History> {
                                   }),
                               child: Text(
                                 lanProvider.texts('reorder'),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),

@@ -121,75 +121,77 @@ class _MyDrawerState extends State<MyDrawer> {
           });
     }
 
-    return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Container(
-                child: Image.asset(
-                  ('file/time_delivery.jpg'),
-                  fit: BoxFit.fill,
+    return SafeArea(
+      child: Directionality(
+        textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+        child: Drawer(
+          child: ListView(
+            children: [
+              DrawerHeader(
+                child: Container(
+                  child: Image.asset(
+                    ('file/time_delivery.jpg'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                padding: const EdgeInsets.all(0),
+              ),
+              Row(
+                children: [
+                  SizedBox(width: width * 0.03),
+                  Expanded(
+                      child: Text(
+                    lanProvider.texts('welcome') +
+                        ' ${provider.authData['name']} !',
+                    style: const TextStyle(fontSize: 21),
+                  )),
+                ],
+              ),
+              listTile(lanProvider.texts('Drawer1'), Icons.home, 'MyHomepage',
+                  context),
+              const Divider(thickness: 0.1,),
+              listTile(lanProvider.texts('Drawer2'), Icons.account_circle,
+                  'MyAccount', context),
+              const Divider(thickness: 0.1,),
+              ListTile(
+                onTap: (){
+                  Navigator.of(context).pushReplacementNamed('MyFavourites');
+                },
+                title: Text(
+                  lanProvider.texts('Drawer3'),
+                  style: const TextStyle(fontSize: 25),
+                ),
+                leading: const Icon(
+                  Icons.favorite,
+                  color: Colors.blueAccent,
                 ),
               ),
-              padding: const EdgeInsets.all(0),
-            ),
-            Row(
-              children: [
-                SizedBox(width: width * 0.03),
-                Expanded(
-                    child: Text(
-                  lanProvider.texts('welcome') +
-                      ' ${provider.authData['name']} !',
-                  style: const TextStyle(fontSize: 21),
-                )),
-              ],
-            ),
-            listTile(lanProvider.texts('Drawer1'), Icons.home, 'MyHomepage',
-                context),
-            const Divider(thickness: 0.1,),
-            listTile(lanProvider.texts('Drawer2'), Icons.account_circle,
-                'MyAccount', context),
-            const Divider(thickness: 0.1,),
-            ListTile(
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed('MyFavourites');
-              },
-              title: Text(
-                lanProvider.texts('Drawer3'),
-                style: const TextStyle(fontSize: 25),
+              const Divider(thickness: 0.1,),
+              listTile(lanProvider.texts('Drawer4'), Icons.location_on_outlined,
+                  'MyLocation', context),
+              const Divider(thickness: 0.1),
+              listTile(lanProvider.texts('Drawer5'), Icons.access_time_outlined,
+                  'myHistory', context),
+              const Divider(thickness: 1.5),
+              listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings',
+                  context),
+              const Divider(thickness: 0.1),
+              listTile(lanProvider.texts('Drawer7'), Icons.error_outline, 'about',
+                  context),
+              const Divider(thickness: 0.1),
+              ListTile(
+                onTap: logOutFun,
+                title: Text(
+                  lanProvider.texts('Drawer8'),
+                  style: const TextStyle(fontSize: 25, color: Colors.red),
+                ),
+                leading: const Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                ),
               ),
-              leading: const Icon(
-                Icons.favorite,
-                color: Colors.blueAccent,
-              ),
-            ),
-            const Divider(thickness: 0.1,),
-            listTile(lanProvider.texts('Drawer4'), Icons.location_on_outlined,
-                'MyLocation', context),
-            const Divider(thickness: 0.1),
-            listTile(lanProvider.texts('Drawer5'), Icons.access_time_outlined,
-                'myHistory', context),
-            const Divider(thickness: 1.5),
-            listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings',
-                context),
-            const Divider(thickness: 0.1),
-            listTile(lanProvider.texts('Drawer7'), Icons.error_outline, 'about',
-                context),
-            const Divider(thickness: 0.1),
-            ListTile(
-              onTap: logOutFun,
-              title: Text(
-                lanProvider.texts('Drawer8'),
-                style: const TextStyle(fontSize: 25, color: Colors.red),
-              ),
-              leading: const Icon(
-                Icons.logout,
-                color: Colors.red,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

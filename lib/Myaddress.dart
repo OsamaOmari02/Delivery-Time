@@ -160,7 +160,7 @@ class _MyAddressState extends State<MyAddress> {
               return Center(
                   child: Text(
                 lanProvider.texts('Error occurred !'),
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
               ));
               return ListView.builder(
                 itemCount: provider.loc.length,

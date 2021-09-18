@@ -75,14 +75,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     TextButton(
                         onPressed: () async =>
-                            await launch('tel://${0789259915}'),
+                            await launch('tel://0779434462'),
                         child: const Text(
                           "0779434462",
                           style: const TextStyle(fontSize: 18),
                         )),
                     TextButton(
                         onPressed: () async =>
-                            await launch('tel://${0795143290}'),
+                            await launch('tel://0795143290'),
                         child: const Text(
                           "0795143290",
                           style: const TextStyle(fontSize: 18),
@@ -90,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               actions: [
                 TextButton(
@@ -115,7 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             SizedBox(height: height * 0.05),
             ListTile(
-              leading: Icon(Icons.language),
+              leading: const Icon(Icons.language),
               title: InkWell(
                 child: Text(lanProvider.texts('language'),
                     style: TextStyle(
@@ -125,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             SizedBox(height: height * 0.013),
             ListTile(
-              leading: Icon(Icons.dark_mode),
+              leading: const Icon(Icons.dark_mode),
               title: Text(lanProvider.texts('dark mode'),
                   style: TextStyle(
                       fontWeight: FontWeight.w600, fontSize: width * 0.055)),
@@ -147,7 +147,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onTap: () => dialog2(),
               ),
             ),
-            Divider(thickness: 0.6),
+            const Divider(thickness: 0.6),
             // ListTile(
             //   leading: const Icon(Icons.star_rate_outlined),
             //   title: InkWell(

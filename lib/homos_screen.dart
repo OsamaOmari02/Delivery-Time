@@ -139,7 +139,7 @@ class _HomosScreenState extends State<HomosScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: height*0.02),
                                     Container(
                                       padding: const EdgeInsets.only(left: 10),
                                       alignment: Alignment.topLeft,
@@ -164,8 +164,8 @@ class _HomosScreenState extends State<HomosScreen> {
                                       alignment: Alignment.bottomLeft,
                                       margin: const EdgeInsets.only(top: 17),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 7),
+                                        padding:
+                                        const EdgeInsets.symmetric(vertical: 7),
                                         child: Text(
                                           lanProvider.texts('price') +
                                               " " +
@@ -236,7 +236,7 @@ class _HomosScreenState extends State<HomosScreen> {
           },
         ),
         bottomNavigationBar: Container(
-          height: 65,
+          height: height*0.1,
           child: Opacity(
             opacity: provider.total == 0 ? 0.4 : 1,
             child: Container(
@@ -262,29 +262,27 @@ class _HomosScreenState extends State<HomosScreen> {
                         Icons.shopping_basket_outlined,
                         color: Colors.white,
                       ),
-                      const SizedBox(width: 7),
+                      SizedBox(width: width*0.02),
                       Text(
                         lanProvider.texts('food cart'),
-                        style:
-                            const TextStyle(fontSize: 17, color: Colors.white),
+                        style: const TextStyle(
+                            fontSize: 17, color: Colors.white),
                       ),
-                      SizedBox(width: width * 0.23),
+                      Spacer(),
                       Text(
                         lanProvider.texts('total'),
-                        style:
-                            const TextStyle(fontSize: 17, color: Colors.white),
+                        style: const TextStyle(
+                            fontSize: 17, color: Colors.white),
                       ),
-                      const SizedBox(width: 5),
                       Text(
-                        "${provider.total}",
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
+                        " ${provider.total} ",
+                        style: const TextStyle(
+                            fontSize: 16, color: Colors.white),
                       ),
-                      const SizedBox(width: 5),
                       Text(
                         lanProvider.texts('jd'),
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
+                        style: const TextStyle(
+                            fontSize: 16, color: Colors.white),
                       ),
                     ],
                   ),

@@ -24,6 +24,8 @@ class _MyFavouritesState extends State<MyFavourites> {
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     var user = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
@@ -67,14 +69,14 @@ class _MyFavouritesState extends State<MyFavourites> {
               .snapshots(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
-              return Center(child: const CircularProgressIndicator());
+              return const Center(child: const CircularProgressIndicator());
             return Scrollbar(
               child: Stack(children: [
                 provider.myFavorites.length == 0
                     ? Center(
                         child: Text(
                         lanProvider.texts('no meals were added to favorites'),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontStyle: FontStyle.italic),
                       ))
                     : ListView.builder(
@@ -142,22 +144,18 @@ class _MyFavouritesState extends State<MyFavourites> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              const SizedBox(height: 20),
+                                              SizedBox(height: height*0.02),
                                               Container(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
-                                                alignment: Alignment.topLeft,
                                                 child: Text(
                                                   resData[index]['meal name'],
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       fontSize: 17,
                                                       fontWeight:
                                                           FontWeight.w800),
                                                 ),
                                               ),
-                                              const SizedBox(height: 10),
+                                              SizedBox(height: height*0.015),
                                               Container(
-                                                padding: const EdgeInsets.only(left: 10,top: 5),
                                                 child: Text(
                                                   resData[index]['description'],
                                                   style: const TextStyle(
@@ -165,9 +163,6 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                 ),
                                               ),
                                               Container(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
-                                                alignment: Alignment.bottomLeft,
                                                 margin: const EdgeInsets.only(
                                                     top: 17),
                                                 child: Padding(
@@ -193,11 +188,9 @@ class _MyFavouritesState extends State<MyFavourites> {
                                     ),
                                   ),
                                   Row(children: [
-                                    Container(
-                                      child: Text(
-                                        resData[index]['resName'],
-                                        style: const TextStyle(fontSize: 15),
-                                      ),
+                                    Text(
+                                      resData[index]['resName'],
+                                      style: const TextStyle(fontSize: 15),
                                     ),
                                     const Padding(
                                       padding: const EdgeInsets.all(8.0),

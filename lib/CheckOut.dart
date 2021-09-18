@@ -3,7 +3,6 @@ import 'package:app/Myprovider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class CheckOut extends StatefulWidget {
@@ -112,7 +111,6 @@ class _CheckOutState extends State<CheckOut> {
         body: ListView(
           padding: const EdgeInsets.all(6.0),
           children: [
-            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -136,7 +134,7 @@ class _CheckOutState extends State<CheckOut> {
                 isThreeLine: true,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: height*0.01),
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
@@ -194,9 +192,8 @@ class _CheckOutState extends State<CheckOut> {
                 ),
               ]),
             ),
-            const SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.all(7.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: _note,
                 keyboardType: TextInputType.text,
@@ -211,9 +208,9 @@ class _CheckOutState extends State<CheckOut> {
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: height*0.03),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80),
+              padding: EdgeInsets.symmetric(horizontal: width*0.2),
               child: provider.isLoading
                   ? const Center(
                       child: const CircularProgressIndicator(),

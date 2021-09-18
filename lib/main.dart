@@ -150,25 +150,22 @@ class _MyHomepageState extends State<MyHomepage> {
         },
         title: Image.asset(
           image,
-          height: height * 0.135,
+          height: height * 0.13,
           fit: BoxFit.fill,
         ),
-        subtitle: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Text(title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: provider.isDark ? Colors.white : Colors.black,
-              ),
-              textAlign: TextAlign.center),
-        ),
+        subtitle: Text(title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: provider.isDark ? Colors.white : Colors.black,
+            ),
+            textAlign: TextAlign.center),
       );
     }
 
     Widget content(image, String title, route) {
       return Container(
-          width: width * 0.41,
+          width: width * 0.44,
           child: Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -211,7 +208,7 @@ class _MyHomepageState extends State<MyHomepage> {
                       backgroundColor: Colors.red,
                       child: Text(
                         provider.myCart.length.toString(),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       )),
               ]),
             ),
@@ -267,7 +264,7 @@ class _MyHomepageState extends State<MyHomepage> {
                   dotIncreasedColor: Colors.black,
                   showIndicator: true,
                   autoplayDuration:
-                      const Duration(seconds: 1, milliseconds: 600),
+                      const Duration(seconds: 1, milliseconds: 700),
                 ),
               ),
               SizedBox(height: height * 0.03),
@@ -315,15 +312,14 @@ class _MyHomepageState extends State<MyHomepage> {
               ),
               SizedBox(height: height * 0.02),
               Container(
-                padding: const EdgeInsets.all(10),
-                height: height * 0.5,
+                height: height * 0.8,
                 child: Scrollbar(
                   child: GridView(
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 240,
+                      maxCrossAxisExtent: 220,
                           mainAxisSpacing: 20,
-                          crossAxisSpacing: 3,
+                          crossAxisSpacing: 0,
                       childAspectRatio: 1.5,
                     ),
                     children: [

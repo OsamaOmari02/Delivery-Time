@@ -54,7 +54,7 @@ class _HomosState extends State<Homos> {
         body: ListView(
           children: [
             SizedBox(
-              height: height * 0.3,
+              height: height * 0.28,
               width: double.infinity,
               child: Container(
                 child: Image.asset(provider.imageFun[1], fit: BoxFit.cover),

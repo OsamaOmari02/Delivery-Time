@@ -76,6 +76,8 @@ class _MyPasswordState extends State<MyPassword> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(lanProvider.texts('my password')),
+          centerTitle: true,
+          backgroundColor: Colors.blue,
         ),
         body: ListView(
           padding: const EdgeInsets.all(10),

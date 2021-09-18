@@ -30,18 +30,15 @@ class _ShawarmaState extends State<Shawarma> {
         },
         title: Image.asset(
           image,
-          height: height * 0.14,
+          height: height * 0.13,
           fit: BoxFit.fill,
         ),
-        subtitle: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Text(title,
-              style: TextStyle(
-                  color: provider.isDark? Colors.white:Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center),
-        ),
+        subtitle: Text(title,
+            style: TextStyle(
+                color: provider.isDark? Colors.white:Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center),
       );
     }
 
@@ -56,7 +53,7 @@ class _ShawarmaState extends State<Shawarma> {
         body: ListView(
           children: [
             SizedBox(
-              height: height * 0.27,
+              height: height * 0.3,
               width: double.infinity,
               child: Container(
                 child: Image.asset('file/shawarmah.jpg', fit: BoxFit.fill),
@@ -77,15 +74,14 @@ class _ShawarmaState extends State<Shawarma> {
               ],
             ),
             Container(
-              padding: const EdgeInsets.all(10),
-              height: height * 0.6,
+              height: height * 0.8,
               child: Scrollbar(
                 child: GridView(
                   gridDelegate:
                   const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
                     mainAxisSpacing: 20,
-                    crossAxisSpacing: 3,
+                    crossAxisSpacing: 0,
                     childAspectRatio: 3 / 2,
                   ),
                   children: [

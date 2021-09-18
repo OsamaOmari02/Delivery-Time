@@ -76,7 +76,7 @@ class _DrinksState extends State<Drinks> {
             ),
             Container(
               padding: const EdgeInsets.all(10),
-              height: height * 0.5,
+              height: height * 0.8,
               child: Scrollbar(
                 child: GridView(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
