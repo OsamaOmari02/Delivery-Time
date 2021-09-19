@@ -202,6 +202,7 @@ class MyProvider with ChangeNotifier {
     'note': '',
     'resName': '',
     'delivery': '',
+    'length':'',
   };
 
   List<FoodCart> detailedCart = [];
@@ -670,6 +671,30 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> sendToRestaurant() async {
+    isLoading = true;
+    await FirebaseFirestore.instance.
+    collection('restaurants orders/${detailedCart[0].resName}/orders').add({
+      'name': details['name'],
+      'date': DateTime.now(),
+      'isChecked': false,
+      'length': details['length'],
+      'meals': [
+        for (int i = 0; i < int.parse(details['length']!); i++)
+          {
+            'meal name': detailedCart[i].mealName,
+            'meal price': detailedCart[i].mealPrice,
+            'quantity': detailedCart[i].quantity,
+            'description': detailedCart[i].description,
+          }
+      ],
+      'note': details['note'],
+      'total': details['total'],
+
+    });
+    isLoading = false;
+    notifyListeners();
+  }
   //------------------------auth----------------------
   authStatus authState = authStatus.Authenticated;
   Map<String, String> authData = {
@@ -752,6 +777,7 @@ class MyProvider with ChangeNotifier {
   }
 
   goToMaps(double long, double lat) async {
+    isLoading = true;
     String url = "https://www.google.com/maps/search/?api=1&query=$lat,$long";
     final String encodeUrl = Uri.encodeFull(url);
     // if (!await canLaunch(encodeUrl))
@@ -761,5 +787,6 @@ class MyProvider with ChangeNotifier {
     //     print('could not launch url');
     //     throw 'could not launch url';
     //   }
+    isLoading = false;
   }
 }

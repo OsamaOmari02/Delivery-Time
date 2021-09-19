@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'Myprovider.dart';
@@ -120,6 +121,7 @@ class _DetailsState extends State<Details> {
         appBar: AppBar(
           title: const Text('التفاصيل'),
           centerTitle: true,
+          backgroundColor: Colors.blue,
         ),
         drawer: Drawer(
           child: ListView(
@@ -230,7 +232,47 @@ class _DetailsState extends State<Details> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.3, vertical: height * 0.04),
+                  horizontal: width * 0.3, vertical: height * 0.02),
+              child: provider.isLoading
+                  ? const Center(child: const CircularProgressIndicator())
+                  : ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      setState(() {
+                        provider.isLoading = true;
+                      });
+                      await provider.sendToRestaurant();
+                      Fluttertoast.showToast(
+                          msg: 'تم إرسال الطلب الى المطعم بنجاح',
+                          toastLength: Toast.LENGTH_SHORT,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                      setState(() {
+                        provider.isLoading = false;
+                      });
+                    } on FirebaseException catch (e){
+                      setState(() {
+                        provider.isLoading = false;
+                      });
+                      dialog('حدث خطأ');
+                      print(e.message);
+                    } catch (e) {
+                      setState(() {
+                        provider.isLoading = false;
+                      });
+                      dialog('حدث خطأ');
+                      print(e);
+                    }
+                  },
+                  child: Text(
+                    'إرسال الطلب',
+                    style: const TextStyle(fontSize: 16),
+                  )),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.3, vertical: height * 0.01),
               child: provider.isLoading
                   ? const Center(child: const CircularProgressIndicator())
                   : ElevatedButton(
@@ -249,6 +291,8 @@ class _DetailsState extends State<Details> {
                           setState(() {
                             provider.isLoading = false;
                           });
+                          dialog('حدث خطأ');
+                          print(e);
                         }
                       },
                       child: Text(

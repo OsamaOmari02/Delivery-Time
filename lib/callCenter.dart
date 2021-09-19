@@ -151,12 +151,10 @@ class _CallCenterState extends State<CallCenter> {
               .orderBy('date', descending: true)
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return Center(child: const CircularProgressIndicator());
             if (snapshot.hasError) return Center(child: Text('حدث خطأ !'));
             return Scrollbar(
                 child: ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
+                    itemCount: snapshot.data?.docs.length??0,
                     itemBuilder: (context, int index) {
                       var resData = snapshot.data!.docs;
                       return Card(
@@ -180,6 +178,8 @@ class _CallCenterState extends State<CallCenter> {
                                         resData[index]['total'].toString();
                                     provider.details['note'] =
                                         resData[index]['note'];
+                                    provider.details['length'] =
+                                        resData[index]['length'].toString();
                                     provider.details['longitude'] =
                                         resData[index]['details']['longitude']
                                             .toString();
