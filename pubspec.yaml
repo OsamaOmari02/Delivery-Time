@@ -45,7 +45,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter_native_splash:
-  color: "#E5E5E5"
+  color: "#f7f7f7"
   image: file/DT.png
   android_gravity: center
   android: true

@@ -71,7 +71,7 @@ class MyProvider with ChangeNotifier {
 
   getDarkMode() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    isDark = pref.getBool('darkMode')!;
+    isDark = pref.getBool('darkMode')??false;
     notifyListeners();
   }
 

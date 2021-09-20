@@ -289,7 +289,7 @@ class _ShoppingState extends State<Shopping> {
                     );
                   }),
           bottomNavigationBar: Container(
-            height: height*0.15,
+            height: height*0.14,
             child: Column(children: [
               if (provider.myCart.isNotEmpty)
                 Row(

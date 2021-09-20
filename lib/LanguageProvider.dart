@@ -274,7 +274,7 @@ class LanProvider with ChangeNotifier {
   // }
   void getLanguage() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    isEn = pref.getBool('language')!;
+    isEn = pref.getBool('language')??false;
     notifyListeners();
   }
 }
