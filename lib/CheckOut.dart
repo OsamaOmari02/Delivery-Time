@@ -123,7 +123,7 @@ class _CheckOutState extends State<CheckOut> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               elevation: 2.0,
-              color: Colors.white70,
+              color: provider.isDark?Colors.black12:Colors.white70,
               child: ListTile(
                 title: Text(provider.checkOut['area'] ?? ""),
                 subtitle: Text(lanProvider.texts('street:') +

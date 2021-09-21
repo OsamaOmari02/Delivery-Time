@@ -12,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,10 @@ import 'homos_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
@@ -257,6 +262,7 @@ class _MyHomepageState extends State<MyHomepage> {
                     Image.asset(provider.imageFun[1], fit: BoxFit.cover),
                     Image.asset(provider.imageFun[2], fit: BoxFit.cover),
                     Image.asset(provider.imageFun[3], fit: BoxFit.fill),
+                    Image.asset(provider.imageFun[4], fit: BoxFit.fill),
                   ],
                   dotColor: Colors.white,
                   dotSize: 5,

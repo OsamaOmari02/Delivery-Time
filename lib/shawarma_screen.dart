@@ -172,8 +172,6 @@ class _FirstState extends State<First> {
           .collection('/shawarma/${provider.restaurantName}/shawarma')
           .snapshots(),
       builder: (ctx, snapshot) {
-        // if (snapshot.connectionState==ConnectionState.waiting)
-        //    Center(child: const CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(child: Text(lanProvider.texts('something went wrong !')));
         return Scrollbar(

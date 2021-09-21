@@ -314,12 +314,12 @@ class _RegisterViewState extends State<Register> {
         key: _formKey,
           child: Container(
             height: mq.size.height,
-            padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: ListView(
+              padding: const EdgeInsets.all(25),
               children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height*0.15),
+                SizedBox(height: mq.size.height*0.13),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20),
+                  margin: EdgeInsets.only(bottom: mq.size.height*0.06),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.deepOrange,
@@ -330,7 +330,7 @@ class _RegisterViewState extends State<Register> {
                           offset: const Offset(0, 2)),
                     ],
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+                  padding: EdgeInsets.symmetric(vertical: mq.size.height*0.014, horizontal: mq.size.height*0.08),
                     child: const Text(
                       "Delivery Time",
                       style: const TextStyle(
@@ -341,10 +341,8 @@ class _RegisterViewState extends State<Register> {
                     ),
                   ),
                 fields,
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: bottom,
-                ),
+                SizedBox(height: mq.size.height*0.03),
+                bottom,
               ],
             ),
           ),

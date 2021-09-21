@@ -123,9 +123,6 @@ class _LoginViewState extends State<Login> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-        ),
         if (provider.authState == authStatus.unAuthenticated ||
             provider.authState == authStatus.Authenticated)
           Row(
@@ -147,7 +144,7 @@ class _LoginViewState extends State<Login> {
     );
 
     final fields = Padding(
-      padding: const EdgeInsets.only(top: 10.0),
+      padding: const EdgeInsets.only(top: 5.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -259,44 +256,39 @@ class _LoginViewState extends State<Login> {
         backgroundColor: Colors.orangeAccent,
         body: Form(
           key: _formKey,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(36),
-            child: Container(
-              height: mq.size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  const SizedBox(height: 40),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.deepOrange,
-                      boxShadow: [
-                        const BoxShadow(
-                            blurRadius: 8,
-                            color: Colors.black,
-                            offset: const Offset(0, 2)),
-                      ],
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 60),
-                    child: const Text(
-                      "Delivery Time",
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 27,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic),
-                    ),
+          child: Container(
+            height: mq.size.height,
+            child: ListView(
+              padding: const EdgeInsets.all(30),
+              children: <Widget>[
+                SizedBox(height: mq.size.height*0.14),
+                Container(
+                  margin: EdgeInsets.only(bottom: mq.size.height*0.06),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.deepOrange,
+                    boxShadow: [
+                      const BoxShadow(
+                          blurRadius: 8,
+                          color: Colors.black,
+                          offset: const Offset(0, 2)),
+                    ],
                   ),
-                  fields,
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 150),
-                    child: bottom,
+                  padding: EdgeInsets.symmetric(
+                      vertical: mq.size.height*0.014, horizontal: mq.size.height*0.08),
+                  child: const Text(
+                    "Delivery Time",
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 27,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
                   ),
-                ],
-              ),
+                ),
+                fields,
+                SizedBox(height: mq.size.height*0.06),
+                bottom,
+              ],
             ),
           ),
         ),

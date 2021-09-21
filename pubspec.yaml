@@ -34,6 +34,7 @@ dependencies:
   intl: ^0.17.0
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -45,11 +46,16 @@ dev_dependencies:
     sdk: flutter
 
 flutter_native_splash:
-  color: "#f7f7f7"
-  image: file/DT.png
+  color: "#ffffff"
+  image: file/Delivery_time.png
   android_gravity: center
   android: true
   ios: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "file/Delivery_time_LOGO.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

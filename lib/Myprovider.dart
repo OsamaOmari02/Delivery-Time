@@ -101,7 +101,7 @@ class MyProvider with ChangeNotifier {
 
   getAdmin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    admin = pref.getBool('admin')!;
+    admin = pref.getBool('admin')??false;
     notifyListeners();
   }
 
@@ -114,6 +114,7 @@ class MyProvider with ChangeNotifier {
     'file/حمص.jpg',
     'file/حلويات.png',
     'file/drinks.jpg',
+    'file/DT_cover.jpg'
   ];
 
   List<String> areas = <String>[

@@ -56,8 +56,8 @@ class _ShoppingState extends State<Shopping> {
             centerTitle: true,
             title: Text(
               lanProvider.texts('choose address'),
-              style: const TextStyle(
-                  color: CupertinoColors.black, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: provider.isDark?CupertinoColors.white:CupertinoColors.black, fontWeight: FontWeight.bold),
             ),
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 1,
