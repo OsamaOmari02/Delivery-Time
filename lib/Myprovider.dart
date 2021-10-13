@@ -71,7 +71,7 @@ class MyProvider with ChangeNotifier {
 
   getDarkMode() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    isDark = pref.getBool('darkMode')??false;
+    isDark = pref.getBool('darkMode') ?? false;
     notifyListeners();
   }
 
@@ -81,7 +81,6 @@ class MyProvider with ChangeNotifier {
     isDark = value;
     notifyListeners();
   }
-
 
   //----------------------intl package-----------------------
 
@@ -101,7 +100,7 @@ class MyProvider with ChangeNotifier {
 
   getAdmin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    admin = pref.getBool('admin')??false;
+    admin = pref.getBool('admin') ?? false;
     notifyListeners();
   }
 
@@ -110,16 +109,16 @@ class MyProvider with ChangeNotifier {
   var mealID;
   var restaurantName;
   List imageFun = [
-    'file/burger.jpg',
-    'file/حمص.jpg',
-    'file/حلويات.png',
-    'file/drinks.jpg',
+    'file/25dc71eea9f56697.jpg',
+    'file/3f48b82e3140f7c0.jpg',
+    'file/مكسات.jpg',
     'file/DT_cover.jpg'
   ];
 
   List<String> areas = <String>[
     '---اختر المنطقة---',
     'حي الحسين',
+    'حي الحسين الغربي',
     'حي الضباط',
     'حي الزهور',
     'حي الأمير حمزة',
@@ -137,54 +136,123 @@ class MyProvider with ChangeNotifier {
     'حي الحياك',
     'الحي الجنوبي',
     'الإسكان العسكري',
-    //----
-    'إسكان الجامعة',
-    'إسكان البوابة الجنوبية',
-    //----
+    'شارع المهندسين',
     'إسكان الفقراء',
     'حي كلثوم',
     'حي الكويتية',
     'الحرفية',
     'الصناعية',
+    'المستشفى الامريكي',
+    'اول شارع المنشية',
+    'حي المقام',
+    'المدفعية 12',
+    'القاعدة الجوية',
+    'الثغرة',
+    'الزعتري',
+    'الباعج',
+    'صبحا وصبحية',
+    'الحمرا',
+    'المنصورة',
+    'الغدير الابيض',
+    'الغدير الاخضر',
+    'المطلة',
+    'سما السرحان',
+    'مغير السرحان',
+    'جابر السرحان',
+    'صوامع الدفاع المدني',
+    'حوشا',
+    'المنشية',
+    'رحاب',
+    'طيب اسم',
+    'دير ورق',
+    'بويضة الحوامده',
+    'بويضة العليمات',
+    'رباع السرحان',
+    'بلعما',
+    'الدجنية',
+    'حمامة العليمات',
+    'حمامة العموش',
+    'زبيدية',
+    'حيان المشرف',
   ];
   String area = '---اختر المنطقة---';
 
-  // deliveryPriceOnArea() {
-  //   if (checkOut['area'] == "حي الحسين" ||
-  //       checkOut['area'] == "حي الفدين" ||
-  //       checkOut['area'] == "الحي الجنوبي" ||
-  //       checkOut['area'] == "حي الضباط" ||
-  //       checkOut['area'] == "حي الزهور" ||
-  //       checkOut['area'] == "حي نوارة" ||
-  //       checkOut['area'] == "اول الضاحية" ||
-  //       checkOut['area'] == "حي المستشفى" ||
-  //       checkOut['area'] == "السوق" ||
-  //       checkOut['area'] == "حي المعانية" ||
-  //       checkOut['area'] == "إسكان الفقراء")
-  //     deliveryPrice = 1.00;
-  //   else if (checkOut['area'] == "شويكة الشرقية" ||
-  //       checkOut['area'] == "حي الأمير حمزة" ||
-  //       checkOut['area'] == "نص الضاحية" ||
-  //       checkOut['area'] == "حي الحسبان" ||
-  //       checkOut['area'] == "؟؟؟؟؟" ||
-  //       checkOut['area'] == "حي الحياك" ||
-  //       checkOut['area'] == "الإسكان العسكري")
-  //     deliveryPrice = 1.25;
-  //   else if (checkOut['area'] == "شويكة الغربية" ||
-  //       checkOut['area'] == "آخر الضاحية" ||
-  //       checkOut['area'] == "حي المقام" ||
-  //       checkOut['area'] == "الصناعية" ||
-  //       checkOut['area'] == "المدفعية 12" ||
-  //       checkOut['area'] == "الحرفية" ||
-  //       checkOut['area'] == "مستشفى سارة" ||
-  //       checkOut['area'] == "مستشفى النسائية" ||
-  //       checkOut['area'] == "حي الكويتية" ||
-  //       checkOut['area'] == "اول شارع المنشية" ||
-  //       checkOut['area'] == "حي كلثوم")
-  //     deliveryPrice = 1.50;
-  //   else if (checkOut['area'] == "بير عقلة") deliveryPrice = 2.00;
-  //   notifyListeners();
-  // }
+  double deliveryPrice = 1.00;
+
+  deliveryPriceOnArea() {
+    if (checkOut['area'] == "حي الحسين" ||
+        checkOut['area'] == "الحي الجنوبي" ||
+        checkOut['area'] == "حي الضباط" ||
+        checkOut['area'] == "حي الزهور" ||
+        checkOut['area'] == "حي المستشفى" ||
+        checkOut['area'] == "السوق" ||
+        checkOut['area'] == "حي المعانية" ||
+        checkOut['area'] == "إسكان الفقراء")
+      deliveryPrice = 1.00;
+    else if (checkOut['area'] == "شويكة الشرقية" ||
+        checkOut['area'] == "اول الضاحية" ||
+        checkOut['area'] == "حي الفدين" ||
+        checkOut['area'] == "حي الحسبان" ||
+        checkOut['area'] == "شارع المهندسين" ||
+        checkOut['area'] == "الإسكان العسكري")
+      deliveryPrice = 1.25;
+    else if (checkOut['area'] == "شويكة الغربية" ||
+        checkOut['area'] == "نص الضاحية" ||
+        checkOut['area'] == "حي المقام" ||
+        checkOut['area'] == "حي الحسين الغربي" ||
+        checkOut['area'] == "حي الأمير حمزة" ||
+        checkOut['area'] == "حي الحياك" ||
+        checkOut['area'] == "الصناعية" ||
+        checkOut['area'] == "المدفعية 12" ||
+        checkOut['area'] == "القاعدة الجوية" ||
+        checkOut['area'] == "الحرفية" ||
+        checkOut['area'] == "حي نوارة" ||
+        checkOut['area'] == "صوامع الدفاع المدني" ||
+        checkOut['area'] == "مستشفى سارة" ||
+        checkOut['area'] == "المستشفى الامريكي" ||
+        checkOut['area'] == "مستشفى النسائية" ||
+        checkOut['area'] == "حي الكويتية" ||
+        checkOut['area'] == "اول شارع المنشية" ||
+        checkOut['area'] == "حي كلثوم")
+      deliveryPrice = 1.50;
+    else if (checkOut['area'] == "بير عقلة" ||
+        checkOut['area'] == "آخر الضاحية" ||
+        checkOut['area'] == "الغدير الاخضر" ||
+        checkOut['area'] == "بويضة الحوامده")
+      deliveryPrice = 2.00;
+    else if (checkOut['area'] == "الثغرة" || checkOut['area'] == "طيب اسم")
+      deliveryPrice = 2.50;
+    else if (checkOut['area'] == "الزعتري" ||
+        checkOut['area'] == "المطلة" ||
+        checkOut['area'] == "المنشية")
+      deliveryPrice = 3.00;
+    else if (checkOut['area'] == "الباعج" || checkOut['area'] == "رحاب")
+      deliveryPrice = 3.50;
+    else if (checkOut['area'] == "المنصورة" ||
+        checkOut['area'] == "بويضة العليمات" ||
+        checkOut['area'] == "حيان المشرف" ||
+        checkOut['area'] == "زبيدية")
+      deliveryPrice = 4.00;
+    else if (checkOut['area'] == "دير ورق" ||
+        checkOut['area'] == "رباع السرحان")
+      deliveryPrice = 4.50;
+    else if (checkOut['area'] == "الحمرا" ||
+        checkOut['area'] == "سما السرحان" ||
+        checkOut['area'] == "مغير السرحان")
+      deliveryPrice = 5.00;
+    else if (checkOut['area'] == "حمامة العليمات")
+      deliveryPrice = 5.50;
+    else if (checkOut['area'] == "حوشا" ||
+        checkOut['area'] == "جابر السرحان" ||
+        checkOut['area'] == "حمامة العموش")
+      deliveryPrice = 6.00;
+    else if (checkOut['area'] == "الدجنية")
+      deliveryPrice = 6.50;
+    else if (checkOut['area'] == "الغدير الابيض" || checkOut['area'] == "بلعما")
+      deliveryPrice = 7.00;
+    else if (checkOut['area'] == "صبحا وصبحية") deliveryPrice = 9.00;
+    notifyListeners();
+  }
 
   Map<String, String> checkOut = {
     'area': ' ',
@@ -203,12 +271,10 @@ class MyProvider with ChangeNotifier {
     'note': '',
     'resName': '',
     'delivery': '',
-    'length':'',
+    'length': '',
   };
 
   List<FoodCart> detailedCart = [];
-
-  double deliveryPrice = 1.00;
 
   // ---------------addresses----------------------
   List<Address> loc = [];
@@ -359,7 +425,7 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addFoodCart(String mealName, String price,desc) async {
+  Future<void> addFoodCart(String mealName, String price, desc) async {
     bool exists = myCart.any((element) => element.foodID == mealID);
     if (!exists)
       myCart.add(FoodCart(
@@ -674,8 +740,9 @@ class MyProvider with ChangeNotifier {
 
   Future<void> sendToRestaurant() async {
     isLoading = true;
-    await FirebaseFirestore.instance.
-    collection('restaurants orders/${detailedCart[0].resName}/orders').add({
+    await FirebaseFirestore.instance
+        .collection('restaurants orders/${detailedCart[0].resName}/orders')
+        .add({
       'name': details['name'],
       'date': DateTime.now(),
       'isChecked': false,
@@ -691,11 +758,11 @@ class MyProvider with ChangeNotifier {
       ],
       'note': details['note'],
       'total': details['total'],
-
     });
     isLoading = false;
     notifyListeners();
   }
+
   //------------------------auth----------------------
   authStatus authState = authStatus.Authenticated;
   Map<String, String> authData = {

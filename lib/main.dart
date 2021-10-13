@@ -252,6 +252,7 @@ class _MyHomepageState extends State<MyHomepage> {
         body: Container(
           alignment: Alignment.center,
           child: ListView(
+            shrinkWrap: true,
             children: [
               SizedBox(
                 height: height * 0.3,
@@ -260,9 +261,8 @@ class _MyHomepageState extends State<MyHomepage> {
                   images: <Widget>[
                     Image.asset(provider.imageFun[0], fit: BoxFit.cover),
                     Image.asset(provider.imageFun[1], fit: BoxFit.cover),
-                    Image.asset(provider.imageFun[2], fit: BoxFit.cover),
+                    Image.asset(provider.imageFun[2], fit: BoxFit.fill),
                     Image.asset(provider.imageFun[3], fit: BoxFit.fill),
-                    Image.asset(provider.imageFun[4], fit: BoxFit.fill),
                   ],
                   dotColor: Colors.white,
                   dotSize: 5,
@@ -270,7 +270,7 @@ class _MyHomepageState extends State<MyHomepage> {
                   dotIncreasedColor: Colors.black,
                   showIndicator: true,
                   autoplayDuration:
-                      const Duration(seconds: 1, milliseconds: 700),
+                      const Duration(seconds: 2),
                 ),
               ),
               SizedBox(height: height * 0.03),
@@ -296,9 +296,9 @@ class _MyHomepageState extends State<MyHomepage> {
                   children: <Widget>[
                     content(
                         'file/shawarmah.jpg', "Shawarma & snacks", 'shawarma'),
-                    content('file/حمص.jpg', "homos & falafel", 'homos'),
-                    content('file/حلويات.png', "Sweets", 'sweets'),
-                    content('file/drinks.jpg', "drinks", 'drinks'),
+                    content('file/3f48b82e3140f7c0.jpg', "homos & falafel", 'homos'),
+                    content('file/unknoswn.png', "Sweets", 'sweets'),
+                    content('file/مشروب.jpg', "drinks", 'drinks'),
                   ],
                 ),
               ),
@@ -318,7 +318,7 @@ class _MyHomepageState extends State<MyHomepage> {
               ),
               SizedBox(height: height * 0.02),
               Container(
-                height: height * 0.8,
+                height: height * 0.7,
                 child: Scrollbar(
                   child: GridView(
                     gridDelegate:
@@ -329,16 +329,17 @@ class _MyHomepageState extends State<MyHomepage> {
                       childAspectRatio: 1.5,
                     ),
                     children: [
-                      funImage('file/بيتزا المفرق.jpg', "بيتزا المفرق"),
-                      funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
+                      funImage('file/معجنات ورد.png', "معجنات ورد"),
+                      // funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
                       funImage('file/قايد حضر موت.jpg', "قايد حضر موت"),
                       funImage('file/ارزه لبنان.jpg', "ارزه لبنان"),
-                      funImage('file/الغزاوي.jpg', "الرائد الغزاوي"),
+                      // funImage('file/الغزاوي.jpg', "الرائد الغزاوي"),
                       funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
-                      funImage('file/الدويري.jpg', "الدويري"),
+                      funImage('file/بيتزا اونلاين.jpg', "بيتزا اونلاين"),
                       funImage('file/ابو جمال.jpg', "مطعم ابو جمال"),
-                      funImage('file/ابو قاسم.jpg', "ابو قاسم"),
-                      funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
+                      funImage('file/ابو هشهش.jpg', "ابو هشهش"),
+                      // funImage('file/ابو قاسم.jpg', "ابو قاسم"),
+                      // funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
                       funImage('file/دلع_كرشك.jpg', "دلع كرشك"),
                     ],
                   ),

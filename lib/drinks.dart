@@ -76,7 +76,7 @@ class _DrinksState extends State<Drinks> {
             ),
             Container(
               padding: const EdgeInsets.all(10),
-              height: height * 0.8,
+              height: height * 0.7,
               child: Scrollbar(
                 child: GridView(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -88,9 +88,8 @@ class _DrinksState extends State<Drinks> {
                   children: [
                     funImage('file/لبناني الشمال.jpg', "لبناني الشمال"),
                     funImage('file/الحفره.jpg', "الحفرة"),
-                    funImage('file/الحايك.jpg', "الحايك"),
-                    funImage('file/شريان.jpg', "شريان"),
-                    funImage('file/تريند.jpg', "ترند"),
+                    // funImage('file/شريان.jpg', "شريان"),
+                    // funImage('file/تريند.jpg', "ترند"),
                   ],
                 ),
               ),

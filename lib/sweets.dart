@@ -77,7 +77,7 @@ class _SweetsState extends State<Sweets> {
             ),
             Container(
               padding: const EdgeInsets.all(10),
-              height: height * 0.8,
+              height: height * 0.7,
               child: Scrollbar(
                 child: GridView(
                   gridDelegate:
@@ -94,9 +94,9 @@ class _SweetsState extends State<Sweets> {
                         'file/الصالون الاخضر سوق.jpg', "الصالون الأخضر-السوق"),
                     funImage(
                         'file/الصالون الاخضر.jpg', "الصالون الأخضر-شويكة"),
-                    funImage('file/مارشميلو كيك.jpg', "مارشميلو كيك"),
-                    funImage('file/angel.jpg', "آنجل"),
-                    funImage('file/كارمن كيك.jpg', "كارمن كيك"),
+                    // funImage('file/مارشميلو كيك.jpg', "مارشميلو كيك"),
+                    // funImage('file/angel.jpg', "آنجل"),
+                    // funImage('file/كارمن كيك.jpg', "كارمن كيك"),
                   ],
                 ),
               ),

@@ -18,7 +18,6 @@ class _ShoppingState extends State<Shopping> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
@@ -95,6 +94,7 @@ class _ShoppingState extends State<Shopping> {
                       provider.checkOut['phoneNum'] =
                           provider.loc[index].phoneNum;
                     });
+                    provider.deliveryPriceOnArea();
                     Navigator.of(context).pushNamed('checkOut');
                   },
                   title: Text(provider.loc[index].area),

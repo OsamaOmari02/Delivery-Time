@@ -74,7 +74,7 @@ class _ShawarmaState extends State<Shawarma> {
               ],
             ),
             Container(
-              height: height * 0.8,
+              height: height * 0.7,
               child: Scrollbar(
                 child: GridView(
                   gridDelegate:
@@ -87,27 +87,26 @@ class _ShawarmaState extends State<Shawarma> {
                   children: [
                     funImage(
                         'file/grill_house.jpg', "Grill House"),
-                    funImage(
-                        'file/snap_burger.jpg', "Snap Burger"),
-                    funImage('file/بيان سناك.jpg', "بيان سناك"),
+                    // funImage('file/snap_burger.jpg', "Snap Burger"),
+                    // funImage('file/بيان سناك.jpg', "بيان سناك"),
                     funImage('file/الإشارة.jpg', "شاورما الإشارة"),
-                    funImage('file/هم هم.jpg', "هم هم بشاير"),
+                    // funImage('file/هم هم.jpg', "هم هم بشاير"),
                     funImage('file/جيت بوئتك.jpg', "جيت بوئتك"),
                     funImage('file/شاورما هنية.jpg', "شاورما هنية"),
-                    funImage('file/اسطنبولي.jpg', "اسطنبولي"),
-                    funImage('file/الماكولات الشاميه.jpg', "المأكولات الشامية"),
+                    // funImage('file/اسطنبولي.jpg', "اسطنبولي"),
+                    // funImage('file/الماكولات الشاميه.jpg', "المأكولات الشامية"),
                     funImage('file/يزن الشامي.jpg', "يزن الشامي"),
-                    funImage('file/مطاعم رؤى.jpg', "مطاعم رؤى"),
-                    funImage('file/زين صاج.jpg', "زين صاج"),
-                    funImage('file/بغداد.jpg', "بغداد"),
-                    funImage('file/شامخ.jpg', "شامخ"),
-                    funImage('file/فوانيس يزن.jpg', "فوانيس يزن"),
+                    // funImage('file/مطاعم رؤى.jpg', "مطاعم رؤى"),
+                    // funImage('file/زين صاج.jpg', "زين صاج"),
+                    // funImage('file/بغداد.jpg', "بغداد"),
+                    // funImage('file/شامخ.jpg', "شامخ"),
+                    // funImage('file/فوانيس يزن.jpg', "فوانيس يزن"),
                     funImage('file/الوقفي.jpg', "الوقفي"),
                     funImage('file/بوابة دمشق.jpg', "بوابة دمشق"),
                     funImage('file/شاورما عون.jpg', "مطعم عون"),
                     funImage('file/لوزان.jpg', "لوزان"),
                     funImage('file/سيتشن ون.jpg', "station one"),
-                    funImage('file/غير شكل.jpg', "غير شكل"),
+                    // funImage('file/غير شكل.jpg', "غير شكل"),
                   ],
                 ),
               ),
