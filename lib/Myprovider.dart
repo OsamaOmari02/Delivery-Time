@@ -112,7 +112,8 @@ class MyProvider with ChangeNotifier {
     'file/25dc71eea9f56697.jpg',
     'file/3f48b82e3140f7c0.jpg',
     'file/مكسات.jpg',
-    'file/DT_cover.jpg'
+    'file/DT_cover.jpg',
+    'file/unknoswn.png'
   ];
 
   List<String> areas = <String>[

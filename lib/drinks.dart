@@ -57,7 +57,7 @@ class _DrinksState extends State<Drinks> {
               height: height * 0.3,
               width: double.infinity,
               child: Container(
-                child: Image.asset(provider.imageFun[3], fit: BoxFit.fill),
+                child: Image.asset(provider.imageFun[2], fit: BoxFit.fill),
               ),
             ),
             SizedBox(height: height * 0.03),

@@ -58,7 +58,7 @@ class _SweetsState extends State<Sweets> {
               height: height * 0.3,
               width: double.infinity,
               child: Container(
-                child: Image.asset(provider.imageFun[2], fit: BoxFit.cover),
+                child: Image.asset(provider.imageFun[4], fit: BoxFit.cover),
               ),
             ),
             SizedBox(height: height * 0.03),
