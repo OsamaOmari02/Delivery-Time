@@ -127,6 +127,7 @@ class LanProvider with ChangeNotifier {
     'will reach out to u': 'سيتم التواصل معك قريباً',
     'alert': 'إنتباه !',
     'details': 'التفاصيل',
+    'Do you want to exit an App':'هل تريد الخروج من التطبيق؟',
     'last note':
         'في بعض الحالات (اذا كان الطلب حساس او كبير الحجم او في حال عدم توفر دراجة بتلك اللحظة) سيتم التوصيل عن طريق السيارة وسيتم زيادة نصف دينار على سعر التوصيل.',
   };
@@ -251,6 +252,7 @@ class LanProvider with ChangeNotifier {
     'will reach out to u': 'We will reach out to you soon !',
     'attention': 'Attention !',
     'details': 'Details',
+    'Do you want to exit an App':'Do you want to exit ?',
     'last note':
         'In some cases we have to use a car instead of a bike,0.50 JD will be added to the delivery price.',
   };

@@ -157,221 +157,228 @@ class _HistoryState extends State<History> {
     );
     showSnackBar() => ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
+    Future<bool> _onWillPop() async {
+      await Navigator.of(context).pushReplacementNamed('MyHomepage');
+      throw "";
+    }
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        drawer: MyDrawer(),
-        appBar: AppBar(
-          title: Text(lanProvider.texts('orders history')),
-          centerTitle: true,
-          backgroundColor: Colors.blue,
-        ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('/orders/${user!.uid}/myOrders')
-              .orderBy('date', descending: true)
-              .snapshots(),
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return Center(child: const CircularProgressIndicator());
-            if (snapshot.hasError)
-              return Center(
-                  child: Text(lanProvider.texts('something went wrong !')));
-            return Scrollbar(
-              child: ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, int index) {
-                  var resData = snapshot.data!.docs;
-                  if (resData.isEmpty)
-                    return Center(
-                      child: Text(
-                        lanProvider.texts('no orders'),
-                        style: TextStyle(
-                            fontSize: 17, fontStyle: FontStyle.italic),
-                      ),
-                    );
-                  return Card(
-                    elevation: 2.5,
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                          child: ListTile(
-                            onLongPress: () async {
-                              setState(() {
-                                provider.mealID = resData[index].id;
-                              });
-                              await delete(lanProvider.texts('delete order?'));
-                            },
-                            onTap: () {
-                              provider.details['area'] =
-                                  resData[index]['details']['area'];
-                              provider.details['street'] =
-                                  resData[index]['details']['street'];
-                              provider.details['phoneNum'] =
-                                  resData[index]['details']['phoneNum'];
-                              provider.details['total'] =
-                                  resData[index]['total'].toString();
-                              provider.details['note'] = resData[index]['note'];
-                              provider.details['delivery'] =
-                                  resData[index]['delivery'].toString();
-                              provider.details['resName'] =
-                                  resData[index]['resName'];
-                              provider.details['length'] =
-                              resData[index]['length'].toString();
-                              for (int i = 0; i < resData[index]['length']; i++)
-                                provider.detailedCart.add(FoodCart(
-                                    resName: resData[index]['resName'],
-                                    mealName: resData[index]['meals'][i]
-                                        ['meal name'],
-                                    mealPrice: resData[index]['meals'][i]
-                                        ['meal price'],
-                                    quantity: resData[index]['meals'][i]
-                                        ['quantity'],
-                                    foodID: resData[index].id,
-                                    description: resData[index]['meals'][i]
-                                    ['description'],));
-                              Navigator.of(context)
-                                  .pushReplacementNamed('detailsHistory');
-                            },
-                            trailing: TextButton(
-                              onPressed: () => showDialog(
-                                  context: ctx,
-                                  builder: (BuildContext ctx) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        lanProvider.texts('reorder?'),
-                                        textAlign: lanProvider.isEn
-                                            ? TextAlign.start
-                                            : TextAlign.end,
-                                        style: const TextStyle(fontSize: 23),
-                                      ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              vertical: 7),
-                                      elevation: 24,
-                                      content: Container(
-                                        height: 30,
-                                        child: const Divider(),
-                                        alignment: Alignment.topCenter,
-                                      ),
-                                      actions: [
-                                        InkWell(
-                                            child: Text(
-                                              lanProvider.texts('yes?'),
-                                              style: const TextStyle(
-                                                  fontSize: 19,
-                                                  color: Colors.blue),
-                                            ),
-                                            onTap: () async {
-                                              try {
-                                                setState(() {
-                                                  provider.isLoading = true;
-                                                });
-                                                for (int i = 0;
-                                                    i <
-                                                        resData[index]
-                                                            ['length'];
-                                                    i++)
-                                                  provider.myCart.add(FoodCart(
-                                                      resName: resData[index]
-                                                          ['resName'],
-                                                      mealName: resData[index]
-                                                              ['meals'][i]
-                                                          ['meal name'],
-                                                      mealPrice: resData[index]
-                                                              ['meals'][i]
-                                                          ['meal price'],
-                                                      quantity: resData[index]
-                                                              ['meals'][i]
-                                                          ['quantity'],
-                                                      foodID: resData[index].id,
-                                                      description: resData[index]
-                                                      ['meals'][i]
-                                                      ['description']));
-                                                Navigator.of(context).pop();
-                                                await provider.reorder(
-                                                  resData[index]['total'],
-                                                  resData[index]['delivery'],
-                                                  resData[index]['note'],
-                                                  resData[index]['length'],
-                                                  resData[index]['resName'],
-                                                  resData[index]['details']
-                                                      ['area'],
-                                                  resData[index]['details']
-                                                      ['street'],
-                                                  resData[index]['details']
-                                                      ['phoneNum'],
-                                                );
-                                                showSnackBar();
-                                                setState(() {
-                                                  provider.isLoading = false;
-                                                  provider.myCart.clear();
-                                                });
-                                              } on FirebaseException catch (e) {
-                                                dialog(lanProvider
-                                                    .texts('Error occurred !'));
-                                                setState(() {
-                                                  provider.isLoading = false;
-                                                  provider.myCart.clear();
-                                                });
-                                                print(e.message);
-                                              } catch (e) {
-                                                dialog(lanProvider
-                                                    .texts('Error occurred !'));
-                                                print(e);
-                                                setState(() {
-                                                  provider.isLoading = false;
-                                                  provider.myCart.clear();
-                                                });
-                                              }
-                                            }),
-                                        const SizedBox(width: 11),
-                                        InkWell(
-                                            child: Text(
-                                                lanProvider.texts('cancel?'),
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          drawer: MyDrawer(),
+          appBar: AppBar(
+            title: Text(lanProvider.texts('orders history')),
+            centerTitle: true,
+            backgroundColor: Colors.blue,
+          ),
+          body: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('/orders/${user!.uid}/myOrders')
+                .orderBy('date', descending: true)
+                .snapshots(),
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return Center(child: const CircularProgressIndicator());
+              if (snapshot.hasError)
+                return Center(
+                    child: Text(lanProvider.texts('something went wrong !')));
+              return Scrollbar(
+                child: ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, int index) {
+                    var resData = snapshot.data!.docs;
+                    if (resData.isEmpty)
+                      return Center(
+                        child: Text(
+                          lanProvider.texts('no orders'),
+                          style: TextStyle(
+                              fontSize: 17, fontStyle: FontStyle.italic),
+                        ),
+                      );
+                    return Card(
+                      elevation: 2.5,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: ListTile(
+                              onLongPress: () async {
+                                setState(() {
+                                  provider.mealID = resData[index].id;
+                                });
+                                await delete(lanProvider.texts('delete order?'));
+                              },
+                              onTap: () {
+                                provider.details['area'] =
+                                    resData[index]['details']['area'];
+                                provider.details['street'] =
+                                    resData[index]['details']['street'];
+                                provider.details['phoneNum'] =
+                                    resData[index]['details']['phoneNum'];
+                                provider.details['total'] =
+                                    resData[index]['total'].toString();
+                                provider.details['note'] = resData[index]['note'];
+                                provider.details['delivery'] =
+                                    resData[index]['delivery'].toString();
+                                provider.details['resName'] =
+                                    resData[index]['resName'];
+                                provider.details['length'] =
+                                resData[index]['length'].toString();
+                                for (int i = 0; i < resData[index]['length']; i++)
+                                  provider.detailedCart.add(FoodCart(
+                                      resName: resData[index]['resName'],
+                                      mealName: resData[index]['meals'][i]
+                                          ['meal name'],
+                                      mealPrice: resData[index]['meals'][i]
+                                          ['meal price'],
+                                      quantity: resData[index]['meals'][i]
+                                          ['quantity'],
+                                      foodID: resData[index].id,
+                                      description: resData[index]['meals'][i]
+                                      ['description'],));
+                                Navigator.of(context)
+                                    .pushReplacementNamed('detailsHistory');
+                              },
+                              trailing: TextButton(
+                                onPressed: () => showDialog(
+                                    context: ctx,
+                                    builder: (BuildContext ctx) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          lanProvider.texts('reorder?'),
+                                          textAlign: lanProvider.isEn
+                                              ? TextAlign.start
+                                              : TextAlign.end,
+                                          style: const TextStyle(fontSize: 23),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                vertical: 7),
+                                        elevation: 24,
+                                        content: Container(
+                                          height: 30,
+                                          child: const Divider(),
+                                          alignment: Alignment.topCenter,
+                                        ),
+                                        actions: [
+                                          InkWell(
+                                              child: Text(
+                                                lanProvider.texts('yes?'),
                                                 style: const TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 19)),
-                                            onTap: () =>
-                                                Navigator.of(context).pop()),
-                                      ],
-                                    );
-                                  }),
-                              child: Text(
-                                lanProvider.texts('reorder'),
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                                    fontSize: 19,
+                                                    color: Colors.blue),
+                                              ),
+                                              onTap: () async {
+                                                try {
+                                                  setState(() {
+                                                    provider.isLoading = true;
+                                                  });
+                                                  for (int i = 0;
+                                                      i <
+                                                          resData[index]
+                                                              ['length'];
+                                                      i++)
+                                                    provider.myCart.add(FoodCart(
+                                                        resName: resData[index]
+                                                            ['resName'],
+                                                        mealName: resData[index]
+                                                                ['meals'][i]
+                                                            ['meal name'],
+                                                        mealPrice: resData[index]
+                                                                ['meals'][i]
+                                                            ['meal price'],
+                                                        quantity: resData[index]
+                                                                ['meals'][i]
+                                                            ['quantity'],
+                                                        foodID: resData[index].id,
+                                                        description: resData[index]
+                                                        ['meals'][i]
+                                                        ['description']));
+                                                  Navigator.of(context).pop();
+                                                  await provider.reorder(
+                                                    resData[index]['total'],
+                                                    resData[index]['delivery'],
+                                                    resData[index]['note'],
+                                                    resData[index]['length'],
+                                                    resData[index]['resName'],
+                                                    resData[index]['details']
+                                                        ['area'],
+                                                    resData[index]['details']
+                                                        ['street'],
+                                                    resData[index]['details']
+                                                        ['phoneNum'],
+                                                  );
+                                                  showSnackBar();
+                                                  setState(() {
+                                                    provider.isLoading = false;
+                                                    provider.myCart.clear();
+                                                  });
+                                                } on FirebaseException catch (e) {
+                                                  dialog(lanProvider
+                                                      .texts('Error occurred !'));
+                                                  setState(() {
+                                                    provider.isLoading = false;
+                                                    provider.myCart.clear();
+                                                  });
+                                                  print(e.message);
+                                                } catch (e) {
+                                                  dialog(lanProvider
+                                                      .texts('Error occurred !'));
+                                                  print(e);
+                                                  setState(() {
+                                                    provider.isLoading = false;
+                                                    provider.myCart.clear();
+                                                  });
+                                                }
+                                              }),
+                                          const SizedBox(width: 11),
+                                          InkWell(
+                                              child: Text(
+                                                  lanProvider.texts('cancel?'),
+                                                  style: const TextStyle(
+                                                      color: Colors.red,
+                                                      fontSize: 19)),
+                                              onTap: () =>
+                                                  Navigator.of(context).pop()),
+                                        ],
+                                      );
+                                    }),
+                                child: Text(
+                                  lanProvider.texts('reorder'),
+                                  style: const TextStyle(
+                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            title: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(resData[index]['resName']),
-                            ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(lanProvider.texts('price') +
-                                      resData[index]['total'].toString() +
-                                      " " +
-                                      lanProvider.texts('jd')),
-                                  const SizedBox(height: 5),
-                                  Text(provider
-                                      .dateTime(resData[index]['date'])),
-                                ],
+                              title: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(resData[index]['resName']),
+                              ),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(lanProvider.texts('price') +
+                                        resData[index]['total'].toString() +
+                                        " " +
+                                        lanProvider.texts('jd')),
+                                    const SizedBox(height: 5),
+                                    Text(provider
+                                        .dateTime(resData[index]['date'])),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            );
-          },
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

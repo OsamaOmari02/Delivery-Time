@@ -30,13 +30,13 @@ class _ShawarmaState extends State<Shawarma> {
         },
         title: Image.asset(
           image,
-          height: height * 0.13,
+          height: height * 0.135,
           fit: BoxFit.fill,
         ),
         subtitle: Text(title,
             style: TextStyle(
                 color: provider.isDark? Colors.white:Colors.black,
-                fontSize: 15,
+                fontSize: width*0.042,
                 fontWeight: FontWeight.bold),
             textAlign: TextAlign.center),
       );
@@ -50,49 +50,52 @@ class _ShawarmaState extends State<Shawarma> {
           title: Text(lanProvider.texts('Shawarma & snacks')),
           centerTitle: true,
         ),
-        body: ListView(
-          children: [
-            SizedBox(
-              height: height * 0.3,
-              width: double.infinity,
-              child: Container(
-                child: Image.asset('file/shawarmah.jpg', fit: BoxFit.fill),
-              ),
-            ),
-            SizedBox(height: height * 0.025),
-            Row(
-              children: [
-                SizedBox(width: width * 0.03),
-                Expanded(
-                  child: Text(
-                    lanProvider.texts('choose ur..'),
-                    maxLines: 2,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: width * 0.055),
-                  ),
+        body: Scrollbar(
+          child: ListView(
+            children: [
+              SizedBox(
+                height: height * 0.3,
+                width: double.infinity,
+                child: Container(
+                  child: Image.asset('file/shawarmah.jpg', fit: BoxFit.fill),
                 ),
-              ],
-            ),
-            Container(
-              height: height * 0.7,
-              child: Scrollbar(
+              ),
+              SizedBox(height: height * 0.025),
+              Row(
+                children: [
+                  SizedBox(width: width * 0.03),
+                  Expanded(
+                    child: Text(
+                      lanProvider.texts('choose ur..'),
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: width * 0.055),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: height * 0.02),
+              Container(
+                height: height*1.4,
                 child: GridView(
+                  physics: const NeverScrollableScrollPhysics(),
                   gridDelegate:
-                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                   SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 0,
+                    mainAxisSpacing: height*0.004,
+                    crossAxisSpacing:0,
                     childAspectRatio: 3 / 2,
                   ),
                   children: [
                     funImage(
                         'file/grill_house.jpg', "Grill House"),
                     // funImage('file/snap_burger.jpg', "Snap Burger"),
-                    // funImage('file/بيان سناك.jpg', "بيان سناك"),
-                    funImage('file/الإشارة.jpg', "شاورما الإشارة"),
+                    funImage('file/بيان سناك.jpg', "بيان سناك"),
+                    funImage('file/سيتشن ون.jpg', "station one"),
                     // funImage('file/هم هم.jpg', "هم هم بشاير"),
                     funImage('file/جيت بوئتك.jpg', "جيت بوئتك"),
                     funImage('file/شاورما هنية.jpg', "شاورما هنية"),
+                    funImage('file/الإشارة.jpg', "شاورما الإشارة"),
                     // funImage('file/اسطنبولي.jpg', "اسطنبولي"),
                     // funImage('file/الماكولات الشاميه.jpg', "المأكولات الشامية"),
                     funImage('file/يزن الشامي.jpg', "يزن الشامي"),
@@ -105,14 +108,15 @@ class _ShawarmaState extends State<Shawarma> {
                     funImage('file/بوابة دمشق.jpg', "بوابة دمشق"),
                     funImage('file/شاورما عون.jpg', "مطعم عون"),
                     funImage('file/لوزان.jpg', "لوزان"),
-                    funImage('file/سيتشن ون.jpg', "station one"),
+
                     // funImage('file/غير شكل.jpg', "غير شكل"),
                   ],
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
+        // bottomSheet: Container(height: height*0.01,),
       ),
     );
   }

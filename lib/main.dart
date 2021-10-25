@@ -1,5 +1,7 @@
 // @dart=2.9
 
+import 'dart:developer';
+
 import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
@@ -62,7 +64,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).getDarkMode();
@@ -85,7 +86,8 @@ class _MyAppState extends State<MyApp> {
         floatingActionButtonTheme:
             FloatingActionButtonThemeData(backgroundColor: Colors.blue),
       ),
-      darkTheme: ThemeData(brightness: Brightness.dark,accentColor: Colors.white),
+      darkTheme:
+          ThemeData(brightness: Brightness.dark, accentColor: Colors.white),
       routes: {
         'MyHomepage': (context) => MyHomepage(),
         'Signup': (context) => Register(),
@@ -128,7 +130,6 @@ class MyHomepage extends StatefulWidget {
 }
 
 class _MyHomepageState extends State<MyHomepage> {
-
   @override
   void initState() {
     Provider.of<LanProvider>(context, listen: false).getLanguage();
@@ -160,7 +161,7 @@ class _MyHomepageState extends State<MyHomepage> {
         ),
         subtitle: Text(title,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: width*0.042,
               fontWeight: FontWeight.bold,
               color: provider.isDark ? Colors.white : Colors.black,
             ),
@@ -187,165 +188,208 @@ class _MyHomepageState extends State<MyHomepage> {
                 child: Text(lanProvider.texts(title),
                     style: TextStyle(
                         color: provider.isDark ? Colors.white : Colors.black,
-                        fontSize: 17),
+                        fontSize: width * 0.044),
                     textAlign: TextAlign.center),
               ),
             ),
           ));
     }
 
+    Future<bool> _onWillPop() async {
+      return (await showDialog(
+            context: context,
+            builder: (context) => new AlertDialog(
+              title: new Text(
+                lanProvider.texts('Do you want to exit an App'),
+                textDirection:
+                    lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+                style: const TextStyle(fontSize: 21)
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: new Text(
+                    lanProvider.texts('yes?'),
+                    textDirection: lanProvider.isEn
+                        ? TextDirection.ltr
+                        : TextDirection.rtl,
+                    style: const TextStyle(fontSize: 17,color: Colors.red),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: new Text(
+                    lanProvider.texts('cancel?'),
+                    textDirection: lanProvider.isEn
+                        ? TextDirection.ltr
+                        : TextDirection.rtl,
+                    style: const TextStyle(fontSize: 17),
+                  ),
+                ),
+              ],
+            ),
+          )) ??
+          false;
+    }
+
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        drawer: MyDrawer(),
-        appBar: AppBar(
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(7.0),
-              child: Stack(children: [
-                IconButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed('Shopping'),
-                    icon: const Icon(Icons.shopping_cart)),
-                if (provider.myCart.length != 0)
-                  CircleAvatar(
-                      radius: 10,
-                      backgroundColor: Colors.red,
-                      child: Text(
-                        provider.myCart.length.toString(),
-                        style: const TextStyle(color: Colors.white),
-                      )),
-              ]),
-            ),
-          ],
-          centerTitle: true,
-          title: Text(lanProvider.texts('Drawer1')),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            try {
-              setState(() {
-                provider.isLoading = true;
-              });
-              await provider.sendLocationToDB(context);
-              setState(() {
-                provider.isLoading = false;
-              });
-            } catch (e) {
-              setState(() {
-                provider.isLoading = false;
-              });
-              Fluttertoast.showToast(
-                  msg: lanProvider.texts('Error occurred !'),
-                  toastLength: Toast.LENGTH_SHORT,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-              print(e);
-            }
-          },
-          child: !provider.isLoading
-              ? Icon(Icons.my_location)
-              : CircularProgressIndicator(),
-          backgroundColor: Theme.of(context).accentColor,
-        ),
-        body: Container(
-          alignment: Alignment.center,
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              SizedBox(
-                height: height * 0.3,
-                width: double.infinity,
-                child: Carousel(
-                  images: <Widget>[
-                    Image.asset(provider.imageFun[0], fit: BoxFit.cover),
-                    Image.asset(provider.imageFun[1], fit: BoxFit.cover),
-                    Image.asset(provider.imageFun[2], fit: BoxFit.fill),
-                    Image.asset(provider.imageFun[3], fit: BoxFit.fill),
-                  ],
-                  dotColor: Colors.white,
-                  dotSize: 5,
-                  dotSpacing: 20,
-                  dotIncreasedColor: Colors.black,
-                  showIndicator: true,
-                  autoplayDuration:
-                      const Duration(seconds: 2),
-                ),
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          drawer: MyDrawer(),
+          appBar: AppBar(
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(7.0),
+                child: Stack(children: [
+                  IconButton(
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed('Shopping'),
+                      icon: const Icon(Icons.shopping_cart)),
+                  if (provider.myCart.length != 0)
+                    CircleAvatar(
+                        radius: 10,
+                        backgroundColor: Colors.red,
+                        child: Text(
+                          provider.myCart.length.toString(),
+                          style: const TextStyle(color: Colors.white),
+                        )),
+                ]),
               ),
-              SizedBox(height: height * 0.03),
-              Row(
+            ],
+            centerTitle: true,
+            title: Text(lanProvider.texts('Drawer1')),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              try {
+                setState(() {
+                  provider.isLoading = true;
+                });
+                await provider.sendLocationToDB(context);
+                setState(() {
+                  provider.isLoading = false;
+                });
+              } catch (e) {
+                setState(() {
+                  provider.isLoading = false;
+                });
+                Fluttertoast.showToast(
+                    msg: lanProvider.texts('Error occurred !'),
+                    toastLength: Toast.LENGTH_SHORT,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                print(e);
+              }
+            },
+            child: !provider.isLoading
+                ? Icon(Icons.my_location)
+                : CircularProgressIndicator(),
+            backgroundColor: Theme.of(context).accentColor,
+          ),
+          body: Container(
+            // height: height,
+            alignment: Alignment.center,
+            child: Scrollbar(
+              child: ListView(
+                shrinkWrap: true,
                 children: [
-                  SizedBox(width: width * 0.03),
-                  Expanded(
-                    child: Text(
-                      lanProvider.texts('order ur food..'),
-                      maxLines: 3,
-                      style: TextStyle(
-                          fontSize: width * 0.06, fontWeight: FontWeight.bold),
+                  SizedBox(
+                    height: height * 0.3,
+                    width: double.infinity,
+                    child: Carousel(
+                      images: <Widget>[
+                        Image.asset(provider.imageFun[0], fit: BoxFit.cover),
+                        Image.asset(provider.imageFun[1], fit: BoxFit.cover),
+                        Image.asset(provider.imageFun[2], fit: BoxFit.fill),
+                        Image.asset(provider.imageFun[3], fit: BoxFit.fill),
+                      ],
+                      dotColor: Colors.white,
+                      dotSize: 5,
+                      dotSpacing: 20,
+                      dotIncreasedColor: Colors.black,
+                      showIndicator: true,
+                      autoplayDuration: const Duration(seconds: 2),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: height * 0.02),
-              Container(
-                height: height * 0.24,
-                width: double.infinity,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    content(
-                        'file/shawarmah.jpg', "Shawarma & snacks", 'shawarma'),
-                    content('file/3f48b82e3140f7c0.jpg', "homos & falafel", 'homos'),
-                    content('file/unknoswn.png', "Sweets", 'sweets'),
-                    content('file/مشروب.jpg', "drinks", 'drinks'),
-                  ],
-                ),
-              ),
-              const Divider(thickness: 1),
-              Row(
-                children: [
-                  SizedBox(width: width * 0.03),
-                  Expanded(
-                    child: Text(
-                      lanProvider.texts('choose ur..'),
-                      maxLines: 2,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: width * 0.06),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: height * 0.02),
-              Container(
-                height: height * 0.7,
-                child: Scrollbar(
-                  child: GridView(
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 220,
-                          mainAxisSpacing: 20,
-                          crossAxisSpacing: 0,
-                      childAspectRatio: 1.5,
-                    ),
+                  SizedBox(height: height * 0.03),
+                  Row(
                     children: [
-                      funImage('file/معجنات ورد.png', "معجنات ورد"),
-                      // funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
-                      funImage('file/قايد حضر موت.jpg', "قايد حضر موت"),
-                      funImage('file/ارزه لبنان.jpg', "ارزه لبنان"),
-                      // funImage('file/الغزاوي.jpg', "الرائد الغزاوي"),
-                      funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
-                      funImage('file/بيتزا اونلاين.jpg', "بيتزا اونلاين"),
-                      funImage('file/ابو جمال.jpg', "مطعم ابو جمال"),
-                      funImage('file/ابو هشهش.jpg', "ابو هشهش"),
-                      // funImage('file/ابو قاسم.jpg', "ابو قاسم"),
-                      // funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
-                      funImage('file/دلع_كرشك.jpg', "دلع كرشك"),
+                      SizedBox(width: width * 0.03),
+                      Expanded(
+                        child: Text(
+                          lanProvider.texts('order ur food..'),
+                          maxLines: 3,
+                          style: TextStyle(
+                              fontSize: width * 0.06,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              )
-            ],
+                  SizedBox(height: height * 0.02),
+                  Container(
+                    height: height * 0.24,
+                    width: double.infinity,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        content('file/shawarmah.jpg', "Shawarma & snacks",
+                            'shawarma'),
+                        content('file/3f48b82e3140f7c0.jpg', "homos & falafel",
+                            'homos'),
+                        content('file/unknoswn.png', "Sweets", 'sweets'),
+                        content('file/مشروب.jpg', "drinks", 'drinks'),
+                      ],
+                    ),
+                  ),
+                  const Divider(thickness: 1),
+                  Row(
+                    children: [
+                      SizedBox(width: width * 0.03),
+                      Expanded(
+                        child: Text(
+                          lanProvider.texts('choose ur..'),
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: width * 0.06),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: height * 0.02),
+                  Container(
+                    height: height * 0.85,
+                    child: GridView(
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 220,
+                        mainAxisSpacing: height * 0.002,
+                        crossAxisSpacing: 1,
+                        childAspectRatio: 3 / 2,
+                      ),
+                      children: [
+                        funImage('file/معجنات ورد.png', "معجنات ورد"),
+                        // funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
+                        funImage('file/قايد حضر موت.jpg', "قايد حضر موت"),
+                        funImage('file/ارزه لبنان.jpg', "ارزه لبنان"),
+                        // funImage('file/الغزاوي.jpg', "الرائد الغزاوي"),
+                        funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
+                        funImage('file/بيتزا اونلاين.jpg', "بيتزا اونلاين"),
+                        funImage('file/ابو جمال.jpg', "مطعم ابو جمال"),
+                        funImage('file/ابو هشهش.jpg', "ابو هشهش"),
+                        // funImage('file/ابو قاسم.jpg', "ابو قاسم"),
+                        // funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
+                        funImage('file/دلع_كرشك.jpg', "دلع كرشك"),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),

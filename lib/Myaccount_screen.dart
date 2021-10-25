@@ -14,47 +14,55 @@ class MyAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
+    Future<bool> _onWillPop() async {
+      await Navigator.of(context).pushReplacementNamed('MyHomepage');
+      throw "";
+    }
+
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        drawer: MyDrawer(),
-        appBar: AppBar(
-            title: Text(lanProvider.texts('my account')),
-            centerTitle: true,
-            backgroundColor: Colors.blue),
-        body: ListView(
-          children: [
-            SizedBox(height: height * 0.02),
-            ListTile(
-              title: Text(
-                lanProvider.texts('my name'),
-                style: const TextStyle(fontSize: 19),
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          drawer: MyDrawer(),
+          appBar: AppBar(
+              title: Text(lanProvider.texts('my account')),
+              centerTitle: true,
+              backgroundColor: Colors.blue),
+          body: ListView(
+            children: [
+              SizedBox(height: height * 0.02),
+              ListTile(
+                title: Text(
+                  lanProvider.texts('my name'),
+                  style: const TextStyle(fontSize: 19),
+                ),
+                leading: const Icon(Icons.person),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: () => Navigator.of(context).pushNamed('Name'),
               ),
-              leading: const Icon(Icons.person),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).pushNamed('Name'),
-            ),
-            const Divider(thickness: 1),
-            ListTile(
-              title: Text(
-                lanProvider.texts('my email'),
-                style: const TextStyle(fontSize: 19),
+              const Divider(thickness: 1),
+              ListTile(
+                title: Text(
+                  lanProvider.texts('my email'),
+                  style: const TextStyle(fontSize: 19),
+                ),
+                leading: const Icon(Icons.alternate_email),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: () => Navigator.of(context).pushNamed('Email'),
               ),
-              leading: const Icon(Icons.alternate_email),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).pushNamed('Email'),
-            ),
-            const Divider(thickness: 1),
-            ListTile(
-              title: Text(
-                lanProvider.texts('my password'),
-                style: const TextStyle(fontSize: 19),
+              const Divider(thickness: 1),
+              ListTile(
+                title: Text(
+                  lanProvider.texts('my password'),
+                  style: const TextStyle(fontSize: 19),
+                ),
+                leading: const Icon(Icons.lock),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: () => Navigator.of(context).pushNamed('password'),
               ),
-              leading: const Icon(Icons.lock),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () => Navigator.of(context).pushNamed('password'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

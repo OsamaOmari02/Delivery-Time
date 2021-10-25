@@ -17,68 +17,73 @@ class _AboutState extends State<About> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
-    void _launchURL(url) async =>
-        !await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+    Future<bool> _onWillPop() async {
+      await Navigator.of(context).pushReplacementNamed('MyHomepage');
+      throw "";
+    }
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        drawer: MyDrawer(),
-        appBar: AppBar(
-          title: Text(lanProvider.texts('about')),
-          centerTitle: true,
-          backgroundColor: Colors.blue,
-        ),
-        body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(height: height*0.1),
-            Text(
-              lanProvider.texts('hello'),
-              style: TextStyle(
-                  fontSize: width*0.044, wordSpacing: 2, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: height*0.015),
-            Text(lanProvider.texts('If you face'),style: TextStyle(
-              fontSize: width*0.033)),
-            SizedBox(height: height*0.08),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-              Material(
-              child: Center(
-                child: Ink(
-                  decoration: const ShapeDecoration(
-                    color: Colors.blueAccent,
-                    shape: const CircleBorder(),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.facebook),
-                    color: Colors.white,
-                    onPressed: ()=>
-                      launch("https://www.facebook.com/osama.omarii02"),
-                  ),
-                ),
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          drawer: MyDrawer(),
+          appBar: AppBar(
+            title: Text(lanProvider.texts('about')),
+            centerTitle: true,
+            backgroundColor: Colors.blue,
+          ),
+          body: Center(
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(height: height*0.1),
+              Text(
+                lanProvider.texts('hello'),
+                style: TextStyle(
+                    fontSize: width*0.044, wordSpacing: 2, fontWeight: FontWeight.bold),
               ),
-            ),
-                SizedBox(width: width*0.15),
+              SizedBox(height: height*0.015),
+              Text(lanProvider.texts('If you face'),style: TextStyle(
+                fontSize: width*0.033)),
+              SizedBox(height: height*0.08),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                 Material(
-                  child: Center(
-                    child: Ink(
-                      decoration: const ShapeDecoration(
-                        color: Colors.red,
-                        shape: const CircleBorder(),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.email),
-                        color: Colors.white,
-                        onPressed: ()=>
-                            launch('mailto:osama.omarii02@gmail.com?subject=&body='),
-                      ),
+                child: Center(
+                  child: Ink(
+                    decoration: const ShapeDecoration(
+                      color: Colors.blueAccent,
+                      shape: const CircleBorder(),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.facebook),
+                      color: Colors.white,
+                      onPressed: ()=>
+                        launch("https://www.facebook.com/osama.omarii02"),
                     ),
                   ),
                 ),
-              ],
-            ),
-          ]),
+              ),
+                  SizedBox(width: width*0.15),
+                  Material(
+                    child: Center(
+                      child: Ink(
+                        decoration: const ShapeDecoration(
+                          color: Colors.red,
+                          shape: const CircleBorder(),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.email),
+                          color: Colors.white,
+                          onPressed: ()=>
+                              launch('mailto:osama.omarii02@gmail.com?subject=&body='),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+          ),
         ),
       ),
     );

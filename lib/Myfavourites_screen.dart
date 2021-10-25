@@ -55,163 +55,170 @@ class _MyFavouritesState extends State<MyFavourites> {
           });
     }
 
+    Future<bool> _onWillPop() async {
+      await Navigator.of(context).pushReplacementNamed('MyHomepage');
+      throw "";
+    }
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        drawer: MyDrawer(),
-        appBar: AppBar(
-          title: Text(lanProvider.texts('my favorites')),
-          centerTitle: true,
-        ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('/favorites/${user!.uid}/myFavorites')
-              .snapshots(),
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return const Center(child: const CircularProgressIndicator());
-            return Scrollbar(
-              child: Stack(children: [
-                provider.myFavorites.length == 0
-                    ? Center(
-                        child: Text(
-                        lanProvider.texts('no meals were added to favorites'),
-                        style: const TextStyle(
-                            fontSize: 18, fontStyle: FontStyle.italic),
-                      ))
-                    : ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, int index) {
-                          var resData = snapshot.data!.docs;
-                          if (resData.length != 0)
-                            return Card(
-                              elevation: 2.5,
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      child: Row(
-                                        children: [
-                                          if (provider.isLoading)
-                                            const CircularProgressIndicator(),
-                                          if (!provider.isLoading)
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.favorite,
-                                                color: Colors.red,
-                                              ),
-                                              onPressed: () async {
-                                                try {
-                                                  setState(() {
-                                                    provider.isLoading = true;
-                                                    provider.mealID =
-                                                        resData[index].id;
-                                                  });
-                                                  await FirebaseFirestore
-                                                      .instance
-                                                      .collection(
-                                                          'favorites/${user.uid}/myFavorites')
-                                                      .doc(provider.mealID)
-                                                      .delete()
-                                                      .then((value) {
-                                                    provider.myFavorites
-                                                        .removeWhere((element) =>
-                                                            element
-                                                                .myFavoriteID ==
-                                                            provider.mealID);
-                                                  });
-                                                  setState(() {
-                                                    provider.isLoading = false;
-                                                  });
-                                                } on FirebaseException catch (e) {
-                                                  setState(() {
-                                                    provider.isLoading = false;
-                                                  });
-                                                  dialog(e.message);
-                                                  print(e);
-                                                } catch (e) {
-                                                  setState(() {
-                                                    provider.isLoading = false;
-                                                  });
-                                                  dialog(lanProvider.texts(
-                                                      'Error occurred !'));
-                                                  print(e);
-                                                }
-                                              },
-                                            ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              SizedBox(height: height*0.02),
-                                              Container(
-                                                child: Text(
-                                                  resData[index]['meal name'],
-                                                  style: const TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w800),
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          drawer: MyDrawer(),
+          appBar: AppBar(
+            title: Text(lanProvider.texts('my favorites')),
+            centerTitle: true,
+          ),
+          body: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('/favorites/${user!.uid}/myFavorites')
+                .snapshots(),
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return const Center(child: const CircularProgressIndicator());
+              return Scrollbar(
+                child: Stack(children: [
+                  provider.myFavorites.length == 0
+                      ? Center(
+                          child: Text(
+                          lanProvider.texts('no meals were added to favorites'),
+                          style: const TextStyle(
+                              fontSize: 18, fontStyle: FontStyle.italic),
+                        ))
+                      : ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, int index) {
+                            var resData = snapshot.data!.docs;
+                            if (resData.length != 0)
+                              return Card(
+                                elevation: 2.5,
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            if (provider.isLoading)
+                                              const CircularProgressIndicator(),
+                                            if (!provider.isLoading)
+                                              IconButton(
+                                                icon: const Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.red,
                                                 ),
+                                                onPressed: () async {
+                                                  try {
+                                                    setState(() {
+                                                      provider.isLoading = true;
+                                                      provider.mealID =
+                                                          resData[index].id;
+                                                    });
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection(
+                                                            'favorites/${user.uid}/myFavorites')
+                                                        .doc(provider.mealID)
+                                                        .delete()
+                                                        .then((value) {
+                                                      provider.myFavorites
+                                                          .removeWhere((element) =>
+                                                              element
+                                                                  .myFavoriteID ==
+                                                              provider.mealID);
+                                                    });
+                                                    setState(() {
+                                                      provider.isLoading = false;
+                                                    });
+                                                  } on FirebaseException catch (e) {
+                                                    setState(() {
+                                                      provider.isLoading = false;
+                                                    });
+                                                    dialog(e.message);
+                                                    print(e);
+                                                  } catch (e) {
+                                                    setState(() {
+                                                      provider.isLoading = false;
+                                                    });
+                                                    dialog(lanProvider.texts(
+                                                        'Error occurred !'));
+                                                    print(e);
+                                                  }
+                                                },
                                               ),
-                                              SizedBox(height: height*0.015),
-                                              Container(
-                                                child: Text(
-                                                  resData[index]['description'],
-                                                  style: const TextStyle(
-                                                      fontSize: 15, color: Colors.grey),
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 17),
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 7),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                SizedBox(height: height*0.02),
+                                                Container(
                                                   child: Text(
-                                                    lanProvider.texts('price') +
-                                                        " " +
-                                                        resData[index]
-                                                            ['meal price'] +
-                                                        " " +
-                                                        lanProvider.texts('jd'),
+                                                    resData[index]['meal name'],
                                                     style: const TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.pink),
+                                                        fontSize: 17,
+                                                        fontWeight:
+                                                            FontWeight.w800),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                                SizedBox(height: height*0.015),
+                                                Container(
+                                                  child: Text(
+                                                    resData[index]['description'],
+                                                    style: const TextStyle(
+                                                        fontSize: 15, color: Colors.grey),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      top: 17),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 7),
+                                                    child: Text(
+                                                      lanProvider.texts('price') +
+                                                          " " +
+                                                          resData[index]
+                                                              ['meal price'] +
+                                                          " " +
+                                                          lanProvider.texts('jd'),
+                                                      style: const TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.pink),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Row(children: [
-                                    Text(
-                                      resData[index]['resName'],
-                                      style: const TextStyle(fontSize: 15),
-                                    ),
-                                    const Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: const Icon(Icons.arrow_forward),
-                                    ),
-                                  ]),
-                                ],
-                              ),
-                            );
-                          return Center(
-                              child: Text(
-                                  lanProvider.texts(
-                                      'no meals were added to favorites'),
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      fontStyle: FontStyle.italic)));
-                        },
-                      ),
-              ]),
-            );
-          },
+                                    Row(children: [
+                                      Text(
+                                        resData[index]['resName'],
+                                        style: const TextStyle(fontSize: 15),
+                                      ),
+                                      const Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: const Icon(Icons.arrow_forward),
+                                      ),
+                                    ]),
+                                  ],
+                                ),
+                              );
+                            return Center(
+                                child: Text(
+                                    lanProvider.texts(
+                                        'no meals were added to favorites'),
+                                    style: const TextStyle(
+                                        fontSize: 17,
+                                        fontStyle: FontStyle.italic)));
+                          },
+                        ),
+                ]),
+              );
+            },
+          ),
         ),
       ),
     );

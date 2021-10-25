@@ -131,68 +131,75 @@ class _MyAddressState extends State<MyAddress> {
             );
           });
     }
+    Future<bool> _onWillPop() async {
+      await Navigator.of(context).pushReplacementNamed('MyHomepage');
+      throw "";
+    }
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        drawer: MyDrawer(),
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          actions: [
-            IconButton(
-              icon: provider.isLoading
-                  ? CircularProgressIndicator()
-                  : Icon(Icons.add),
-              onPressed: () => Navigator.of(context).pushNamed('addAddress'),
-            ),
-          ],
-          title: Text(lanProvider.texts('my addresses')),
-          centerTitle: true,
-        ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('/address/${user!.uid}/addresses')
-              .snapshots(),
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return const Center(child: const CircularProgressIndicator());
-            if (snapshot.hasError)
-              return Center(
-                  child: Text(
-                lanProvider.texts('Error occurred !'),
-                style: const TextStyle(color: Colors.red),
-              ));
-              return ListView.builder(
-                itemCount: provider.loc.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var userData = snapshot.data!.docs;
-                  if (provider.loc.isEmpty || userData.isEmpty) {
-                    return Center(
-                        child: Text(lanProvider.texts('new address'),
-                            style: const TextStyle(
-                                fontSize: 17, fontStyle: FontStyle.italic)));
-                  }
-                  return Card(
-                    elevation: 1.5,
-                    child: ListTile(
-                      onLongPress: () async {
-                        setState(() {
-                          provider.iD = userData[index].id;
-                        });
-                        await delete(lanProvider.texts('delete this address?'));
-                      },
-                      title: Text(userData[index]['area']??""),
-                      subtitle: Text(lanProvider.texts('street:') +
-                          userData[index]['street']+
-                          "\n" +
-                          lanProvider.texts('phone:') +
-                          userData[index]['phoneNum']),
-                      isThreeLine: true,
-                    ),
-                  );
-                },
-              );
-          },
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          drawer: MyDrawer(),
+          appBar: AppBar(
+            backgroundColor: Colors.blue,
+            actions: [
+              IconButton(
+                icon: provider.isLoading
+                    ? CircularProgressIndicator()
+                    : Icon(Icons.add),
+                onPressed: () => Navigator.of(context).pushNamed('addAddress'),
+              ),
+            ],
+            title: Text(lanProvider.texts('my addresses')),
+            centerTitle: true,
+          ),
+          body: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('/address/${user!.uid}/addresses')
+                .snapshots(),
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return const Center(child: const CircularProgressIndicator());
+              if (snapshot.hasError)
+                return Center(
+                    child: Text(
+                  lanProvider.texts('Error occurred !'),
+                  style: const TextStyle(color: Colors.red),
+                ));
+                return ListView.builder(
+                  itemCount: provider.loc.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var userData = snapshot.data!.docs;
+                    if (provider.loc.isEmpty || userData.isEmpty) {
+                      return Center(
+                          child: Text(lanProvider.texts('new address'),
+                              style: const TextStyle(
+                                  fontSize: 17, fontStyle: FontStyle.italic)));
+                    }
+                    return Card(
+                      elevation: 1.5,
+                      child: ListTile(
+                        onLongPress: () async {
+                          setState(() {
+                            provider.iD = userData[index].id;
+                          });
+                          await delete(lanProvider.texts('delete this address?'));
+                        },
+                        title: Text(userData[index]['area']??""),
+                        subtitle: Text(lanProvider.texts('street:') +
+                            userData[index]['street']+
+                            "\n" +
+                            lanProvider.texts('phone:') +
+                            userData[index]['phoneNum']),
+                        isThreeLine: true,
+                      ),
+                    );
+                  },
+                );
+            },
+          ),
         ),
       ),
     );

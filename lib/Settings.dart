@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'Drawer.dart';
@@ -102,75 +103,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
           });
     }
 
+    Future<bool> _onWillPop() async {
+      await Navigator.of(context).pushReplacementNamed('MyHomepage');
+      throw "";
+    }
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        drawer: MyDrawer(),
-        appBar: AppBar(
-          title: Text(lanProvider.texts('Drawer6')),
-          centerTitle: true,
-          backgroundColor: Colors.blue,
-        ),
-        body: ListView(
-          children: [
-            SizedBox(height: height * 0.05),
-            ListTile(
-              leading: const Icon(Icons.language),
-              title: InkWell(
-                child: Text(lanProvider.texts('language'),
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          drawer: MyDrawer(),
+          appBar: AppBar(
+            title: Text(lanProvider.texts('Drawer6')),
+            centerTitle: true,
+            backgroundColor: Colors.blue,
+          ),
+          body: ListView(
+            children: [
+              SizedBox(height: height * 0.05),
+              ListTile(
+                leading: const Icon(Icons.language),
+                title: InkWell(
+                  child: Text(lanProvider.texts('language'),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: width * 0.055)),
+                  onTap: () => dialog(),
+                ),
+              ),
+              SizedBox(height: height * 0.013),
+              ListTile(
+                leading: const Icon(Icons.dark_mode),
+                title: Text(lanProvider.texts('dark mode'),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () => dialog(),
+                trailing: Switch(
+                    activeColor: Colors.blueAccent,
+                    activeTrackColor: Colors.blue[200],
+                    value: provider.isDark,
+                    onChanged: (bool val) async {
+                      await provider.setDarkMode(val);
+                    }),
               ),
-            ),
-            SizedBox(height: height * 0.013),
-            ListTile(
-              leading: const Icon(Icons.dark_mode),
-              title: Text(lanProvider.texts('dark mode'),
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-              trailing: Switch(
-                  activeColor: Colors.blueAccent,
-                  activeTrackColor: Colors.blue[200],
-                  value: provider.isDark,
-                  onChanged: (bool val) async {
-                    await provider.setDarkMode(val);
-                  }),
-            ),
-            SizedBox(height: height * 0.013),
-            ListTile(
-              leading: const Icon(Icons.phone),
-              title: InkWell(
-                child: Text(lanProvider.texts('call us'),
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () => dialog2(),
+              SizedBox(height: height * 0.013),
+              ListTile(
+                leading: const Icon(Icons.phone),
+                title: InkWell(
+                  child: Text(lanProvider.texts('call us'),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: width * 0.055)),
+                  onTap: () => dialog2(),
+                ),
               ),
-            ),
-            const Divider(thickness: 0.6),
-            // ListTile(
-            //   leading: const Icon(Icons.star_rate_outlined),
-            //   title: InkWell(
-            //     child: Text(lanProvider.texts('rate app'),
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-            //     onTap: () {
-            //       //  TODO add the link of the application
-            //     },
-            //   ),
-            // ),
-            // ListTile(
-            //   leading: const Icon(Icons.share),
-            //   title: InkWell(
-            //     child: Text(lanProvider.texts('share app'),
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-            //     onTap: () {
-            //       //  TODO share app
-            //     },
-            //   ),
-            // ),
-          ],
+              const Divider(thickness: 0.6),
+              ListTile(
+                leading: const Icon(Icons.star_rate_outlined),
+                title: InkWell(
+                  child: Text(lanProvider.texts('rate app'),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: width * 0.055)),
+                  onTap: () async{
+                    await launch('https://play.google.com/store/apps/details?id=com.delivery.time.osama');
+                  },
+                ),
+              ),
+              SizedBox(height: height * 0.013),
+              ListTile(
+                leading: const Icon(Icons.share),
+                title: InkWell(
+                  child: Text(lanProvider.texts('share app'),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: width * 0.055)),
+                  onTap: () async{
+                     await Share.share('https://play.google.com/store/apps/details?id=com.delivery.time.osama');
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -37,7 +37,7 @@ class _SweetsState extends State<Sweets> {
           child: Text(title,
               style: TextStyle(
                   color: provider.isDark? Colors.white:Colors.black,
-                  fontSize: 16,
+                  fontSize: width*0.042,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.center),
         ),
@@ -77,14 +77,15 @@ class _SweetsState extends State<Sweets> {
             ),
             Container(
               padding: const EdgeInsets.all(10),
-              height: height * 0.7,
+              height: height*0.65,
               child: Scrollbar(
                 child: GridView(
+                  physics: const NeverScrollableScrollPhysics(),
                   gridDelegate:
-                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                   SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 3,
+                    mainAxisSpacing: height*0.002,
+                    crossAxisSpacing: 1,
                     childAspectRatio: 3 / 2,
                   ),
                   children: [
