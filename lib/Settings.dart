@@ -103,6 +103,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           });
     }
 
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    bool isAndroid = Theme.of(context).platform == TargetPlatform.android;
+
     Future<bool> _onWillPop() async {
       await Navigator.of(context).pushReplacementNamed('MyHomepage');
       throw "";
@@ -155,6 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               const Divider(thickness: 0.6),
+              if (isAndroid)
               ListTile(
                 leading: const Icon(Icons.star_rate_outlined),
                 title: InkWell(
@@ -166,7 +170,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
               ),
+              if (isAndroid)
               SizedBox(height: height * 0.013),
+              if (isAndroid)
               ListTile(
                 leading: const Icon(Icons.share),
                 title: InkWell(

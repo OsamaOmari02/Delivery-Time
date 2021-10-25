@@ -16,6 +16,7 @@ class _SweetsState extends State<Sweets> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
@@ -52,41 +53,19 @@ class _SweetsState extends State<Sweets> {
           title: Text(lanProvider.texts('Sweets')),
           centerTitle: true,
         ),
-        body: ListView(
-          children: [
-            SizedBox(
-              height: height * 0.3,
-              width: double.infinity,
-              child: Container(
-                child: Image.asset(provider.imageFun[4], fit: BoxFit.cover),
-              ),
-            ),
-            SizedBox(height: height * 0.03),
-            Row(
-              children: [
-                SizedBox(width: width * 0.03),
-                Expanded(
-                  child: Text(
-                    lanProvider.texts('choose ur sweet'),
-                    maxLines: 2,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: width * 0.055),
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              height: height*0.65,
+        body: Container(
+              height: height*1.1,
+              padding: EdgeInsets.fromLTRB(2, 20, 2, 0),
               child: Scrollbar(
                 child: GridView(
-                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  // physics: const NeverScrollableScrollPhysics(),
                   gridDelegate:
-                   SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 220,
-                    mainAxisSpacing: height*0.002,
+                  SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: shortestSide<650?2:3,
+                    mainAxisSpacing: 1,
                     crossAxisSpacing: 1,
-                    childAspectRatio: 3 / 2,
+                    childAspectRatio: shortestSide<700?1.2:1,
                   ),
                   children: [
                     funImage(
@@ -102,8 +81,6 @@ class _SweetsState extends State<Sweets> {
                 ),
               ),
             )
-          ],
-        ),
       ),
     );
   }

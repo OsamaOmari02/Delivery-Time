@@ -143,6 +143,7 @@ class _MyHomepageState extends State<MyHomepage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
@@ -188,7 +189,7 @@ class _MyHomepageState extends State<MyHomepage> {
                 child: Text(lanProvider.texts(title),
                     style: TextStyle(
                         color: provider.isDark ? Colors.white : Colors.black,
-                        fontSize: width * 0.044),
+                        fontSize: width * 0.042),
                     textAlign: TextAlign.center),
               ),
             ),
@@ -292,103 +293,104 @@ class _MyHomepageState extends State<MyHomepage> {
           body: Container(
             // height: height,
             alignment: Alignment.center,
-            child: Scrollbar(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  SizedBox(
-                    height: height * 0.3,
-                    width: double.infinity,
-                    child: Carousel(
-                      images: <Widget>[
-                        Image.asset(provider.imageFun[0], fit: BoxFit.cover),
-                        Image.asset(provider.imageFun[1], fit: BoxFit.cover),
-                        Image.asset(provider.imageFun[2], fit: BoxFit.fill),
-                        Image.asset(provider.imageFun[3], fit: BoxFit.fill),
-                      ],
-                      dotColor: Colors.white,
-                      dotSize: 5,
-                      dotSpacing: 20,
-                      dotIncreasedColor: Colors.black,
-                      showIndicator: true,
-                      autoplayDuration: const Duration(seconds: 2),
-                    ),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                SizedBox(
+                  height: height * 0.3,
+                  width: double.infinity,
+                  child: Carousel(
+                    images: <Widget>[
+                      Image.asset(provider.imageFun[0], fit: BoxFit.cover),
+                      Image.asset(provider.imageFun[1], fit: BoxFit.cover),
+                      Image.asset(provider.imageFun[2], fit: BoxFit.fill),
+                      Image.asset(provider.imageFun[3], fit: BoxFit.fill),
+                    ],
+                    dotColor: Colors.white,
+                    dotSize: 5,
+                    dotSpacing: 20,
+                    dotIncreasedColor: Colors.black,
+                    showIndicator: true,
+                    autoplayDuration: const Duration(seconds: 2),
                   ),
-                  SizedBox(height: height * 0.03),
-                  Row(
-                    children: [
-                      SizedBox(width: width * 0.03),
-                      Expanded(
-                        child: Text(
-                          lanProvider.texts('order ur food..'),
-                          maxLines: 3,
-                          style: TextStyle(
-                              fontSize: width * 0.06,
-                              fontWeight: FontWeight.bold),
-                        ),
+                ),
+                SizedBox(height: height * 0.03),
+                Row(
+                  children: [
+                    SizedBox(width: width * 0.03),
+                    Expanded(
+                      child: Text(
+                        lanProvider.texts('order ur food..'),
+                        maxLines: 3,
+                        style: TextStyle(
+                            fontSize: width * 0.06,
+                            fontWeight: FontWeight.bold),
                       ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: height * 0.02),
+                Container(
+                  height: height * 0.24,
+                  width: double.infinity,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      content('file/shawarmah.jpg', "Shawarma & snacks",
+                          'shawarma'),
+                      content('file/3f48b82e3140f7c0.jpg', "homos & falafel",
+                          'homos'),
+                      content('file/unknoswn.png', "Sweets", 'sweets'),
+                      content('file/مشروب.jpg', "drinks", 'drinks'),
                     ],
                   ),
-                  SizedBox(height: height * 0.02),
-                  Container(
-                    height: height * 0.24,
-                    width: double.infinity,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        content('file/shawarmah.jpg', "Shawarma & snacks",
-                            'shawarma'),
-                        content('file/3f48b82e3140f7c0.jpg', "homos & falafel",
-                            'homos'),
-                        content('file/unknoswn.png', "Sweets", 'sweets'),
-                        content('file/مشروب.jpg', "drinks", 'drinks'),
-                      ],
-                    ),
-                  ),
-                  const Divider(thickness: 1),
-                  Row(
-                    children: [
-                      SizedBox(width: width * 0.03),
-                      Expanded(
-                        child: Text(
-                          lanProvider.texts('choose ur..'),
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: width * 0.06),
-                        ),
+                ),
+                const Divider(thickness: 1),
+                Row(
+                  children: [
+                    SizedBox(width: width * 0.03),
+                    Expanded(
+                      child: Text(
+                        lanProvider.texts('choose ur..'),
+                        maxLines: 2,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: width * 0.06),
                       ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: height * 0.02),
+                Container(
+                  height: shortestSide<650?height * 1.17:height*0.82,
+                  child: GridView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: shortestSide<700?220:300,
+                      mainAxisSpacing: shortestSide<700?25:50,
+                      crossAxisSpacing: 1,
+                      childAspectRatio: shortestSide<700?1.5:1,
+                    ),
+                    children: [
+                      funImage('file/معجنات ورد.png', "معجنات ورد"),
+                      // funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
+                      funImage('file/قايد حضر موت.jpg', "قايد حضر موت"),
+                      funImage('file/ارزه لبنان.jpg', "ارزه لبنان"),
+                      // funImage('file/الغزاوي.jpg', "الرائد الغزاوي"),
+                      funImage('file/دلع_كرشك.jpg', "دلع كرشك"),
+                      funImage('file/بيتزا المفرق.jpg', "بيتزا المفرق"),
+                      funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
+                      funImage('file/بيتزا اونلاين.jpg', "بيتزا اونلاين"),
+                      funImage('file/ابو جمال.jpg', "مطعم ابو جمال"),
+                      funImage('file/ابو هشهش.jpg', "ابو هشهش"),
+                      funImage('file/الدويري.jpg', "الدويري"),
+                      // funImage('file/ابو قاسم.jpg', "ابو قاسم"),
+                      // funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
                     ],
                   ),
-                  SizedBox(height: height * 0.02),
-                  Container(
-                    height: height * 0.85,
-                    child: GridView(
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 220,
-                        mainAxisSpacing: height * 0.002,
-                        crossAxisSpacing: 1,
-                        childAspectRatio: 3 / 2,
-                      ),
-                      children: [
-                        funImage('file/معجنات ورد.png', "معجنات ورد"),
-                        // funImage('file/بيتزا هوم.jpg', "بيتزا هوم"),
-                        funImage('file/قايد حضر موت.jpg', "قايد حضر موت"),
-                        funImage('file/ارزه لبنان.jpg', "ارزه لبنان"),
-                        // funImage('file/الغزاوي.jpg', "الرائد الغزاوي"),
-                        funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
-                        funImage('file/بيتزا اونلاين.jpg', "بيتزا اونلاين"),
-                        funImage('file/ابو جمال.jpg', "مطعم ابو جمال"),
-                        funImage('file/ابو هشهش.jpg', "ابو هشهش"),
-                        // funImage('file/ابو قاسم.jpg', "ابو قاسم"),
-                        // funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
-                        funImage('file/دلع_كرشك.jpg', "دلع كرشك"),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),
