@@ -155,10 +155,13 @@ class _MyHomepageState extends State<MyHomepage> {
           });
           Navigator.of(context).pushNamed('resScreen');
         },
-        title: Image.asset(
-          image,
-          height: height * 0.13,
-          fit: BoxFit.fill,
+        title: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: Image.asset(
+            image,
+            height: height * 0.13,
+            fit: BoxFit.fill,
+          ),
         ),
         subtitle: Text(title,
             style: TextStyle(
@@ -179,10 +182,13 @@ class _MyHomepageState extends State<MyHomepage> {
             elevation: 1.5,
             child: ListTile(
               onTap: () => Navigator.of(context).pushNamed(route),
-              title: Image.asset(
-                image,
-                height: height * 0.13,
-                fit: BoxFit.fill,
+              title: ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.asset(
+                  image,
+                  height: height * 0.13,
+                  fit: BoxFit.fill,
+                ),
               ),
               subtitle: Container(
                 padding: EdgeInsets.symmetric(vertical: height * 0.015),

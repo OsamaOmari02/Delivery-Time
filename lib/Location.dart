@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'Myprovider.dart';
 
 class Locations extends StatefulWidget {
-
   @override
   _LocationsState createState() => _LocationsState();
 }
@@ -26,6 +24,7 @@ class _LocationsState extends State<Locations> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -49,8 +48,7 @@ class _LocationsState extends State<Locations> {
               actions: [
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text("حسناً",
-                        style: const TextStyle(fontSize: 19)),
+                    child: Text("حسناً", style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
@@ -80,38 +78,39 @@ class _LocationsState extends State<Locations> {
                       "نعم",
                       style: const TextStyle(fontSize: 19, color: Colors.red),
                     ),
-                    onTap: () async{
+                    onTap: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
                           provider.authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
-                          Provider.of<MyProvider>(context,listen: false).details.clear();
+                          Provider.of<MyProvider>(context, listen: false)
+                              .details
+                              .clear();
                         });
-                      } on FirebaseException catch (e){
+                      } on FirebaseException catch (e) {
                         dialog("حدث خطأ !");
                         setState(() {
                           provider.authState = authStatus.unAuthenticated;
                         });
                         print(e.message);
-                      } catch (e){
+                      } catch (e) {
                         dialog("حدث خطأ !");
                         print(e);
                         setState(() {
                           provider.authState = authStatus.unAuthenticated;
                         });
                       }
-                    }
-                ),
+                    }),
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text("إلغاء",
-                        style: const TextStyle(fontSize: 19)),
+                    child: Text("إلغاء", style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
             );
           });
     }
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -139,7 +138,11 @@ class _LocationsState extends State<Locations> {
             ],
           ),
         ),
-        body: Center(child: Text('قيد الإنشاء ...',style: const TextStyle(fontSize: 20)),),
+        body: const Center(
+            child: const Text(
+          'قيد الإنشاء...',
+          style: const TextStyle(fontSize: 22),
+        )),
       ),
     );
   }

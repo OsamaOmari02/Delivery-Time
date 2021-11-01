@@ -28,10 +28,13 @@ class _HomosState extends State<Homos> {
           });
           Navigator.of(context).pushNamed('homosScreen');
         },
-        title: Image.asset(
-          image,
-          height: height * 0.14,
-          fit: BoxFit.fill,
+        title: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: Image.asset(
+            image,
+            height: height * 0.14,
+            fit: BoxFit.fill,
+          ),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.all(2.0),

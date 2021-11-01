@@ -1,4 +1,6 @@
 import 'package:app/Myprovider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -180,57 +182,35 @@ class _FirstState extends State<First> {
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return Card(
-                elevation: 2.5,
+                elevation: 3,
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: Container(
                         child: Row(
                           children: [
-                            if (provider.isLoading)
-                              const Center(child: const CircularProgressIndicator()),
-                            if (!provider.isLoading)
-                              IconButton(
-                                icon: Icon(
-                                  provider.isMyFav(resData[index].id)
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: Colors.red,
+                            if (resData[index]['imageUrl']!="")
+                              Container(
+                                margin: const EdgeInsets.all(7),
+                                width: width*0.24,
+                                height: height*0.16,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fill,
+                                    imageUrl: resData[index]['imageUrl'],
+                                    placeholder: (context, url) => const Center(child: const CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  ),
                                 ),
-                                onPressed: () async {
-                                  try {
-                                    setState(() {
-                                      provider.isLoading = true;
-                                      provider.mealID = resData[index].id;
-                                    });
-                                    await provider.toggleFavourite();
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                  } on FirebaseException catch (e) {
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                    dialog(
-                                        lanProvider.texts('Error occurred !'));
-                                    print(e.message);
-                                  } catch (e) {
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                    dialog(
-                                        lanProvider.texts('Error occurred !'));
-                                    print(e);
-                                  }
-                                },
                               ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.02),
+                                SizedBox(height: height*0.025),
                                 Container(
-                                  alignment: Alignment.topLeft,
+                                  padding: const EdgeInsets.symmetric(horizontal: 6),
                                   child: Text(
                                     resData[index]['meal name'],
                                     style: const TextStyle(
@@ -238,19 +218,26 @@ class _FirstState extends State<First> {
                                         fontWeight: FontWeight.w800),
                                   ),
                                 ),
-                                SizedBox(height: height*0.015),
-                                Container(
-                                  child: Text(
+                                const SizedBox(height: 10),
+                                SizedBox(
+                                  width: width*0.4,
+                                  child: AutoSizeText(
                                     resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        fontSize: 14, color: Colors.grey),
+                                        fontSize: 14,
+                                        color: Colors.grey),
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(top: height*0.015),
+                                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 16),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
+                                    const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
                                       lanProvider.texts('price') +
                                           " " +
@@ -258,7 +245,7 @@ class _FirstState extends State<First> {
                                           " " +
                                           lanProvider.texts('jd'),
                                       style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                          fontSize: 15, color: Colors.pink),
                                     ),
                                   ),
                                 ),
@@ -269,43 +256,87 @@ class _FirstState extends State<First> {
                         ),
                       ),
                     ),
-                    Row(
+                    Column(
                       children: [
-                        provider.existsInCart(resData[index].id)
-                            ? IconButton(
+                        if (provider.isLoading)
+                          const CircularProgressIndicator(),
+                        if (!provider.isLoading)
+                          IconButton(
+                            icon: Icon(
+                              provider.isMyFav(resData[index].id)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                            ),
+                            onPressed: () async {
+                              try {
+                                setState(() {
+                                  provider.isLoading = true;
+                                  provider.mealID = resData[index].id;
+                                });
+                                await provider.toggleFavourite();
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                              } on FirebaseException catch (e) {
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                                dialog(e.message);
+                                print(e.message);
+                              } catch (e) {
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                                dialog(lanProvider
+                                    .texts('Error occurred !'));
+                                print(e);
+                              }
+                            },
+                          ),
+                        Row(
+                          children: [
+                            provider.existsInCart(resData[index].id)
+                                ? IconButton(
+                              icon: const Icon(
+                                Icons.remove,
+                                color: Colors.red,
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  provider.mealID = resData[index].id;
+                                });
+                                await provider.removeFoodCart(resData[index]['meal price']);
+                              },
+                            )
+                                : Container(),
+                            Text(provider.getIndex(resData[index].id) == -1
+                                ? "0"
+                                : (provider
+                                .myCart[provider
+                                .getIndex(resData[index].id)]
+                                .quantity)
+                                .toString()),
+                            IconButton(
                                 icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.red,
+                                  Icons.add,
+                                  color: Colors.green,
                                 ),
                                 onPressed: () async {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  await provider.removeFoodCart(resData[index]['meal price']);
-                                },
-                              )
-                            : Container(),
-                        Text(provider.getIndex(resData[index].id) == -1
-                            ? "0"
-                            : (provider
-                                    .myCart[
-                                        provider.getIndex(resData[index].id)]
-                                    .quantity)
-                                .toString()),
-                        IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.green,
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                provider.mealID = resData[index].id;
-                              });
-                              if (provider.myCart.length!=0 && provider.restaurantName!=provider.myCart[0].resName)
-                                return dialog(lanProvider.texts('foodCart'));
-                              await provider.addFoodCart(resData[index]['meal name'],
-                                  resData[index]['meal price'],resData[index]['description']);
-                            }),
+                                  if (provider.myCart.length != 0 &&
+                                      provider.restaurantName !=
+                                          provider.myCart[0].resName)
+                                    return dialog(
+                                        lanProvider.texts('foodCart'));
+                                  provider.addFoodCart(
+                                      resData[index]['meal name'],
+                                      resData[index]['meal price'],resData[index]['description']);
+                                }),
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -376,57 +407,35 @@ class _SecondState extends State<Second> {
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return Card(
-                elevation: 2.5,
+                elevation: 3,
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: Container(
                         child: Row(
                           children: [
-                            if (provider.isLoading)
-                              const CircularProgressIndicator(),
-                            if (!provider.isLoading)
-                              IconButton(
-                                icon: Icon(
-                                  provider.isMyFav(resData[index].id)
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: Colors.red,
+                            if (resData[index]['imageUrl']!="")
+                              Container(
+                                margin: const EdgeInsets.all(7),
+                                width: width*0.24,
+                                height: height*0.16,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fill,
+                                    imageUrl: resData[index]['imageUrl'],
+                                    placeholder: (context, url) => const Center(child: const CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  ),
                                 ),
-                                onPressed: () async {
-                                  try {
-                                    setState(() {
-                                      provider.isLoading = true;
-                                      provider.mealID = resData[index].id;
-                                    });
-                                    await provider.toggleFavourite();
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                  } on FirebaseException catch (e) {
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                    dialog(e.message);
-                                    print(e.message);
-                                  } catch (e) {
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                    dialog(
-                                        lanProvider.texts('Error occurred !'));
-                                    print(e);
-                                  }
-                                },
                               ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.02),
+                                SizedBox(height: height*0.025),
                                 Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  alignment: Alignment.topLeft,
+                                  padding: const EdgeInsets.symmetric(horizontal: 6),
                                   child: Text(
                                     resData[index]['meal name'],
                                     style: const TextStyle(
@@ -435,18 +444,22 @@ class _SecondState extends State<Second> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Text(
+                                SizedBox(
+                                  width: width*0.4,
+                                  child: AutoSizeText(
                                     resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        fontSize: 15, color: Colors.grey),
+                                        fontSize: 14,
+                                        color: Colors.grey),
                                   ),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 7),
                                   alignment: Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(top: 17),
+                                  margin: const EdgeInsets.only(top: 16),
                                   child: Padding(
                                     padding:
                                     const EdgeInsets.symmetric(vertical: 7),
@@ -457,7 +470,7 @@ class _SecondState extends State<Second> {
                                           " " +
                                           lanProvider.texts('jd'),
                                       style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                          fontSize: 15, color: Colors.pink),
                                     ),
                                   ),
                                 ),
@@ -468,41 +481,87 @@ class _SecondState extends State<Second> {
                         ),
                       ),
                     ),
-                    Row(
+                    Column(
                       children: [
-                        provider.existsInCart(resData[index].id)
-                            ? IconButton(
+                        if (provider.isLoading)
+                          const CircularProgressIndicator(),
+                        if (!provider.isLoading)
+                          IconButton(
+                            icon: Icon(
+                              provider.isMyFav(resData[index].id)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                            ),
+                            onPressed: () async {
+                              try {
+                                setState(() {
+                                  provider.isLoading = true;
+                                  provider.mealID = resData[index].id;
+                                });
+                                await provider.toggleFavourite();
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                              } on FirebaseException catch (e) {
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                                dialog(e.message);
+                                print(e.message);
+                              } catch (e) {
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                                dialog(lanProvider
+                                    .texts('Error occurred !'));
+                                print(e);
+                              }
+                            },
+                          ),
+                        Row(
+                          children: [
+                            provider.existsInCart(resData[index].id)
+                                ? IconButton(
+                              icon: const Icon(
+                                Icons.remove,
+                                color: Colors.red,
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  provider.mealID = resData[index].id;
+                                });
+                                await provider.removeFoodCart(resData[index]['meal price']);
+                              },
+                            )
+                                : Container(),
+                            Text(provider.getIndex(resData[index].id) == -1
+                                ? "0"
+                                : (provider
+                                .myCart[provider
+                                .getIndex(resData[index].id)]
+                                .quantity)
+                                .toString()),
+                            IconButton(
                                 icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.red,
+                                  Icons.add,
+                                  color: Colors.green,
                                 ),
                                 onPressed: () async {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  await provider.removeFoodCart(resData[index]['meal price']);
-                                },
-                              )
-                            : Container(),
-                        Text(provider.getIndex(resData[index].id) == -1
-                            ? "0"
-                            : (provider
-                                    .myCart[
-                                        provider.getIndex(resData[index].id)]
-                                    .quantity)
-                                .toString()),
-                        IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.green,
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                provider.mealID = resData[index].id;
-                              });
-                              await provider.addFoodCart(resData[index]['meal name'],
-                                  resData[index]['meal price'],resData[index]['description']);
-                            }),
+                                  if (provider.myCart.length != 0 &&
+                                      provider.restaurantName !=
+                                          provider.myCart[0].resName)
+                                    return dialog(
+                                        lanProvider.texts('foodCart'));
+                                  provider.addFoodCart(
+                                      resData[index]['meal name'],
+                                      resData[index]['meal price'],resData[index]['description']);
+                                }),
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -572,57 +631,35 @@ class _ThirdState extends State<Third> {
             itemBuilder: (context, int index) {
               var resData = snapshot.data!.docs;
               return Card(
-                elevation: 2.5,
+                elevation: 3,
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: Container(
                         child: Row(
                           children: [
-                            if (provider.isLoading)
-                              const CircularProgressIndicator(),
-                            if (!provider.isLoading)
-                              IconButton(
-                                icon: Icon(
-                                  provider.isMyFav(resData[index].id)
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: Colors.red,
+                            if (resData[index]['imageUrl']!="")
+                              Container(
+                                margin: const EdgeInsets.all(7),
+                                width: width*0.24,
+                                height: height*0.16,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fill,
+                                    imageUrl: resData[index]['imageUrl'],
+                                    placeholder: (context, url) => const Center(child: const CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  ),
                                 ),
-                                onPressed: () async {
-                                  try {
-                                    setState(() {
-                                      provider.isLoading = true;
-                                      provider.mealID = resData[index].id;
-                                    });
-                                    await provider.toggleFavourite();
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                  } on FirebaseException catch (e) {
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                    dialog(e.message);
-                                    print(e.message);
-                                  } catch (e) {
-                                    setState(() {
-                                      provider.isLoading = false;
-                                    });
-                                    dialog(
-                                        lanProvider.texts('Error occurred !'));
-                                    print(e);
-                                  }
-                                },
                               ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.02),
+                                SizedBox(height: height*0.025),
                                 Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  alignment: Alignment.topLeft,
+                                  padding: const EdgeInsets.symmetric(horizontal: 6),
                                   child: Text(
                                     resData[index]['meal name'],
                                     style: const TextStyle(
@@ -631,18 +668,22 @@ class _ThirdState extends State<Third> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Text(
+                                SizedBox(
+                                  width: width*0.4,
+                                  child: AutoSizeText(
                                     resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        fontSize: 15, color: Colors.grey),
+                                        fontSize: 14,
+                                        color: Colors.grey),
                                   ),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 7),
                                   alignment: Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(top: 17),
+                                  margin: const EdgeInsets.only(top: 16),
                                   child: Padding(
                                     padding:
                                     const EdgeInsets.symmetric(vertical: 7),
@@ -653,7 +694,7 @@ class _ThirdState extends State<Third> {
                                           " " +
                                           lanProvider.texts('jd'),
                                       style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                          fontSize: 15, color: Colors.pink),
                                     ),
                                   ),
                                 ),
@@ -664,41 +705,87 @@ class _ThirdState extends State<Third> {
                         ),
                       ),
                     ),
-                    Row(
+                    Column(
                       children: [
-                        provider.existsInCart(resData[index].id)
-                            ? IconButton(
+                        if (provider.isLoading)
+                          const CircularProgressIndicator(),
+                        if (!provider.isLoading)
+                          IconButton(
+                            icon: Icon(
+                              provider.isMyFav(resData[index].id)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                            ),
+                            onPressed: () async {
+                              try {
+                                setState(() {
+                                  provider.isLoading = true;
+                                  provider.mealID = resData[index].id;
+                                });
+                                await provider.toggleFavourite();
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                              } on FirebaseException catch (e) {
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                                dialog(e.message);
+                                print(e.message);
+                              } catch (e) {
+                                setState(() {
+                                  provider.isLoading = false;
+                                });
+                                dialog(lanProvider
+                                    .texts('Error occurred !'));
+                                print(e);
+                              }
+                            },
+                          ),
+                        Row(
+                          children: [
+                            provider.existsInCart(resData[index].id)
+                                ? IconButton(
+                              icon: const Icon(
+                                Icons.remove,
+                                color: Colors.red,
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  provider.mealID = resData[index].id;
+                                });
+                                await provider.removeFoodCart(resData[index]['meal price']);
+                              },
+                            )
+                                : Container(),
+                            Text(provider.getIndex(resData[index].id) == -1
+                                ? "0"
+                                : (provider
+                                .myCart[provider
+                                .getIndex(resData[index].id)]
+                                .quantity)
+                                .toString()),
+                            IconButton(
                                 icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.red,
+                                  Icons.add,
+                                  color: Colors.green,
                                 ),
                                 onPressed: () async {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  await provider.removeFoodCart(resData[index]['meal price']);
-                                },
-                              )
-                            : Container(),
-                        Text(provider.getIndex(resData[index].id) == -1
-                            ? "0"
-                            : (provider
-                                    .myCart[
-                                        provider.getIndex(resData[index].id)]
-                                    .quantity)
-                                .toString()),
-                        IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.green,
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                provider.mealID = resData[index].id;
-                              });
-                              await provider.addFoodCart(resData[index]['meal name'],
-                                  resData[index]['meal price'],resData[index]['description']);
-                            }),
+                                  if (provider.myCart.length != 0 &&
+                                      provider.restaurantName !=
+                                          provider.myCart[0].resName)
+                                    return dialog(
+                                        lanProvider.texts('foodCart'));
+                                  provider.addFoodCart(
+                                      resData[index]['meal name'],
+                                      resData[index]['meal price'],resData[index]['description']);
+                                }),
+                          ],
+                        ),
                       ],
                     ),
                   ],

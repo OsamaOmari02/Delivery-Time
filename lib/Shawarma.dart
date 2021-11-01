@@ -29,10 +29,13 @@ class _ShawarmaState extends State<Shawarma> {
           });
           Navigator.of(context).pushNamed('shawarmaScreen');
         },
-        title: Image.asset(
-          image,
-          height: height * 0.135,
-          fit: BoxFit.fill,
+        title: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: Image.asset(
+            image,
+            height: height * 0.135,
+            fit: BoxFit.fill,
+          ),
         ),
         subtitle: Text(title,
             style: TextStyle(
