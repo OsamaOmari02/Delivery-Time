@@ -128,21 +128,21 @@ class _DrinksScreenState extends State<DrinksScreen> {
                                       padding: const EdgeInsets.symmetric(horizontal: 6),
                                       child: Text(
                                         resData[index]['meal name'],
-                                        style: const TextStyle(
-                                            fontSize: 17,
+                                        style: TextStyle(
+                                            fontSize: width*0.045,
                                             fontWeight: FontWeight.w800),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                     SizedBox(
-                                      width: width*0.4,
+                                      width: width*0.41,
                                       child: AutoSizeText(
                                         resData[index]['description'],
                                         maxLines: 3,
                                         minFontSize: 12,
                                         overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                            fontSize: 14,
+                                        style: TextStyle(
+                                            fontSize: width*0.035,
                                             color: Colors.grey),
                                       ),
                                     ),
@@ -159,8 +159,8 @@ class _DrinksScreenState extends State<DrinksScreen> {
                                               resData[index]['meal price'] +
                                               " " +
                                               lanProvider.texts('jd'),
-                                          style: const TextStyle(
-                                              fontSize: 15, color: Colors.pink),
+                                          style: TextStyle(
+                                              fontSize: width*0.04, color: Colors.pink),
                                         ),
                                       ),
                                     ),
