@@ -104,7 +104,7 @@ class _HomosScreenState extends State<HomosScreen> {
                               children: [
                                 if (resData[index]['imageUrl']!="")
                                   Container(
-                                    margin: const EdgeInsets.all(7),
+                                    padding: const EdgeInsets.all(3),
                                     width: width*0.24,
                                     height: height*0.16,
                                     child: ClipRRect(
@@ -174,6 +174,7 @@ class _HomosScreenState extends State<HomosScreen> {
                               const CircularProgressIndicator(),
                             if (!provider.isLoading)
                               IconButton(
+                                alignment: Alignment.topLeft,
                                 icon: Icon(
                                   provider.isMyFav(resData[index].id)
                                       ? Icons.favorite

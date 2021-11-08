@@ -180,7 +180,7 @@ class _FirstState extends State<First> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                margin: const EdgeInsets.all(7),
+                                padding: const EdgeInsets.all(3),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(
@@ -250,6 +250,7 @@ class _FirstState extends State<First> {
                           const CircularProgressIndicator(),
                         if (!provider.isLoading)
                           IconButton(
+                            alignment: Alignment.topLeft,
                             icon: Icon(
                               provider.isMyFav(resData[index].id)
                                   ? Icons.favorite
@@ -422,7 +423,7 @@ class _SecondState extends State<Second> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                margin: const EdgeInsets.all(7),
+                                padding: const EdgeInsets.all(3),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(
@@ -492,6 +493,7 @@ class _SecondState extends State<Second> {
                           const CircularProgressIndicator(),
                         if (!provider.isLoading)
                           IconButton(
+                            alignment: Alignment.topLeft,
                             icon: Icon(
                               provider.isMyFav(resData[index].id)
                                   ? Icons.favorite
@@ -647,7 +649,7 @@ class _ThirdState extends State<Third> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                margin: const EdgeInsets.all(7),
+                                padding: const EdgeInsets.all(3),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(
@@ -717,6 +719,7 @@ class _ThirdState extends State<Third> {
                           const CircularProgressIndicator(),
                         if (!provider.isLoading)
                           IconButton(
+                            alignment: Alignment.topLeft,
                             icon: Icon(
                               provider.isMyFav(resData[index].id)
                                   ? Icons.favorite
