@@ -289,14 +289,14 @@ class _ShoppingState extends State<Shopping> {
                     );
                   }),
           bottomNavigationBar: Container(
-            height: height*0.14,
+            height: height*0.16,
             child: Column(children: [
               if (provider.myCart.isNotEmpty)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Text(lanProvider.texts('cart total :'),
                           style: const TextStyle(
                             fontSize: 16,

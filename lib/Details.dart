@@ -244,7 +244,7 @@ class _DetailsState extends State<Details> {
                       await provider.sendToRestaurant();
                       Fluttertoast.showToast(
                           msg: 'تم إرسال الطلب الى المطعم بنجاح',
-                          toastLength: Toast.LENGTH_SHORT,
+                          toastLength: Toast.LENGTH_LONG,
                           backgroundColor: Colors.grey,
                           textColor: Colors.white,
                           fontSize: 16.0);

@@ -12,9 +12,15 @@ class CallCenter extends StatefulWidget {
 }
 
 class _CallCenterState extends State<CallCenter> {
+
+  var stream;
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
+    stream = FirebaseFirestore.instance
+        .collection('allOrders')
+        .orderBy('date', descending: true)
+        .snapshots();
     super.initState();
   }
 
@@ -146,12 +152,11 @@ class _CallCenterState extends State<CallCenter> {
           title: const Text('الطلبات'),
         ),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('allOrders')
-              .orderBy('date', descending: true)
-              .snapshots(),
+          stream: stream,
           builder: (ctx, snapshot) {
             if (snapshot.hasError) return Center(child: const Text('حدث خطأ !'));
+            if (snapshot.connectionState==ConnectionState.waiting)
+              return const Center(child: const CircularProgressIndicator());
             return Scrollbar(
                 child: ListView.builder(
                     itemCount: snapshot.data?.docs.length??0,

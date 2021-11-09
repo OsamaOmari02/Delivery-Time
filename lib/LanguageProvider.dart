@@ -80,7 +80,7 @@ class LanProvider with ChangeNotifier {
     'add meal': 'اضافة وجبة جديدة',
     'add text': 'اضافة الى',
     'about': 'حول التطبيق',
-    'hello': 'مرحبا, شكراً لإستخدامكم تطبيقنا.',
+    'hello': 'شكراً لإستخدامكم تطبيقنا.',
     'If you face':
         'اذا واجهتم مشاكل خلال استخدامكم التطبيق الرجاء التواصل مع الدعم الفني.',
     'Error occurred !': '! حدث خطأ',
@@ -203,7 +203,7 @@ class LanProvider with ChangeNotifier {
     'add meal': 'Add Meal',
     'add text': 'Add To',
     'about': 'About The Application',
-    'hello': 'Hello, thanks for using our app.',
+    'hello': 'Thanks for using our app.',
     'If you face':
         'If you face any problem let the support know please and thank you !',
     'Error occurred !': 'Error occurred !',

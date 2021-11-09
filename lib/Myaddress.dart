@@ -16,9 +16,14 @@ class MyAddress extends StatefulWidget {
 }
 
 class _MyAddressState extends State<MyAddress> {
+  var stream;
+  var user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).fetchAddress();
+    stream = FirebaseFirestore.instance
+        .collection('/address/${user!.uid}/addresses')
+        .snapshots();
     super.initState();
   }
 
@@ -26,7 +31,6 @@ class _MyAddressState extends State<MyAddress> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    var user = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
           context: context,
@@ -156,9 +160,7 @@ class _MyAddressState extends State<MyAddress> {
             centerTitle: true,
           ),
           body: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('/address/${user!.uid}/addresses')
-                .snapshots(),
+            stream: stream,
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
                 return const Center(child: const CircularProgressIndicator());
