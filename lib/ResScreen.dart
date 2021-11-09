@@ -12,7 +12,7 @@ class MainResScreen extends StatefulWidget {
   @override
   _MainResScreenState createState() => _MainResScreenState();
 }
-
+ var tab1r;
 class _MainResScreenState extends State<MainResScreen> {
   @override
   void initState() {
@@ -20,6 +20,9 @@ class _MainResScreenState extends State<MainResScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsMain(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
+    tab1r = FirebaseFirestore.instance
+        .collection('/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
+        .snapshots();
     super.initState();
   }
 
@@ -79,12 +82,10 @@ class _MainResScreenState extends State<MainResScreen> {
       child: Scaffold(
         appBar: AppBar(centerTitle: true, title: Text(provider.restaurantName)),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('/mainRes/${provider.restaurantName}/meals')
-              .snapshots(),
+          stream: tab1r,
           builder: (ctx, snapshot) {
-            // if (snapshot.connectionState == ConnectionState.waiting)
-            //   return Center(child: const CircularProgressIndicator());
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return const Center(child: const CircularProgressIndicator());
             if (snapshot.hasError)
               return Center(
                   child: Text(lanProvider.texts('something went wrong !')));
@@ -104,7 +105,7 @@ class _MainResScreenState extends State<MainResScreen> {
                               children: [
                                 if (resData[index]['imageUrl']!="")
                                   Container(
-                                    padding: const EdgeInsets.all(3),
+                                    margin: const EdgeInsets.symmetric(vertical: 10),
                                     width: width*0.24,
                                     height: height*0.16,
                                     child: ClipRRect(

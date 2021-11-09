@@ -151,7 +151,7 @@ class _CallCenterState extends State<CallCenter> {
               .orderBy('date', descending: true)
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (snapshot.hasError) return Center(child: Text('حدث خطأ !'));
+            if (snapshot.hasError) return Center(child: const Text('حدث خطأ !'));
             return Scrollbar(
                 child: ListView.builder(
                     itemCount: snapshot.data?.docs.length??0,

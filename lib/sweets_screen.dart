@@ -13,6 +13,9 @@ class SweetScreen extends StatefulWidget {
   _SweetScreenState createState() => _SweetScreenState();
 }
 
+  var tab1s;
+  var tab2s;
+  var tab3s;
 class _SweetScreenState extends State<SweetScreen> {
   @override
   void initState() {
@@ -20,6 +23,18 @@ class _SweetScreenState extends State<SweetScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsSweets(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
+    tab1s = FirebaseFirestore.instance
+        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/kunafeh')
+        .snapshots();
+    tab2s = FirebaseFirestore.instance
+        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/cake')
+        .snapshots();
+    tab3s = FirebaseFirestore.instance
+        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/others')
+        .snapshots();
     super.initState();
   }
 
@@ -155,12 +170,10 @@ class _FirstState extends State<First> {
     }
 
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('sweets/${provider.restaurantName}/kunafeh')
-          .snapshots(),
+      stream: tab1s,
       builder: (ctx, snapshot) {
-        // if (snapshot.connectionState == ConnectionState.waiting)
-        //   return Center(child: CircularProgressIndicator());
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return const Center(child: const CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(
               child: Text(lanProvider.texts('something went wrong !')));
@@ -180,7 +193,7 @@ class _FirstState extends State<First> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                padding: const EdgeInsets.all(3),
+                                margin: const EdgeInsets.symmetric(vertical: 10),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(
@@ -398,12 +411,10 @@ class _SecondState extends State<Second> {
     }
 
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('sweets/${provider.restaurantName}/cake')
-          .snapshots(),
+      stream: tab2s,
       builder: (ctx, snapshot) {
-        // if (snapshot.connectionState == ConnectionState.waiting)
-        //   return Center(child: CircularProgressIndicator());
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return const Center(child: const CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(
               child: Text(lanProvider.texts('something went wrong !')));
@@ -423,7 +434,7 @@ class _SecondState extends State<Second> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                padding: const EdgeInsets.all(3),
+                                margin: const EdgeInsets.symmetric(vertical: 10),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(
@@ -624,12 +635,10 @@ class _ThirdState extends State<Third> {
     }
 
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('sweets/${provider.restaurantName}/others')
-          .snapshots(),
+      stream: tab3s,
       builder: (ctx, snapshot) {
-        // if (snapshot.connectionState == ConnectionState.waiting)
-        //   return Center(child: CircularProgressIndicator());
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return const Center(child: const CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(
               child: Text(lanProvider.texts('something went wrong !')));
@@ -649,7 +658,7 @@ class _ThirdState extends State<Third> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                padding: const EdgeInsets.all(3),
+                                margin: const EdgeInsets.symmetric(vertical: 10),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(

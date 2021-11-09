@@ -13,13 +13,18 @@ class HomosScreen extends StatefulWidget {
   _HomosScreenState createState() => _HomosScreenState();
 }
 
+  var tab1h;
 class _HomosScreenState extends State<HomosScreen> {
+
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<MyProvider>(context, listen: false).fetchMealsHomos(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
+    tab1h = FirebaseFirestore.instance
+        .collection('/homos/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
+        .snapshots();
     super.initState();
   }
 
@@ -79,12 +84,10 @@ class _HomosScreenState extends State<HomosScreen> {
       child: Scaffold(
         appBar: AppBar(centerTitle: true, title: Text(provider.restaurantName)),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('/homos/${provider.restaurantName}/meals')
-              .snapshots(),
+          stream: tab1h,
           builder: (ctx, snapshot) {
-            // if (snapshot.connectionState == ConnectionState.waiting)
-            //   return Center(child: const CircularProgressIndicator());
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return const Center(child: const CircularProgressIndicator());
             if (snapshot.hasError)
               return Center(
                   child: Text(lanProvider.texts('something went wrong !')));
@@ -104,7 +107,7 @@ class _HomosScreenState extends State<HomosScreen> {
                               children: [
                                 if (resData[index]['imageUrl']!="")
                                   Container(
-                                    padding: const EdgeInsets.all(3),
+                                    margin: const EdgeInsets.symmetric(vertical: 10),
                                     width: width*0.24,
                                     height: height*0.16,
                                     child: ClipRRect(

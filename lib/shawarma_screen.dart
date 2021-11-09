@@ -12,7 +12,9 @@ class ShawarmaScreen extends StatefulWidget {
   @override
   _ShawarmaScreenState createState() => _ShawarmaScreenState();
 }
-
+  var tab1sh;
+  var tab2sh;
+  var tab3sh;
 class _ShawarmaScreenState extends State<ShawarmaScreen> {
   @override
   void initState() {
@@ -20,6 +22,18 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsShawarma(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
+    tab1sh = FirebaseFirestore.instance
+        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/shawarma')
+        .snapshots();
+    tab2sh = FirebaseFirestore.instance
+        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/snacks')
+        .snapshots();
+    tab3sh = FirebaseFirestore.instance
+        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/others')
+        .snapshots();
     super.initState();
   }
 
@@ -113,6 +127,8 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
     );
   }
 }
+
+//-------------------------------1-------------------------------
 class First extends StatefulWidget {
   @override
   _FirstState createState() => _FirstState();
@@ -170,12 +186,12 @@ class _FirstState extends State<First> {
           });
     }
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('/shawarma/${provider.restaurantName}/shawarma')
-          .snapshots(),
+      stream: tab1sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
           return Center(child: Text(lanProvider.texts('something went wrong !')));
+        if (snapshot.connectionState==ConnectionState.waiting)
+          return const Center(child: const CircularProgressIndicator());
         return Scrollbar(
           child: ListView.builder(
             itemCount: snapshot.data?.docs.length??0,
@@ -192,7 +208,7 @@ class _FirstState extends State<First> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                padding: const EdgeInsets.all(3),
+                                margin: const EdgeInsets.symmetric(vertical: 10),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(
@@ -394,14 +410,12 @@ class _SecondState extends State<Second> {
     }
 
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('shawarma/${provider.restaurantName}/snacks')
-          .snapshots(),
+      stream: tab2sh,
       builder: (ctx, snapshot) {
-        // if (snapshot.connectionState==ConnectionState.waiting)
-        //   return Center(child: CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(child: Text(lanProvider.texts('something went wrong !')));
+        if (snapshot.connectionState==ConnectionState.waiting)
+          return const Center(child: const CircularProgressIndicator());
         return Scrollbar(
           child: ListView.builder(
             itemCount: snapshot.data?.docs.length??0,
@@ -418,7 +432,7 @@ class _SecondState extends State<Second> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                padding: const EdgeInsets.all(3),
+                                margin: const EdgeInsets.symmetric(vertical: 10),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(
@@ -619,14 +633,12 @@ class _ThirdState extends State<Third> {
     }
 
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('/shawarma/${provider.restaurantName}/others')
-          .snapshots(),
+      stream: tab3sh,
       builder: (ctx, snapshot) {
-        // if (snapshot.connectionState==ConnectionState.waiting)
-        //   return Center(child: CircularProgressIndicator());
         if (snapshot.hasError)
           return Center(child: Text(lanProvider.texts('something went wrong !')));
+        if (snapshot.connectionState==ConnectionState.waiting)
+          return const Center(child: const CircularProgressIndicator());
         return Scrollbar(
           child: ListView.builder(
             itemCount: snapshot.data?.docs.length??0,
@@ -643,7 +655,7 @@ class _ThirdState extends State<Third> {
                           children: [
                             if (resData[index]['imageUrl']!="")
                               Container(
-                                padding: const EdgeInsets.all(3),
+                                margin: const EdgeInsets.symmetric(vertical: 10),
                                 width: width*0.24,
                                 height: height*0.16,
                                 child: ClipRRect(

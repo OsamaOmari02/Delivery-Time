@@ -14,11 +14,16 @@ class History extends StatefulWidget {
   @override
   _HistoryState createState() => _HistoryState();
 }
-
+var user = FirebaseAuth.instance.currentUser;
 class _HistoryState extends State<History> {
+   var stream;
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
+    stream = FirebaseFirestore.instance
+        .collection('/orders/${user!.uid}/myOrders')
+        .orderBy('date', descending: true)
+        .snapshots();
     super.initState();
   }
 
@@ -28,8 +33,6 @@ class _HistoryState extends State<History> {
     double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
-    var user = FirebaseAuth.instance.currentUser;
-
     dialog(title) {
       return showDialog(
           context: context,
@@ -173,10 +176,7 @@ class _HistoryState extends State<History> {
             backgroundColor: Colors.blue,
           ),
           body: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('/orders/${user!.uid}/myOrders')
-                .orderBy('date', descending: true)
-                .snapshots(),
+            stream: stream,
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
                 return Center(child: const CircularProgressIndicator());
@@ -192,7 +192,7 @@ class _HistoryState extends State<History> {
                       return Center(
                         child: Text(
                           lanProvider.texts('no orders'),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 17, fontStyle: FontStyle.italic),
                         ),
                       );

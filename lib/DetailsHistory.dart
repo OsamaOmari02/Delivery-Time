@@ -34,7 +34,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 lanProvider.texts('deliver to'),
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
             Card(
@@ -56,7 +56,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 provider.details['resName']!,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),

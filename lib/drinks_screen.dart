@@ -16,6 +16,7 @@ class DrinksScreen extends StatefulWidget {
   _DrinksScreenState createState() => _DrinksScreenState();
 }
 
+  var tab1d;
 class _DrinksScreenState extends State<DrinksScreen> {
   @override
   void initState() {
@@ -23,6 +24,9 @@ class _DrinksScreenState extends State<DrinksScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
+    tab1d = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
+        .snapshots();
     super.initState();
   }
 
@@ -82,12 +86,10 @@ class _DrinksScreenState extends State<DrinksScreen> {
       child: Scaffold(
         appBar: AppBar(centerTitle: true, title: Text(provider.restaurantName)),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('/drinks/${provider.restaurantName}/meals')
-              .snapshots(),
+          stream: tab1d,
           builder: (ctx, snapshot) {
-            // if (snapshot.connectionState == ConnectionState.waiting)
-            //   return Center(child: const CircularProgressIndicator());
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return const Center(child: const CircularProgressIndicator());
             if (snapshot.hasError)
               return Center(
                   child: Text(lanProvider.texts('something went wrong !')));

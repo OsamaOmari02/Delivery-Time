@@ -13,10 +13,15 @@ class MyFavourites extends StatefulWidget {
   _MyFavouritesState createState() => _MyFavouritesState();
 }
 
+var stream;
 class _MyFavouritesState extends State<MyFavourites> {
+  var user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).fetchFav();
+    stream = FirebaseFirestore.instance
+        .collection('/favorites/${user!.uid}/myFavorites')
+        .snapshots();
     super.initState();
   }
 
@@ -26,7 +31,6 @@ class _MyFavouritesState extends State<MyFavourites> {
     var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var user = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
           context: context,
@@ -70,9 +74,7 @@ class _MyFavouritesState extends State<MyFavourites> {
             centerTitle: true,
           ),
           body: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('/favorites/${user!.uid}/myFavorites')
-                .snapshots(),
+            stream: stream,
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
                 return const Center(child: const CircularProgressIndicator());
@@ -117,7 +119,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                     await FirebaseFirestore
                                                         .instance
                                                         .collection(
-                                                            'favorites/${user.uid}/myFavorites')
+                                                            'favorites/${user!.uid}/myFavorites')
                                                         .doc(provider.mealID)
                                                         .delete()
                                                         .then((value) {
