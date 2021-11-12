@@ -312,8 +312,8 @@ class MyProvider with ChangeNotifier {
     }).then((value) {
       loc.add(
           Address(id: value.id, area: area, street: street, phoneNum: phone));
-      notifyListeners();
     });
+    notifyListeners();
   }
 
   var iD;

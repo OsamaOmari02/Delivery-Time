@@ -133,8 +133,9 @@ class _MyHomepageState extends State<MyHomepage> {
   @override
   void initState() {
     Provider.of<LanProvider>(context, listen: false).getLanguage();
-    Provider.of<MyProvider>(context, listen: false).fetch();
-    Provider.of<MyProvider>(context, listen: false).fetchFav();
+    if (Provider.of<MyProvider>(context, listen: false).authData['name']!=null
+    || Provider.of<MyProvider>(context, listen: false).authData['name']!='')
+        Provider.of<MyProvider>(context, listen: false).fetch();
     Provider.of<MyProvider>(context, listen: false).fetchAddress();
     super.initState();
   }
