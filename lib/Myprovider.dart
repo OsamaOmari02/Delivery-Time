@@ -797,25 +797,6 @@ class MyProvider with ChangeNotifier {
       });
   }
 
-  // var isLogged;
-  //
-  // setStateLog() async{
-  //   SharedPreferences state = await SharedPreferences.getInstance();
-  //   isLogged = state.setBool('loggedIn',true);
-  //   notifyListeners();
-  // }
-  // logInLogOut(BuildContext context) async{
-  //   SharedPreferences state = await SharedPreferences.getInstance();
-  //   isLogged = state.getBool('loggedIn')??false;
-  //   if (!isLogged)
-  //     Navigator.of(context).pushReplacementNamed('callCenter');
-  //   else if (isLogged && admin)
-  //     Navigator.of(context).pushReplacementNamed('callCenter');
-  //   else if (isLogged && !admin)
-  //     Navigator.of(context).pushReplacementNamed('MyHomepage');
-  //   notifyListeners();
-  // }
-
 //  ---------------------------location------------------------------------------
 
   var lat;

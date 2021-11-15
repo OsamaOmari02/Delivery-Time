@@ -19,7 +19,6 @@ class _LoginViewState extends State<Login> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).getAdmin();
-    // Provider.of<MyProvider>(context, listen: false).isLogged(context);
     super.initState();
   }
 
@@ -187,7 +186,6 @@ class _LoginViewState extends State<Login> {
                 provider.fetch();
                 provider.authState = authStatus.Authenticated;
               });
-              // provider.setStateLog();
               if (_emailController.text.trim() != "admin@gmail.com" &&
                   _passwordController.text != "delivery.time123") {
                 provider.setAdmin(false);
