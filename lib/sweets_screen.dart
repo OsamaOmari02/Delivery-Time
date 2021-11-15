@@ -22,6 +22,20 @@ class _SweetScreenState extends State<SweetScreen> {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<MyProvider>(context, listen: false).fetchMealsSweets(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
+      setState(() {
+        tab1s = FirebaseFirestore.instance
+            .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+            .restaurantName}/kunafeh')
+            .snapshots();
+        tab2s = FirebaseFirestore.instance
+            .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+            .restaurantName}/cake')
+            .snapshots();
+        tab3s = FirebaseFirestore.instance
+            .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+            .restaurantName}/others')
+            .snapshots();
+      });
     });
     super.initState();
   }
@@ -124,14 +138,6 @@ class First extends StatefulWidget {
 
 class _FirstState extends State<First> {
 
-  @override
-  void initState() {
-    tab1s = FirebaseFirestore.instance
-        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/kunafeh')
-        .snapshots();
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -357,14 +363,7 @@ class Second extends StatefulWidget {
 
 class _SecondState extends State<Second> {
 
-  @override
-  void initState() {
-    tab2s = FirebaseFirestore.instance
-        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/cake')
-        .snapshots();
-    super.initState();
-  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -607,14 +606,6 @@ class Third extends StatefulWidget {
 
 class _ThirdState extends State<Third> {
 
-  @override
-  void initState() {
-    tab3s = FirebaseFirestore.instance
-        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/others')
-        .snapshots();
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

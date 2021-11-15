@@ -22,9 +22,11 @@ class _HomosScreenState extends State<HomosScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsHomos(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
-    tab1h = FirebaseFirestore.instance
-        .collection('/homos/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
-        .snapshots();
+    setState(() {
+      tab1h = FirebaseFirestore.instance
+          .collection('/homos/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
+          .snapshots();
+    });
     super.initState();
   }
 

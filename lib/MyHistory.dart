@@ -20,10 +20,12 @@ class _HistoryState extends State<History> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
-    stream = FirebaseFirestore.instance
-        .collection('/orders/${user!.uid}/myOrders')
-        .orderBy('date', descending: true)
-        .snapshots();
+    setState(() {
+      stream = FirebaseFirestore.instance
+          .collection('/orders/${user!.uid}/myOrders')
+          .orderBy('date', descending: true)
+          .snapshots();
+    });
     super.initState();
   }
 

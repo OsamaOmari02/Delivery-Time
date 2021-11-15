@@ -9,14 +9,28 @@ import 'package:provider/provider.dart';
 
 import 'LanguageProvider.dart';
 
-class UserState extends StatelessWidget {
+class UserState extends StatefulWidget {
+
+  @override
+  State<UserState> createState() => _UserStateState();
+}
+
+class _UserStateState extends State<UserState> {
+  var stream;
+  @override
+  void initState() {
+    setState(() {
+      stream = FirebaseAuth.instance.authStateChanges();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
+        stream: stream,
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return Login();

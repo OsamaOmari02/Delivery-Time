@@ -22,18 +22,20 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsShawarma(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
-    tab1sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/shawarma')
-        .snapshots();
-    tab2sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/snacks')
-        .snapshots();
-    tab3sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/others')
-        .snapshots();
+    setState(() {
+      tab1sh = FirebaseFirestore.instance
+          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+          .restaurantName}/shawarma')
+          .snapshots();
+      tab2sh = FirebaseFirestore.instance
+          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+          .restaurantName}/snacks')
+          .snapshots();
+      tab3sh = FirebaseFirestore.instance
+          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+          .restaurantName}/others')
+          .snapshots();
+    });
     super.initState();
   }
 

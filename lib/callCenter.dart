@@ -17,10 +17,12 @@ class _CallCenterState extends State<CallCenter> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
-    stream = FirebaseFirestore.instance
-        .collection('allOrders')
-        .orderBy('date', descending: true)
-        .snapshots();
+    setState(() {
+      stream = FirebaseFirestore.instance
+          .collection('allOrders')
+          .orderBy('date', descending: true)
+          .snapshots();
+    });
     super.initState();
   }
 

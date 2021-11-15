@@ -21,9 +21,11 @@ class _MyAddressState extends State<MyAddress> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).fetchAddress();
-    stream = FirebaseFirestore.instance
-        .collection('/address/${user!.uid}/addresses')
-        .snapshots();
+    setState(() {
+      stream = FirebaseFirestore.instance
+          .collection('/address/${user!.uid}/addresses')
+          .snapshots();
+    });
     super.initState();
   }
 

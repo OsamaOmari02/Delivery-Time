@@ -24,9 +24,11 @@ class _DrinksScreenState extends State<DrinksScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
-    tab1d = FirebaseFirestore.instance
-        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
-        .snapshots();
+    setState(() {
+      tab1d = FirebaseFirestore.instance
+          .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
+          .snapshots();
+    });
     super.initState();
   }
 

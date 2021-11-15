@@ -20,9 +20,11 @@ class _MainResScreenState extends State<MainResScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsMain(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
-    tab1r = FirebaseFirestore.instance
-        .collection('/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
-        .snapshots();
+    setState(() {
+      tab1r = FirebaseFirestore.instance
+          .collection('/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
+          .snapshots();
+    });
     super.initState();
   }
 

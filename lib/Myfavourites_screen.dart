@@ -19,9 +19,11 @@ class _MyFavouritesState extends State<MyFavourites> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).fetchFav();
-    stream = FirebaseFirestore.instance
-        .collection('/favorites/${user!.uid}/myFavorites')
-        .snapshots();
+    setState(() {
+      stream = FirebaseFirestore.instance
+          .collection('/favorites/${user!.uid}/myFavorites')
+          .snapshots();
+    });
     super.initState();
   }
 
@@ -29,7 +31,6 @@ class _MyFavouritesState extends State<MyFavourites> {
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
