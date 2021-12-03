@@ -14,14 +14,12 @@ class DetailsHistory extends StatefulWidget {
 class _DetailsHistoryState extends State<DetailsHistory> {
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     double height = MediaQuery.of(context).size.height;
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(lanProvider.texts('details')),
+          title: Text( Provider.of<LanProvider>(context,listen: false).texts('details')),
           centerTitle: true,
         ),
         drawer: MyDrawer(),
@@ -32,7 +30,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                lanProvider.texts('deliver to'),
+                Provider.of<LanProvider>(context,listen: false).texts('deliver to'),
                 style: const TextStyle(fontSize: 15),
               ),
             ),
@@ -40,26 +38,26 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               elevation: 2.0,
-              color: provider.isDark ? Colors.grey[170] : Colors.white70,
+              color: Provider.of<MyProvider>(context,listen: false).isDark ? Colors.grey[170] : Colors.white70,
               child: ListTile(
-                title: Text(provider.details['area'] ?? ""),
-                subtitle: Text(lanProvider.texts('street') +
-                    provider.details['street']! +
+                title: Text(Provider.of<MyProvider>(context,listen: false).details['area'] ?? ""),
+                subtitle: Text( Provider.of<LanProvider>(context,listen: false).texts('street') +
+                    Provider.of<MyProvider>(context,listen: false).details['street']! +
                     "\n" +
-                    lanProvider.texts('phone:') +
-                    provider.details['phoneNum']!),
+                    Provider.of<LanProvider>(context,listen: false).texts('phone:') +
+                    Provider.of<MyProvider>(context,listen: false).details['phoneNum']!),
                 isThreeLine: true,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                provider.details['resName']!,
+                Provider.of<MyProvider>(context,listen: false).details['resName']!,
                 style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
-            for (int i = 0; i < provider.detailedCart.length; i++)
+            for (int i = 0; i < Provider.of<MyProvider>(context,listen: false).detailedCart.length; i++)
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Card(
@@ -67,14 +65,14 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                       borderRadius: BorderRadius.circular(12)),
                   elevation: 3.0,
                   child: ListTile(
-                    title: Text(provider.detailedCart[i].mealName),
-                    subtitle: Text(provider.detailedCart[i].description +
+                    title: Text(Provider.of<MyProvider>(context,listen: false).detailedCart[i].mealName),
+                    subtitle: Text(Provider.of<MyProvider>(context,listen: false).detailedCart[i].description +
                         "\n" +
-                        lanProvider.texts('meal price : ') +
-                        provider.detailedCart[i].mealPrice.toString() +
-                        " ${lanProvider.texts('jd')}\n" +
-                        lanProvider.texts('quantity : ') +
-                        provider.detailedCart[i].quantity.toString()),
+                        Provider.of<LanProvider>(context,listen: false).texts('meal price : ') +
+                        Provider.of<MyProvider>(context,listen: false).detailedCart[i].mealPrice.toString() +
+                        " ${ Provider.of<LanProvider>(context,listen: false).texts('jd')}\n" +
+                        Provider.of<LanProvider>(context,listen: false).texts('quantity : ') +
+                        Provider.of<MyProvider>(context,listen: false).detailedCart[i].quantity.toString()),
                     isThreeLine: true,
                   ),
                 ),
@@ -84,15 +82,15 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
-                  lanProvider.texts('cart total :'),
+                  Provider.of<LanProvider>(context,listen: false).texts('cart total :'),
                   style: const TextStyle(fontSize: 15),
                 ),
                 Text(
-                  provider.details['total'].toString() + " ",
+                  Provider.of<MyProvider>(context,listen: false).details['total'].toString() + " ",
                   style: const TextStyle(fontSize: 15),
                 ),
                 Text(
-                  lanProvider.texts('jd'),
+                  Provider.of<LanProvider>(context,listen: false).texts('jd'),
                   style: const TextStyle(fontSize: 15),
                 ),
               ]),
@@ -101,15 +99,15 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
-                  lanProvider.texts('delivery price'),
+                  Provider.of<LanProvider>(context,listen: false).texts('delivery price'),
                   style: const TextStyle(fontSize: 15),
                 ),
                 Text(
-                  provider.details['delivery'].toString() + " ",
+                  Provider.of<MyProvider>(context,listen: false).details['delivery'].toString() + " ",
                   style: const TextStyle(fontSize: 15),
                 ),
                 Text(
-                  lanProvider.texts('jd'),
+                  Provider.of<LanProvider>(context,listen: false).texts('jd'),
                   style: const TextStyle(fontSize: 15),
                 ),
               ]),
@@ -119,17 +117,17 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
-                  lanProvider.texts('total'),
+                  Provider.of<LanProvider>(context,listen: false).texts('total'),
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  (double.parse(provider.details['delivery']!) +
-                          double.parse(provider.details['total']!))
+                  (double.parse(Provider.of<MyProvider>(context,listen: false).details['delivery']!) +
+                          double.parse(Provider.of<MyProvider>(context,listen: false).details['total']!))
                       .toString(),
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(" " +
-                  lanProvider.texts('jd'),
+                    Provider.of<LanProvider>(context,listen: false).texts('jd'),
                   style: const TextStyle(fontSize: 16),
                 ),
               ]),
@@ -137,13 +135,13 @@ class _DetailsHistoryState extends State<DetailsHistory> {
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Card(
-                color: provider.isDark ? Colors.grey[170] : Colors.greenAccent,
+                color: Provider.of<MyProvider>(context,listen: false).isDark ? Colors.grey[170] : Colors.greenAccent,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      Text(lanProvider.texts('note')),
-                      Expanded(child: Text(provider.details['note']!)),
+                      Text( Provider.of<LanProvider>(context,listen: false).texts('note')),
+                      Expanded(child: Text(Provider.of<MyProvider>(context,listen: false).details['note']!)),
                     ],
                   ),
                 ),

@@ -17,14 +17,11 @@ class _DrinksState extends State<Drinks> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var shortestSide = MediaQuery.of(context).size.shortestSide;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
-
     Widget funImage(image, title) {
       return ListTile(
         onTap: () {
           setState(() {
-            provider.restaurantName = title;
+            Provider.of<MyProvider>(context,listen: false).restaurantName = title;
           });
           Navigator.of(context).pushNamed('drinksScreen');
         },
@@ -40,7 +37,7 @@ class _DrinksState extends State<Drinks> {
           padding: const EdgeInsets.all(2.0),
           child: Text(title,
               style: TextStyle(
-                  color: provider.isDark? Colors.white:Colors.black,
+                  color: Provider.of<MyProvider>(context,listen: false).isDark? Colors.white:Colors.black,
                   fontSize: width*0.042,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.center),
@@ -49,10 +46,10 @@ class _DrinksState extends State<Drinks> {
     }
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(lanProvider.texts('drinks')),
+          title: Text( Provider.of<LanProvider>(context,listen: false).texts('drinks')),
           centerTitle: true,
         ),
         body: Container(

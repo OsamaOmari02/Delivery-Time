@@ -15,7 +15,6 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
@@ -72,7 +71,7 @@ class _DetailsState extends State<Details> {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
-                          provider.authState = authStatus.Authenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
                           Provider.of<MyProvider>(context, listen: false)
                               .details
@@ -81,14 +80,14 @@ class _DetailsState extends State<Details> {
                       } on FirebaseException catch (e) {
                         dialog("حدث خطأ !");
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                         print(e.message);
                       } catch (e) {
                         dialog("حدث خطأ !");
                         print(e);
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                       }
                     }),
@@ -147,7 +146,7 @@ class _DetailsState extends State<Details> {
           padding: const EdgeInsets.all(8.0),
           children: [
             Text(
-              provider.details['name']!,
+              Provider.of<MyProvider>(context,listen: false).details['name']!,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
@@ -158,24 +157,24 @@ class _DetailsState extends State<Details> {
               elevation: 2.0,
               color: Colors.white70,
               child: ListTile(
-                title: Text(provider.details['area'] ?? ""),
+                title: Text(Provider.of<MyProvider>(context,listen: false).details['area'] ?? ""),
                 subtitle: Text('الشارع : ' +
-                    provider.details['street']! +
+                    Provider.of<MyProvider>(context,listen: false).details['street']! +
                     "\n" +
                     'رقم الهاتف : ' +
-                    provider.details['phoneNum']!),
+                    Provider.of<MyProvider>(context,listen: false).details['phoneNum']!),
                 isThreeLine: true,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                provider.detailedCart[0].resName,
+                Provider.of<MyProvider>(context,listen: false).detailedCart[0].resName,
                 style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
             ),
-            for (int i = 0; i < provider.detailedCart.length; i++)
+            for (int i = 0; i < Provider.of<MyProvider>(context,listen: false).detailedCart.length; i++)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -184,15 +183,15 @@ class _DetailsState extends State<Details> {
                   elevation: 3.0,
                   child: ListTile(
                     title: Text(
-                        'اسم الوجبة : ' + provider.detailedCart[i].mealName),
+                        'اسم الوجبة : ' + Provider.of<MyProvider>(context,listen: false).detailedCart[i].mealName),
                     subtitle: Text('الوصف : ' +
-                        provider.detailedCart[i].description +
+                        Provider.of<MyProvider>(context,listen: false).detailedCart[i].description +
                         "\n" +
                         'سعر الوجبة : ' +
-                        provider.detailedCart[i].mealPrice.toString() +
+                        Provider.of<MyProvider>(context,listen: false).detailedCart[i].mealPrice.toString() +
                         " د.أ\n" +
                         'الكمية : ' +
-                        provider.detailedCart[i].quantity.toString()),
+                        Provider.of<MyProvider>(context,listen: false).detailedCart[i].quantity.toString()),
                     isThreeLine: true,
                   ),
                 ),
@@ -206,7 +205,7 @@ class _DetailsState extends State<Details> {
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  provider.details['total'].toString() + " ",
+                  Provider.of<MyProvider>(context,listen: false).details['total'].toString() + " ",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -224,7 +223,7 @@ class _DetailsState extends State<Details> {
                   child: Row(
                     children: [
                       const Text('الملاحظات : '),
-                      Expanded(child: Text(provider.details['note']!)),
+                      Expanded(child: Text(Provider.of<MyProvider>(context,listen: false).details['note']!)),
                     ],
                   ),
                 ),
@@ -233,15 +232,15 @@ class _DetailsState extends State<Details> {
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: width * 0.3, vertical: height * 0.02),
-              child: provider.isLoading
+              child: Provider.of<MyProvider>(context,listen: false).isLoading
                   ? const Center(child: const CircularProgressIndicator())
                   : ElevatedButton(
                   onPressed: () async {
                     try {
                       setState(() {
-                        provider.isLoading = true;
+                        Provider.of<MyProvider>(context,listen: false).isLoading = true;
                       });
-                      await provider.sendToRestaurant();
+                      await Provider.of<MyProvider>(context,listen: false).sendToRestaurant();
                       Fluttertoast.showToast(
                           msg: 'تم إرسال الطلب الى المطعم بنجاح',
                           toastLength: Toast.LENGTH_LONG,
@@ -249,17 +248,17 @@ class _DetailsState extends State<Details> {
                           textColor: Colors.white,
                           fontSize: 16.0);
                       setState(() {
-                        provider.isLoading = false;
+                        Provider.of<MyProvider>(context,listen: false).isLoading = false;
                       });
                     } on FirebaseException catch (e){
                       setState(() {
-                        provider.isLoading = false;
+                        Provider.of<MyProvider>(context,listen: false).isLoading = false;
                       });
                       dialog('حدث خطأ');
                       print(e.message);
                     } catch (e) {
                       setState(() {
-                        provider.isLoading = false;
+                        Provider.of<MyProvider>(context,listen: false).isLoading = false;
                       });
                       dialog('حدث خطأ');
                       print(e);
@@ -273,23 +272,23 @@ class _DetailsState extends State<Details> {
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: width * 0.3, vertical: height * 0.01),
-              child: provider.isLoading
+              child: Provider.of<MyProvider>(context,listen: false).isLoading
                   ? const Center(child: const CircularProgressIndicator())
                   : ElevatedButton(
                       onPressed: () async {
                         try {
                           setState(() {
-                            provider.isLoading = true;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
-                          await provider.goToMaps(
-                              double.parse(provider.details['longitude']!),
-                              double.parse(provider.details['latitude']!));
+                          await Provider.of<MyProvider>(context).goToMaps(
+                              double.parse(Provider.of<MyProvider>(context,listen: false).details['longitude']!),
+                              double.parse(Provider.of<MyProvider>(context,listen: false).details['latitude']!));
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                         } catch (e) {
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           dialog('حدث خطأ');
                           print(e);

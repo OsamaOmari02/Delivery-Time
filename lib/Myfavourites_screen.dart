@@ -29,8 +29,6 @@ class _MyFavouritesState extends State<MyFavourites> {
 
   @override
   Widget build(BuildContext context) {
-    var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
@@ -39,7 +37,7 @@ class _MyFavouritesState extends State<MyFavourites> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -52,7 +50,7 @@ class _MyFavouritesState extends State<MyFavourites> {
               actions: [
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -65,13 +63,13 @@ class _MyFavouritesState extends State<MyFavourites> {
       throw "";
     }
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
           drawer: MyDrawer(),
           appBar: AppBar(
-            title: Text(lanProvider.texts('my favorites')),
+            title: Text( Provider.of<LanProvider>(context,listen: false).texts('my favorites')),
             centerTitle: true,
           ),
           body: StreamBuilder<QuerySnapshot>(
@@ -81,10 +79,10 @@ class _MyFavouritesState extends State<MyFavourites> {
                 return const Center(child: const CircularProgressIndicator());
               return Scrollbar(
                 child: Stack(children: [
-                  provider.myFavorites.length == 0
+                  Provider.of<MyProvider>(context,listen: false).myFavorites.length == 0
                       ? Center(
                           child: Text(
-                          lanProvider.texts('no meals were added to favorites'),
+                            Provider.of<LanProvider>(context,listen: false).texts('no meals were added to favorites'),
                           style: const TextStyle(
                               fontSize: 18, fontStyle: FontStyle.italic),
                         ))
@@ -102,9 +100,9 @@ class _MyFavouritesState extends State<MyFavourites> {
                                       child: Container(
                                         child: Row(
                                           children: [
-                                            if (provider.isLoading)
+                                            if (Provider.of<MyProvider>(context,listen: false).isLoading)
                                               const CircularProgressIndicator(),
-                                            if (!provider.isLoading)
+                                            if (!Provider.of<MyProvider>(context,listen: false).isLoading)
                                               IconButton(
                                                 icon: const Icon(
                                                   Icons.favorite,
@@ -113,37 +111,37 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                 onPressed: () async {
                                                   try {
                                                     setState(() {
-                                                      provider.isLoading = true;
-                                                      provider.mealID =
+                                                      Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                                                      Provider.of<MyProvider>(context,listen: false).mealID =
                                                           resData[index].id;
                                                     });
                                                     await FirebaseFirestore
                                                         .instance
                                                         .collection(
                                                             'favorites/${user!.uid}/myFavorites')
-                                                        .doc(provider.mealID)
+                                                        .doc(Provider.of<MyProvider>(context,listen: false).mealID)
                                                         .delete()
                                                         .then((value) {
-                                                      provider.myFavorites
+                                                      Provider.of<MyProvider>(context,listen: false).myFavorites
                                                           .removeWhere((element) =>
                                                               element
                                                                   .myFavoriteID ==
-                                                              provider.mealID);
+                                                                  Provider.of<MyProvider>(context,listen: false).mealID);
                                                     });
                                                     setState(() {
-                                                      provider.isLoading = false;
+                                                      Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                                     });
                                                   } on FirebaseException catch (e) {
                                                     setState(() {
-                                                      provider.isLoading = false;
+                                                      Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                                     });
                                                     dialog(e.message);
                                                     print(e);
                                                   } catch (e) {
                                                     setState(() {
-                                                      provider.isLoading = false;
+                                                      Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                                     });
-                                                    dialog(lanProvider.texts(
+                                                    dialog( Provider.of<LanProvider>(context,listen: false).texts(
                                                         'Error occurred !'));
                                                     print(e);
                                                   }
@@ -178,12 +176,12 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                     padding: const EdgeInsets
                                                         .symmetric(vertical: 7),
                                                     child: Text(
-                                                      lanProvider.texts('price') +
+                                                      Provider.of<LanProvider>(context,listen: false).texts('price') +
                                                           " " +
                                                           resData[index]
                                                               ['meal price'] +
                                                           " " +
-                                                          lanProvider.texts('jd'),
+                                                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
                                                       style: const TextStyle(
                                                           fontSize: 16,
                                                           color: Colors.pink),
@@ -211,7 +209,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                               );
                             return Center(
                                 child: Text(
-                                    lanProvider.texts(
+                                    Provider.of<LanProvider>(context,listen: false).texts(
                                         'no meals were added to favorites'),
                                     style: const TextStyle(
                                         fontSize: 17,

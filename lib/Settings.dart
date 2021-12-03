@@ -1,7 +1,5 @@
 import 'package:app/LanguageProvider.dart';
 import 'package:app/Myprovider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,9 +24,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
-
     dialog() {
       return showDialog(
           context: context,
@@ -41,13 +36,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Switch(
                       activeColor: Colors.blueAccent,
                       activeTrackColor: Colors.blue[200],
-                      value: lanProvider.isEn,
+                      value: Provider.of<LanProvider>(context,listen: false).isEn,
                       onChanged: (val) async {
                         SharedPreferences pref =
                             await SharedPreferences.getInstance();
                         pref.setBool('language', val);
                         setState(() {
-                          lanProvider.isEn = val;
+                          Provider.of<LanProvider>(context,listen: false).isEn = val;
                         });
                         Navigator.of(context).pop();
                       }),
@@ -58,7 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               elevation: 24,
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
@@ -95,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               elevation: 24,
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('cancel?'),
+                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
                         style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
@@ -111,13 +106,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       throw "";
     }
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
           drawer: MyDrawer(),
           appBar: AppBar(
-            title: Text(lanProvider.texts('Drawer6')),
+            title: Text(Provider.of<LanProvider>(context,listen: false).texts('Drawer6')),
             centerTitle: true,
             backgroundColor: Colors.blue,
           ),
@@ -127,7 +122,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListTile(
                 leading: const Icon(Icons.language),
                 title: InkWell(
-                  child: Text(lanProvider.texts('language'),
+                  child: Text(Provider.of<LanProvider>(context,listen: false).texts('language'),
                       style: TextStyle(
                           fontWeight: FontWeight.w600, fontSize: width * 0.055)),
                   onTap: () => dialog(),
@@ -136,22 +131,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(height: height * 0.013),
               ListTile(
                 leading: const Icon(Icons.dark_mode),
-                title: Text(lanProvider.texts('dark mode'),
+                title: Text(Provider.of<LanProvider>(context,listen: false).texts('dark mode'),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: width * 0.055)),
                 trailing: Switch(
                     activeColor: Colors.blueAccent,
                     activeTrackColor: Colors.blue[200],
-                    value: provider.isDark,
+                    value: Provider.of<MyProvider>(context,listen: false).isDark,
                     onChanged: (bool val) async {
-                      await provider.setDarkMode(val);
+                      await Provider.of<MyProvider>(context,listen: false).setDarkMode(val);
                     }),
               ),
               SizedBox(height: height * 0.013),
               ListTile(
                 leading: const Icon(Icons.phone),
                 title: InkWell(
-                  child: Text(lanProvider.texts('call us'),
+                  child: Text(Provider.of<LanProvider>(context,listen: false).texts('call us'),
                       style: TextStyle(
                           fontWeight: FontWeight.w600, fontSize: width * 0.055)),
                   onTap: () => dialog2(),
@@ -162,7 +157,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListTile(
                 leading: const Icon(Icons.star_rate_outlined),
                 title: InkWell(
-                  child: Text(lanProvider.texts('rate app'),
+                  child: Text(Provider.of<LanProvider>(context,listen: false).texts('rate app'),
                       style: TextStyle(
                           fontWeight: FontWeight.w600, fontSize: width * 0.055)),
                   onTap: () async{
@@ -176,7 +171,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListTile(
                 leading: const Icon(Icons.share),
                 title: InkWell(
-                  child: Text(lanProvider.texts('share app'),
+                  child: Text(Provider.of<LanProvider>(context,listen: false).texts('share app'),
                       style: TextStyle(
                           fontWeight: FontWeight.w600, fontSize: width * 0.055)),
                   onTap: () async{

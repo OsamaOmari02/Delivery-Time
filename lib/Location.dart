@@ -27,7 +27,6 @@ class _LocationsState extends State<Locations> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -82,7 +81,7 @@ class _LocationsState extends State<Locations> {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
-                          provider.authState = authStatus.Authenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
                           Provider.of<MyProvider>(context, listen: false)
                               .details
@@ -91,14 +90,14 @@ class _LocationsState extends State<Locations> {
                       } on FirebaseException catch (e) {
                         dialog("حدث خطأ !");
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                         print(e.message);
                       } catch (e) {
                         dialog("حدث خطأ !");
                         print(e);
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                       }
                     }),

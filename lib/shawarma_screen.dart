@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'LanguageProvider.dart';
 
@@ -43,28 +44,26 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(provider.restaurantName),
+            title: Text(Provider.of<MyProvider>(context,listen: false).restaurantName),
             bottom: TabBar(
               tabs: [
-                Tab(text: lanProvider.texts('tab1')),
-                Tab(text: lanProvider.texts('tab2')),
-                Tab(text: lanProvider.texts('tab3')),
+                Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab1')),
+                Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab2')),
+                Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab3')),
               ],
             ),
           ),
           bottomNavigationBar: Container(
             height: height*0.1,
             child: Opacity(
-              opacity: provider.total == 0 ? 0.4 : 1,
+              opacity: Provider.of<MyProvider>(context,listen: false).total == 0 ? 0.4 : 1,
               child: Container(
                 padding: const EdgeInsets.fromLTRB(12, 0, 12, 15),
                 alignment: Alignment.bottomCenter,
@@ -90,23 +89,23 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
                         ),
                         SizedBox(width: width*0.02),
                         Text(
-                          lanProvider.texts('food cart'),
+                          Provider.of<LanProvider>(context,listen: false).texts('food cart'),
                           style: const TextStyle(
                               fontSize: 17, color: Colors.white),
                         ),
                         Spacer(),
                         Text(
-                          lanProvider.texts('total'),
+                          Provider.of<LanProvider>(context,listen: false).texts('total'),
                           style: const TextStyle(
                               fontSize: 17, color: Colors.white),
                         ),
                         Text(
-                          " ${provider.total} ",
+                          " ${Provider.of<MyProvider>(context,listen: false).total} ",
                           style: const TextStyle(
                               fontSize: 16, color: Colors.white),
                         ),
                         Text(
-                          lanProvider.texts('jd'),
+                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
                           style: const TextStyle(
                               fontSize: 16, color: Colors.white),
                         ),
@@ -141,15 +140,13 @@ class _FirstState extends State<First> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Text(
                   title,
@@ -166,7 +163,7 @@ class _FirstState extends State<First> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
-                        child: Text(lanProvider.texts('cancel?'),
+                        child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
                             style: const TextStyle(
                                 fontSize: 19, color: Colors.red)),
                         onTap: () => Navigator.of(context).pop()),
@@ -175,10 +172,10 @@ class _FirstState extends State<First> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextButton(
-                        child: Text(lanProvider.texts('yes?'),
+                        child: Text(Provider.of<LanProvider>(context,listen: false).texts('yes?'),
                             style: const TextStyle(fontSize: 19)),
                         onPressed: () {
-                          provider.myCartClear();
+                          Provider.of<MyProvider>(context,listen: false).myCartClear();
                           Navigator.of(context).pop();
                         }),
                   ),
@@ -191,7 +188,7 @@ class _FirstState extends State<First> {
       stream: tab1sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
-          return Center(child: Text(lanProvider.texts('something went wrong !')));
+          return Center(child: Text(Provider.of<LanProvider>(context,listen: false).texts('something went wrong !')));
         if (snapshot.connectionState==ConnectionState.waiting)
           return const Center(child: const CircularProgressIndicator());
         return Scrollbar(
@@ -228,25 +225,32 @@ class _FirstState extends State<First> {
                               children: <Widget>[
                                 SizedBox(height: height*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                                  child: Text(
-                                    resData[index]['meal name'],
-                                    style: const TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                SizedBox(
-                                  width: width*0.4,
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
                                   child: AutoSizeText(
-                                    resData[index]['description'],
-                                    maxLines: 3,
+                                    resData[index]['meal name'],
+                                    maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Padding(
+                                  padding: Provider.of<LanProvider>(context,listen: false).isEn?
+                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
+                                  child: SizedBox(
+                                    width: width*0.5,
+                                    child: AutoSizeText(
+                                      resData[index]['description'],
+                                      maxLines: 3,
+                                      minFontSize: 10,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey),
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -257,11 +261,11 @@ class _FirstState extends State<First> {
                                     padding:
                                     const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      lanProvider.texts('price') +
+                                      Provider.of<LanProvider>(context,listen: false).texts('price') +
                                           " " +
                                           resData[index]['meal price'] +
                                           " " +
-                                          lanProvider.texts('jd'),
+                                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
                                       style: const TextStyle(
                                           fontSize: 15, color: Colors.pink),
                                     ),
@@ -276,13 +280,13 @@ class _FirstState extends State<First> {
                     ),
                     Column(
                       children: [
-                        if (provider.isLoading)
+                        if (Provider.of<MyProvider>(context,listen: false).isLoading)
                           const CircularProgressIndicator(),
-                        if (!provider.isLoading)
+                        if (!Provider.of<MyProvider>(context,listen: false).isLoading)
                           IconButton(
                             alignment: Alignment.topLeft,
                             icon: Icon(
-                              provider.isMyFav(resData[index].id)
+                              Provider.of<MyProvider>(context,listen: false).isMyFav(resData[index].id)
                                   ? Icons.favorite
                                   : Icons.favorite_border,
                               color: Colors.red,
@@ -290,24 +294,24 @@ class _FirstState extends State<First> {
                             onPressed: () async {
                               try {
                                 setState(() {
-                                  provider.isLoading = true;
-                                  provider.mealID = resData[index].id;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                                  Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                 });
-                                await provider.toggleFavourite();
+                                await Provider.of<MyProvider>(context,listen: false).toggleFavourite();
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
                               } on FirebaseException catch (e) {
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
                                 dialog(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
-                                dialog(lanProvider
+                                dialog(Provider.of<LanProvider>(context,listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
                               }
@@ -315,24 +319,10 @@ class _FirstState extends State<First> {
                           ),
                         Row(
                           children: [
-                            provider.existsInCart(resData[index].id)
-                                ? IconButton(
-                              icon: const Icon(
-                                Icons.remove,
-                                color: Colors.red,
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  provider.mealID = resData[index].id;
-                                });
-                                await provider.removeFoodCart(resData[index]['meal price']);
-                              },
-                            )
-                                : Container(),
-                            Text(provider.getIndex(resData[index].id) == -1
+                            Text(Provider.of<MyProvider>(context,listen: false).getIndex(resData[index].id) == -1
                                 ? "0"
-                                : (provider
-                                .myCart[provider
+                                : (Provider.of<MyProvider>(context,listen: false)
+                                .myCart[Provider.of<MyProvider>(context,listen: false)
                                 .getIndex(resData[index].id)]
                                 .quantity)
                                 .toString()),
@@ -343,19 +333,33 @@ class _FirstState extends State<First> {
                                 ),
                                 onPressed: () async {
                                   setState(() {
-                                    provider.mealID = resData[index].id;
+                                    Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                   });
-                                  if (provider.myCart.length != 0 &&
-                                      provider.restaurantName !=
-                                          provider.myCart[0].resName)
+                                  if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0 &&
+                                      Provider.of<MyProvider>(context,listen: false).restaurantName !=
+                                          Provider.of<MyProvider>(context,listen: false).myCart[0].resName)
                                     return dialog(
-                                        lanProvider.texts('foodCart'));
-                                  provider.addFoodCart(
+                                        Provider.of<LanProvider>(context,listen: false).texts('foodCart'));
+                                  Provider.of<MyProvider>(context,listen: false).addFoodCart(
                                       resData[index]['meal name'],
                                       resData[index]['meal price'],resData[index]['description']);
                                 }),
                           ],
                         ),
+                        Provider.of<MyProvider>(context,listen: false).existsInCart(resData[index].id)
+                            ? IconButton(
+                          icon: const Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                            });
+                            await Provider.of<MyProvider>(context,listen: false).removeFoodCart(resData[index]['meal price']);
+                          },
+                        )
+                            : Container(),
                       ],
                     ),
                   ],
@@ -381,8 +385,6 @@ class _SecondState extends State<Second> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -390,7 +392,7 @@ class _SecondState extends State<Second> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                textAlign: Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -403,7 +405,7 @@ class _SecondState extends State<Second> {
               actions: [
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -415,7 +417,7 @@ class _SecondState extends State<Second> {
       stream: tab2sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
-          return Center(child: Text(lanProvider.texts('something went wrong !')));
+          return Center(child: Text(Provider.of<LanProvider>(context,listen: false).texts('something went wrong !')));
         if (snapshot.connectionState==ConnectionState.waiting)
           return const Center(child: const CircularProgressIndicator());
         return Scrollbar(
@@ -452,25 +454,32 @@ class _SecondState extends State<Second> {
                               children: <Widget>[
                                 SizedBox(height: height*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                                  child: Text(
-                                    resData[index]['meal name'],
-                                    style: const TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                SizedBox(
-                                  width: width*0.4,
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
                                   child: AutoSizeText(
-                                    resData[index]['description'],
-                                    maxLines: 3,
+                                    resData[index]['meal name'],
+                                    maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Padding(
+                                  padding: Provider.of<LanProvider>(context,listen: false).isEn?
+                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
+                                  child: SizedBox(
+                                    width: width*0.5,
+                                    child: AutoSizeText(
+                                      resData[index]['description'],
+                                      maxLines: 3,
+                                      minFontSize: 10,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey),
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -481,11 +490,11 @@ class _SecondState extends State<Second> {
                                     padding:
                                     const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      lanProvider.texts('price') +
+                                      Provider.of<LanProvider>(context,listen: false).texts('price') +
                                           " " +
                                           resData[index]['meal price'] +
                                           " " +
-                                          lanProvider.texts('jd'),
+                                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
                                       style: const TextStyle(
                                           fontSize: 15, color: Colors.pink),
                                     ),
@@ -500,13 +509,13 @@ class _SecondState extends State<Second> {
                     ),
                     Column(
                       children: [
-                        if (provider.isLoading)
+                        if (Provider.of<MyProvider>(context,listen: false).isLoading)
                           const CircularProgressIndicator(),
-                        if (!provider.isLoading)
+                        if (!Provider.of<MyProvider>(context,listen: false).isLoading)
                           IconButton(
                             alignment: Alignment.topLeft,
                             icon: Icon(
-                              provider.isMyFav(resData[index].id)
+                              Provider.of<MyProvider>(context,listen: false).isMyFav(resData[index].id)
                                   ? Icons.favorite
                                   : Icons.favorite_border,
                               color: Colors.red,
@@ -514,24 +523,24 @@ class _SecondState extends State<Second> {
                             onPressed: () async {
                               try {
                                 setState(() {
-                                  provider.isLoading = true;
-                                  provider.mealID = resData[index].id;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                                  Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                 });
-                                await provider.toggleFavourite();
+                                await Provider.of<MyProvider>(context,listen: false).toggleFavourite();
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
                               } on FirebaseException catch (e) {
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
                                 dialog(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
-                                dialog(lanProvider
+                                dialog(Provider.of<LanProvider>(context,listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
                               }
@@ -539,24 +548,10 @@ class _SecondState extends State<Second> {
                           ),
                         Row(
                           children: [
-                            provider.existsInCart(resData[index].id)
-                                ? IconButton(
-                              icon: const Icon(
-                                Icons.remove,
-                                color: Colors.red,
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  provider.mealID = resData[index].id;
-                                });
-                                await provider.removeFoodCart(resData[index]['meal price']);
-                              },
-                            )
-                                : Container(),
-                            Text(provider.getIndex(resData[index].id) == -1
+                            Text(Provider.of<MyProvider>(context,listen: false).getIndex(resData[index].id) == -1
                                 ? "0"
-                                : (provider
-                                .myCart[provider
+                                : (Provider.of<MyProvider>(context,listen: false)
+                                .myCart[Provider.of<MyProvider>(context,listen: false)
                                 .getIndex(resData[index].id)]
                                 .quantity)
                                 .toString()),
@@ -567,19 +562,33 @@ class _SecondState extends State<Second> {
                                 ),
                                 onPressed: () async {
                                   setState(() {
-                                    provider.mealID = resData[index].id;
+                                    Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                   });
-                                  if (provider.myCart.length != 0 &&
-                                      provider.restaurantName !=
-                                          provider.myCart[0].resName)
+                                  if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0 &&
+                                      Provider.of<MyProvider>(context,listen: false).restaurantName !=
+                                          Provider.of<MyProvider>(context,listen: false).myCart[0].resName)
                                     return dialog(
-                                        lanProvider.texts('foodCart'));
-                                  provider.addFoodCart(
+                                        Provider.of<LanProvider>(context,listen: false).texts('foodCart'));
+                                  Provider.of<MyProvider>(context,listen: false).addFoodCart(
                                       resData[index]['meal name'],
                                       resData[index]['meal price'],resData[index]['description']);
                                 }),
                           ],
                         ),
+                        Provider.of<MyProvider>(context,listen: false).existsInCart(resData[index].id)
+                            ? IconButton(
+                          icon: const Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                            });
+                            await Provider.of<MyProvider>(context,listen: false).removeFoodCart(resData[index]['meal price']);
+                          },
+                        )
+                            : Container(),
                       ],
                     ),
                   ],
@@ -604,8 +613,6 @@ class _ThirdState extends State<Third> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -613,7 +620,7 @@ class _ThirdState extends State<Third> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                textAlign: Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -626,7 +633,7 @@ class _ThirdState extends State<Third> {
               actions: [
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -638,7 +645,7 @@ class _ThirdState extends State<Third> {
       stream: tab3sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
-          return Center(child: Text(lanProvider.texts('something went wrong !')));
+          return Center(child: Text(Provider.of<LanProvider>(context,listen: false).texts('something went wrong !')));
         if (snapshot.connectionState==ConnectionState.waiting)
           return const Center(child: const CircularProgressIndicator());
         return Scrollbar(
@@ -675,25 +682,32 @@ class _ThirdState extends State<Third> {
                               children: <Widget>[
                                 SizedBox(height: height*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                                  child: Text(
-                                    resData[index]['meal name'],
-                                    style: const TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                SizedBox(
-                                  width: width*0.4,
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
                                   child: AutoSizeText(
-                                    resData[index]['description'],
-                                    maxLines: 3,
+                                    resData[index]['meal name'],
+                                    maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Padding(
+                                  padding: Provider.of<LanProvider>(context,listen: false).isEn?
+                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
+                                  child: SizedBox(
+                                    width: width*0.5,
+                                    child: AutoSizeText(
+                                      resData[index]['description'],
+                                      maxLines: 3,
+                                      minFontSize: 10,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey),
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -704,11 +718,11 @@ class _ThirdState extends State<Third> {
                                     padding:
                                     const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      lanProvider.texts('price') +
+                                      Provider.of<LanProvider>(context,listen: false).texts('price') +
                                           " " +
                                           resData[index]['meal price'] +
                                           " " +
-                                          lanProvider.texts('jd'),
+                                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
                                       style: const TextStyle(
                                           fontSize: 15, color: Colors.pink),
                                     ),
@@ -723,13 +737,13 @@ class _ThirdState extends State<Third> {
                     ),
                     Column(
                       children: [
-                        if (provider.isLoading)
+                        if (Provider.of<MyProvider>(context,listen: false).isLoading)
                           const CircularProgressIndicator(),
-                        if (!provider.isLoading)
+                        if (!Provider.of<MyProvider>(context,listen: false).isLoading)
                           IconButton(
                             alignment: Alignment.topLeft,
                             icon: Icon(
-                              provider.isMyFav(resData[index].id)
+                              Provider.of<MyProvider>(context,listen: false).isMyFav(resData[index].id)
                                   ? Icons.favorite
                                   : Icons.favorite_border,
                               color: Colors.red,
@@ -737,24 +751,24 @@ class _ThirdState extends State<Third> {
                             onPressed: () async {
                               try {
                                 setState(() {
-                                  provider.isLoading = true;
-                                  provider.mealID = resData[index].id;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                                  Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                 });
-                                await provider.toggleFavourite();
+                                await Provider.of<MyProvider>(context,listen: false).toggleFavourite();
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
                               } on FirebaseException catch (e) {
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
                                 dialog(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
-                                  provider.isLoading = false;
+                                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                 });
-                                dialog(lanProvider
+                                dialog(Provider.of<LanProvider>(context,listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
                               }
@@ -762,24 +776,10 @@ class _ThirdState extends State<Third> {
                           ),
                         Row(
                           children: [
-                            provider.existsInCart(resData[index].id)
-                                ? IconButton(
-                              icon: const Icon(
-                                Icons.remove,
-                                color: Colors.red,
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  provider.mealID = resData[index].id;
-                                });
-                                await provider.removeFoodCart(resData[index]['meal price']);
-                              },
-                            )
-                                : Container(),
-                            Text(provider.getIndex(resData[index].id) == -1
+                            Text(Provider.of<MyProvider>(context,listen: false).getIndex(resData[index].id) == -1
                                 ? "0"
-                                : (provider
-                                .myCart[provider
+                                : (Provider.of<MyProvider>(context,listen: false)
+                                .myCart[Provider.of<MyProvider>(context,listen: false)
                                 .getIndex(resData[index].id)]
                                 .quantity)
                                 .toString()),
@@ -790,19 +790,33 @@ class _ThirdState extends State<Third> {
                                 ),
                                 onPressed: () async {
                                   setState(() {
-                                    provider.mealID = resData[index].id;
+                                    Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                   });
-                                  if (provider.myCart.length != 0 &&
-                                      provider.restaurantName !=
-                                          provider.myCart[0].resName)
+                                  if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0 &&
+                                      Provider.of<MyProvider>(context,listen: false).restaurantName !=
+                                          Provider.of<MyProvider>(context,listen: false).myCart[0].resName)
                                     return dialog(
-                                        lanProvider.texts('foodCart'));
-                                  provider.addFoodCart(
+                                        Provider.of<LanProvider>(context,listen: false).texts('foodCart'));
+                                  Provider.of<MyProvider>(context,listen: false).addFoodCart(
                                       resData[index]['meal name'],
                                       resData[index]['meal price'],resData[index]['description']);
                                 }),
                           ],
                         ),
+                        Provider.of<MyProvider>(context,listen: false).existsInCart(resData[index].id)
+                            ? IconButton(
+                          icon: const Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                            });
+                            await Provider.of<MyProvider>(context,listen: false).removeFoodCart(resData[index]['meal price']);
+                          },
+                        )
+                            : Container(),
                       ],
                     ),
                   ],

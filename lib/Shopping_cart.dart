@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'LanguageProvider.dart';
@@ -16,8 +15,6 @@ class Shopping extends StatefulWidget {
 class _ShoppingState extends State<Shopping> {
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
@@ -26,7 +23,7 @@ class _ShoppingState extends State<Shopping> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                textAlign: Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -39,7 +36,7 @@ class _ShoppingState extends State<Shopping> {
               actions: [
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -49,14 +46,14 @@ class _ShoppingState extends State<Shopping> {
 
     bottomSheet() {
       return Directionality(
-        textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              lanProvider.texts('choose address'),
+              Provider.of<LanProvider>(context,listen: false).texts('choose address'),
               style: TextStyle(
-                  color: provider.isDark?CupertinoColors.white:CupertinoColors.black, fontWeight: FontWeight.bold),
+                  color: Provider.of<MyProvider>(context,listen: false).isDark?CupertinoColors.white:CupertinoColors.black, fontWeight: FontWeight.bold),
             ),
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 1,
@@ -71,14 +68,14 @@ class _ShoppingState extends State<Shopping> {
             ],
           ),
           body: ListView.builder(
-            itemCount: provider.loc.length,
+            itemCount: Provider.of<MyProvider>(context,listen: false).loc.length,
             itemBuilder: (BuildContext context, int index) {
-              if (provider.loc.isEmpty)
+              if (Provider.of<MyProvider>(context,listen: false).loc.isEmpty)
                 return Center(
                   child: TextButton(
                       onPressed: () =>
                           Navigator.of(context).pushNamed('addAddress'),
-                      child: Text(lanProvider.texts('new address'),
+                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('new address'),
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
@@ -89,20 +86,20 @@ class _ShoppingState extends State<Shopping> {
                 child: ListTile(
                   onTap: () {
                     setState(() {
-                      provider.checkOut['area'] = provider.loc[index].area;
-                      provider.checkOut['street'] = provider.loc[index].street;
-                      provider.checkOut['phoneNum'] =
-                          provider.loc[index].phoneNum;
+                      Provider.of<MyProvider>(context,listen: false).checkOut['area'] = Provider.of<MyProvider>(context,listen: false).loc[index].area;
+                      Provider.of<MyProvider>(context,listen: false).checkOut['street'] = Provider.of<MyProvider>(context,listen: false).loc[index].street;
+                      Provider.of<MyProvider>(context,listen: false).checkOut['phoneNum'] =
+                          Provider.of<MyProvider>(context,listen: false).loc[index].phoneNum;
                     });
-                    provider.deliveryPriceOnArea();
+                    Provider.of<MyProvider>(context,listen: false).deliveryPriceOnArea();
                     Navigator.of(context).pushNamed('checkOut');
                   },
-                  title: Text(provider.loc[index].area),
-                  subtitle: Text(lanProvider.texts('street:') +
-                      provider.loc[index].street +
+                  title: Text(Provider.of<MyProvider>(context,listen: false).loc[index].area),
+                  subtitle: Text(Provider.of<LanProvider>(context,listen: false).texts('street:') +
+                      Provider.of<MyProvider>(context,listen: false).loc[index].street +
                       "\n" +
-                      lanProvider.texts('phone:') +
-                      provider.loc[index].phoneNum),
+                      Provider.of<LanProvider>(context,listen: false).texts('phone:') +
+                      Provider.of<MyProvider>(context,listen: false).loc[index].phoneNum),
                   isThreeLine: true,
                 ),
               );
@@ -113,15 +110,15 @@ class _ShoppingState extends State<Shopping> {
     }
 
     return Directionality(
-        textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              lanProvider.texts('food cart'),
+              Provider.of<LanProvider>(context,listen: false).texts('food cart'),
               style: const TextStyle(fontSize: 20),
             ),
-            actions: provider.myCart.isEmpty
+            actions: Provider.of<MyProvider>(context,listen: false).myCart.isEmpty
                 ? null
                 : [
                     Padding(
@@ -133,7 +130,7 @@ class _ShoppingState extends State<Shopping> {
                             builder: (BuildContext ctx) {
                               return AlertDialog(
                                 title: Text(
-                                  lanProvider.texts('clear everything?'),
+                                  Provider.of<LanProvider>(context,listen: false).texts('clear everything?'),
                                   style: const TextStyle(fontSize: 23),
                                 ),
                                 contentPadding:
@@ -147,18 +144,18 @@ class _ShoppingState extends State<Shopping> {
                                 actions: [
                                   InkWell(
                                     child: Text(
-                                      lanProvider.texts('yes?'),
+                                      Provider.of<LanProvider>(context,listen: false).texts('yes?'),
                                       style: const TextStyle(
                                           fontSize: 19, color: Colors.red),
                                     ),
                                     onTap: () {
-                                      provider.myCartClear();
+                                      Provider.of<MyProvider>(context,listen: false).myCartClear();
                                       Navigator.of(context).pop();
                                     },
                                   ),
                                   const SizedBox(width: 11),
                                   InkWell(
-                                      child: Text(lanProvider.texts('cancel?'),
+                                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
                                           style: const TextStyle(fontSize: 19)),
                                       onTap: () => Navigator.of(context).pop()),
                                 ],
@@ -171,14 +168,14 @@ class _ShoppingState extends State<Shopping> {
                     ),
                   ],
           ),
-          body: provider.myCart.length == 0
+          body: Provider.of<MyProvider>(context,listen: false).myCart.length == 0
               ? Center(
                   child: Text(
-                  lanProvider.texts('empty cart'),
+                    Provider.of<LanProvider>(context,listen: false).texts('empty cart'),
                   style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
                 ))
               : ListView.builder(
-                  itemCount: provider.myCart.length,
+                  itemCount: Provider.of<MyProvider>(context,listen: false).myCart.length,
                   itemBuilder: (context, index) {
                     return Card(
                       elevation: 3,
@@ -192,11 +189,11 @@ class _ShoppingState extends State<Shopping> {
                                   SizedBox(height: height*0.02),
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                                    alignment: lanProvider.isEn
+                                    alignment: Provider.of<LanProvider>(context,listen: false).isEn
                                         ? Alignment.topLeft
                                         : Alignment.topRight,
                                     child: Text(
-                                      provider.myCart[index].mealName,
+                                      Provider.of<MyProvider>(context,listen: false).myCart[index].mealName,
                                       style: const TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w800),
@@ -204,11 +201,11 @@ class _ShoppingState extends State<Shopping> {
                                   ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    alignment: lanProvider.isEn
+                                    alignment: Provider.of<LanProvider>(context,listen: false).isEn
                                         ? Alignment.topLeft
                                         : Alignment.topRight,
                                     child: Text(
-                                      provider.myCart[index].description,
+                                      Provider.of<MyProvider>(context,listen: false).myCart[index].description,
                                       style: const TextStyle(
                                         color: Colors.grey,
                                           fontSize: 16),
@@ -216,18 +213,18 @@ class _ShoppingState extends State<Shopping> {
                                   ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                                    alignment: lanProvider.isEn
+                                    alignment: Provider.of<LanProvider>(context,listen: false).isEn
                                         ? Alignment.bottomLeft
                                         : Alignment.bottomRight,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 7),
                                       child: Text(
-                                        lanProvider.texts('price') +
+                                        Provider.of<LanProvider>(context,listen: false).texts('price') +
                                             " " +
-                                            provider.myCart[index].mealPrice +
+                                            Provider.of<MyProvider>(context,listen: false).myCart[index].mealPrice +
                                             " " +
-                                            lanProvider.texts('jd'),
+                                            Provider.of<LanProvider>(context,listen: false).texts('jd'),
                                         style: const TextStyle(
                                             fontSize: 16, color: Colors.pink),
                                       ),
@@ -248,18 +245,18 @@ class _ShoppingState extends State<Shopping> {
                                 onPressed: () async {
                                   try {
                                     setState(() {
-                                      provider.mealID =
-                                          provider.myCart[index].foodID;
+                                      Provider.of<MyProvider>(context,listen: false).mealID =
+                                          Provider.of<MyProvider>(context,listen: false).myCart[index].foodID;
                                     });
-                                    await provider.removeFoodCart(provider.myCart[index].mealPrice);
+                                    await Provider.of<MyProvider>(context,listen: false).removeFoodCart(Provider.of<MyProvider>(context,listen: false).myCart[index].mealPrice);
                                   } catch (e) {
                                     dialog(
-                                        lanProvider.texts('Error occurred !'));
+                                        Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                                     print(e);
                                   }
                                 },
                               ),
-                              Text(provider.myCart[index].quantity.toString()),
+                              Text(Provider.of<MyProvider>(context,listen: false).myCart[index].quantity.toString()),
                               IconButton(
                                 icon: const Icon(
                                   Icons.add,
@@ -268,16 +265,16 @@ class _ShoppingState extends State<Shopping> {
                                 onPressed: () async {
                                   try {
                                     setState(() {
-                                      provider.mealID =
-                                          provider.myCart[index].foodID;
+                                      Provider.of<MyProvider>(context,listen: false).mealID =
+                                          Provider.of<MyProvider>(context,listen: false).myCart[index].foodID;
                                     });
-                                    await provider.addFoodCart(
-                                        provider.myCart[index].mealName,
-                                        provider.myCart[index].mealPrice,
-                                        provider.myCart[index].description);
+                                    await Provider.of<MyProvider>(context,listen: false).addFoodCart(
+                                        Provider.of<MyProvider>(context,listen: false).myCart[index].mealName,
+                                        Provider.of<MyProvider>(context,listen: false).myCart[index].mealPrice,
+                                        Provider.of<MyProvider>(context,listen: false).myCart[index].description);
                                   } catch (e) {
                                     dialog(
-                                        lanProvider.texts('Error occurred !'));
+                                        Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                                     print(e);
                                   }
                                 },
@@ -291,62 +288,62 @@ class _ShoppingState extends State<Shopping> {
           bottomNavigationBar: Container(
             height: height*0.16,
             child: Column(children: [
-              if (provider.myCart.isNotEmpty)
+              if (Provider.of<MyProvider>(context,listen: false).myCart.isNotEmpty)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: Text(lanProvider.texts('cart total :'),
+                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('cart total :'),
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
-                    Text(provider.total.toString() + " ",
+                    Text(Provider.of<MyProvider>(context,listen: false).total.toString() + " ",
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         )),
-                    Text(lanProvider.texts('jd'),
+                    Text(Provider.of<LanProvider>(context,listen: false).texts('jd'),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         )),
                   ],
                 ),
-              if (provider.myCart.isNotEmpty)
-                provider.isLoading
+              if (Provider.of<MyProvider>(context,listen: false).myCart.isNotEmpty)
+                Provider.of<MyProvider>(context,listen: false).isLoading
                     ? const Center(
                         child: const CircularProgressIndicator(),
                       )
                     : TextButton(
                         onPressed: () async {
-                          if (provider.long == null && provider.lat == null) {
+                          if (Provider.of<MyProvider>(context,listen: false).long == null && Provider.of<MyProvider>(context,listen: false).lat == null) {
                             try {
                               setState(() {
-                                provider.isLoading = true;
+                                Provider.of<MyProvider>(context,listen: false).isLoading = true;
                               });
-                              await provider.sendLocationToDB(context);
+                              await Provider.of<MyProvider>(context,listen: false).sendLocationToDB(context);
                               setState(() {
-                                provider.isLoading = false;
+                                Provider.of<MyProvider>(context,listen: false).isLoading = false;
                               });
-                              if (provider.approved)
+                              if (Provider.of<MyProvider>(context,listen: false).approved)
                                 showModalBottomSheet(
                                     context: context,
                                     builder: (_) => bottomSheet());
                               print('done');
                             } on FirebaseException catch (e) {
                               setState(() {
-                                provider.isLoading = false;
+                                Provider.of<MyProvider>(context,listen: false).isLoading = false;
                               });
-                              dialog(lanProvider.texts('Error occurred !'));
+                              dialog(Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                               print(e.message);
                             } catch (e) {
                               setState(() {
-                                provider.isLoading = false;
+                                Provider.of<MyProvider>(context,listen: false).isLoading = false;
                               });
-                              dialog(lanProvider.texts('Error occurred !'));
+                              dialog(Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                               print(e);
                             }
                           } else {
@@ -355,7 +352,7 @@ class _ShoppingState extends State<Shopping> {
                                 builder: (_) => bottomSheet());
                           }
                         },
-                        child: Text(lanProvider.texts('Next'),
+                        child: Text(Provider.of<LanProvider>(context,listen: false).texts('Next'),
                             style: const TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,

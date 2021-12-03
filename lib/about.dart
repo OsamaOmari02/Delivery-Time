@@ -16,19 +16,18 @@ class _AboutState extends State<About> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var lanProvider = Provider.of<LanProvider>(context);
     Future<bool> _onWillPop() async {
       await Navigator.of(context).pushReplacementNamed('MyHomepage');
       throw "";
     }
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
           drawer: MyDrawer(),
           appBar: AppBar(
-            title: Text(lanProvider.texts('about')),
+            title: Text( Provider.of<LanProvider>(context,listen: false).texts('about')),
             centerTitle: true,
             backgroundColor: Colors.blue,
           ),
@@ -36,12 +35,12 @@ class _AboutState extends State<About> {
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               SizedBox(height: height*0.1),
               Text(
-                lanProvider.texts('hello'),
+                Provider.of<LanProvider>(context,listen: false).texts('hello'),
                 style: TextStyle(
                     fontSize: width*0.044, wordSpacing: 2, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: height*0.015),
-              Text(lanProvider.texts('If you face'),style: TextStyle(
+              Text( Provider.of<LanProvider>(context,listen: false).texts('If you face'),style: TextStyle(
                 fontSize: width*0.033)),
               SizedBox(height: height*0.08),
               Row(

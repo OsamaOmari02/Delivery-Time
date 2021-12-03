@@ -73,11 +73,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: UserState(),
-      themeMode: provider.isDark ? ThemeMode.dark : ThemeMode.light,
+      themeMode: Provider.of<MyProvider>(context,listen: false).isDark ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
@@ -145,14 +144,11 @@ class _MyHomepageState extends State<MyHomepage> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var shortestSide = MediaQuery.of(context).size.shortestSide;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
-
     Widget funImage(image, title) {
       return ListTile(
         onTap: () {
           setState(() {
-            provider.restaurantName = title;
+            Provider.of<MyProvider>(context,listen: false).restaurantName = title;
           });
           Navigator.of(context).pushNamed('resScreen');
         },
@@ -168,7 +164,7 @@ class _MyHomepageState extends State<MyHomepage> {
             style: TextStyle(
               fontSize: width*0.042,
               fontWeight: FontWeight.bold,
-              color: provider.isDark ? Colors.white : Colors.black,
+              color: Provider.of<MyProvider>(context,listen: false).isDark ? Colors.white : Colors.black,
             ),
             textAlign: TextAlign.center),
       );
@@ -193,9 +189,9 @@ class _MyHomepageState extends State<MyHomepage> {
               ),
               subtitle: Container(
                 padding: EdgeInsets.symmetric(vertical: height * 0.015),
-                child: Text(lanProvider.texts(title),
+                child: Text( Provider.of<LanProvider>(context,listen: false).texts(title),
                     style: TextStyle(
-                        color: provider.isDark ? Colors.white : Colors.black,
+                        color: Provider.of<MyProvider>(context,listen: false).isDark ? Colors.white : Colors.black,
                         fontSize: width * 0.042),
                     textAlign: TextAlign.center),
               ),
@@ -208,17 +204,17 @@ class _MyHomepageState extends State<MyHomepage> {
             context: context,
             builder: (context) => new AlertDialog(
               title: new Text(
-                lanProvider.texts('Do you want to exit an App'),
+                  Provider.of<LanProvider>(context,listen: false).texts('Do you want to exit an App'),
                 textDirection:
-                    lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+                Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
                 style: const TextStyle(fontSize: 21)
               ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: new Text(
-                    lanProvider.texts('yes?'),
-                    textDirection: lanProvider.isEn
+                    Provider.of<LanProvider>(context,listen: false).texts('yes?'),
+                    textDirection:  Provider.of<LanProvider>(context,listen: false).isEn
                         ? TextDirection.ltr
                         : TextDirection.rtl,
                     style: const TextStyle(fontSize: 17,color: Colors.red),
@@ -227,8 +223,8 @@ class _MyHomepageState extends State<MyHomepage> {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
                   child: new Text(
-                    lanProvider.texts('cancel?'),
-                    textDirection: lanProvider.isEn
+                    Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
+                    textDirection:  Provider.of<LanProvider>(context,listen: false).isEn
                         ? TextDirection.ltr
                         : TextDirection.rtl,
                     style: const TextStyle(fontSize: 17),
@@ -241,7 +237,7 @@ class _MyHomepageState extends State<MyHomepage> {
     }
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -255,36 +251,36 @@ class _MyHomepageState extends State<MyHomepage> {
                       onPressed: () =>
                           Navigator.of(context).pushNamed('Shopping'),
                       icon: const Icon(Icons.shopping_cart)),
-                  if (provider.myCart.length != 0)
+                  if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0)
                     CircleAvatar(
                         radius: 10,
                         backgroundColor: Colors.red,
                         child: Text(
-                          provider.myCart.length.toString(),
+                          Provider.of<MyProvider>(context,listen: false).myCart.length.toString(),
                           style: const TextStyle(color: Colors.white),
                         )),
                 ]),
               ),
             ],
             centerTitle: true,
-            title: Text(lanProvider.texts('Drawer1')),
+            title: Text( Provider.of<LanProvider>(context,listen: false).texts('Drawer1')),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               try {
                 setState(() {
-                  provider.isLoading = true;
+                  Provider.of<MyProvider>(context,listen: false).isLoading = true;
                 });
-                await provider.sendLocationToDB(context);
+                await Provider.of<MyProvider>(context,listen: false).sendLocationToDB(context);
                 setState(() {
-                  provider.isLoading = false;
+                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                 });
               } catch (e) {
                 setState(() {
-                  provider.isLoading = false;
+                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
                 });
                 Fluttertoast.showToast(
-                    msg: lanProvider.texts('Error occurred !'),
+                    msg:  Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'),
                     toastLength: Toast.LENGTH_SHORT,
                     backgroundColor: Colors.red,
                     textColor: Colors.white,
@@ -292,7 +288,7 @@ class _MyHomepageState extends State<MyHomepage> {
                 print(e);
               }
             },
-            child: !provider.isLoading
+            child: !Provider.of<MyProvider>(context,listen: false).isLoading
                 ? Icon(Icons.my_location)
                 : CircularProgressIndicator(),
             backgroundColor: Theme.of(context).accentColor,
@@ -308,10 +304,10 @@ class _MyHomepageState extends State<MyHomepage> {
                   width: double.infinity,
                   child: Carousel(
                     images: <Widget>[
-                      Image.asset(provider.imageFun[0], fit: BoxFit.cover),
-                      Image.asset(provider.imageFun[1], fit: BoxFit.cover),
-                      Image.asset(provider.imageFun[2], fit: BoxFit.fill),
-                      Image.asset(provider.imageFun[3], fit: BoxFit.fill),
+                      Image.asset(Provider.of<MyProvider>(context,listen: false).imageFun[0], fit: BoxFit.cover),
+                      Image.asset(Provider.of<MyProvider>(context,listen: false).imageFun[1], fit: BoxFit.cover),
+                      Image.asset(Provider.of<MyProvider>(context,listen: false).imageFun[2], fit: BoxFit.fill),
+                      Image.asset(Provider.of<MyProvider>(context,listen: false).imageFun[3], fit: BoxFit.fill),
                     ],
                     dotColor: Colors.white,
                     dotSize: 5,
@@ -327,7 +323,7 @@ class _MyHomepageState extends State<MyHomepage> {
                     SizedBox(width: width * 0.03),
                     Expanded(
                       child: Text(
-                        lanProvider.texts('order ur food..'),
+                        Provider.of<LanProvider>(context,listen: false).texts('order ur food..'),
                         maxLines: 3,
                         style: TextStyle(
                             fontSize: width * 0.06,
@@ -358,7 +354,7 @@ class _MyHomepageState extends State<MyHomepage> {
                     SizedBox(width: width * 0.03),
                     Expanded(
                       child: Text(
-                        lanProvider.texts('choose ur..'),
+                        Provider.of<LanProvider>(context,listen: false).texts('choose ur..'),
                         maxLines: 2,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,

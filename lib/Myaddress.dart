@@ -1,4 +1,3 @@
-import 'package:app/Addaddress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,8 +30,6 @@ class _MyAddressState extends State<MyAddress> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -63,7 +60,7 @@ class _MyAddressState extends State<MyAddress> {
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
@@ -78,7 +75,7 @@ class _MyAddressState extends State<MyAddress> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -91,46 +88,46 @@ class _MyAddressState extends State<MyAddress> {
               actions: [
                 InkWell(
                     child: Text(
-                      lanProvider.texts('yes?'),
+                      Provider.of<LanProvider>(context,listen: false).texts('yes?'),
                       style: const TextStyle(fontSize: 19, color: Colors.red),
                     ),
                     onTap: () async {
                       try {
                         setState(() {
-                          provider.isLoading = true;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = true;
                         });
                         Navigator.of(context).pop();
-                        await provider.delete();
-                        print("length = after in dialog " + provider.loc.length.toString());
+                        await Provider.of<MyProvider>(context,listen: false).delete();
+                        print("length = after in dialog " + Provider.of<MyProvider>(context,listen: false).loc.length.toString());
                         Fluttertoast.showToast(
-                            msg: lanProvider.texts('Address Deleted'),
+                            msg:  Provider.of<LanProvider>(context,listen: false).texts('Address Deleted'),
                             toastLength: Toast.LENGTH_SHORT,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
                             fontSize: 16.0);
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                       } on FirebaseException catch (e) {
                         dialog(e.message);
                         setState(() {
-                          provider.isLoading = false;
-                          final addressObj = provider.loc.firstWhere((element) => element.id == provider.iD);
-                          provider.loc.add(addressObj);
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                          final addressObj = Provider.of<MyProvider>(context,listen: false).loc.firstWhere((element) => element.id == Provider.of<MyProvider>(context).iD);
+                          Provider.of<MyProvider>(context,listen: false).loc.add(addressObj);
                         });
                       } catch (e) {
-                        dialog(lanProvider.texts('Error occurred !'));
+                        dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                         print(e);
                         setState(() {
-                          provider.isLoading = false;
-                          final addressObj = provider.loc.firstWhere((element) => element.id == provider.iD);
-                          provider.loc.add(addressObj);
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                          final addressObj = Provider.of<MyProvider>(context,listen: false).loc.firstWhere((element) => element.id == Provider.of<MyProvider>(context).iD);
+                          Provider.of<MyProvider>(context,listen: false).loc.add(addressObj);
                         });
                       }
                     }),
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text(lanProvider.texts('cancel?'),
+                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
                         style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -143,7 +140,7 @@ class _MyAddressState extends State<MyAddress> {
     }
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -152,13 +149,13 @@ class _MyAddressState extends State<MyAddress> {
             backgroundColor: Colors.blue,
             actions: [
               IconButton(
-                icon: provider.isLoading
+                icon: Provider.of<MyProvider>(context,listen: false).isLoading
                     ? CircularProgressIndicator()
                     : Icon(Icons.add),
                 onPressed: () => Navigator.of(context).pushNamed('addAddress'),
               ),
             ],
-            title: Text(lanProvider.texts('my addresses')),
+            title: Text( Provider.of<LanProvider>(context,listen: false).texts('my addresses')),
             centerTitle: true,
           ),
           body: StreamBuilder<QuerySnapshot>(
@@ -169,16 +166,16 @@ class _MyAddressState extends State<MyAddress> {
               if (snapshot.hasError)
                 return Center(
                     child: Text(
-                  lanProvider.texts('Error occurred !'),
+                      Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'),
                   style: const TextStyle(color: Colors.red),
                 ));
                 return ListView.builder(
-                  itemCount: provider.loc.length,
+                  itemCount: Provider.of<MyProvider>(context,listen: false).loc.length,
                   itemBuilder: (BuildContext context, int index) {
                     var userData = snapshot.data!.docs;
-                    if (provider.loc.isEmpty || userData.isEmpty) {
+                    if (Provider.of<MyProvider>(context,listen: false).loc.isEmpty || userData.isEmpty) {
                       return Center(
-                          child: Text(lanProvider.texts('new address'),
+                          child: Text( Provider.of<LanProvider>(context,listen: false).texts('new address'),
                               style: const TextStyle(
                                   fontSize: 17, fontStyle: FontStyle.italic)));
                     }
@@ -187,15 +184,15 @@ class _MyAddressState extends State<MyAddress> {
                       child: ListTile(
                         onLongPress: () async {
                           setState(() {
-                            provider.iD = userData[index].id;
+                            Provider.of<MyProvider>(context,listen: false).iD = userData[index].id;
                           });
-                          await delete(lanProvider.texts('delete this address?'));
+                          await delete( Provider.of<LanProvider>(context,listen: false).texts('delete this address?'));
                         },
                         title: Text(userData[index]['area']??""),
-                        subtitle: Text(lanProvider.texts('street:') +
+                        subtitle: Text( Provider.of<LanProvider>(context,listen: false).texts('street:') +
                             userData[index]['street']+
                             "\n" +
-                            lanProvider.texts('phone:') +
+                            Provider.of<LanProvider>(context,listen: false).texts('phone:') +
                             userData[index]['phoneNum']),
                         isThreeLine: true,
                       ),

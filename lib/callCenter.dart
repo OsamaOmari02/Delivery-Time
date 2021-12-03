@@ -28,7 +28,6 @@ class _CallCenterState extends State<CallCenter> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -83,7 +82,7 @@ class _CallCenterState extends State<CallCenter> {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
-                          provider.authState = authStatus.Authenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
                           Provider.of<MyProvider>(context, listen: false)
                               .details
@@ -92,14 +91,14 @@ class _CallCenterState extends State<CallCenter> {
                       } on FirebaseException catch (e) {
                         dialog("حدث خطأ !");
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                         print(e.message);
                       } catch (e) {
                         dialog("حدث خطأ !");
                         print(e);
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                       }
                     }),
@@ -173,30 +172,30 @@ class _CallCenterState extends State<CallCenter> {
                               child: ListTile(
                                 onTap: () {
                                   setState(() {
-                                    provider.details['area'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['area'] =
                                         resData[index]['details']['area'];
-                                    provider.details['street'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['street'] =
                                         resData[index]['details']['street'];
-                                    provider.details['phoneNum'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['phoneNum'] =
                                         resData[index]['details']['phoneNum'];
-                                    provider.details['name'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['name'] =
                                         resData[index]['details']['name'];
-                                    provider.details['total'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['total'] =
                                         resData[index]['total'].toString();
-                                    provider.details['note'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['note'] =
                                         resData[index]['note'];
-                                    provider.details['length'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['length'] =
                                         resData[index]['length'].toString();
-                                    provider.details['longitude'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['longitude'] =
                                         resData[index]['details']['longitude']
                                             .toString();
-                                    provider.details['latitude'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['latitude'] =
                                         resData[index]['details']['latitude']
                                             .toString();
                                     for (int i = 0;
                                         i < resData[index]['length'];
                                         i++)
-                                      provider.detailedCart.add(FoodCart(
+                                      Provider.of<MyProvider>(context,listen: false).detailedCart.add(FoodCart(
                                           resName: resData[index]['resName'],
                                           mealName: resData[index]['meals'][i]
                                               ['meal name'],
@@ -236,7 +235,7 @@ class _CallCenterState extends State<CallCenter> {
                                 ),
                                 subtitle: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(provider
+                                    child: Text(Provider.of<MyProvider>(context,listen: false)
                                         .dateTime(resData[index]['date']))),
                               ),
                             ),

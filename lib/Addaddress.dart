@@ -31,9 +31,6 @@ class _AddAddressState extends State<AddAddress> {
 
   @override
   Widget build(BuildContext context) {
-    var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
     requiredPhone(title, keyboard, value) {
@@ -45,7 +42,7 @@ class _AddAddressState extends State<AddAddress> {
             if (val.toString().isEmpty ||
                 !val.toString().startsWith("07") ||
                 val!.length != 10)
-              return lanProvider.texts('invalid');
+              return  Provider.of<LanProvider>(context,listen: false).texts('invalid');
             else {
               return null;
             }
@@ -74,8 +71,8 @@ class _AddAddressState extends State<AddAddress> {
             underline: const SizedBox(),
             borderRadius: BorderRadius.circular(12),
             isExpanded: true,
-            value: provider.area,
-            items: provider.areas.map((value) {
+            value: Provider.of<MyProvider>(context,listen: false).area,
+            items: Provider.of<MyProvider>(context,listen: false).areas.map((value) {
               return DropdownMenuItem(
                 value: value,
                 child: Text(value),
@@ -83,7 +80,7 @@ class _AddAddressState extends State<AddAddress> {
             }).toList(),
             onChanged: (String? newValue) {
               setState(() {
-                provider.area = newValue!;
+                Provider.of<MyProvider>(context,listen: false).area = newValue!;
               });
             },
           ),
@@ -122,7 +119,7 @@ class _AddAddressState extends State<AddAddress> {
                   Text(
                     title,
                     textAlign:
-                        lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                    Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
                     style: const TextStyle(fontSize: 23),
                   ),
                 ],
@@ -138,7 +135,7 @@ class _AddAddressState extends State<AddAddress> {
                 InkWell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(lanProvider.texts('ok'),
+                      child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
                           style: const TextStyle(
                               fontSize: 19, color: Colors.blue)),
                     ),
@@ -149,12 +146,12 @@ class _AddAddressState extends State<AddAddress> {
     }
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
           centerTitle: true,
-          title: Text(lanProvider.texts('new address')),
+          title: Text( Provider.of<LanProvider>(context,listen: false).texts('new address')),
         ),
         body: Form(
           key: _formKey,
@@ -162,60 +159,60 @@ class _AddAddressState extends State<AddAddress> {
             children: [
               SizedBox(height: height*0.03),
               Container(
-                child: Text(lanProvider.texts('area'),style: TextStyle(fontSize: 16),),
+                child: Text( Provider.of<LanProvider>(context,listen: false).texts('area'),style: TextStyle(fontSize: 16),),
                 padding: EdgeInsets.fromLTRB(12,12,12,0),
               ),
               area(),
-              street(lanProvider.texts('street'),
+              street( Provider.of<LanProvider>(context,listen: false).texts('street'),
                   TextInputType.text, _street),
-              requiredPhone(lanProvider.texts('phone number'),
+              requiredPhone( Provider.of<LanProvider>(context,listen: false).texts('phone number'),
                   TextInputType.number, _phone),
               SizedBox(height: height*0.06),
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.33,
                 ),
-                child: provider.isLoading
+                child: Provider.of<MyProvider>(context,listen: false).isLoading
                     ? Align(
                         child: const CircularProgressIndicator(),
                         alignment: Alignment.center)
                     : ElevatedButton(
                         onPressed: () async {
                           try {
-                            if (provider.area=="---اختر المنطقة---")
-                               return dialog(lanProvider.texts('Choose your area'));
+                            if (Provider.of<MyProvider>(context,listen: false).area=="---اختر المنطقة---")
+                               return dialog( Provider.of<LanProvider>(context,listen: false).texts('Choose your area'));
                             if (_formKey.currentState!.validate()) {
                               setState(() {
-                                provider.isLoading = true;
+                                Provider.of<MyProvider>(context,listen: false).isLoading = true;
                               });
-                              await provider
-                                  .add(provider.area, _street.text, _phone.text)
+                              await Provider.of<MyProvider>(context,listen: false)
+                                  .add(Provider.of<MyProvider>(context,listen: false).area, _street.text, _phone.text)
                                   .then((_) => Navigator.of(context).pop());
                               Fluttertoast.showToast(
-                                  msg: lanProvider.texts('Address Added'),
+                                  msg:  Provider.of<LanProvider>(context,listen: false).texts('Address Added'),
                                   toastLength: Toast.LENGTH_SHORT,
                                   backgroundColor: Colors.grey,
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                               setState(() {
-                                provider.isLoading = false;
+                                Provider.of<MyProvider>(context,listen: false).isLoading = false;
                               });
                             }
                           } on FirebaseAuthException catch (e) {
                             dialog(e.message);
                             setState(() {
-                              provider.isLoading = false;
+                              Provider.of<MyProvider>(context,listen: false).isLoading = false;
                             });
                           } catch (e) {
-                            dialog(lanProvider.texts('Error occurred !'));
+                            dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                             setState(() {
-                              provider.isLoading = false;
+                              Provider.of<MyProvider>(context,listen: false).isLoading = false;
                             });
                             print(e);
                           }
                         },
                         child: Text(
-                          lanProvider.texts('add'),
+                          Provider.of<LanProvider>(context,listen: false).texts('add'),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),

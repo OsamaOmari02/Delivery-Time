@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
@@ -33,8 +32,6 @@ class _HistoryState extends State<History> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -42,7 +39,7 @@ class _HistoryState extends State<History> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -55,7 +52,7 @@ class _HistoryState extends State<History> {
               actions: [
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -70,7 +67,7 @@ class _HistoryState extends State<History> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -83,45 +80,45 @@ class _HistoryState extends State<History> {
               actions: [
                 InkWell(
                     child: Text(
-                      lanProvider.texts('yes?'),
+                      Provider.of<LanProvider>(context,listen: false).texts('yes?'),
                       style: const TextStyle(fontSize: 19, color: Colors.red),
                     ),
                     onTap: () async {
                       try {
                         setState(() {
-                          provider.isLoading = true;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = true;
                         });
                         await FirebaseFirestore.instance
                             .collection('orders/${user!.uid}/myOrders')
-                            .doc(provider.mealID)
+                            .doc(Provider.of<MyProvider>(context,listen: false).mealID)
                             .delete();
                         Fluttertoast.showToast(
-                            msg: lanProvider.texts('order deleted'),
+                            msg:  Provider.of<LanProvider>(context,listen: false).texts('order deleted'),
                             toastLength: Toast.LENGTH_SHORT,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
                             fontSize: 16.0);
                         Navigator.of(context).pop();
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                       } on FirebaseException catch (e) {
-                        dialog(lanProvider.texts('Error occurred !'));
+                        dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                         print(e.message);
                       } catch (e) {
-                        dialog(lanProvider.texts('Error occurred !'));
+                        dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                         print(e);
                       }
                     }),
                 const SizedBox(width: 11),
                 InkWell(
-                    child: Text(lanProvider.texts('cancel?'),
+                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
                         style: const TextStyle(fontSize: 19)),
                     onTap: () => Navigator.of(context).pop()),
               ],
@@ -138,11 +135,11 @@ class _HistoryState extends State<History> {
             Column(
               children: [
                 Text(
-                  lanProvider.texts('order confirmed'),
+                  Provider.of<LanProvider>(context,listen: false).texts('order confirmed'),
                   style: TextStyle(fontSize: width * 0.032),
                 ),
                 Text(
-                  lanProvider.texts('will reach out to u'),
+                  Provider.of<LanProvider>(context,listen: false).texts('will reach out to u'),
                   style: TextStyle(fontSize: width * 0.03),
                 ),
               ],
@@ -167,13 +164,13 @@ class _HistoryState extends State<History> {
       throw "";
     }
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
           drawer: MyDrawer(),
           appBar: AppBar(
-            title: Text(lanProvider.texts('orders history')),
+            title: Text( Provider.of<LanProvider>(context,listen: false).texts('orders history')),
             centerTitle: true,
             backgroundColor: Colors.blue,
           ),
@@ -184,7 +181,7 @@ class _HistoryState extends State<History> {
                 return Center(child: const CircularProgressIndicator());
               if (snapshot.hasError)
                 return Center(
-                    child: Text(lanProvider.texts('something went wrong !')));
+                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('something went wrong !')));
               return Scrollbar(
                 child: ListView.builder(
                   itemCount: snapshot.data!.docs.length,
@@ -193,7 +190,7 @@ class _HistoryState extends State<History> {
                     if (resData.isEmpty)
                       return Center(
                         child: Text(
-                          lanProvider.texts('no orders'),
+                          Provider.of<LanProvider>(context,listen: false).texts('no orders'),
                           style: const TextStyle(
                               fontSize: 17, fontStyle: FontStyle.italic),
                         ),
@@ -207,28 +204,28 @@ class _HistoryState extends State<History> {
                             child: ListTile(
                               onLongPress: () async {
                                 setState(() {
-                                  provider.mealID = resData[index].id;
+                                  Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                 });
-                                await delete(lanProvider.texts('delete order?'));
+                                await delete( Provider.of<LanProvider>(context,listen: false).texts('delete order?'));
                               },
                               onTap: () {
-                                provider.details['area'] =
+                                Provider.of<MyProvider>(context,listen: false).details['area'] =
                                     resData[index]['details']['area'];
-                                provider.details['street'] =
+                                Provider.of<MyProvider>(context,listen: false).details['street'] =
                                     resData[index]['details']['street'];
-                                provider.details['phoneNum'] =
+                                Provider.of<MyProvider>(context,listen: false).details['phoneNum'] =
                                     resData[index]['details']['phoneNum'];
-                                provider.details['total'] =
+                                Provider.of<MyProvider>(context,listen: false).details['total'] =
                                     resData[index]['total'].toString();
-                                provider.details['note'] = resData[index]['note'];
-                                provider.details['delivery'] =
+                                Provider.of<MyProvider>(context,listen: false).details['note'] = resData[index]['note'];
+                                Provider.of<MyProvider>(context,listen: false).details['delivery'] =
                                     resData[index]['delivery'].toString();
-                                provider.details['resName'] =
+                                Provider.of<MyProvider>(context,listen: false).details['resName'] =
                                     resData[index]['resName'];
-                                provider.details['length'] =
+                                Provider.of<MyProvider>(context,listen: false).details['length'] =
                                 resData[index]['length'].toString();
                                 for (int i = 0; i < resData[index]['length']; i++)
-                                  provider.detailedCart.add(FoodCart(
+                                  Provider.of<MyProvider>(context,listen: false).detailedCart.add(FoodCart(
                                       resName: resData[index]['resName'],
                                       mealName: resData[index]['meals'][i]
                                           ['meal name'],
@@ -248,8 +245,8 @@ class _HistoryState extends State<History> {
                                     builder: (BuildContext ctx) {
                                       return AlertDialog(
                                         title: Text(
-                                          lanProvider.texts('reorder?'),
-                                          textAlign: lanProvider.isEn
+                                          Provider.of<LanProvider>(context,listen: false).texts('reorder?'),
+                                          textAlign:  Provider.of<LanProvider>(context,listen: false).isEn
                                               ? TextAlign.start
                                               : TextAlign.end,
                                           style: const TextStyle(fontSize: 23),
@@ -266,7 +263,7 @@ class _HistoryState extends State<History> {
                                         actions: [
                                           InkWell(
                                               child: Text(
-                                                lanProvider.texts('yes?'),
+                                                Provider.of<LanProvider>(context,listen: false).texts('yes?'),
                                                 style: const TextStyle(
                                                     fontSize: 19,
                                                     color: Colors.blue),
@@ -274,14 +271,14 @@ class _HistoryState extends State<History> {
                                               onTap: () async {
                                                 try {
                                                   setState(() {
-                                                    provider.isLoading = true;
+                                                    Provider.of<MyProvider>(context,listen: false).isLoading = true;
                                                   });
                                                   for (int i = 0;
                                                       i <
                                                           resData[index]
                                                               ['length'];
                                                       i++)
-                                                    provider.myCart.add(FoodCart(
+                                                    Provider.of<MyProvider>(context,listen: false).myCart.add(FoodCart(
                                                         resName: resData[index]
                                                             ['resName'],
                                                         mealName: resData[index]
@@ -298,7 +295,7 @@ class _HistoryState extends State<History> {
                                                         ['meals'][i]
                                                         ['description']));
                                                   Navigator.of(context).pop();
-                                                  await provider.reorder(
+                                                  await Provider.of<MyProvider>(context,listen: false).reorder(
                                                     resData[index]['total'],
                                                     resData[index]['delivery'],
                                                     resData[index]['note'],
@@ -313,31 +310,31 @@ class _HistoryState extends State<History> {
                                                   );
                                                   showSnackBar();
                                                   setState(() {
-                                                    provider.isLoading = false;
-                                                    provider.myCart.clear();
+                                                    Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                                                    Provider.of<MyProvider>(context,listen: false).myCart.clear();
                                                   });
                                                 } on FirebaseException catch (e) {
-                                                  dialog(lanProvider
+                                                  dialog( Provider.of<LanProvider>(context,listen: false)
                                                       .texts('Error occurred !'));
                                                   setState(() {
-                                                    provider.isLoading = false;
-                                                    provider.myCart.clear();
+                                                    Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                                                    Provider.of<MyProvider>(context,listen: false).myCart.clear();
                                                   });
                                                   print(e.message);
                                                 } catch (e) {
-                                                  dialog(lanProvider
+                                                  dialog( Provider.of<LanProvider>(context,listen: false)
                                                       .texts('Error occurred !'));
                                                   print(e);
                                                   setState(() {
-                                                    provider.isLoading = false;
-                                                    provider.myCart.clear();
+                                                    Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                                                    Provider.of<MyProvider>(context,listen: false).myCart.clear();
                                                   });
                                                 }
                                               }),
                                           const SizedBox(width: 11),
                                           InkWell(
                                               child: Text(
-                                                  lanProvider.texts('cancel?'),
+                                                  Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
                                                   style: const TextStyle(
                                                       color: Colors.red,
                                                       fontSize: 19)),
@@ -347,7 +344,7 @@ class _HistoryState extends State<History> {
                                       );
                                     }),
                                 child: Text(
-                                  lanProvider.texts('reorder'),
+                                  Provider.of<LanProvider>(context,listen: false).texts('reorder'),
                                   style: const TextStyle(
                                       fontSize: 15, fontWeight: FontWeight.bold),
                                 ),
@@ -361,12 +358,12 @@ class _HistoryState extends State<History> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(lanProvider.texts('price') +
+                                    Text( Provider.of<LanProvider>(context,listen: false).texts('price') +
                                         resData[index]['total'].toString() +
                                         " " +
-                                        lanProvider.texts('jd')),
+                                        Provider.of<LanProvider>(context,listen: false).texts('jd')),
                                     const SizedBox(height: 5),
-                                    Text(provider
+                                    Text(Provider.of<MyProvider>(context,listen: false)
                                         .dateTime(resData[index]['date'])),
                                   ],
                                 ),

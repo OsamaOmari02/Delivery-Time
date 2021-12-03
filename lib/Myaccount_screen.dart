@@ -13,20 +13,19 @@ class MyAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    var lanProvider = Provider.of<LanProvider>(context);
     Future<bool> _onWillPop() async {
       await Navigator.of(context).pushReplacementNamed('MyHomepage');
       throw "";
     }
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
           drawer: MyDrawer(),
           appBar: AppBar(
-              title: Text(lanProvider.texts('my account')),
+              title: Text( Provider.of<LanProvider>(context,listen: false).texts('my account')),
               centerTitle: true,
               backgroundColor: Colors.blue),
           body: ListView(
@@ -34,7 +33,7 @@ class MyAccount extends StatelessWidget {
               SizedBox(height: height * 0.02),
               ListTile(
                 title: Text(
-                  lanProvider.texts('my name'),
+                  Provider.of<LanProvider>(context,listen: false).texts('my name'),
                   style: const TextStyle(fontSize: 19),
                 ),
                 leading: const Icon(Icons.person),
@@ -44,7 +43,7 @@ class MyAccount extends StatelessWidget {
               const Divider(thickness: 1),
               ListTile(
                 title: Text(
-                  lanProvider.texts('my email'),
+                  Provider.of<LanProvider>(context,listen: false).texts('my email'),
                   style: const TextStyle(fontSize: 19),
                 ),
                 leading: const Icon(Icons.alternate_email),
@@ -54,7 +53,7 @@ class MyAccount extends StatelessWidget {
               const Divider(thickness: 1),
               ListTile(
                 title: Text(
-                  lanProvider.texts('my password'),
+                  Provider.of<LanProvider>(context,listen: false).texts('my password'),
                   style: const TextStyle(fontSize: 19),
                 ),
                 leading: const Icon(Icons.lock),
@@ -90,8 +89,6 @@ class _EmailState extends State<Email> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -122,7 +119,7 @@ class _EmailState extends State<Email> {
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
@@ -131,11 +128,11 @@ class _EmailState extends State<Email> {
     }
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.blue,
-            title: Text(lanProvider.texts('change email')),
+            title: Text( Provider.of<LanProvider>(context,listen: false).texts('change email')),
             centerTitle: true,
           ),
           body: ListView(children: [
@@ -150,8 +147,8 @@ class _EmailState extends State<Email> {
                     Icons.alternate_email,
                     color: Colors.blue,
                   ),
-                  labelText: lanProvider.texts("email"),
-                  hintText: provider.authData['email'],
+                  labelText:  Provider.of<LanProvider>(context,listen: false).texts("email"),
+                  hintText: Provider.of<MyProvider>(context,listen: false).authData['email'],
                 ),
               ),
             ),
@@ -166,16 +163,16 @@ class _EmailState extends State<Email> {
                     Icons.lock,
                     color: Colors.blue,
                   ),
-                  labelText: lanProvider.texts('pass'),
+                  labelText:  Provider.of<LanProvider>(context,listen: false).texts('pass'),
                 ),
               ),
             ),
             SizedBox(height: height * 0.08),
-            if (provider.authState == authStatus.Authenticating)
+            if (Provider.of<MyProvider>(context,listen: false).authState == authStatus.Authenticating)
               Container(
                   child: const CircularProgressIndicator(),
                   alignment: Alignment.center),
-            if (provider.authState != authStatus.Authenticating)
+            if (Provider.of<MyProvider>(context,listen: false).authState != authStatus.Authenticating)
               Container(
                 padding: EdgeInsets.symmetric(horizontal: width * 0.26),
                 child: ElevatedButton(
@@ -183,17 +180,17 @@ class _EmailState extends State<Email> {
                     try {
                       if (_email.text.trim().isEmpty ||
                           _password.text.isEmpty) {
-                        return dialog(lanProvider.texts('empty field'));
+                        return dialog( Provider.of<LanProvider>(context,listen: false).texts('empty field'));
                       }
-                      if (_password.text != provider.authData['password']) {
+                      if (_password.text != Provider.of<MyProvider>(context,listen: false).authData['password']) {
                         return dialog(
-                            lanProvider.texts('ur password isnt correct'));
+                            Provider.of<LanProvider>(context,listen: false).texts('ur password isnt correct'));
                       }
-                      if (_email.text.trim() == provider.authData['email']) {
-                        return dialog(lanProvider.texts('new email must diff'));
+                      if (_email.text.trim() == Provider.of<MyProvider>(context,listen: false).authData['email']) {
+                        return dialog( Provider.of<LanProvider>(context,listen: false).texts('new email must diff'));
                       }
                       setState(() {
-                        provider.authState = authStatus.Authenticating;
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticating;
                       });
                       await FirebaseAuth.instance.currentUser!
                           .updateEmail(_email.text.trim());
@@ -202,12 +199,12 @@ class _EmailState extends State<Email> {
                           .doc(FirebaseAuth.instance.currentUser!.uid)
                           .update({'email': _email.text.trim()});
                       setState(() {
-                        provider.authData['email'] = _email.text.trim();
-                        provider.authState = authStatus.Authenticated;
+                        Provider.of<MyProvider>(context,listen: false).authData['email'] = _email.text.trim();
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                       });
                       Navigator.of(context).pop();
                       Fluttertoast.showToast(
-                          msg: lanProvider.texts('Email Updated Successfully'),
+                          msg:  Provider.of<LanProvider>(context,listen: false).texts('Email Updated Successfully'),
                           toastLength: Toast.LENGTH_SHORT,
                           backgroundColor: Colors.grey,
                           textColor: Colors.white,
@@ -217,12 +214,12 @@ class _EmailState extends State<Email> {
                           "This operation is sensitive and requires"
                               " recent authentication. Log in again before retrying this request.") {
                         setState(() {
-                          provider.authState = authStatus.Authenticating;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticating;
                         });
                         AuthCredential credential =
                             EmailAuthProvider.credential(
-                                email: provider.authData['email']!,
-                                password: provider.authData['password']!);
+                                email: Provider.of<MyProvider>(context,listen: false).authData['email']!,
+                                password: Provider.of<MyProvider>(context,listen: false).authData['password']!);
                         await FirebaseAuth.instance.currentUser!
                             .reauthenticateWithCredential(credential);
                         await FirebaseAuth.instance.currentUser!
@@ -232,13 +229,13 @@ class _EmailState extends State<Email> {
                             .doc(FirebaseAuth.instance.currentUser!.uid)
                             .update({'email': _email.text.trim()});
                         setState(() {
-                          provider.authData['email'] = _email.text.trim();
-                          provider.authState = authStatus.Authenticated;
+                          Provider.of<MyProvider>(context,listen: false).authData['email'] = _email.text.trim();
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                         });
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
                             msg:
-                                lanProvider.texts('Email Updated Successfully'),
+                            Provider.of<LanProvider>(context,listen: false).texts('Email Updated Successfully'),
                             toastLength: Toast.LENGTH_SHORT,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
@@ -246,23 +243,23 @@ class _EmailState extends State<Email> {
                       } else {
                         if (e.message ==
                             "The email address is badly formatted.")
-                          dialog(lanProvider.texts('badly formatted'));
+                          dialog( Provider.of<LanProvider>(context,listen: false).texts('badly formatted'));
                         else
                           dialog(e.message);
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                       }
                       print(e.message);
                     } catch (e) {
-                      dialog(lanProvider.texts('Error occurred !'));
+                      dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                       print(e);
                       setState(() {
-                        provider.authState = authStatus.unAuthenticated;
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                       });
                     }
                   },
-                  child: Text(lanProvider.texts('save&exit'),
+                  child: Text( Provider.of<LanProvider>(context,listen: false).texts('save&exit'),
                       style:
                           const TextStyle(fontSize: 18, color: Colors.white)),
                 ),
@@ -293,8 +290,6 @@ class _NameState extends State<Name> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
@@ -325,7 +320,7 @@ class _NameState extends State<Name> {
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'),
+                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
                         style: const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
@@ -334,11 +329,11 @@ class _NameState extends State<Name> {
     }
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
-          title: Text(lanProvider.texts('change name')),
+          title: Text( Provider.of<LanProvider>(context,listen: false).texts('change name')),
           centerTitle: true,
         ),
         body:
@@ -352,8 +347,8 @@ class _NameState extends State<Name> {
                 Icons.person,
                 color: Colors.blue,
               ),
-              labelText: lanProvider.texts('name'),
-              hintText: provider.authData['name'],
+              labelText:  Provider.of<LanProvider>(context,listen: false).texts('name'),
+              hintText: Provider.of<MyProvider>(context,listen: false).authData['name'],
             ),
           ),
           TextFormField(
@@ -365,32 +360,32 @@ class _NameState extends State<Name> {
                 Icons.lock,
                 color: Colors.blue,
               ),
-              labelText: lanProvider.texts('pass'),
+              labelText:  Provider.of<LanProvider>(context,listen: false).texts('pass'),
             ),
           ),
           SizedBox(height: height * 0.06),
-          if (provider.authState == authStatus.Authenticating)
+          if (Provider.of<MyProvider>(context,listen: false).authState == authStatus.Authenticating)
             Container(
                 child: const CircularProgressIndicator(),
                 alignment: Alignment.center),
-          if (provider.authState != authStatus.Authenticating)
+          if (Provider.of<MyProvider>(context,listen: false).authState != authStatus.Authenticating)
             Container(
               padding: EdgeInsets.symmetric(horizontal: width * 0.26),
               child: ElevatedButton(
                 onPressed: () async {
                   try {
                     if (_myName.text.isEmpty || _password.text.isEmpty) {
-                      return dialog(lanProvider.texts('empty field'));
+                      return dialog( Provider.of<LanProvider>(context,listen: false).texts('empty field'));
                     }
-                    if (_password.text != provider.authData['password']) {
+                    if (_password.text != Provider.of<MyProvider>(context,listen: false).authData['password']) {
                       return dialog(
-                          lanProvider.texts('ur password isnt correct'));
+                          Provider.of<LanProvider>(context,listen: false).texts('ur password isnt correct'));
                     }
-                    if (_myName.text == provider.authData['name']) {
-                      return dialog(lanProvider.texts('new name must diff'));
+                    if (_myName.text == Provider.of<MyProvider>(context,listen: false).authData['name']) {
+                      return dialog( Provider.of<LanProvider>(context,listen: false).texts('new name must diff'));
                     }
                     setState(() {
-                      provider.authState = authStatus.Authenticating;
+                      Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticating;
                     });
                     await FirebaseAuth.instance.currentUser!
                         .updateDisplayName(_myName.text);
@@ -399,12 +394,12 @@ class _NameState extends State<Name> {
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .update({'username': _myName.text});
                     setState(() {
-                      provider.authData['name'] = _myName.text;
-                      provider.authState = authStatus.Authenticated;
+                      Provider.of<MyProvider>(context,listen: false).authData['name'] = _myName.text;
+                      Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                     });
                     Navigator.of(context).pop();
                     Fluttertoast.showToast(
-                        msg: lanProvider.texts('Name Updated Successfully'),
+                        msg:  Provider.of<LanProvider>(context,listen: false).texts('Name Updated Successfully'),
                         toastLength: Toast.LENGTH_SHORT,
                         backgroundColor: Colors.grey,
                         textColor: Colors.white,
@@ -412,14 +407,14 @@ class _NameState extends State<Name> {
                   } on FirebaseAuthException catch (e) {
                     dialog(e.message);
                     setState(() {
-                      provider.authState = authStatus.unAuthenticated;
+                      Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                     });
                   } catch (e) {
-                    dialog(lanProvider.texts('Error occurred !'));
-                    provider.authState = authStatus.unAuthenticated;
+                    dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
+                    Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                   }
                 },
-                child: Text(lanProvider.texts('save&exit'),
+                child: Text( Provider.of<LanProvider>(context,listen: false).texts('save&exit'),
                     style: const TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ),

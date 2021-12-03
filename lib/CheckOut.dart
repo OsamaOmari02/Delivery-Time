@@ -23,15 +23,13 @@ class _CheckOutState extends State<CheckOut> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
     dialog(title) {
       return showDialog(
           context: context,
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-                  lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Row(
                   children: [
@@ -58,7 +56,7 @@ class _CheckOutState extends State<CheckOut> {
                 ),
                 actions: [
                   TextButton(
-                      child: Text(lanProvider.texts('ok'),
+                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
                           style: const TextStyle(fontSize: 21)),
                       onPressed: () => Navigator.of(context).pop()),
                 ],
@@ -76,11 +74,11 @@ class _CheckOutState extends State<CheckOut> {
             Column(
               children: [
                 Text(
-                  lanProvider.texts('order confirmed'),
+                  Provider.of<LanProvider>(context,listen: false).texts('order confirmed'),
                   style: TextStyle(fontSize: width * 0.034),
                 ),
                 Text(
-                  lanProvider.texts('will reach out to u'),
+                  Provider.of<LanProvider>(context,listen: false).texts('will reach out to u'),
                   style: TextStyle(fontSize: width * 0.034),
                 ),
               ],
@@ -101,12 +99,12 @@ class _CheckOutState extends State<CheckOut> {
     showSnackBar() => ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.green,
           centerTitle: true,
-          title: Text(lanProvider.texts('CheckOut')),
+          title: Text( Provider.of<LanProvider>(context,listen: false).texts('CheckOut')),
         ),
         body: ListView(
           padding: const EdgeInsets.all(6.0),
@@ -114,7 +112,7 @@ class _CheckOutState extends State<CheckOut> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                lanProvider.texts('deliver to'),
+                Provider.of<LanProvider>(context,listen: false).texts('deliver to'),
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -123,14 +121,14 @@ class _CheckOutState extends State<CheckOut> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               elevation: 2.0,
-              color: provider.isDark?Colors.black12:Colors.white70,
+              color: Provider.of<MyProvider>(context,listen: false).isDark?Colors.black12:Colors.white70,
               child: ListTile(
-                title: Text(provider.checkOut['area'] ?? ""),
-                subtitle: Text(lanProvider.texts('street:') +
-                    provider.checkOut['street'] +
+                title: Text(Provider.of<MyProvider>(context,listen: false).checkOut['area'] ?? ""),
+                subtitle: Text( Provider.of<LanProvider>(context,listen: false).texts('street:') +
+                    Provider.of<MyProvider>(context,listen: false).checkOut['street'] +
                     "\n" +
-                    lanProvider.texts('phone:') +
-                    provider.checkOut['phoneNum']),
+                    Provider.of<LanProvider>(context,listen: false).texts('phone:') +
+                    Provider.of<MyProvider>(context,listen: false).checkOut['phoneNum']),
                 isThreeLine: true,
               ),
             ),
@@ -139,15 +137,15 @@ class _CheckOutState extends State<CheckOut> {
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
-                  lanProvider.texts('cart total :'),
+                  Provider.of<LanProvider>(context,listen: false).texts('cart total :'),
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  provider.total.toString() + " ",
+                  Provider.of<MyProvider>(context,listen: false).total.toString() + " ",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  lanProvider.texts('jd'),
+                  Provider.of<LanProvider>(context,listen: false).texts('jd'),
                   style: const TextStyle(fontSize: 16),
                 ),
               ]),
@@ -156,15 +154,15 @@ class _CheckOutState extends State<CheckOut> {
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
-                  lanProvider.texts('delivery price') + " ",
+                  Provider.of<LanProvider>(context,listen: false).texts('delivery price') + " ",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  provider.deliveryPrice.toString() + " ",
+                  Provider.of<MyProvider>(context,listen: false).deliveryPrice.toString() + " ",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  lanProvider.texts('jd'),
+                  Provider.of<LanProvider>(context,listen: false).texts('jd'),
                   style: const TextStyle(fontSize: 16),
                 ),
                 SizedBox(width: width*0.05),
@@ -176,17 +174,17 @@ class _CheckOutState extends State<CheckOut> {
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
                 Text(
-                  lanProvider.texts('total') + " ",
+                  Provider.of<LanProvider>(context,listen: false).texts('total') + " ",
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  (provider.total + provider.deliveryPrice).toString() + " ",
+                  (Provider.of<MyProvider>(context,listen: false).total + Provider.of<MyProvider>(context,listen: false).deliveryPrice).toString() + " ",
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  lanProvider.texts('jd'),
+                  Provider.of<LanProvider>(context,listen: false).texts('jd'),
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -204,14 +202,14 @@ class _CheckOutState extends State<CheckOut> {
                     Icons.event_note,
                     color: Colors.blue,
                   ),
-                  labelText: lanProvider.texts('note'),
+                  labelText:  Provider.of<LanProvider>(context,listen: false).texts('note'),
                 ),
               ),
             ),
             SizedBox(height: height*0.03),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width*0.2),
-              child: provider.isLoading
+              child: Provider.of<MyProvider>(context,listen: false).isLoading
                   ? const Center(
                       child: const CircularProgressIndicator(),
                     )
@@ -219,35 +217,35 @@ class _CheckOutState extends State<CheckOut> {
                       onPressed: () async {
                         try {
                           setState(() {
-                            provider.isLoading = true;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
-                          await provider.addToDB(_note.text);
+                          await Provider.of<MyProvider>(context,listen: false).addToDB(_note.text);
                           Navigator.of(context)
                               .pushReplacementNamed('MyHomepage');
                           setState(() {
-                            provider.isLoading = false;
-                            provider.total = 0.0;
-                            provider.checkOut['area'] = "";
-                            provider.checkOut['street'] = "";
-                            provider.checkOut['phoneNum'] = "";
-                            provider.myCart.clear();
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).total = 0.0;
+                            Provider.of<MyProvider>(context,listen: false).checkOut['area'] = "";
+                            Provider.of<MyProvider>(context,listen: false).checkOut['street'] = "";
+                            Provider.of<MyProvider>(context,listen: false).checkOut['phoneNum'] = "";
+                            Provider.of<MyProvider>(context,listen: false).myCart.clear();
                           });
                           showSnackBar();
                         } on FirebaseException catch (e) {
-                          dialog(lanProvider.texts('Error occurred !'));
+                          dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           print(e.message);
                         } catch (e) {
-                          dialog(lanProvider.texts('Error occurred !'));
+                          dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           print(e);
                         }
                       },
-                      child: Text(lanProvider.texts('CheckOut'),
+                      child: Text( Provider.of<LanProvider>(context,listen: false).texts('CheckOut'),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       style: ButtonStyle(
@@ -257,7 +255,7 @@ class _CheckOutState extends State<CheckOut> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(child: Text(lanProvider.texts('last note'))),
+              child: Container(child: Text( Provider.of<LanProvider>(context,listen: false).texts('last note'))),
             ),
           ],
         ),

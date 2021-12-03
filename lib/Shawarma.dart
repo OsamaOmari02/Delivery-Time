@@ -18,14 +18,11 @@ class _ShawarmaState extends State<Shawarma> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var shortestSide = MediaQuery.of(context).size.shortestSide;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
-
     Widget funImage(image, title) {
       return ListTile(
         onTap: () {
           setState(() {
-            provider.restaurantName = title;
+            Provider.of<MyProvider>(context,listen: false).restaurantName = title;
           });
           Navigator.of(context).pushNamed('shawarmaScreen');
         },
@@ -39,7 +36,7 @@ class _ShawarmaState extends State<Shawarma> {
         ),
         subtitle: Text(title,
             style: TextStyle(
-                color: provider.isDark? Colors.white:Colors.black,
+                color: Provider.of<MyProvider>(context,listen: false).isDark? Colors.white:Colors.black,
                 fontSize: width*0.042,
                 fontWeight: FontWeight.bold),
             textAlign: TextAlign.center),
@@ -47,12 +44,12 @@ class _ShawarmaState extends State<Shawarma> {
     }
 
     AppBar appBar =  AppBar(
-      title: Text(lanProvider.texts('Shawarma & snacks')),
+      title: Text(Provider.of<LanProvider>(context,listen: false).texts('Shawarma & snacks')),
       centerTitle: true,
     );
 
     return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: appBar,
         body: Scrollbar(

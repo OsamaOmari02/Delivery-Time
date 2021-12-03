@@ -19,6 +19,7 @@ class _MyPasswordState extends State<MyPassword> {
   TextEditingController myPass = TextEditingController();
   TextEditingController myNewPass = TextEditingController();
   TextEditingController myNewPassConf = TextEditingController();
+  var user = FirebaseAuth.instance.currentUser;
   @override
   void dispose() {
     myPass.dispose();
@@ -31,9 +32,6 @@ class _MyPasswordState extends State<MyPassword> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var provider = Provider.of<MyProvider>(context);
-    var lanProvider = Provider.of<LanProvider>(context);
-    var user = FirebaseAuth.instance.currentUser;
     dialog(title) {
       return showDialog(
           context: context,
@@ -64,7 +62,7 @@ class _MyPasswordState extends State<MyPassword> {
               ),
               actions: [
                 TextButton(
-                    child: Text(lanProvider.texts('ok'), style:const TextStyle(fontSize: 21)),
+                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'), style:const TextStyle(fontSize: 21)),
                     onPressed: () => Navigator.of(context).pop()),
               ],
             );
@@ -72,10 +70,10 @@ class _MyPasswordState extends State<MyPassword> {
     }
 
     return Directionality(
-      textDirection: lanProvider.isEn?TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn?TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(lanProvider.texts('my password')),
+          title: Text( Provider.of<LanProvider>(context,listen: false).texts('my password')),
           centerTitle: true,
           backgroundColor: Colors.blue,
         ),
@@ -103,7 +101,7 @@ class _MyPasswordState extends State<MyPassword> {
                     Icons.edit,
                     color: Colors.blue,
                   ),
-                  labelText: lanProvider.texts('current pass'),
+                  labelText:  Provider.of<LanProvider>(context,listen: false).texts('current pass'),
                 ),
               ),
             ),
@@ -117,7 +115,7 @@ class _MyPasswordState extends State<MyPassword> {
                     Icons.edit,
                     color: Colors.blue,
                   ),
-                  labelText: lanProvider.texts('new pass'),
+                  labelText:  Provider.of<LanProvider>(context,listen: false).texts('new pass'),
                 ),
               ),
             ),
@@ -131,15 +129,15 @@ class _MyPasswordState extends State<MyPassword> {
                     Icons.edit,
                     color: Colors.blue,
                   ),
-                  labelText: lanProvider.texts('confirm pass'),
+                  labelText:  Provider.of<LanProvider>(context,listen: false).texts('confirm pass'),
                 ),
               ),
             ),
             SizedBox(height: height * 0.06),
-            if(provider.authState==authStatus.Authenticating)
+            if(Provider.of<MyProvider>(context,listen: false).authState==authStatus.Authenticating)
               Container(child: const CircularProgressIndicator(),
                 alignment: Alignment.center),
-            if(provider.authState!=authStatus.Authenticating)
+            if(Provider.of<MyProvider>(context,listen: false).authState!=authStatus.Authenticating)
               Container(
                 padding: EdgeInsets.symmetric(horizontal: width*0.26),
                 child: ElevatedButton(
@@ -147,21 +145,21 @@ class _MyPasswordState extends State<MyPassword> {
                     try{
                       if(myNewPass.text.isEmpty || myPass.text.isEmpty ||
                           myNewPassConf.text.isEmpty) {
-                        return dialog(lanProvider.texts('empty field'));
-                      }  if (myPass.text != provider.authData['password']) {
-                        return dialog(lanProvider.texts('ur password isnt correct'));
+                        return dialog( Provider.of<LanProvider>(context,listen: false).texts('empty field'));
+                      }  if (myPass.text != Provider.of<MyProvider>(context,listen: false).authData['password']) {
+                        return dialog( Provider.of<LanProvider>(context,listen: false).texts('ur password isnt correct'));
                       }
                       if(myNewPassConf.text!=myNewPass.text){
-                        return dialog(lanProvider.texts('passwords dont match'));
+                        return dialog( Provider.of<LanProvider>(context,listen: false).texts('passwords dont match'));
                       }
                       if (myNewPass.text.length<6){
-                        return dialog(lanProvider.texts('pass must be 6'));
+                        return dialog( Provider.of<LanProvider>(context,listen: false).texts('pass must be 6'));
                       }
-                      if (myNewPass.text==provider.authData['password']){
-                        return dialog(lanProvider.texts('new pass must be'));
+                      if (myNewPass.text==Provider.of<MyProvider>(context,listen: false).authData['password']){
+                        return dialog( Provider.of<LanProvider>(context,listen: false).texts('new pass must be'));
                       }
                       setState(() {
-                        provider.authState=authStatus.Authenticating;
+                        Provider.of<MyProvider>(context,listen: false).authState=authStatus.Authenticating;
                       });
                       await
                       FirebaseAuth.instance.currentUser!.updatePassword(myNewPass.text);
@@ -170,12 +168,12 @@ class _MyPasswordState extends State<MyPassword> {
                           .doc(user!.uid)
                           .update({'password':myNewPass.text});
                       setState(() {
-                        provider.authData['password'] = myNewPass.text;
-                        provider.authState=authStatus.Authenticated;
+                        Provider.of<MyProvider>(context,listen: false).authData['password'] = myNewPass.text;
+                        Provider.of<MyProvider>(context,listen: false).authState=authStatus.Authenticated;
                       });
                       Navigator.of(context).pop('password');
                       Fluttertoast.showToast(
-                          msg: lanProvider.texts('Pass Updated'),
+                          msg:  Provider.of<LanProvider>(context,listen: false).texts('Pass Updated'),
                           toastLength: Toast.LENGTH_SHORT,
                           backgroundColor: Colors.grey,
                           textColor: Colors.white,
@@ -185,11 +183,11 @@ class _MyPasswordState extends State<MyPassword> {
                       if (e.message=="This operation is sensitive and requires"
                           " recent authentication. Log in again before retrying this request.") {
                         setState(() {
-                          provider.authState = authStatus.Authenticating;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticating;
                         });
                         AuthCredential credential = EmailAuthProvider
-                            .credential(email: provider.authData['email']!,
-                            password: provider.authData['password']!);
+                            .credential(email: Provider.of<MyProvider>(context,listen: false).authData['email']!,
+                            password: Provider.of<MyProvider>(context,listen: false).authData['password']!);
                         await FirebaseAuth.instance.currentUser!
                             .reauthenticateWithCredential(credential);
                         await
@@ -200,12 +198,12 @@ class _MyPasswordState extends State<MyPassword> {
                             .doc(user!.uid)
                             .update({'password': myNewPass.text});
                         setState(() {
-                          provider.authData['password'] = myNewPass.text;
-                          provider.authState = authStatus.Authenticated;
+                          Provider.of<MyProvider>(context,listen: false).authData['password'] = myNewPass.text;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                         });
                         Navigator.of(context).pop('password');
                         Fluttertoast.showToast(
-                            msg: lanProvider.texts('Pass Updated'),
+                            msg:  Provider.of<LanProvider>(context,listen: false).texts('Pass Updated'),
                             toastLength: Toast.LENGTH_SHORT,
                             backgroundColor: Colors.grey,
                             textColor: Colors.white,
@@ -215,19 +213,19 @@ class _MyPasswordState extends State<MyPassword> {
                       else {
                         dialog(e.message);
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                       }
                     }
                     catch(e) {
-                      dialog(lanProvider.texts('Error occurred !'));
+                      dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
                       print(e);
                       setState(() {
-                        provider.authState=authStatus.unAuthenticated;
+                        Provider.of<MyProvider>(context,listen: false).authState=authStatus.unAuthenticated;
                       });
                     }
                   },
-                  child: Text(lanProvider.texts('save&exit'),
+                  child: Text( Provider.of<LanProvider>(context,listen: false).texts('save&exit'),
                       style: const TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),

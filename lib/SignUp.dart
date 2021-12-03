@@ -44,7 +44,6 @@ class _RegisterViewState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    var provider = Provider.of<MyProvider>(context);
     LogoutFun(title) {
       return showDialog(
           context: context,
@@ -233,7 +232,7 @@ class _RegisterViewState extends State<Register> {
             return LogoutFun("Passwords do not match");
           try {
             setState(() {
-              provider.authState = authStatus.Authenticating;
+              Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticating;
             });
                 UserCredential authRes = await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
@@ -247,22 +246,22 @@ class _RegisterViewState extends State<Register> {
                     'isAdmin':false,
                   });
                   setState(() {
-                    provider.authState = authStatus.Authenticated;
+                    Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                   });
-                  provider.fetch();
+            Provider.of<MyProvider>(context,listen: false).fetch();
                   Navigator.of(context).pushReplacementNamed('MyHomepage');
           } on FirebaseAuthException catch (e) {
              e.message=='Given String is empty or null'?LogoutFun('Empty field!'):LogoutFun(e.message);
             print(e);
              setState(() {
-               provider.authState = authStatus.unAuthenticated;
+               Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                _passwordController.clear();
                _repasswordController.clear();
              });
           } catch (e) {
             print(e);
             setState(() {
-              provider.authState = authStatus.unAuthenticated;
+              Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
               _passwordController.clear();
               _repasswordController.clear();
             });
@@ -274,14 +273,16 @@ class _RegisterViewState extends State<Register> {
     final bottom = Column(
       children: <Widget>[
         SizedBox(height: MediaQuery.of(context).size.height*0.05),
-        if (provider.authState==authStatus.Authenticating)
+        if (Provider.of<MyProvider>(context,listen: false).authState==authStatus.Authenticating)
           CircularProgressIndicator(color: Colors.white),
-        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
+        if (Provider.of<MyProvider>(context,listen: false).authState==authStatus.unAuthenticated
+            ||Provider.of<MyProvider>(context,listen: false).authState==authStatus.Authenticated)
           registerButton,
         Padding(
           padding: EdgeInsets.all(8.0),
         ),
-        if (provider.authState==authStatus.unAuthenticated||provider.authState==authStatus.Authenticated)
+        if (Provider.of<MyProvider>(context,listen: false).authState==authStatus.unAuthenticated
+            || Provider.of<MyProvider>(context,listen: false).authState==authStatus.Authenticated)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[

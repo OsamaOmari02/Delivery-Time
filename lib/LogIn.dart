@@ -32,8 +32,6 @@ class _LoginViewState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    var provider = Provider.of<MyProvider>(context);
-
     dialog(title) {
       return showDialog(
           context: context,
@@ -123,8 +121,8 @@ class _LoginViewState extends State<Login> {
             ),
           ),
         ),
-        if (provider.authState == authStatus.unAuthenticated ||
-            provider.authState == authStatus.Authenticated)
+        if (Provider.of<MyProvider>(context,listen: false).authState == authStatus.unAuthenticated ||
+            Provider.of<MyProvider>(context,listen: false).authState == authStatus.Authenticated)
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -173,7 +171,7 @@ class _LoginViewState extends State<Login> {
         onPressed: () async {
           try {
             setState(() {
-              provider.authState = authStatus.Authenticating;
+              Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticating;
             });
             var auth = (await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: _emailController.text.trim(),
@@ -183,15 +181,15 @@ class _LoginViewState extends State<Login> {
             if (auth != null) {
               if (!mounted) return;
               setState(() {
-                provider.fetch();
-                provider.authState = authStatus.Authenticated;
+                Provider.of<MyProvider>(context,listen: false).fetch();
+                Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
               });
               if (_emailController.text.trim() != "admin@gmail.com" &&
                   _passwordController.text != "delivery.time123") {
-                provider.setAdmin(false);
+                Provider.of<MyProvider>(context,listen: false).setAdmin(false);
                 Navigator.of(context).pushReplacementNamed('MyHomepage');
               } else {
-                provider.setAdmin(true);
+                Provider.of<MyProvider>(context,listen: false).setAdmin(true);
                 Navigator.of(context).pushReplacementNamed('callCenter');
               }
             }
@@ -200,13 +198,13 @@ class _LoginViewState extends State<Login> {
                 ? dialog('Empty field!')
                 : dialog(e.message);
             setState(() {
-              provider.authState = authStatus.unAuthenticated;
+              Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
             });
             _passwordController.clear();
           } catch (e) {
             print(e);
             setState(() {
-              provider.authState = authStatus.unAuthenticated;
+              Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
             });
           }
         },
@@ -215,16 +213,16 @@ class _LoginViewState extends State<Login> {
 
     final bottom = Column(
       children: <Widget>[
-        if (provider.authState == authStatus.Authenticating)
+        if (Provider.of<MyProvider>(context,listen: false).authState == authStatus.Authenticating)
           const CircularProgressIndicator(color: Colors.white),
-        if (provider.authState == authStatus.unAuthenticated ||
-            provider.authState == authStatus.Authenticated)
+        if (Provider.of<MyProvider>(context,listen: false).authState == authStatus.unAuthenticated ||
+            Provider.of<MyProvider>(context,listen: false).authState == authStatus.Authenticated)
           loginButton,
         const Padding(
           padding: EdgeInsets.all(8.0),
         ),
-        if (provider.authState == authStatus.unAuthenticated ||
-            provider.authState == authStatus.Authenticated)
+        if (Provider.of<MyProvider>(context,listen: false).authState == authStatus.unAuthenticated ||
+            Provider.of<MyProvider>(context,listen: false).authState == authStatus.Authenticated)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
