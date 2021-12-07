@@ -38,7 +38,7 @@ class _MyDrawerState extends State<MyDrawer> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -65,7 +65,7 @@ class _MyDrawerState extends State<MyDrawer> {
             return AlertDialog(
               title: Text(
                 Provider.of<LanProvider>(context,listen: false).texts('log out?'),
-                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -120,7 +120,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
     return SafeArea(
       child: Directionality(
-        textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+        textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
         child: Drawer(
           child: ListView(
             children: [

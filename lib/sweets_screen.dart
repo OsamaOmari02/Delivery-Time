@@ -22,20 +22,6 @@ class _SweetScreenState extends State<SweetScreen> {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<MyProvider>(context, listen: false).fetchMealsSweets(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
-      setState(() {
-        tab1s = FirebaseFirestore.instance
-            .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-            .restaurantName}/kunafeh')
-            .snapshots();
-        tab2s = FirebaseFirestore.instance
-            .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-            .restaurantName}/cake')
-            .snapshots();
-        tab3s = FirebaseFirestore.instance
-            .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-            .restaurantName}/others')
-            .snapshots();
-      });
     });
     super.initState();
   }
@@ -45,7 +31,7 @@ class _SweetScreenState extends State<SweetScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(
-      textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -63,7 +49,7 @@ class _SweetScreenState extends State<SweetScreen> {
           bottomNavigationBar: Container(
             height: height*0.1,
             child: Opacity(
-              opacity: Provider.of<MyProvider>(context,listen: false).total == 0 ? 0.4 : 1,
+              opacity: Provider.of<MyProvider>(context).total <0.009 ? 0.4 : 1,
               child: Container(
                 padding: const EdgeInsets.fromLTRB(12, 0, 12, 15),
                 alignment: Alignment.bottomCenter,
@@ -100,14 +86,18 @@ class _SweetScreenState extends State<SweetScreen> {
                               fontSize: 17, color: Colors.white),
                         ),
                         Text(
-                          " ${Provider.of<MyProvider>(context,listen: false).total} ",
+                          " ${Provider.of<MyProvider>(context).total.toStringAsFixed(2)=="-0.00"?
+                          0.0:Provider.of<MyProvider>(context).total.toStringAsFixed(2)}",
                           style: const TextStyle(
                               fontSize: 16, color: Colors.white),
                         ),
-                        Text(
-                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.white),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: Text(
+                            Provider.of<LanProvider>(context,listen: false).texts('jd'),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.white),
+                          ),
                         ),
                       ],
                     ),
@@ -136,6 +126,15 @@ class First extends StatefulWidget {
 
 class _FirstState extends State<First> {
 
+
+  @override
+  void initState() {
+    tab1s = FirebaseFirestore.instance
+        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/kunafeh')
+        .snapshots();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -147,7 +146,7 @@ class _FirstState extends State<First> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -223,7 +222,7 @@ class _FirstState extends State<First> {
                                 ),
                                 const SizedBox(height: 5),
                                 Padding(
-                                  padding: Provider.of<LanProvider>(context,listen: false).isEn?
+                                  padding: Provider.of<LanProvider>(context).isEn?
                                   EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
                                   child: SizedBox(
                                     width: width*0.5,
@@ -251,8 +250,8 @@ class _FirstState extends State<First> {
                                           resData[index]['meal price'] +
                                           " " +
                                           Provider.of<LanProvider>(context,listen: false).texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.pink),
+                                      style: TextStyle(
+                                          fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                     ),
                                   ),
                                 ),
@@ -366,7 +365,14 @@ class Second extends StatefulWidget {
 
 class _SecondState extends State<Second> {
 
-
+  @override
+  void initState() {
+    tab2s = FirebaseFirestore.instance
+        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/cake')
+        .snapshots();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -377,7 +383,7 @@ class _SecondState extends State<Second> {
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-              Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+              Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Text(
                   title,
@@ -471,7 +477,7 @@ class _SecondState extends State<Second> {
                                 ),
                                 const SizedBox(height: 5),
                                 Padding(
-                                  padding: Provider.of<LanProvider>(context,listen: false).isEn?
+                                  padding: Provider.of<LanProvider>(context).isEn?
                                   EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
                                   child: SizedBox(
                                     width: width*0.5,
@@ -499,8 +505,8 @@ class _SecondState extends State<Second> {
                                           resData[index]['meal price'] +
                                           " " +
                                           Provider.of<LanProvider>(context,listen: false).texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.pink),
+                                      style: TextStyle(
+                                          fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                     ),
                                   ),
                                 ),
@@ -615,6 +621,14 @@ class Third extends StatefulWidget {
 class _ThirdState extends State<Third> {
 
   @override
+  void initState() {
+    tab3s = FirebaseFirestore.instance
+        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+        .restaurantName}/others')
+        .snapshots();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -625,7 +639,7 @@ class _ThirdState extends State<Third> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -701,7 +715,7 @@ class _ThirdState extends State<Third> {
                                 ),
                                 const SizedBox(height: 5),
                                 Padding(
-                                  padding: Provider.of<LanProvider>(context,listen: false).isEn?
+                                  padding: Provider.of<LanProvider>(context).isEn?
                                   EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
                                   child: SizedBox(
                                     width: width*0.5,
@@ -729,8 +743,8 @@ class _ThirdState extends State<Third> {
                                           resData[index]['meal price'] +
                                           " " +
                                           Provider.of<LanProvider>(context,listen: false).texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.pink),
+                                      style: TextStyle(
+                                          fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                     ),
                                   ),
                                 ),

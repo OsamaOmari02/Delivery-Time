@@ -20,11 +20,9 @@ class _MyAddressState extends State<MyAddress> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).fetchAddress();
-    setState(() {
       stream = FirebaseFirestore.instance
           .collection('/address/${user!.uid}/addresses')
           .snapshots();
-    });
     super.initState();
   }
 
@@ -75,7 +73,7 @@ class _MyAddressState extends State<MyAddress> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -98,7 +96,6 @@ class _MyAddressState extends State<MyAddress> {
                         });
                         Navigator.of(context).pop();
                         await Provider.of<MyProvider>(context,listen: false).delete();
-                        print("length = after in dialog " + Provider.of<MyProvider>(context,listen: false).loc.length.toString());
                         Fluttertoast.showToast(
                             msg:  Provider.of<LanProvider>(context,listen: false).texts('Address Deleted'),
                             toastLength: Toast.LENGTH_SHORT,
@@ -140,7 +137,7 @@ class _MyAddressState extends State<MyAddress> {
     }
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -170,10 +167,10 @@ class _MyAddressState extends State<MyAddress> {
                   style: const TextStyle(color: Colors.red),
                 ));
                 return ListView.builder(
-                  itemCount: Provider.of<MyProvider>(context,listen: false).loc.length,
+                  itemCount: Provider.of<MyProvider>(context).loc.length,
                   itemBuilder: (BuildContext context, int index) {
                     var userData = snapshot.data!.docs;
-                    if (Provider.of<MyProvider>(context,listen: false).loc.isEmpty || userData.isEmpty) {
+                    if (Provider.of<MyProvider>(context).loc.isEmpty || userData.isEmpty) {
                       return Center(
                           child: Text( Provider.of<LanProvider>(context,listen: false).texts('new address'),
                               style: const TextStyle(

@@ -19,12 +19,10 @@ class _HistoryState extends State<History> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
-    setState(() {
       stream = FirebaseFirestore.instance
           .collection('/orders/${user!.uid}/myOrders')
           .orderBy('date', descending: true)
           .snapshots();
-    });
     super.initState();
   }
 
@@ -39,7 +37,7 @@ class _HistoryState extends State<History> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -67,7 +65,7 @@ class _HistoryState extends State<History> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -164,7 +162,7 @@ class _HistoryState extends State<History> {
       throw "";
     }
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -246,7 +244,7 @@ class _HistoryState extends State<History> {
                                       return AlertDialog(
                                         title: Text(
                                           Provider.of<LanProvider>(context,listen: false).texts('reorder?'),
-                                          textAlign:  Provider.of<LanProvider>(context,listen: false).isEn
+                                          textAlign:  Provider.of<LanProvider>(context).isEn
                                               ? TextAlign.start
                                               : TextAlign.end,
                                           style: const TextStyle(fontSize: 23),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanProvider with ChangeNotifier {
-  bool isEn = true;
+  bool isEn = false;
 
   Map<String, Object> arabic = {
     'order ur food..': 'اطلب اكلك واستمتع !',

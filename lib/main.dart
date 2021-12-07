@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: UserState(),
-      themeMode: Provider.of<MyProvider>(context,listen: false).isDark ? ThemeMode.dark : ThemeMode.light,
+      themeMode: Provider.of<MyProvider>(context).isDark ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
@@ -164,7 +164,7 @@ class _MyHomepageState extends State<MyHomepage> {
             style: TextStyle(
               fontSize: width*0.042,
               fontWeight: FontWeight.bold,
-              color: Provider.of<MyProvider>(context,listen: false).isDark ? Colors.white : Colors.black,
+              color: Provider.of<MyProvider>(context).isDark ? Colors.white : Colors.black,
             ),
             textAlign: TextAlign.center),
       );
@@ -191,7 +191,7 @@ class _MyHomepageState extends State<MyHomepage> {
                 padding: EdgeInsets.symmetric(vertical: height * 0.015),
                 child: Text( Provider.of<LanProvider>(context,listen: false).texts(title),
                     style: TextStyle(
-                        color: Provider.of<MyProvider>(context,listen: false).isDark ? Colors.white : Colors.black,
+                        color: Provider.of<MyProvider>(context).isDark ? Colors.white : Colors.black,
                         fontSize: width * 0.042),
                     textAlign: TextAlign.center),
               ),
@@ -206,7 +206,7 @@ class _MyHomepageState extends State<MyHomepage> {
               title: new Text(
                   Provider.of<LanProvider>(context,listen: false).texts('Do you want to exit an App'),
                 textDirection:
-                Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+                Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
                 style: const TextStyle(fontSize: 21)
               ),
               actions: <Widget>[
@@ -214,7 +214,7 @@ class _MyHomepageState extends State<MyHomepage> {
                   onPressed: () => Navigator.of(context).pop(true),
                   child: new Text(
                     Provider.of<LanProvider>(context,listen: false).texts('yes?'),
-                    textDirection:  Provider.of<LanProvider>(context,listen: false).isEn
+                    textDirection:  Provider.of<LanProvider>(context).isEn
                         ? TextDirection.ltr
                         : TextDirection.rtl,
                     style: const TextStyle(fontSize: 17,color: Colors.red),
@@ -224,7 +224,7 @@ class _MyHomepageState extends State<MyHomepage> {
                   onPressed: () => Navigator.of(context).pop(false),
                   child: new Text(
                     Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
-                    textDirection:  Provider.of<LanProvider>(context,listen: false).isEn
+                    textDirection:  Provider.of<LanProvider>(context).isEn
                         ? TextDirection.ltr
                         : TextDirection.rtl,
                     style: const TextStyle(fontSize: 17),
@@ -237,7 +237,7 @@ class _MyHomepageState extends State<MyHomepage> {
     }
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -251,12 +251,12 @@ class _MyHomepageState extends State<MyHomepage> {
                       onPressed: () =>
                           Navigator.of(context).pushNamed('Shopping'),
                       icon: const Icon(Icons.shopping_cart)),
-                  if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0)
+                  if (Provider.of<MyProvider>(context).myCart.length != 0)
                     CircleAvatar(
                         radius: 10,
                         backgroundColor: Colors.red,
                         child: Text(
-                          Provider.of<MyProvider>(context,listen: false).myCart.length.toString(),
+                          Provider.of<MyProvider>(context).myCart.length.toString(),
                           style: const TextStyle(color: Colors.white),
                         )),
                 ]),

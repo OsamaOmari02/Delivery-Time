@@ -37,7 +37,7 @@ class _SweetsState extends State<Sweets> {
           padding: const EdgeInsets.all(2.0),
           child: Text(title,
               style: TextStyle(
-                  color: Provider.of<MyProvider>(context,listen: false).isDark? Colors.white:Colors.black,
+                  color: Provider.of<MyProvider>(context).isDark? Colors.white:Colors.black,
                   fontSize: width*0.042,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.center),
@@ -47,7 +47,7 @@ class _SweetsState extends State<Sweets> {
 
 
     return Directionality(
-      textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           title: Text(Provider.of<LanProvider>(context,listen: false).texts('Sweets')),

@@ -13,6 +13,7 @@ class Shopping extends StatefulWidget {
 }
 
 class _ShoppingState extends State<Shopping> {
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -23,7 +24,7 @@ class _ShoppingState extends State<Shopping> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign: Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -46,14 +47,14 @@ class _ShoppingState extends State<Shopping> {
 
     bottomSheet() {
       return Directionality(
-        textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(
               Provider.of<LanProvider>(context,listen: false).texts('choose address'),
               style: TextStyle(
-                  color: Provider.of<MyProvider>(context,listen: false).isDark?CupertinoColors.white:CupertinoColors.black, fontWeight: FontWeight.bold),
+                  color: Provider.of<MyProvider>(context).isDark?CupertinoColors.white:CupertinoColors.black, fontWeight: FontWeight.bold),
             ),
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 1,
@@ -68,9 +69,9 @@ class _ShoppingState extends State<Shopping> {
             ],
           ),
           body: ListView.builder(
-            itemCount: Provider.of<MyProvider>(context,listen: false).loc.length,
+            itemCount: Provider.of<MyProvider>(context).loc.length,
             itemBuilder: (BuildContext context, int index) {
-              if (Provider.of<MyProvider>(context,listen: false).loc.isEmpty)
+              if (Provider.of<MyProvider>(context).loc.isEmpty)
                 return Center(
                   child: TextButton(
                       onPressed: () =>
@@ -110,7 +111,7 @@ class _ShoppingState extends State<Shopping> {
     }
 
     return Directionality(
-        textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -118,7 +119,7 @@ class _ShoppingState extends State<Shopping> {
               Provider.of<LanProvider>(context,listen: false).texts('food cart'),
               style: const TextStyle(fontSize: 20),
             ),
-            actions: Provider.of<MyProvider>(context,listen: false).myCart.isEmpty
+            actions: Provider.of<MyProvider>(context).myCart.isEmpty
                 ? null
                 : [
                     Padding(
@@ -168,52 +169,54 @@ class _ShoppingState extends State<Shopping> {
                     ),
                   ],
           ),
-          body: Provider.of<MyProvider>(context,listen: false).myCart.length == 0
+          body: Provider.of<MyProvider>(context).myCart.length == 0
               ? Center(
                   child: Text(
                     Provider.of<LanProvider>(context,listen: false).texts('empty cart'),
                   style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
                 ))
               : ListView.builder(
-                  itemCount: Provider.of<MyProvider>(context,listen: false).myCart.length,
+                  itemCount: Provider.of<MyProvider>(context).myCart.length,
                   itemBuilder: (context, index) {
                     return Card(
-                      elevation: 3,
+                      elevation: 5,
                       child: Row(
                         children: <Widget>[
                           Expanded(
+                            flex: 5,
                             child: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(height: height*0.02),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                                    alignment: Provider.of<LanProvider>(context,listen: false).isEn
+                                    padding: const EdgeInsets.symmetric(horizontal: 7,vertical: 5),
+                                    alignment: Provider.of<LanProvider>(context).isEn
                                         ? Alignment.topLeft
                                         : Alignment.topRight,
                                     child: Text(
                                       Provider.of<MyProvider>(context,listen: false).myCart[index].mealName,
                                       style: const TextStyle(
-                                          fontSize: 17,
+
+                                          fontSize: 14,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    alignment: Provider.of<LanProvider>(context,listen: false).isEn
+                                    alignment: Provider.of<LanProvider>(context).isEn
                                         ? Alignment.topLeft
                                         : Alignment.topRight,
                                     child: Text(
                                       Provider.of<MyProvider>(context,listen: false).myCart[index].description,
                                       style: const TextStyle(
                                         color: Colors.grey,
-                                          fontSize: 16),
+                                          fontSize: 13),
                                     ),
                                   ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                                    alignment: Provider.of<LanProvider>(context,listen: false).isEn
+                                    alignment: Provider.of<LanProvider>(context).isEn
                                         ? Alignment.bottomLeft
                                         : Alignment.bottomRight,
                                     child: Padding(
@@ -225,8 +228,8 @@ class _ShoppingState extends State<Shopping> {
                                             Provider.of<MyProvider>(context,listen: false).myCart[index].mealPrice +
                                             " " +
                                             Provider.of<LanProvider>(context,listen: false).texts('jd'),
-                                        style: const TextStyle(
-                                            fontSize: 16, color: Colors.pink),
+                                        style: TextStyle(
+                                            fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                       ),
                                     ),
                                   ),
@@ -288,7 +291,7 @@ class _ShoppingState extends State<Shopping> {
           bottomNavigationBar: Container(
             height: height*0.16,
             child: Column(children: [
-              if (Provider.of<MyProvider>(context,listen: false).myCart.isNotEmpty)
+              if (Provider.of<MyProvider>(context).myCart.isNotEmpty)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -296,11 +299,11 @@ class _ShoppingState extends State<Shopping> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(Provider.of<LanProvider>(context,listen: false).texts('cart total :'),
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
-                    Text(Provider.of<MyProvider>(context,listen: false).total.toString() + " ",
+                    Text(Provider.of<MyProvider>(context).total.toStringAsFixed(2) + " ",
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -312,7 +315,7 @@ class _ShoppingState extends State<Shopping> {
                         )),
                   ],
                 ),
-              if (Provider.of<MyProvider>(context,listen: false).myCart.isNotEmpty)
+              if (Provider.of<MyProvider>(context).myCart.isNotEmpty)
                 Provider.of<MyProvider>(context,listen: false).isLoading
                     ? const Center(
                         child: const CircularProgressIndicator(),

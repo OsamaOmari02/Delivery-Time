@@ -21,7 +21,7 @@ class _AboutState extends State<About> {
       throw "";
     }
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(

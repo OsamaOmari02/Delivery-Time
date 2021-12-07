@@ -205,7 +205,7 @@ class _DetailsState extends State<Details> {
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  Provider.of<MyProvider>(context,listen: false).details['total'].toString() + " ",
+                  double.parse(Provider.of<MyProvider>(context,listen: false).details['total']!).toStringAsFixed(2) + " ",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -280,7 +280,7 @@ class _DetailsState extends State<Details> {
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
-                          await Provider.of<MyProvider>(context).goToMaps(
+                          await Provider.of<MyProvider>(context,listen: false).goToMaps(
                               double.parse(Provider.of<MyProvider>(context,listen: false).details['longitude']!),
                               double.parse(Provider.of<MyProvider>(context,listen: false).details['latitude']!));
                           setState(() {

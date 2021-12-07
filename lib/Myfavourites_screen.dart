@@ -19,11 +19,9 @@ class _MyFavouritesState extends State<MyFavourites> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).fetchFav();
-    setState(() {
       stream = FirebaseFirestore.instance
           .collection('/favorites/${user!.uid}/myFavorites')
           .snapshots();
-    });
     super.initState();
   }
 
@@ -37,7 +35,7 @@ class _MyFavouritesState extends State<MyFavourites> {
             return AlertDialog(
               title: Text(
                 title,
-                textAlign:  Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                 style: const TextStyle(fontSize: 23),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 7),
@@ -63,7 +61,7 @@ class _MyFavouritesState extends State<MyFavourites> {
       throw "";
     }
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -79,7 +77,7 @@ class _MyFavouritesState extends State<MyFavourites> {
                 return const Center(child: const CircularProgressIndicator());
               return Scrollbar(
                 child: Stack(children: [
-                  Provider.of<MyProvider>(context,listen: false).myFavorites.length == 0
+                  Provider.of<MyProvider>(context).myFavorites.length == 0
                       ? Center(
                           child: Text(
                             Provider.of<LanProvider>(context,listen: false).texts('no meals were added to favorites'),
@@ -182,9 +180,8 @@ class _MyFavouritesState extends State<MyFavourites> {
                                                               ['meal price'] +
                                                           " " +
                                                           Provider.of<LanProvider>(context,listen: false).texts('jd'),
-                                                      style: const TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.pink),
+                                                      style: TextStyle(
+                                                          fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                                     ),
                                                   ),
                                                 ),

@@ -20,11 +20,9 @@ class _MainResScreenState extends State<MainResScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsMain(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
-    setState(() {
       tab1r = FirebaseFirestore.instance
           .collection('/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
           .snapshots();
-    });
     super.initState();
   }
 
@@ -38,7 +36,7 @@ class _MainResScreenState extends State<MainResScreen> {
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-              Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+              Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Text(
                   title,
@@ -78,7 +76,7 @@ class _MainResScreenState extends State<MainResScreen> {
     }
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(centerTitle: true, title: Text(Provider.of<MyProvider>(context,listen: false).restaurantName)),
         body: StreamBuilder<QuerySnapshot>(
@@ -136,7 +134,7 @@ class _MainResScreenState extends State<MainResScreen> {
                                     ),
                                     const SizedBox(height: 5),
                                     Padding(
-                                      padding: Provider.of<LanProvider>(context,listen: false).isEn?
+                                      padding: Provider.of<LanProvider>(context).isEn?
                                       EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
                                       child: SizedBox(
                                         width: width*0.5,
@@ -164,8 +162,8 @@ class _MainResScreenState extends State<MainResScreen> {
                                               resData[index]['meal price'] +
                                               " " +
                                               Provider.of<LanProvider>(context,listen: false).texts('jd'),
-                                          style: const TextStyle(
-                                              fontSize: 15, color: Colors.pink),
+                                          style: TextStyle(
+                                              fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                         ),
                                       ),
                                     ),
@@ -271,7 +269,7 @@ class _MainResScreenState extends State<MainResScreen> {
         bottomNavigationBar: Container(
           height: height*0.1,
           child: Opacity(
-            opacity: Provider.of<MyProvider>(context,listen: false).total == 0 ? 0.4 : 1,
+            opacity: Provider.of<MyProvider>(context).total <0.009 ? 0.4 : 1,
             child: Container(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 15),
               alignment: Alignment.bottomCenter,
@@ -308,14 +306,18 @@ class _MainResScreenState extends State<MainResScreen> {
                             fontSize: 17, color: Colors.white),
                       ),
                       Text(
-                        " ${Provider.of<MyProvider>(context,listen: false).total} ",
+                        " ${Provider.of<MyProvider>(context).total.toStringAsFixed(2)=="-0.00"?
+                        0.0:Provider.of<MyProvider>(context).total.toStringAsFixed(2)}",
                         style: const TextStyle(
                             fontSize: 16, color: Colors.white),
                       ),
-                      Text(
-                        Provider.of<LanProvider>(context,listen: false).texts('jd'),
-                        style: const TextStyle(
-                            fontSize: 16, color: Colors.white),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                        child: Text(
+                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white),
+                        ),
                       ),
                     ],
                   ),

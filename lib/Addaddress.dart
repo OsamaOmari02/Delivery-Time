@@ -71,8 +71,8 @@ class _AddAddressState extends State<AddAddress> {
             underline: const SizedBox(),
             borderRadius: BorderRadius.circular(12),
             isExpanded: true,
-            value: Provider.of<MyProvider>(context,listen: false).area,
-            items: Provider.of<MyProvider>(context,listen: false).areas.map((value) {
+            value: Provider.of<MyProvider>(context).area,
+            items: Provider.of<MyProvider>(context).areas.map((value) {
               return DropdownMenuItem(
                 value: value,
                 child: Text(value),
@@ -119,7 +119,7 @@ class _AddAddressState extends State<AddAddress> {
                   Text(
                     title,
                     textAlign:
-                    Provider.of<LanProvider>(context,listen: false).isEn ? TextAlign.start : TextAlign.end,
+                    Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
                     style: const TextStyle(fontSize: 23),
                   ),
                 ],
@@ -146,7 +146,7 @@ class _AddAddressState extends State<AddAddress> {
     }
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,

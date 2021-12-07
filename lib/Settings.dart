@@ -36,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Switch(
                       activeColor: Colors.blueAccent,
                       activeTrackColor: Colors.blue[200],
-                      value: Provider.of<LanProvider>(context,listen: false).isEn,
+                      value: Provider.of<LanProvider>(context).isEn,
                       onChanged: (val) async {
                         SharedPreferences pref =
                             await SharedPreferences.getInstance();
@@ -106,7 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       throw "";
     }
     return Directionality(
-      textDirection: Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -137,7 +137,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 trailing: Switch(
                     activeColor: Colors.blueAccent,
                     activeTrackColor: Colors.blue[200],
-                    value: Provider.of<MyProvider>(context,listen: false).isDark,
+                    value: Provider.of<MyProvider>(context).isDark,
                     onChanged: (bool val) async {
                       await Provider.of<MyProvider>(context,listen: false).setDarkMode(val);
                     }),

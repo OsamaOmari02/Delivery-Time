@@ -393,7 +393,7 @@ class MyProvider with ChangeNotifier {
 
   List<FoodCart> myCart = [];
 
-  double total = 0.00;
+  double total = 0;
 
   addPrice(price) {
     total += price;

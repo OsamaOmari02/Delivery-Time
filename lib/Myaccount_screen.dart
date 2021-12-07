@@ -19,7 +19,7 @@ class MyAccount extends StatelessWidget {
     }
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -128,7 +128,7 @@ class _EmailState extends State<Email> {
     }
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.blue,
@@ -329,7 +329,7 @@ class _NameState extends State<Name> {
     }
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,

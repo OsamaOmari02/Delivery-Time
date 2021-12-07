@@ -29,7 +29,7 @@ class _CheckOutState extends State<CheckOut> {
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-              Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+              Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Row(
                   children: [
@@ -99,7 +99,7 @@ class _CheckOutState extends State<CheckOut> {
     showSnackBar() => ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.green,
@@ -121,7 +121,7 @@ class _CheckOutState extends State<CheckOut> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               elevation: 2.0,
-              color: Provider.of<MyProvider>(context,listen: false).isDark?Colors.black12:Colors.white70,
+              color: Provider.of<MyProvider>(context).isDark?Colors.black12:Colors.white70,
               child: ListTile(
                 title: Text(Provider.of<MyProvider>(context,listen: false).checkOut['area'] ?? ""),
                 subtitle: Text( Provider.of<LanProvider>(context,listen: false).texts('street:') +
@@ -141,7 +141,7 @@ class _CheckOutState extends State<CheckOut> {
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  Provider.of<MyProvider>(context,listen: false).total.toString() + " ",
+                  Provider.of<MyProvider>(context,listen: false).total.toStringAsFixed(2) + " ",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -158,7 +158,7 @@ class _CheckOutState extends State<CheckOut> {
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  Provider.of<MyProvider>(context,listen: false).deliveryPrice.toString() + " ",
+                  Provider.of<MyProvider>(context,listen: false).deliveryPrice.toStringAsFixed(2) + " ",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -166,7 +166,7 @@ class _CheckOutState extends State<CheckOut> {
                   style: const TextStyle(fontSize: 16),
                 ),
                 SizedBox(width: width*0.05),
-                Icon(Icons.motorcycle)
+                const Icon(Icons.motorcycle)
               ]),
             ),
             const Divider(thickness: 1),
@@ -179,7 +179,7 @@ class _CheckOutState extends State<CheckOut> {
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  (Provider.of<MyProvider>(context,listen: false).total + Provider.of<MyProvider>(context,listen: false).deliveryPrice).toString() + " ",
+                  (Provider.of<MyProvider>(context,listen: false).total + Provider.of<MyProvider>(context,listen: false).deliveryPrice).toStringAsFixed(2) + " ",
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),

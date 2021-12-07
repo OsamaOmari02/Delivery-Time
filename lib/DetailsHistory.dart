@@ -16,7 +16,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context,listen: false).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           title: Text( Provider.of<LanProvider>(context,listen: false).texts('details')),
@@ -38,7 +38,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               elevation: 2.0,
-              color: Provider.of<MyProvider>(context,listen: false).isDark ? Colors.grey[170] : Colors.white70,
+              color: Provider.of<MyProvider>(context).isDark ? Colors.grey[170] : Colors.white70,
               child: ListTile(
                 title: Text(Provider.of<MyProvider>(context,listen: false).details['area'] ?? ""),
                 subtitle: Text( Provider.of<LanProvider>(context,listen: false).texts('street') +
@@ -86,7 +86,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                   style: const TextStyle(fontSize: 15),
                 ),
                 Text(
-                  Provider.of<MyProvider>(context,listen: false).details['total'].toString() + " ",
+                  double.parse(Provider.of<MyProvider>(context).details['total']??'').toStringAsFixed(2) + " ",
                   style: const TextStyle(fontSize: 15),
                 ),
                 Text(
@@ -123,7 +123,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                 Text(
                   (double.parse(Provider.of<MyProvider>(context,listen: false).details['delivery']!) +
                           double.parse(Provider.of<MyProvider>(context,listen: false).details['total']!))
-                      .toString(),
+                      .toStringAsFixed(2),
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(" " +
@@ -135,7 +135,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Card(
-                color: Provider.of<MyProvider>(context,listen: false).isDark ? Colors.grey[170] : Colors.greenAccent,
+                color: Provider.of<MyProvider>(context).isDark ? Colors.grey[170] : Colors.greenAccent,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
