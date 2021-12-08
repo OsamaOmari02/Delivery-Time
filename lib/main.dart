@@ -68,6 +68,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     Provider.of<MyProvider>(context, listen: false).getDarkMode();
     Provider.of<MyProvider>(context, listen: false).getAdmin();
+    Provider.of<LanProvider>(context, listen: false).getLanguage();
     super.initState();
   }
 
