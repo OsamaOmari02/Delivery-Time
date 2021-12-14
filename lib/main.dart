@@ -6,6 +6,7 @@ import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
 import 'package:app/Settings.dart';
+import 'package:app/pizzaScreen.dart';
 import 'package:app/shawarma_screen.dart';
 import 'package:app/sweets.dart';
 import 'package:app/sweets_screen.dart';
@@ -115,6 +116,7 @@ class _MyAppState extends State<MyApp> {
         'drinks': (context) => Drinks(),
         'drinksScreen': (context) => DrinksScreen(),
         'resScreen': (context) => MainResScreen(),
+        'pizzaScreen': (context) => PizzaScreen(),
         'callCenter': (context) => CallCenter(),
         'details': (context) => Details(),
         'location': (context) => Locations(),
@@ -151,6 +153,10 @@ class _MyHomepageState extends State<MyHomepage> {
           setState(() {
             Provider.of<MyProvider>(context,listen: false).restaurantName = title;
           });
+          if (Provider.of<MyProvider>(context,listen: false).restaurantName=='بيتزا المفرق'
+          || Provider.of<MyProvider>(context,listen: false).restaurantName=='بيتزا اونلاين')
+            Navigator.of(context).pushNamed('pizzaScreen');
+          else
           Navigator.of(context).pushNamed('resScreen');
         },
         title: ClipRRect(
@@ -342,8 +348,9 @@ class _MyHomepageState extends State<MyHomepage> {
                     children: <Widget>[
                       content('file/shawarmah.jpg', "Shawarma & snacks",
                           'shawarma'),
-                      content('file/3f48b82e3140f7c0.jpg', "homos & falafel",
+                      content('file/3f48b82e3140f7c0.jpg', "hummus & falafel",
                           'homos'),
+                      // content('file/pizza.jpg', "pizza", 'pizza'),
                       content('file/unknoswn.png', "Sweets", 'sweets'),
                       content('file/مشروب.jpg', "drinks", 'drinks'),
                     ],

@@ -70,6 +70,13 @@ class FoodCart {
       required this.foodID});
 }
 
+class PizzaClass {
+  String title;
+  bool value;
+
+  PizzaClass({this.value = false, required this.title});
+}
+
 //-----------------------------------------------------------
 class MyProvider with ChangeNotifier {
   bool isDark = false;
@@ -86,7 +93,6 @@ class MyProvider with ChangeNotifier {
     isDark = value;
     notifyListeners();
   }
-
 
   //----------------------intl package-----------------------
 
@@ -120,6 +126,19 @@ class MyProvider with ChangeNotifier {
     'file/مكسات.jpg',
     'file/DT_cover.jpg',
     'file/unknoswn.png'
+  ];
+
+  bool checkBoxValue = false;
+
+
+  List<PizzaClass> pizzaTypes = <PizzaClass>[
+    PizzaClass(title: 'سلامي'),
+    PizzaClass(title: 'ببروني'),
+    PizzaClass(title: 'دجاج'),
+    PizzaClass(title: 'خضار'),
+    PizzaClass(title: 'مرغريتا'),
+    PizzaClass(title: 'زنجر'),
+    PizzaClass(title: 'هوت دوغ'),
   ];
 
   List<String> areas = <String>[
@@ -623,6 +642,56 @@ class MyProvider with ChangeNotifier {
     });
     await FirebaseFirestore.instance
         .collection('shawarma/$title/others')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id,
+              resName: title));
+      });
+    });
+    notifyListeners();
+  }
+
+  Future<void> fetchMealsPizza(title) async {
+    await FirebaseFirestore.instance
+        .collection('Pizza/$title/Pizza')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              resName: title,
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
+      });
+    });
+    if (restaurantName == 'بيتزا المفرق')
+      await FirebaseFirestore.instance
+          .collection('Pizza/$title/broasted')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+    await FirebaseFirestore.instance
+        .collection('Pizza/$title/others')
         .get()
         .then((value) {
       value.docs.forEach((element) {
