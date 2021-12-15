@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app/LanguageProvider.dart';
 import 'package:app/LogIn.dart';
 import 'package:app/MyHistory.dart';
@@ -131,6 +133,17 @@ class MyProvider with ChangeNotifier {
   bool checkBoxValue = false;
 
 
+  checkFun(val,index){
+    pizzaTypes[index].value = val;
+    notifyListeners();
+  }
+
+  setFalse(){
+    for (int i=0;i<pizzaTypes.length;i++)
+      if (pizzaTypes[i].value)
+        pizzaTypes[i].value = false;
+    notifyListeners();
+  }
   List<PizzaClass> pizzaTypes = <PizzaClass>[
     PizzaClass(title: 'سلامي'),
     PizzaClass(title: 'ببروني'),
@@ -450,6 +463,32 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
+  var mealPrice;
+  Future<void> addFoodCartPizza(counter) async {
+    String desc = '';
+    for (int i=0;i<pizzaTypes.length;i++)
+    {
+      if (pizzaTypes[i].value)
+        desc+=pizzaTypes[i].title + ' , ';
+    }
+    int index = mealIDs.indexWhere((element) => element.id == mealID );
+      myCart.add(FoodCart(
+          quantity: counter,
+          foodID: mealID,
+          mealName: mealIDs[index].mealName,
+          mealPrice: mealIDs[index].mealPrice,
+          resName: mealIDs[index].resName,
+          description: desc));
+    addPrice(double.parse(mealIDs[index].mealPrice)*counter);
+    notifyListeners();
+  }
+
+  Future<void> addFoodCartPizzaPlus(price,desc) async {
+    int index = myCart.indexWhere((element) => element.description == desc);
+      myCart[index].quantity++;
+    addPrice(double.parse(price));
+    notifyListeners();
+  }
 
   Future<void> addFoodCart(String mealName, String price, desc) async {
     bool exists = myCart.any((element) => element.foodID == mealID);
@@ -466,6 +505,16 @@ class MyProvider with ChangeNotifier {
       myCart[index].quantity++;
     }
     addPrice(double.parse(price));
+    notifyListeners();
+  }
+
+  Future<void> removeFoodCartPizza(price,desc) async {
+    int index = myCart.indexWhere((element) => element.description == desc);
+    if (myCart[index].quantity == 1)
+      myCart.removeAt(index);
+    else
+      myCart[index].quantity--;
+    subtractPrice(double.parse(price));
     notifyListeners();
   }
 
@@ -488,7 +537,7 @@ class MyProvider with ChangeNotifier {
         .doc(uuid)
         .set({
       'date': DateTime.now(),
-      'total': total,
+      'total': total.toStringAsFixed(2),
       'delivery': deliveryPrice,
       'note': note,
       'length': myCart.length,
@@ -510,7 +559,7 @@ class MyProvider with ChangeNotifier {
     });
     await FirebaseFirestore.instance.collection('allOrders').doc(uuid).set({
       'date': DateTime.now(),
-      'total': total,
+      'total': total.toStringAsFixed(2),
       'note': note,
       'isChecked': false,
       'resName': myCart[0].resName,

@@ -26,10 +26,13 @@ class _SweetScreenState extends State<SweetScreen> {
     super.initState();
   }
 
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return Directionality(
       textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: DefaultTabController(
@@ -47,7 +50,7 @@ class _SweetScreenState extends State<SweetScreen> {
             ),
           ),
           bottomNavigationBar: Container(
-            height: height*0.1,
+            height: getHeight()*0.1,
             child: Opacity(
               opacity: Provider.of<MyProvider>(context).total <0.009 ? 0.4 : 1,
               child: Container(
@@ -73,7 +76,7 @@ class _SweetScreenState extends State<SweetScreen> {
                           Icons.shopping_basket_outlined,
                           color: Colors.white,
                         ),
-                        SizedBox(width: width*0.02),
+                        SizedBox(width: getWidth()*0.02),
                         Text(
                           Provider.of<LanProvider>(context,listen: false).texts('food cart'),
                           style: const TextStyle(
@@ -135,37 +138,42 @@ class _FirstState extends State<First> {
         .snapshots();
     super.initState();
   }
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
 
     return StreamBuilder<QuerySnapshot>(
       stream: tab1s,
@@ -192,8 +200,8 @@ class _FirstState extends State<First> {
                             if (resData[index]['imageUrl']!="")
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 10),
-                                width: width*0.24,
-                                height: height*0.16,
+                                width: getWidth()*0.24,
+                                height: getHeight()*0.16,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -207,7 +215,7 @@ class _FirstState extends State<First> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.025),
+                                SizedBox(height: getWidth()*0.025),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 5),
                                   child: AutoSizeText(
@@ -225,7 +233,7 @@ class _FirstState extends State<First> {
                                   padding: Provider.of<LanProvider>(context).isEn?
                                   EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
                                   child: SizedBox(
-                                    width: width*0.5,
+                                    width: getWidth()*0.5,
                                     child: AutoSizeText(
                                       resData[index]['description'],
                                       maxLines: 3,
@@ -373,55 +381,58 @@ class _SecondState extends State<Second> {
         .snapshots();
     super.initState();
   }
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+
+  getHeight() => height = MediaQuery.of(context).size.height;
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return Directionality(
+            textDirection:
+            Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
+            child: AlertDialog(
+              title: Text(
+                title,
+                style: const TextStyle(fontSize: 23),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
+                          style: const TextStyle(
+                              fontSize: 19, color: Colors.red)),
+                      onTap: () => Navigator.of(context).pop()),
+                ),
+                const SizedBox(width: 11),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('yes?'),
+                          style: const TextStyle(fontSize: 19)),
+                      onPressed: () {
+                        Provider.of<MyProvider>(context,listen: false).myCartClear();
+                        Navigator.of(context).pop();
+                      }),
+                ),
+              ],
+            ),
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return Directionality(
-              textDirection:
-              Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
-              child: AlertDialog(
-                title: Text(
-                  title,
-                  style: const TextStyle(fontSize: 23),
-                ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 7),
-                elevation: 24,
-                content: Container(
-                  height: 30,
-                  child: const Divider(),
-                  alignment: Alignment.topCenter,
-                ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                        child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
-                            style: const TextStyle(
-                                fontSize: 19, color: Colors.red)),
-                        onTap: () => Navigator.of(context).pop()),
-                  ),
-                  const SizedBox(width: 11),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextButton(
-                        child: Text(Provider.of<LanProvider>(context,listen: false).texts('yes?'),
-                            style: const TextStyle(fontSize: 19)),
-                        onPressed: () {
-                          Provider.of<MyProvider>(context,listen: false).myCartClear();
-                          Navigator.of(context).pop();
-                        }),
-                  ),
-                ],
-              ),
-            );
-          });
-    }
-
     return StreamBuilder<QuerySnapshot>(
       stream: tab2s,
       builder: (ctx, snapshot) {
@@ -447,8 +458,8 @@ class _SecondState extends State<Second> {
                             if (resData[index]['imageUrl']!="")
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 10),
-                                width: width*0.24,
-                                height: height*0.16,
+                                width: getWidth()*0.24,
+                                height: getHeight()*0.16,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -462,7 +473,7 @@ class _SecondState extends State<Second> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.025),
+                                SizedBox(height: getHeight()*0.025),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 5),
                                   child: AutoSizeText(
@@ -480,7 +491,7 @@ class _SecondState extends State<Second> {
                                   padding: Provider.of<LanProvider>(context).isEn?
                                   EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
                                   child: SizedBox(
-                                    width: width*0.5,
+                                    width: getWidth()*0.5,
                                     child: AutoSizeText(
                                       resData[index]['description'],
                                       maxLines: 3,
@@ -628,37 +639,41 @@ class _ThirdState extends State<Third> {
         .snapshots();
     super.initState();
   }
+
+  double? width;
+  double? height;
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
 
     return StreamBuilder<QuerySnapshot>(
       stream: tab3s,
@@ -685,8 +700,8 @@ class _ThirdState extends State<Third> {
                             if (resData[index]['imageUrl']!="")
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 10),
-                                width: width*0.24,
-                                height: height*0.16,
+                                width: getWidth()*0.24,
+                                height: getHeight()*0.16,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -700,7 +715,7 @@ class _ThirdState extends State<Third> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.025),
+                                SizedBox(height: getHeight()*0.025),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 5),
                                   child: AutoSizeText(
@@ -718,7 +733,7 @@ class _ThirdState extends State<Third> {
                                   padding: Provider.of<LanProvider>(context).isEn?
                                   EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
                                   child: SizedBox(
-                                    width: width*0.5,
+                                    width: getWidth()*0.5,
                                     child: AutoSizeText(
                                       resData[index]['description'],
                                       maxLines: 3,
