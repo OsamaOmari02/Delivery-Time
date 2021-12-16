@@ -28,47 +28,46 @@ class _LoginViewState extends State<Login> {
     _passwordController.dispose();
     super.dispose();
   }
-
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  size: 30,
+                  color: Colors.red,
+                ),
+                const SizedBox(width: 17),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontSize: 23, color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+            elevation: 24,
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.05,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              TextButton(
+                  child:
+                  const Text("ok", style: const TextStyle(fontSize: 21)),
+                  onPressed: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Row(
-                children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 30,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 17),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontSize: 23, color: Colors.red),
-                    ),
-                  ),
-                ],
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 24,
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.05,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                TextButton(
-                    child:
-                        const Text("ok", style: const TextStyle(fontSize: 21)),
-                    onPressed: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
 
     final emailField = TextFormField(
       controller: _emailController,

@@ -13,106 +13,110 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text("حسناً", style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  logOutFun() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              'هل تريد تسجيل الخروج؟',
+              textAlign: TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              InkWell(
+                  child: Text(
+                    "نعم",
+                    style: const TextStyle(fontSize: 19, color: Colors.red),
+                  ),
+                  onTap: () async {
+                    try {
+                      await FirebaseAuth.instance.signOut();
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
+                        Navigator.of(context).pushReplacementNamed('login');
+                        Provider.of<MyProvider>(context, listen: false)
+                            .details
+                            .clear();
+                      });
+                    } on FirebaseException catch (e) {
+                      dialog("حدث خطأ !");
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
+                      });
+                      print(e.message);
+                    } catch (e) {
+                      dialog("حدث خطأ !");
+                      print(e);
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
+                      });
+                    }
+                  }),
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text("إلغاء", style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  ListTile listTile(String title, icon, route, BuildContext ctx) {
+    return ListTile(
+      onTap: () => Navigator.of(ctx).pushReplacementNamed(route),
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 25),
+      ),
+      leading: Icon(
+        icon,
+        color: Colors.blueAccent,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text("حسناً", style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
-    logOutFun() {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                'هل تريد تسجيل الخروج؟',
-                textAlign: TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                InkWell(
-                    child: Text(
-                      "نعم",
-                      style: const TextStyle(fontSize: 19, color: Colors.red),
-                    ),
-                    onTap: () async {
-                      try {
-                        await FirebaseAuth.instance.signOut();
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
-                          Navigator.of(context).pushReplacementNamed('login');
-                          Provider.of<MyProvider>(context, listen: false)
-                              .details
-                              .clear();
-                        });
-                      } on FirebaseException catch (e) {
-                        dialog("حدث خطأ !");
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
-                        });
-                        print(e.message);
-                      } catch (e) {
-                        dialog("حدث خطأ !");
-                        print(e);
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
-                        });
-                      }
-                    }),
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text("إلغاء", style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
-    ListTile listTile(String title, icon, route, BuildContext ctx) {
-      return ListTile(
-        onTap: () => Navigator.of(ctx).pushReplacementNamed(route),
-        title: Text(
-          title,
-          style: const TextStyle(fontSize: 25),
-        ),
-        leading: Icon(
-          icon,
-          color: Colors.blueAccent,
-        ),
-      );
-    }
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -231,7 +235,7 @@ class _DetailsState extends State<Details> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.3, vertical: height * 0.02),
+                  horizontal: getWidth() * 0.3, vertical: getHeight() * 0.02),
               child: Provider.of<MyProvider>(context,listen: false).isLoading
                   ? const Center(child: const CircularProgressIndicator())
                   : ElevatedButton(
@@ -271,7 +275,7 @@ class _DetailsState extends State<Details> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.3, vertical: height * 0.01),
+                  horizontal: getWidth() * 0.3, vertical: getHeight() * 0.01),
               child: Provider.of<MyProvider>(context,listen: false).isLoading
                   ? const Center(child: const CircularProgressIndicator())
                   : ElevatedButton(

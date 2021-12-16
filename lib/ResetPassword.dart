@@ -16,45 +16,44 @@ class _ResetPasswordState extends State<ResetPassword> {
     _emailController.dispose();
     super.dispose();
   }
-
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 30,
+                  color: Colors.red,
+                ),
+                SizedBox(width: 17),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(fontSize: 23, color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 8),
+            elevation: 24,
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.05,
+              child: Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              TextButton(
+                  child: Text("OK", style: TextStyle(fontSize: 21)),
+                  onPressed: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Row(
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 30,
-                    color: Colors.red,
-                  ),
-                  SizedBox(width: 17),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(fontSize: 23, color: Colors.red),
-                    ),
-                  ),
-                ],
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
-              elevation: 24,
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.05,
-                child: Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                TextButton(
-                    child: Text("OK", style: TextStyle(fontSize: 21)),
-                    onPressed: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -19,55 +19,58 @@ class _CheckOutState extends State<CheckOut> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return Directionality(
-              textDirection:
-              Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
-              child: AlertDialog(
-                title: Row(
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      size: 30,
-                      color: Colors.red,
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return Directionality(
+            textDirection:
+            Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
+            child: AlertDialog(
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  const SizedBox(width: 17),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(fontSize: 23, color: Colors.red),
                     ),
-                    const SizedBox(width: 17),
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: const TextStyle(fontSize: 23, color: Colors.red),
-                      ),
-                    ),
-                  ],
-                ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                elevation: 24,
-                content: Container(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  child: const Divider(),
-                  alignment: Alignment.topCenter,
-                ),
-                actions: [
-                  TextButton(
-                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
-                          style: const TextStyle(fontSize: 21)),
-                      onPressed: () => Navigator.of(context).pop()),
+                  ),
                 ],
               ),
-            );
-          });
-    }
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
+              elevation: 24,
+              content: Container(
+                height: MediaQuery.of(context).size.height * 0.05,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                TextButton(
+                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
+                        style: const TextStyle(fontSize: 21)),
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+            ),
+          );
+        });
+  }
+  @override
+  Widget build(BuildContext context) {
 
     final snackBar = SnackBar(
       content: Container(
-        height: height * 0.081,
+        height: getHeight() * 0.081,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -75,15 +78,15 @@ class _CheckOutState extends State<CheckOut> {
               children: [
                 Text(
                   Provider.of<LanProvider>(context,listen: false).texts('order confirmed'),
-                  style: TextStyle(fontSize: width * 0.034),
+                  style: TextStyle(fontSize: getWidth() * 0.034),
                 ),
                 Text(
                   Provider.of<LanProvider>(context,listen: false).texts('will reach out to u'),
-                  style: TextStyle(fontSize: width * 0.034),
+                  style: TextStyle(fontSize: getWidth() * 0.034),
                 ),
               ],
             ),
-            SizedBox(width: width * 0.1),
+            SizedBox(width: getWidth() * 0.1),
             Icon(
               Icons.check_circle_outline,
               color: Colors.white,
@@ -132,7 +135,7 @@ class _CheckOutState extends State<CheckOut> {
                 isThreeLine: true,
               ),
             ),
-            SizedBox(height: height*0.01),
+            SizedBox(height: getHeight()*0.01),
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
@@ -165,7 +168,7 @@ class _CheckOutState extends State<CheckOut> {
                   Provider.of<LanProvider>(context,listen: false).texts('jd'),
                   style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(width: width*0.05),
+                SizedBox(width: getWidth()*0.05),
                 const Icon(Icons.motorcycle)
               ]),
             ),
@@ -206,9 +209,9 @@ class _CheckOutState extends State<CheckOut> {
                 ),
               ),
             ),
-            SizedBox(height: height*0.03),
+            SizedBox(height: getHeight()*0.03),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: width*0.2),
+              padding: EdgeInsets.symmetric(horizontal: getWidth()*0.2),
               child: Provider.of<MyProvider>(context,listen: false).isLoading
                   ? const Center(
                       child: const CircularProgressIndicator(),

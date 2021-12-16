@@ -23,105 +23,103 @@ class _CallCenterState extends State<CallCenter> {
           .snapshots();
     super.initState();
   }
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text("حسناً", style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  logOutFun() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              'هل تريد تسجيل الخروج؟',
+              textAlign: TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              InkWell(
+                  child: Text(
+                    "نعم",
+                    style: const TextStyle(fontSize: 19, color: Colors.red),
+                  ),
+                  onTap: () async {
+                    try {
+                      await FirebaseAuth.instance.signOut();
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
+                        Navigator.of(context).pushReplacementNamed('login');
+                        Provider.of<MyProvider>(context, listen: false)
+                            .details
+                            .clear();
+                      });
+                    } on FirebaseException catch (e) {
+                      dialog("حدث خطأ !");
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
+                      });
+                      print(e.message);
+                    } catch (e) {
+                      dialog("حدث خطأ !");
+                      print(e);
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
+                      });
+                    }
+                  }),
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text("إلغاء", style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  ListTile listTile(String title, icon, route, BuildContext ctx) {
+    return ListTile(
+      onTap: () => Navigator.of(ctx).pushReplacementNamed(route),
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 25),
+      ),
+      leading: Icon(
+        icon,
+        color: Colors.blueAccent,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text("حسناً", style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
-    logOutFun() {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                'هل تريد تسجيل الخروج؟',
-                textAlign: TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                InkWell(
-                    child: Text(
-                      "نعم",
-                      style: const TextStyle(fontSize: 19, color: Colors.red),
-                    ),
-                    onTap: () async {
-                      try {
-                        await FirebaseAuth.instance.signOut();
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
-                          Navigator.of(context).pushReplacementNamed('login');
-                          Provider.of<MyProvider>(context, listen: false)
-                              .details
-                              .clear();
-                        });
-                      } on FirebaseException catch (e) {
-                        dialog("حدث خطأ !");
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
-                        });
-                        print(e.message);
-                      } catch (e) {
-                        dialog("حدث خطأ !");
-                        print(e);
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
-                        });
-                      }
-                    }),
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text("إلغاء", style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
-    ListTile listTile(String title, icon, route, BuildContext ctx) {
-      return ListTile(
-        onTap: () => Navigator.of(ctx).pushReplacementNamed(route),
-        title: Text(
-          title,
-          style: const TextStyle(fontSize: 25),
-        ),
-        leading: Icon(
-          icon,
-          color: Colors.blueAccent,
-        ),
-      );
-    }
 
     return Directionality(
       textDirection: TextDirection.rtl,

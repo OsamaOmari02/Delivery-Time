@@ -28,46 +28,49 @@ class _MyPasswordState extends State<MyPassword> {
     super.dispose();
   }
 
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  size: 30,
+                  color: Colors.red,
+                ),
+                const SizedBox(width: 17),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontSize: 23, color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+            elevation: 24,
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.05,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              TextButton(
+                  child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'), style:const TextStyle(fontSize: 21)),
+                  onPressed: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Row(
-                children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 30,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 17),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontSize: 23, color: Colors.red),
-                    ),
-                  ),
-                ],
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 24,
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.05,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                TextButton(
-                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'), style:const TextStyle(fontSize: 21)),
-                    onPressed: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
 
     return Directionality(
       textDirection:  Provider.of<LanProvider>(context,listen: false).isEn?TextDirection.ltr : TextDirection.rtl,
@@ -80,7 +83,7 @@ class _MyPasswordState extends State<MyPassword> {
         body: ListView(
           padding: const EdgeInsets.all(10),
           children: [
-            SizedBox(height: height * 0.005),
+            SizedBox(height: getHeight() * 0.005),
             Container(
               child: TextField(
                 controller: myPass,
@@ -133,13 +136,13 @@ class _MyPasswordState extends State<MyPassword> {
                 ),
               ),
             ),
-            SizedBox(height: height * 0.06),
+            SizedBox(height: getHeight() * 0.06),
             if(Provider.of<MyProvider>(context,listen: false).authState==authStatus.Authenticating)
               Container(child: const CircularProgressIndicator(),
                 alignment: Alignment.center),
             if(Provider.of<MyProvider>(context,listen: false).authState!=authStatus.Authenticating)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: width*0.26),
+                padding: EdgeInsets.symmetric(horizontal: getWidth()*0.26),
                 child: ElevatedButton(
                   onPressed: () async {
                     try{

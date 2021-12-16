@@ -41,48 +41,50 @@ class _RegisterViewState extends State<Register> {
     repassNode.dispose();
     super.dispose();
   }
+
+  LogoutFun(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  size: 30,
+                  color: Colors.red,
+                ),
+                const SizedBox(width: 17),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontSize: 23, color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+            elevation: 24,
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.05,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              TextButton(
+                  child: Text("OK", style: const TextStyle(fontSize: 21)),
+                  onPressed: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  void requestNode(BuildContext context,FocusNode focusNode){
+    FocusScope.of(context).requestFocus(focusNode);
+  }
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    LogoutFun(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Row(
-                children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 30,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 17),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontSize: 23, color: Colors.red),
-                    ),
-                  ),
-                ],
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 24,
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.05,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                TextButton(
-                    child: Text("OK", style: const TextStyle(fontSize: 21)),
-                    onPressed: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-    void requestNode(BuildContext context,FocusNode focusNode){
-      FocusScope.of(context).requestFocus(focusNode);
-    }
+
     final usernameField = TextFormField(
       focusNode: nameNode,
       onEditingComplete: ()=>requestNode(context,emailNode),
@@ -106,8 +108,6 @@ class _RegisterViewState extends State<Register> {
         ),
       ),
     );
-
-
     final emailField = TextFormField(
       focusNode: emailNode,
       onEditingComplete: ()=>requestNode(context,passNode),
@@ -136,7 +136,6 @@ class _RegisterViewState extends State<Register> {
         ),
       ),
     );
-
     final passwordField = Container(
       child: TextField(
         focusNode: passNode,
@@ -170,7 +169,6 @@ class _RegisterViewState extends State<Register> {
         ),
       ),
     );
-
     final repasswordField = TextFormField(
       focusNode: repassNode,
       obscureText: true,
@@ -208,7 +206,6 @@ class _RegisterViewState extends State<Register> {
         ],
       ),
     );
-
     final registerButton = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(25.0),
@@ -269,7 +266,6 @@ class _RegisterViewState extends State<Register> {
         },
       ),
     );
-
     final bottom = Column(
       children: <Widget>[
         SizedBox(height: MediaQuery.of(context).size.height*0.05),
@@ -308,7 +304,6 @@ class _RegisterViewState extends State<Register> {
         ),
       ],
     );
-
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Form(

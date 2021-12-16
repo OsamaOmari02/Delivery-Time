@@ -12,10 +12,15 @@ class About extends StatefulWidget {
 }
 
 class _AboutState extends State<About> {
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     Future<bool> _onWillPop() async {
       await Navigator.of(context).pushReplacementNamed('MyHomepage');
       throw "";
@@ -33,16 +38,16 @@ class _AboutState extends State<About> {
           ),
           body: Center(
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(height: height*0.1),
+              SizedBox(height: getHeight()*0.1),
               Text(
                 Provider.of<LanProvider>(context,listen: false).texts('hello'),
                 style: TextStyle(
-                    fontSize: width*0.044, wordSpacing: 2, fontWeight: FontWeight.bold),
+                    fontSize: getWidth()*0.044, wordSpacing: 2, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: height*0.015),
+              SizedBox(height: getHeight()*0.015),
               Text( Provider.of<LanProvider>(context,listen: false).texts('If you face'),style: TextStyle(
-                fontSize: width*0.033)),
-              SizedBox(height: height*0.08),
+                fontSize: getWidth()*0.033)),
+              SizedBox(height: getHeight()*0.08),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -62,7 +67,7 @@ class _AboutState extends State<About> {
                   ),
                 ),
               ),
-                  SizedBox(width: width*0.15),
+                  SizedBox(width: getWidth()*0.15),
                   Material(
                     child: Center(
                       child: Ink(

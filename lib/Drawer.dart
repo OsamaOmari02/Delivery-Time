@@ -28,55 +28,57 @@ class _MyDrawerState extends State<MyDrawer> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-    logOutFun() {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                Provider.of<LanProvider>(context,listen: false).texts('log out?'),
-                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                InkWell(
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  logOutFun() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              Provider.of<LanProvider>(context,listen: false).texts('log out?'),
+              textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              InkWell(
                   child: Text(
                     Provider.of<LanProvider>(context,listen: false).texts('yes?'),
                     style: const TextStyle(fontSize: 19, color: Colors.red),
@@ -107,16 +109,18 @@ class _MyDrawerState extends State<MyDrawer> {
                       });
                     }
                   }
-                ),
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
+              ),
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text( Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  @override
+  Widget build(BuildContext context) {
 
     return SafeArea(
       child: Directionality(
@@ -135,7 +139,7 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               Row(
                 children: [
-                  SizedBox(width: width * 0.03),
+                  SizedBox(width: getWidth() * 0.03),
                   Expanded(
                       child: Text(
                         Provider.of<LanProvider>(context,listen: false).texts('welcome') +

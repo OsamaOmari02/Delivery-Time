@@ -12,39 +12,43 @@ class Sweets extends StatefulWidget {
 }
 
 class _SweetsState extends State<Sweets> {
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+
+  Widget funImage(image, title) {
+    return ListTile(
+      onTap: () {
+        setState(() {
+          Provider.of<MyProvider>(context,listen: false).restaurantName = title;
+        });
+        Navigator.of(context).pushNamed('sweetScreen');
+      },
+      title: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Image.asset(
+          image,
+          height: getHeight() * 0.14,
+          fit: BoxFit.fill,
+        ),
+      ),
+      subtitle: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Text(title,
+            style: TextStyle(
+                color: Provider.of<MyProvider>(context).isDark? Colors.white:Colors.black,
+                fontSize: getWidth()*0.042,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     var shortestSide = MediaQuery.of(context).size.shortestSide;
-    Widget funImage(image, title) {
-      return ListTile(
-        onTap: () {
-          setState(() {
-            Provider.of<MyProvider>(context,listen: false).restaurantName = title;
-          });
-          Navigator.of(context).pushNamed('sweetScreen');
-        },
-        title: ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: Image.asset(
-            image,
-            height: height * 0.14,
-            fit: BoxFit.fill,
-          ),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Text(title,
-              style: TextStyle(
-                  color: Provider.of<MyProvider>(context).isDark? Colors.white:Colors.black,
-                  fontSize: width*0.042,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center),
-        ),
-      );
-    }
-
 
     return Directionality(
       textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -54,12 +58,11 @@ class _SweetsState extends State<Sweets> {
           centerTitle: true,
         ),
         body: Container(
-              height: height*1.1,
+              height: getHeight()*1.1,
               padding: EdgeInsets.fromLTRB(2, 20, 2, 0),
               child: Scrollbar(
                 child: GridView(
                   shrinkWrap: true,
-                  // physics: const NeverScrollableScrollPhysics(),
                   gridDelegate:
                   SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: shortestSide<650?2:3,

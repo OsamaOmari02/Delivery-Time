@@ -217,32 +217,29 @@ class _FirstState extends State<First> {
                               children: <Widget>[
                                 SizedBox(height: getWidth()*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.54,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
                                     maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
                                   ),
                                 ),
-                                const SizedBox(height: 5),
-                                Padding(
-                                  padding: Provider.of<LanProvider>(context).isEn?
-                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
-                                  child: SizedBox(
-                                    width: getWidth()*0.5,
-                                    child: AutoSizeText(
-                                      resData[index]['description'],
-                                      maxLines: 3,
-                                      minFontSize: 10,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey),
-                                    ),
+                                SizedBox(height: getHeight() * 0.01),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.51,
+                                  child: AutoSizeText(
+                                    resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
                                   ),
                                 ),
                                 Container(
@@ -475,32 +472,29 @@ class _SecondState extends State<Second> {
                               children: <Widget>[
                                 SizedBox(height: getHeight()*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.54,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
                                     maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
                                   ),
                                 ),
-                                const SizedBox(height: 5),
-                                Padding(
-                                  padding: Provider.of<LanProvider>(context).isEn?
-                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
-                                  child: SizedBox(
-                                    width: getWidth()*0.5,
-                                    child: AutoSizeText(
-                                      resData[index]['description'],
-                                      maxLines: 3,
-                                      minFontSize: 10,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey),
-                                    ),
+                                SizedBox(height: getHeight() * 0.01),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.51,
+                                  child: AutoSizeText(
+                                    resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
                                   ),
                                 ),
                                 Container(
@@ -717,32 +711,29 @@ class _ThirdState extends State<Third> {
                               children: <Widget>[
                                 SizedBox(height: getHeight()*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.54,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
                                     maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
                                   ),
                                 ),
-                                const SizedBox(height: 5),
-                                Padding(
-                                  padding: Provider.of<LanProvider>(context).isEn?
-                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
-                                  child: SizedBox(
-                                    width: getWidth()*0.5,
-                                    child: AutoSizeText(
-                                      resData[index]['description'],
-                                      maxLines: 3,
-                                      minFontSize: 10,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey),
-                                    ),
+                                SizedBox(height: getHeight() * 0.01),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.51,
+                                  child: AutoSizeText(
+                                    resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
                                   ),
                                 ),
                                 Container(

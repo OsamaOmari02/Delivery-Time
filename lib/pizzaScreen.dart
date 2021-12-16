@@ -374,7 +374,8 @@ class _FirstState extends State<First> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 SizedBox(height: getHeight() * 0.025),
-                                SizedBox(
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
                                   width: getWidth() * 0.54,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
@@ -387,8 +388,9 @@ class _FirstState extends State<First> {
                                   ),
                                 ),
                                 SizedBox(height: getHeight() * 0.01),
-                                SizedBox(
-                                  width: getWidth() * 0.5,
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.51,
                                   child: AutoSizeText(
                                     resData[index]['description'],
                                     maxLines: 3,
@@ -399,22 +401,20 @@ class _FirstState extends State<First> {
                                   ),
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 16),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
+                                    const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      Provider.of<LanProvider>(context,
-                                                  listen: false)
-                                              .texts('price') +
+                                      Provider.of<LanProvider>(context,listen: false).texts('price') +
                                           " " +
                                           resData[index]['meal price'] +
                                           " " +
-                                          Provider.of<LanProvider>(context,
-                                                  listen: false)
-                                              .texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
+                                      style: TextStyle(
+                                          fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                     ),
                                   ),
                                 ),
@@ -645,7 +645,8 @@ class _SecondState extends State<Second> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 SizedBox(height: getHeight() * 0.025),
-                                SizedBox(
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
                                   width: getWidth() * 0.54,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
@@ -658,8 +659,9 @@ class _SecondState extends State<Second> {
                                   ),
                                 ),
                                 SizedBox(height: getHeight() * 0.01),
-                                SizedBox(
-                                  width: getWidth() * 0.5,
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.51,
                                   child: AutoSizeText(
                                     resData[index]['description'],
                                     maxLines: 3,
@@ -670,22 +672,20 @@ class _SecondState extends State<Second> {
                                   ),
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 16),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
+                                    const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      Provider.of<LanProvider>(context,
-                                                  listen: false)
-                                              .texts('price') +
+                                      Provider.of<LanProvider>(context,listen: false).texts('price') +
                                           " " +
                                           resData[index]['meal price'] +
                                           " " +
-                                          Provider.of<LanProvider>(context,
-                                                  listen: false)
-                                              .texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
+                                      style: TextStyle(
+                                          fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                     ),
                                   ),
                                 ),
@@ -751,6 +751,49 @@ class _SecondState extends State<Second> {
                               }
                             },
                           ),
+                        Row(
+                          children: [
+                            Text(Provider.of<MyProvider>(context,listen: false).getIndex(resData[index].id) == -1
+                                ? "0"
+                                : (Provider.of<MyProvider>(context,listen: false)
+                                .myCart[Provider.of<MyProvider>(context,listen: false)
+                                .getIndex(resData[index].id)]
+                                .quantity)
+                                .toString()),
+                            IconButton(
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.green,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                                  });
+                                  if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0 &&
+                                      Provider.of<MyProvider>(context,listen: false).restaurantName !=
+                                          Provider.of<MyProvider>(context,listen: false).myCart[0].resName)
+                                    return dialog(
+                                        Provider.of<LanProvider>(context,listen: false).texts('foodCart'));
+                                  Provider.of<MyProvider>(context,listen: false).addFoodCart(
+                                      resData[index]['meal name'],
+                                      resData[index]['meal price'],resData[index]['description']);
+                                }),
+                          ],
+                        ),
+                        Provider.of<MyProvider>(context,listen: false).existsInCart(resData[index].id)
+                            ? IconButton(
+                          icon: const Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                            });
+                            await Provider.of<MyProvider>(context,listen: false).removeFoodCart(resData[index]['meal price']);
+                          },
+                        )
+                            : Container(),
                       ],
                     ),
                   ],
@@ -865,7 +908,8 @@ class _ThirdState extends State<Third> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 SizedBox(height: getHeight() * 0.025),
-                                SizedBox(
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
                                   width: getWidth() * 0.54,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
@@ -878,8 +922,9 @@ class _ThirdState extends State<Third> {
                                   ),
                                 ),
                                 SizedBox(height: getHeight() * 0.01),
-                                SizedBox(
-                                  width: getWidth() * 0.5,
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.51,
                                   child: AutoSizeText(
                                     resData[index]['description'],
                                     maxLines: 3,
@@ -890,22 +935,20 @@ class _ThirdState extends State<Third> {
                                   ),
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 16),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
+                                    const EdgeInsets.symmetric(vertical: 7),
                                     child: Text(
-                                      Provider.of<LanProvider>(context,
-                                                  listen: false)
-                                              .texts('price') +
+                                      Provider.of<LanProvider>(context,listen: false).texts('price') +
                                           " " +
                                           resData[index]['meal price'] +
                                           " " +
-                                          Provider.of<LanProvider>(context,
-                                                  listen: false)
-                                              .texts('jd'),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.pink),
+                                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
+                                      style: TextStyle(
+                                          fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
                                     ),
                                   ),
                                 ),
@@ -971,49 +1014,49 @@ class _ThirdState extends State<Third> {
                               }
                             },
                           ),
-                        // Row(
-                        //   children: [
-                        //     Text(Provider.of<MyProvider>(context,listen: false).getIndex(resData[index].id) == -1
-                        //         ? "0"
-                        //         : (Provider.of<MyProvider>(context,listen: false)
-                        //         .myCart[Provider.of<MyProvider>(context,listen: false)
-                        //         .getIndex(resData[index].id)]
-                        //         .quantity)
-                        //         .toString()),
-                        //     IconButton(
-                        //         icon: const Icon(
-                        //           Icons.add,
-                        //           color: Colors.green,
-                        //         ),
-                        //         onPressed: () async {
-                        //           setState(() {
-                        //             Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
-                        //           });
-                        //           if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0 &&
-                        //               Provider.of<MyProvider>(context,listen: false).restaurantName !=
-                        //                   Provider.of<MyProvider>(context,listen: false).myCart[0].resName)
-                        //             return dialog(
-                        //                 Provider.of<LanProvider>(context,listen: false).texts('foodCart'));
-                        //           Provider.of<MyProvider>(context,listen: false).addFoodCart(
-                        //               resData[index]['meal name'],
-                        //               resData[index]['meal price'],resData[index]['description']);
-                        //         }),
-                        //   ],
-                        // ),
-                        // Provider.of<MyProvider>(context,listen: false).existsInCart(resData[index].id)
-                        //     ? IconButton(
-                        //   icon: const Icon(
-                        //     Icons.remove,
-                        //     color: Colors.red,
-                        //   ),
-                        //   onPressed: () async {
-                        //     setState(() {
-                        //       Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
-                        //     });
-                        //     await Provider.of<MyProvider>(context,listen: false).removeFoodCart(resData[index]['meal price']);
-                        //   },
-                        // )
-                        //     : Container(),
+                        Row(
+                          children: [
+                            Text(Provider.of<MyProvider>(context,listen: false).getIndex(resData[index].id) == -1
+                                ? "0"
+                                : (Provider.of<MyProvider>(context,listen: false)
+                                .myCart[Provider.of<MyProvider>(context,listen: false)
+                                .getIndex(resData[index].id)]
+                                .quantity)
+                                .toString()),
+                            IconButton(
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.green,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                                  });
+                                  if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0 &&
+                                      Provider.of<MyProvider>(context,listen: false).restaurantName !=
+                                          Provider.of<MyProvider>(context,listen: false).myCart[0].resName)
+                                    return dialog(
+                                        Provider.of<LanProvider>(context,listen: false).texts('foodCart'));
+                                  Provider.of<MyProvider>(context,listen: false).addFoodCart(
+                                      resData[index]['meal name'],
+                                      resData[index]['meal price'],resData[index]['description']);
+                                }),
+                          ],
+                        ),
+                        Provider.of<MyProvider>(context,listen: false).existsInCart(resData[index].id)
+                            ? IconButton(
+                          icon: const Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                            });
+                            await Provider.of<MyProvider>(context,listen: false).removeFoodCart(resData[index]['meal price']);
+                          },
+                        )
+                            : Container(),
                       ],
                     ),
                   ],

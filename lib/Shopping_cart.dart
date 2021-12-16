@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,135 +14,138 @@ class Shopping extends StatefulWidget {
 }
 
 class _ShoppingState extends State<Shopping> {
-  @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: Provider.of<LanProvider>(context).isEn
-                    ? TextAlign.start
-                    : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  bottomSheet() {
+    return Directionality(
+      textDirection: Provider.of<LanProvider>(context).isEn
+          ? TextDirection.ltr
+          : TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            Provider.of<LanProvider>(context, listen: false)
+                .texts('choose address'),
+            style: TextStyle(
+                color: Provider.of<MyProvider>(context).isDark
+                    ? CupertinoColors.white
+                    : CupertinoColors.black,
+                fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Theme.of(context).canvasColor,
+          elevation: 1,
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.add,
+                color: Colors.blue,
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
+              onPressed: () => Navigator.of(context).pushNamed('addAddress'),
+            ),
+          ],
+        ),
+        body: ListView.builder(
+          itemCount: Provider.of<MyProvider>(context).loc.length,
+          itemBuilder: (BuildContext context, int index) {
+            if (Provider.of<MyProvider>(context).loc.isEmpty)
+              return Center(
+                child: TextButton(
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed('addAddress'),
                     child: Text(
                         Provider.of<LanProvider>(context, listen: false)
-                            .texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
-    bottomSheet() {
-      return Directionality(
-        textDirection: Provider.of<LanProvider>(context).isEn
-            ? TextDirection.ltr
-            : TextDirection.rtl,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              Provider.of<LanProvider>(context, listen: false)
-                  .texts('choose address'),
-              style: TextStyle(
-                  color: Provider.of<MyProvider>(context).isDark
-                      ? CupertinoColors.white
-                      : CupertinoColors.black,
-                  fontWeight: FontWeight.bold),
-            ),
-            backgroundColor: Theme.of(context).canvasColor,
-            elevation: 1,
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  color: Colors.blue,
-                ),
-                onPressed: () => Navigator.of(context).pushNamed('addAddress'),
-              ),
-            ],
-          ),
-          body: ListView.builder(
-            itemCount: Provider.of<MyProvider>(context).loc.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (Provider.of<MyProvider>(context).loc.isEmpty)
-                return Center(
-                  child: TextButton(
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed('addAddress'),
-                      child: Text(
-                          Provider.of<LanProvider>(context, listen: false)
-                              .texts('new address'),
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ))),
-                );
-              return Card(
-                elevation: 0.5,
-                child: ListTile(
-                  onTap: () {
-                    setState(() {
-                      Provider.of<MyProvider>(context, listen: false)
-                              .checkOut['area'] =
-                          Provider.of<MyProvider>(context, listen: false)
-                              .loc[index]
-                              .area;
-                      Provider.of<MyProvider>(context, listen: false)
-                              .checkOut['street'] =
-                          Provider.of<MyProvider>(context, listen: false)
-                              .loc[index]
-                              .street;
-                      Provider.of<MyProvider>(context, listen: false)
-                              .checkOut['phoneNum'] =
-                          Provider.of<MyProvider>(context, listen: false)
-                              .loc[index]
-                              .phoneNum;
-                    });
-                    Provider.of<MyProvider>(context, listen: false)
-                        .deliveryPriceOnArea();
-                    Navigator.of(context).pushNamed('checkOut');
-                  },
-                  title: Text(Provider.of<MyProvider>(context, listen: false)
-                      .loc[index]
-                      .area),
-                  subtitle: Text(
-                      Provider.of<LanProvider>(context, listen: false)
-                              .texts('street:') +
-                          Provider.of<MyProvider>(context, listen: false)
-                              .loc[index]
-                              .street +
-                          "\n" +
-                          Provider.of<LanProvider>(context, listen: false)
-                              .texts('phone:') +
-                          Provider.of<MyProvider>(context, listen: false)
-                              .loc[index]
-                              .phoneNum),
-                  isThreeLine: true,
-                ),
+                            .texts('new address'),
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ))),
               );
-            },
-          ),
+            return Card(
+              elevation: 0.5,
+              child: ListTile(
+                onTap: () {
+                  setState(() {
+                    Provider.of<MyProvider>(context, listen: false)
+                        .checkOut['area'] =
+                        Provider.of<MyProvider>(context, listen: false)
+                            .loc[index]
+                            .area;
+                    Provider.of<MyProvider>(context, listen: false)
+                        .checkOut['street'] =
+                        Provider.of<MyProvider>(context, listen: false)
+                            .loc[index]
+                            .street;
+                    Provider.of<MyProvider>(context, listen: false)
+                        .checkOut['phoneNum'] =
+                        Provider.of<MyProvider>(context, listen: false)
+                            .loc[index]
+                            .phoneNum;
+                  });
+                  Provider.of<MyProvider>(context, listen: false)
+                      .deliveryPriceOnArea();
+                  Navigator.of(context).pushNamed('checkOut');
+                },
+                title: Text(Provider.of<MyProvider>(context, listen: false)
+                    .loc[index]
+                    .area),
+                subtitle: Text(
+                    Provider.of<LanProvider>(context, listen: false)
+                        .texts('street:') +
+                        Provider.of<MyProvider>(context, listen: false)
+                            .loc[index]
+                            .street +
+                        "\n" +
+                        Provider.of<LanProvider>(context, listen: false)
+                            .texts('phone:') +
+                        Provider.of<MyProvider>(context, listen: false)
+                            .loc[index]
+                            .phoneNum),
+                isThreeLine: true,
+              ),
+            );
+          },
         ),
-      );
-    }
-
+      ),
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
     return Directionality(
         textDirection: Provider.of<LanProvider>(context).isEn
             ? TextDirection.ltr
@@ -175,7 +179,7 @@ class _ShoppingState extends State<Shopping> {
                                     const EdgeInsets.symmetric(vertical: 7),
                                 elevation: 24,
                                 content: Container(
-                                  height: height * 0.05,
+                                  height: getHeight() * 0.05,
                                   child: const Divider(),
                                   alignment: Alignment.topCenter,
                                 ),
@@ -234,38 +238,46 @@ class _ShoppingState extends State<Shopping> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  SizedBox(height: height * 0.02),
+                                  SizedBox(height: getHeight() * 0.02),
                                   Container(
+                                    width: getWidth() * 0.6,
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 7, vertical: 5),
+                                        horizontal: 5, vertical: 5),
                                     alignment:
                                         Provider.of<LanProvider>(context).isEn
                                             ? Alignment.topLeft
                                             : Alignment.topRight,
-                                    child: Text(
+                                    child: AutoSizeText(
                                       Provider.of<MyProvider>(context,
                                               listen: false)
                                           .myCart[index]
                                           .mealName,
-                                      style: const TextStyle(
-                                          fontSize: 14,
+                                      maxLines: 2,
+                                      minFontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
                                   Container(
+                                    width: getWidth() * 0.56,
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
+                                        horizontal: 5),
                                     alignment:
                                         Provider.of<LanProvider>(context).isEn
                                             ? Alignment.topLeft
                                             : Alignment.topRight,
-                                    child: Text(
+                                    child: AutoSizeText(
                                       Provider.of<MyProvider>(context,
                                               listen: false)
                                           .myCart[index]
                                           .description,
-                                      style: const TextStyle(
-                                          color: Colors.grey, fontSize: 13),
+                                      maxLines: 3,
+                                      minFontSize: 11,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 14,color: Colors.grey),
                                     ),
                                   ),
                                   Container(
@@ -429,7 +441,7 @@ class _ShoppingState extends State<Shopping> {
                     );
                   }),
           bottomNavigationBar: Container(
-            height: height * 0.16,
+            height: getHeight() * 0.15,
             child: Column(children: [
               if (Provider.of<MyProvider>(context).myCart.isNotEmpty)
                 Row(

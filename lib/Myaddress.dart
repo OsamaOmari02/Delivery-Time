@@ -26,111 +26,111 @@ class _MyAddressState extends State<MyAddress> {
     super.initState();
   }
 
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  size: 30,
+                  color: Colors.red,
+                ),
+                const SizedBox(width: 17),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontSize: 23, color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+            elevation: 24,
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.05,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              TextButton(
+                  child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
+                      style: const TextStyle(fontSize: 21)),
+                  onPressed: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
+  delete(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              InkWell(
+                  child: Text(
+                    Provider.of<LanProvider>(context,listen: false).texts('yes?'),
+                    style: const TextStyle(fontSize: 19, color: Colors.red),
+                  ),
+                  onTap: () async {
+                    try {
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                      });
+                      Navigator.of(context).pop();
+                      await Provider.of<MyProvider>(context,listen: false).delete();
+                      Fluttertoast.showToast(
+                          msg:  Provider.of<LanProvider>(context,listen: false).texts('Address Deleted'),
+                          toastLength: Toast.LENGTH_SHORT,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                      });
+                    } on FirebaseException catch (e) {
+                      dialog(e.message);
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                        final addressObj = Provider.of<MyProvider>(context,listen: false).loc.firstWhere((element) => element.id == Provider.of<MyProvider>(context).iD);
+                        Provider.of<MyProvider>(context,listen: false).loc.add(addressObj);
+                      });
+                    } catch (e) {
+                      dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
+                      print(e);
+                      setState(() {
+                        Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                        final addressObj = Provider.of<MyProvider>(context,listen: false).loc.firstWhere((element) => element.id == Provider.of<MyProvider>(context).iD);
+                        Provider.of<MyProvider>(context,listen: false).loc.add(addressObj);
+                      });
+                    }
+                  }),
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text( Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Row(
-                children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 30,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 17),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontSize: 23, color: Colors.red),
-                    ),
-                  ),
-                ],
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 24,
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.05,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                TextButton(
-                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
-                        style: const TextStyle(fontSize: 21)),
-                    onPressed: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
 
-    delete(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                InkWell(
-                    child: Text(
-                      Provider.of<LanProvider>(context,listen: false).texts('yes?'),
-                      style: const TextStyle(fontSize: 19, color: Colors.red),
-                    ),
-                    onTap: () async {
-                      try {
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = true;
-                        });
-                        Navigator.of(context).pop();
-                        await Provider.of<MyProvider>(context,listen: false).delete();
-                        Fluttertoast.showToast(
-                            msg:  Provider.of<LanProvider>(context,listen: false).texts('Address Deleted'),
-                            toastLength: Toast.LENGTH_SHORT,
-                            backgroundColor: Colors.grey,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
-                        });
-                      } on FirebaseException catch (e) {
-                        dialog(e.message);
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
-                          final addressObj = Provider.of<MyProvider>(context,listen: false).loc.firstWhere((element) => element.id == Provider.of<MyProvider>(context).iD);
-                          Provider.of<MyProvider>(context,listen: false).loc.add(addressObj);
-                        });
-                      } catch (e) {
-                        dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
-                        print(e);
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
-                          final addressObj = Provider.of<MyProvider>(context,listen: false).loc.firstWhere((element) => element.id == Provider.of<MyProvider>(context).iD);
-                          Provider.of<MyProvider>(context,listen: false).loc.add(addressObj);
-                        });
-                      }
-                    }),
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
     Future<bool> _onWillPop() async {
       await Navigator.of(context).pushReplacementNamed('MyHomepage');
       throw "";
@@ -177,7 +177,7 @@ class _MyAddressState extends State<MyAddress> {
                                   fontSize: 17, fontStyle: FontStyle.italic)));
                     }
                     return Card(
-                      elevation: 1.5,
+                      elevation: 2,
                       child: ListTile(
                         onLongPress: () async {
                           setState(() {

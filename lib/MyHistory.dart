@@ -13,10 +13,10 @@ class History extends StatefulWidget {
   @override
   _HistoryState createState() => _HistoryState();
 }
-var user = FirebaseAuth.instance.currentUser;
 class _HistoryState extends State<History> {
    var stream;
-  @override
+   var user = FirebaseAuth.instance.currentUser;
+   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
       stream = FirebaseFirestore.instance
@@ -25,108 +25,109 @@ class _HistoryState extends State<History> {
           .snapshots();
     super.initState();
   }
+   double? width;
+   double? height;
 
+   getWidth() => width = MediaQuery.of(context).size.width;
+   getHeight() => height = MediaQuery.of(context).size.height;
+   dialog(title) {
+     return showDialog(
+         context: context,
+         builder: (BuildContext ctx) {
+           return AlertDialog(
+             title: Text(
+               title,
+               textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+               style: const TextStyle(fontSize: 23),
+             ),
+             contentPadding: const EdgeInsets.symmetric(vertical: 7),
+             elevation: 24,
+             content: Container(
+               height: 30,
+               child: const Divider(),
+               alignment: Alignment.topCenter,
+             ),
+             actions: [
+               const SizedBox(width: 11),
+               InkWell(
+                   child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
+                       style: const TextStyle(fontSize: 19)),
+                   onTap: () => Navigator.of(context).pop()),
+             ],
+           );
+         });
+   }
+   delete(title) {
+     return showDialog(
+         context: context,
+         builder: (BuildContext ctx) {
+           return AlertDialog(
+             title: Text(
+               title,
+               textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+               style: const TextStyle(fontSize: 23),
+             ),
+             contentPadding: const EdgeInsets.symmetric(vertical: 7),
+             elevation: 24,
+             content: Container(
+               height: 30,
+               child: const Divider(),
+               alignment: Alignment.topCenter,
+             ),
+             actions: [
+               InkWell(
+                   child: Text(
+                     Provider.of<LanProvider>(context,listen: false).texts('yes?'),
+                     style: const TextStyle(fontSize: 19, color: Colors.red),
+                   ),
+                   onTap: () async {
+                     try {
+                       setState(() {
+                         Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                       });
+                       await FirebaseFirestore.instance
+                           .collection('orders/${user!.uid}/myOrders')
+                           .doc(Provider.of<MyProvider>(context,listen: false).mealID)
+                           .delete();
+                       Fluttertoast.showToast(
+                           msg:  Provider.of<LanProvider>(context,listen: false).texts('order deleted'),
+                           toastLength: Toast.LENGTH_SHORT,
+                           backgroundColor: Colors.grey,
+                           textColor: Colors.white,
+                           fontSize: 16.0);
+                       Navigator.of(context).pop();
+                       setState(() {
+                         Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                       });
+                     } on FirebaseException catch (e) {
+                       dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
+                       setState(() {
+                         Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                       });
+                       print(e.message);
+                     } catch (e) {
+                       dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
+                       setState(() {
+                         Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                       });
+                       print(e);
+                     }
+                   }),
+               const SizedBox(width: 11),
+               InkWell(
+                   child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
+                       style: const TextStyle(fontSize: 19)),
+                   onTap: () => Navigator.of(context).pop()),
+             ],
+           );
+         });
+   }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text( Provider.of<LanProvider>(context,listen: false).texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
-    delete(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign:  Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                InkWell(
-                    child: Text(
-                      Provider.of<LanProvider>(context,listen: false).texts('yes?'),
-                      style: const TextStyle(fontSize: 19, color: Colors.red),
-                    ),
-                    onTap: () async {
-                      try {
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = true;
-                        });
-                        await FirebaseFirestore.instance
-                            .collection('orders/${user!.uid}/myOrders')
-                            .doc(Provider.of<MyProvider>(context,listen: false).mealID)
-                            .delete();
-                        Fluttertoast.showToast(
-                            msg:  Provider.of<LanProvider>(context,listen: false).texts('order deleted'),
-                            toastLength: Toast.LENGTH_SHORT,
-                            backgroundColor: Colors.grey,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        Navigator.of(context).pop();
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
-                        });
-                      } on FirebaseException catch (e) {
-                        dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
-                        });
-                        print(e.message);
-                      } catch (e) {
-                        dialog( Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'));
-                        setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
-                        });
-                        print(e);
-                      }
-                    }),
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
 
     final snackBar = SnackBar(
       content: Container(
-        height: height * 0.081,
+        height: getHeight() * 0.081,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -134,15 +135,15 @@ class _HistoryState extends State<History> {
               children: [
                 Text(
                   Provider.of<LanProvider>(context,listen: false).texts('order confirmed'),
-                  style: TextStyle(fontSize: width * 0.032),
+                  style: TextStyle(fontSize: getWidth() * 0.032),
                 ),
                 Text(
                   Provider.of<LanProvider>(context,listen: false).texts('will reach out to u'),
-                  style: TextStyle(fontSize: width * 0.03),
+                  style: TextStyle(fontSize: getWidth() * 0.03),
                 ),
               ],
             ),
-            SizedBox(width: width * 0.1),
+            SizedBox(width: getWidth() * 0.1),
             Icon(
               Icons.check_circle_outline,
               color: Colors.white,

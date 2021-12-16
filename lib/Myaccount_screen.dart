@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'LanguageProvider.dart';
 
 class MyAccount extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

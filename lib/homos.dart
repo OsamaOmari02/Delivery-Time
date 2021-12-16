@@ -12,10 +12,14 @@ class Homos extends StatefulWidget {
 }
 
 class _HomosState extends State<Homos> {
-  @override
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+  @override
     var shortestSide = MediaQuery.of(context).size.shortestSide;
     Widget funImage(image, title) {
       return ListTile(
@@ -29,7 +33,7 @@ class _HomosState extends State<Homos> {
           borderRadius: BorderRadius.circular(10.0),
           child: Image.asset(
             image,
-            height: height * 0.14,
+            height: getHeight() * 0.14,
             fit: BoxFit.fill,
           ),
         ),
@@ -38,7 +42,7 @@ class _HomosState extends State<Homos> {
           child: Text(title,
               style: TextStyle(
                   color: Provider.of<MyProvider>(context).isDark? Colors.white:Colors.black,
-                  fontSize: width*0.042,
+                  fontSize: getWidth()*0.042,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.center),
         ),
@@ -49,11 +53,11 @@ class _HomosState extends State<Homos> {
       textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text( Provider.of<LanProvider>(context,listen: false).texts('homos & falafel')),
+          title: Text( Provider.of<LanProvider>(context).texts('hummus & falafel')),
           centerTitle: true,
         ),
         body: Container(
-          height: height*1.1,
+          height: getHeight()*1.1,
           padding: EdgeInsets.fromLTRB(2, 20, 2, 0),
           child: Scrollbar(
             child: GridView(

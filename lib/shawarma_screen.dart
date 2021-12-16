@@ -26,28 +26,34 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
     super.initState();
   }
 
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return Directionality(
       textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: DefaultTabController(
-        length: 3,
+        length: Provider.of<MyProvider>(context).restaurantName=='Snap Burger'||Provider.of<MyProvider>(context).restaurantName=='شاورما هنية'?2:3,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(Provider.of<MyProvider>(context,listen: false).restaurantName),
             bottom: TabBar(
               tabs: [
+                if (Provider.of<MyProvider>(context).restaurantName!='Snap Burger')
                 Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab1')),
+                if (Provider.of<MyProvider>(context).restaurantName!='شاورما هنية')
                 Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab2')),
                 Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab3')),
               ],
             ),
           ),
           bottomNavigationBar: Container(
-            height: height*0.095,
+            height: getHeight()*0.095,
             child: Opacity(
               opacity: Provider.of<MyProvider>(context).total <0.009 ? 0.4 : 1,
               child: Container(
@@ -73,7 +79,7 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
                           Icons.shopping_basket_outlined,
                           color: Colors.white,
                         ),
-                        SizedBox(width: width*0.02),
+                        SizedBox(width: getWidth()*0.02),
                         Text(
                           Provider.of<LanProvider>(context,listen: false).texts('food cart'),
                           style: const TextStyle(
@@ -108,7 +114,9 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
           ),
           body: TabBarView(
             children: <Widget>[
+              if (Provider.of<MyProvider>(context).restaurantName!='Snap Burger')
               First(),
+              if (Provider.of<MyProvider>(context).restaurantName!='شاورما هنية')
               Second(),
               Third(),
             ],
@@ -135,54 +143,58 @@ class _FirstState extends State<First> {
         .snapshots();
     super.initState();
   }
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return Directionality(
+            textDirection:
+            Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
+            child: AlertDialog(
+              title: Text(
+                title,
+                style: const TextStyle(fontSize: 23),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
+                          style: const TextStyle(
+                              fontSize: 19, color: Colors.red)),
+                      onTap: () => Navigator.of(context).pop()),
+                ),
+                const SizedBox(width: 11),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                      child: Text(Provider.of<LanProvider>(context,listen: false).texts('yes?'),
+                          style: const TextStyle(fontSize: 19)),
+                      onPressed: () {
+                        Provider.of<MyProvider>(context,listen: false).myCartClear();
+                        Navigator.of(context).pop();
+                      }),
+                ),
+              ],
+            ),
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return Directionality(
-              textDirection:
-              Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
-              child: AlertDialog(
-                title: Text(
-                  title,
-                  style: const TextStyle(fontSize: 23),
-                ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 7),
-                elevation: 24,
-                content: Container(
-                  height: 30,
-                  child: const Divider(),
-                  alignment: Alignment.topCenter,
-                ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                        child: Text(Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
-                            style: const TextStyle(
-                                fontSize: 19, color: Colors.red)),
-                        onTap: () => Navigator.of(context).pop()),
-                  ),
-                  const SizedBox(width: 11),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextButton(
-                        child: Text(Provider.of<LanProvider>(context,listen: false).texts('yes?'),
-                            style: const TextStyle(fontSize: 19)),
-                        onPressed: () {
-                          Provider.of<MyProvider>(context,listen: false).myCartClear();
-                          Navigator.of(context).pop();
-                        }),
-                  ),
-                ],
-              ),
-            );
-          });
-    }
+
     return StreamBuilder<QuerySnapshot>(
       stream: tab1sh,
       builder: (ctx, snapshot) {
@@ -207,8 +219,8 @@ class _FirstState extends State<First> {
                             if (resData[index]['imageUrl']!="")
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 10),
-                                width: width*0.24,
-                                height: height*0.16,
+                                width: getWidth()*0.24,
+                                height: getHeight()*0.16,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -222,34 +234,31 @@ class _FirstState extends State<First> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.025),
+                                SizedBox(height: getHeight()*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.54,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
                                     maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
                                   ),
                                 ),
-                                const SizedBox(height: 5),
-                                Padding(
-                                  padding: Provider.of<LanProvider>(context).isEn?
-                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
-                                  child: SizedBox(
-                                    width: width*0.5,
-                                    child: AutoSizeText(
-                                      resData[index]['description'],
-                                      maxLines: 3,
-                                      minFontSize: 10,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey),
-                                    ),
+                                SizedBox(height: getHeight() * 0.01),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.51,
+                                  child: AutoSizeText(
+                                    resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
                                   ),
                                 ),
                                 Container(
@@ -388,38 +397,41 @@ class _SecondState extends State<Second> {
         .snapshots();
     super.initState();
   }
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
     return StreamBuilder<QuerySnapshot>(
       stream: tab2sh,
       builder: (ctx, snapshot) {
@@ -444,8 +456,8 @@ class _SecondState extends State<Second> {
                             if (resData[index]['imageUrl']!="")
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 10),
-                                width: width*0.24,
-                                height: height*0.16,
+                                width: getWidth()*0.24,
+                                height: getHeight()*0.16,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -459,34 +471,31 @@ class _SecondState extends State<Second> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.025),
+                                SizedBox(height: getHeight()*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.55,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
                                     maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
                                   ),
                                 ),
-                                const SizedBox(height: 5),
-                                Padding(
-                                  padding: Provider.of<LanProvider>(context).isEn?
-                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
-                                  child: SizedBox(
-                                    width: width*0.5,
-                                    child: AutoSizeText(
-                                      resData[index]['description'],
-                                      maxLines: 3,
-                                      minFontSize: 10,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey),
-                                    ),
+                                SizedBox(height: getHeight() * 0.01),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.54,
+                                  child: AutoSizeText(
+                                    resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
                                   ),
                                 ),
                                 Container(
@@ -625,37 +634,41 @@ class _ThirdState extends State<Third> {
         .snapshots();
     super.initState();
   }
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: Provider.of<LanProvider>(context).isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text(Provider.of<LanProvider>(context,listen: false).texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
 
     return StreamBuilder<QuerySnapshot>(
       stream: tab3sh,
@@ -681,8 +694,8 @@ class _ThirdState extends State<Third> {
                             if (resData[index]['imageUrl']!="")
                               Container(
                                 margin: const EdgeInsets.symmetric(vertical: 10),
-                                width: width*0.24,
-                                height: height*0.16,
+                                width: getWidth()*0.24,
+                                height: getHeight()*0.16,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -696,34 +709,31 @@ class _ThirdState extends State<Third> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: height*0.025),
+                                SizedBox(height: getHeight()*0.025),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.54,
                                   child: AutoSizeText(
                                     resData[index]['meal name'],
                                     maxLines: 2,
                                     minFontSize: 12,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
                                   ),
                                 ),
-                                const SizedBox(height: 5),
-                                Padding(
-                                  padding: Provider.of<LanProvider>(context).isEn?
-                                  EdgeInsets.only(left:3.5):EdgeInsets.only(right:3.5),
-                                  child: SizedBox(
-                                    width: width*0.5,
-                                    child: AutoSizeText(
-                                      resData[index]['description'],
-                                      maxLines: 3,
-                                      minFontSize: 10,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey),
-                                    ),
+                                SizedBox(height: getHeight() * 0.01),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.5,
+                                  child: AutoSizeText(
+                                    resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
                                   ),
                                 ),
                                 Container(

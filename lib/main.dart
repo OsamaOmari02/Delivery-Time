@@ -142,70 +142,71 @@ class _MyHomepageState extends State<MyHomepage> {
     super.initState();
   }
 
+  double width;
+  double height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
+  Widget funImage(image, title) {
+    return ListTile(
+      onTap: () {
+        setState(() {
+          Provider.of<MyProvider>(context,listen: false).restaurantName = title;
+        });
+        if (Provider.of<MyProvider>(context,listen: false).restaurantName=='بيتزا المفرق'
+            || Provider.of<MyProvider>(context,listen: false).restaurantName=='بيتزا اونلاين')
+          Navigator.of(context).pushNamed('pizzaScreen');
+        else
+          Navigator.of(context).pushNamed('resScreen');
+      },
+      title: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Image.asset(
+          image,
+          height: height * 0.13,
+          fit: BoxFit.fill,
+        ),
+      ),
+      subtitle: Text(title,
+          style: TextStyle(
+            fontSize: width*0.042,
+            fontWeight: FontWeight.bold,
+            color: Provider.of<MyProvider>(context).isDark ? Colors.white : Colors.black,
+          ),
+          textAlign: TextAlign.center),
+    );
+  }
+  Widget content(image, String title, route) {
+    return Container(
+        width: width * 0.44,
+        child: Card(
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          elevation: 1.5,
+          child: ListTile(
+            onTap: () => Navigator.of(context).pushNamed(route),
+            title: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Image.asset(
+                image,
+                height: height * 0.13,
+                fit: BoxFit.fill,
+              ),
+            ),
+            subtitle: Container(
+              padding: EdgeInsets.symmetric(vertical: height * 0.015),
+              child: Text( Provider.of<LanProvider>(context,listen: false).texts(title),
+                  style: TextStyle(
+                      color: Provider.of<MyProvider>(context).isDark ? Colors.white : Colors.black,
+                      fontSize: width * 0.042),
+                  textAlign: TextAlign.center),
+            ),
+          ),
+        ));
+  }
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     var shortestSide = MediaQuery.of(context).size.shortestSide;
-    Widget funImage(image, title) {
-      return ListTile(
-        onTap: () {
-          setState(() {
-            Provider.of<MyProvider>(context,listen: false).restaurantName = title;
-          });
-          if (Provider.of<MyProvider>(context,listen: false).restaurantName=='بيتزا المفرق'
-          || Provider.of<MyProvider>(context,listen: false).restaurantName=='بيتزا اونلاين')
-            Navigator.of(context).pushNamed('pizzaScreen');
-          else
-          Navigator.of(context).pushNamed('resScreen');
-        },
-        title: ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: Image.asset(
-            image,
-            height: height * 0.13,
-            fit: BoxFit.fill,
-          ),
-        ),
-        subtitle: Text(title,
-            style: TextStyle(
-              fontSize: width*0.042,
-              fontWeight: FontWeight.bold,
-              color: Provider.of<MyProvider>(context).isDark ? Colors.white : Colors.black,
-            ),
-            textAlign: TextAlign.center),
-      );
-    }
-
-    Widget content(image, String title, route) {
-      return Container(
-          width: width * 0.44,
-          child: Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            elevation: 1.5,
-            child: ListTile(
-              onTap: () => Navigator.of(context).pushNamed(route),
-              title: ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  image,
-                  height: height * 0.13,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              subtitle: Container(
-                padding: EdgeInsets.symmetric(vertical: height * 0.015),
-                child: Text( Provider.of<LanProvider>(context,listen: false).texts(title),
-                    style: TextStyle(
-                        color: Provider.of<MyProvider>(context).isDark ? Colors.white : Colors.black,
-                        fontSize: width * 0.042),
-                    textAlign: TextAlign.center),
-              ),
-            ),
-          ));
-    }
-
     Future<bool> _onWillPop() async {
       return (await showDialog(
             context: context,
@@ -307,7 +308,7 @@ class _MyHomepageState extends State<MyHomepage> {
               shrinkWrap: true,
               children: [
                 SizedBox(
-                  height: height * 0.3,
+                  height: getHeight() * 0.3,
                   width: double.infinity,
                   child: Carousel(
                     images: <Widget>[
@@ -324,24 +325,24 @@ class _MyHomepageState extends State<MyHomepage> {
                     autoplayDuration: const Duration(seconds: 2),
                   ),
                 ),
-                SizedBox(height: height * 0.03),
+                SizedBox(height: getHeight() * 0.03),
                 Row(
                   children: [
-                    SizedBox(width: width * 0.03),
+                    SizedBox(width: getWidth() * 0.03),
                     Expanded(
                       child: Text(
                         Provider.of<LanProvider>(context,listen: false).texts('order ur food..'),
                         maxLines: 3,
                         style: TextStyle(
-                            fontSize: width * 0.06,
+                            fontSize: getWidth() * 0.06,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: height * 0.02),
+                SizedBox(height: getHeight() * 0.02),
                 Container(
-                  height: height * 0.24,
+                  height: getHeight() * 0.24,
                   width: double.infinity,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -359,21 +360,21 @@ class _MyHomepageState extends State<MyHomepage> {
                 const Divider(thickness: 1),
                 Row(
                   children: [
-                    SizedBox(width: width * 0.03),
+                    SizedBox(width: getWidth() * 0.03),
                     Expanded(
                       child: Text(
                         Provider.of<LanProvider>(context,listen: false).texts('choose ur..'),
                         maxLines: 2,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: width * 0.06),
+                            fontSize: getWidth() * 0.06),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: height * 0.02),
+                SizedBox(height: getHeight() * 0.02),
                 Container(
-                  height: shortestSide<650?height * 1.17:height*0.82,
+                  height: shortestSide<650?getHeight() * 1.17:getHeight()*0.82,
                   child: GridView(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

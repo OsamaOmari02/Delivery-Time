@@ -12,9 +12,15 @@ class DetailsHistory extends StatefulWidget {
 }
 
 class _DetailsHistoryState extends State<DetailsHistory> {
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+  getHeight() => height = MediaQuery.of(context).size.height;
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+
     return Directionality(
       textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -26,7 +32,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
         body: ListView(
           padding: const EdgeInsets.all(8.0),
           children: [
-            SizedBox(height: height * 0.005),
+            SizedBox(height: getHeight() * 0.005),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -77,7 +83,7 @@ class _DetailsHistoryState extends State<DetailsHistory> {
                   ),
                 ),
               ),
-            SizedBox(height: height * 0.01),
+            SizedBox(height: getHeight() * 0.01),
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Row(children: [
