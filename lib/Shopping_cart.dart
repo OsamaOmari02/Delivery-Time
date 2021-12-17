@@ -345,10 +345,16 @@ class _ShoppingState extends State<Shopping> {
                                                     listen: false)
                                                 .myCart[index]
                                                 .resName ==
-                                            'بيتزا اونلاين')
+                                            'بيتزا اونلاين'|| Provider.of<MyProvider>(context,
+                                        listen: false).myCart[index].resName ==
+                                        'قايد حضر موت'||  Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'نفيسة'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'ارزه لبنان')
                                       await Provider.of<MyProvider>(context,
                                               listen: false)
-                                          .removeFoodCartPizza(
+                                          .removeFoodCartTypes(
                                               Provider.of<MyProvider>(context,
                                                       listen: false)
                                                   .myCart[index]
@@ -398,10 +404,16 @@ class _ShoppingState extends State<Shopping> {
                                         .myCart[index].resName == 'بيتزا المفرق'
                                         || Provider.of<MyProvider>(context,
                                             listen: false).myCart[index].resName ==
-                                            'بيتزا اونلاين')
+                                            'بيتزا اونلاين'|| Provider.of<MyProvider>(context,
+                                        listen: false).myCart[index].resName ==
+                                        'قايد حضر موت' ||  Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'نفيسة'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'ارزه لبنان')
                                       await Provider.of<MyProvider>(context,
                                           listen: false)
-                                          .addFoodCartPizzaPlus(
+                                          .addFoodCartTypes(
                                           Provider.of<MyProvider>(context,
                                               listen: false)
                                               .myCart[index]

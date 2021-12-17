@@ -12,7 +12,9 @@ class MainResScreen extends StatefulWidget {
   @override
   _MainResScreenState createState() => _MainResScreenState();
 }
- var tab1r;
+
+var tab1r;
+
 class _MainResScreenState extends State<MainResScreen> {
   @override
   void initState() {
@@ -20,9 +22,11 @@ class _MainResScreenState extends State<MainResScreen> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsMain(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
-      tab1r = FirebaseFirestore.instance
-          .collection('/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
-          .snapshots();
+    tab1r = FirebaseFirestore.instance
+        .collection(
+            '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
+        .orderBy("meal name")
+        .snapshots();
     super.initState();
   }
 
@@ -30,14 +34,17 @@ class _MainResScreenState extends State<MainResScreen> {
   double? height;
 
   getWidth() => width = MediaQuery.of(context).size.width;
+
   getHeight() => height = MediaQuery.of(context).size.height;
+
   dialog(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
           return Directionality(
-            textDirection:
-            Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
+            textDirection: Provider.of<LanProvider>(context).isEn
+                ? TextDirection.ltr
+                : TextDirection.rtl,
             child: AlertDialog(
               title: Text(
                 title,
@@ -54,19 +61,24 @@ class _MainResScreenState extends State<MainResScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
-                      child: Text( Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
-                          style: const TextStyle(
-                              fontSize: 19, color: Colors.red)),
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('cancel?'),
+                          style:
+                              const TextStyle(fontSize: 19, color: Colors.red)),
                       onTap: () => Navigator.of(context).pop()),
                 ),
                 const SizedBox(width: 11),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
-                      child: Text( Provider.of<LanProvider>(context,listen: false).texts('yes?'),
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('yes?'),
                           style: const TextStyle(fontSize: 19)),
                       onPressed: () {
-                        Provider.of<MyProvider>(context,listen: false).myCartClear();
+                        Provider.of<MyProvider>(context, listen: false)
+                            .myCartClear();
                         Navigator.of(context).pop();
                       }),
                 ),
@@ -75,12 +87,18 @@ class _MainResScreenState extends State<MainResScreen> {
           );
         });
   }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: Provider.of<LanProvider>(context).isEn
+          ? TextDirection.ltr
+          : TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(centerTitle: true, title: Text(Provider.of<MyProvider>(context,listen: false).restaurantName)),
+        appBar: AppBar(
+            centerTitle: true,
+            title: Text(Provider.of<MyProvider>(context, listen: false)
+                .restaurantName)),
         body: StreamBuilder<QuerySnapshot>(
           stream: tab1r,
           builder: (ctx, snapshot) {
@@ -88,10 +106,11 @@ class _MainResScreenState extends State<MainResScreen> {
               return const Center(child: const CircularProgressIndicator());
             if (snapshot.hasError)
               return Center(
-                  child: Text( Provider.of<LanProvider>(context,listen: false).texts('something went wrong !')));
+                  child: Text(Provider.of<LanProvider>(context, listen: false)
+                      .texts('something went wrong !')));
             return Scrollbar(
               child: ListView.builder(
-                itemCount: snapshot.data?.docs.length??0,
+                itemCount: snapshot.data?.docs.length ?? 0,
                 itemBuilder: (context, int index) {
                   var resData = snapshot.data!.docs;
                   return Card(
@@ -103,27 +122,32 @@ class _MainResScreenState extends State<MainResScreen> {
                           child: Container(
                             child: Row(
                               children: [
-                                if (resData[index]['imageUrl']!="")
+                                if (resData[index]['imageUrl'] != "")
                                   Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 10),
-                                    width: getWidth()*0.24,
-                                    height: getHeight()*0.16,
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    width: getWidth() * 0.24,
+                                    height: getHeight() * 0.16,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: CachedNetworkImage(
                                         fit: BoxFit.fill,
                                         imageUrl: resData[index]['imageUrl'],
-                                        placeholder: (context, url) => const Center(child: const CircularProgressIndicator()),
-                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        placeholder: (context, url) => const Center(
+                                            child:
+                                                const CircularProgressIndicator()),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
                                       ),
                                     ),
                                   ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    SizedBox(height: getHeight()*0.025),
+                                    SizedBox(height: getHeight() * 0.025),
                                     Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 5),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5),
                                       width: getWidth() * 0.54,
                                       child: AutoSizeText(
                                         resData[index]['meal name'],
@@ -137,7 +161,8 @@ class _MainResScreenState extends State<MainResScreen> {
                                     ),
                                     SizedBox(height: getHeight() * 0.01),
                                     Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 5),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5),
                                       width: getWidth() * 0.5,
                                       child: AutoSizeText(
                                         resData[index]['description'],
@@ -149,20 +174,30 @@ class _MainResScreenState extends State<MainResScreen> {
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 7),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 7),
                                       alignment: Alignment.bottomLeft,
                                       margin: const EdgeInsets.only(top: 16),
                                       child: Padding(
-                                        padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 7),
                                         child: Text(
-                                          Provider.of<LanProvider>(context,listen: false).texts('price') +
+                                          Provider.of<LanProvider>(context,
+                                                      listen: false)
+                                                  .texts('price') +
                                               " " +
                                               resData[index]['meal price'] +
                                               " " +
-                                              Provider.of<LanProvider>(context,listen: false).texts('jd'),
+                                              Provider.of<LanProvider>(context,
+                                                      listen: false)
+                                                  .texts('jd'),
                                           style: TextStyle(
-                                              fontSize: 15, color: Provider.of<MyProvider>(context).isDark?Colors.white70:Colors.pink),
+                                              fontSize: 15,
+                                              color: Provider.of<MyProvider>(
+                                                          context)
+                                                      .isDark
+                                                  ? Colors.white70
+                                                  : Colors.pink),
                                         ),
                                       ),
                                     ),
@@ -175,13 +210,17 @@ class _MainResScreenState extends State<MainResScreen> {
                         ),
                         Column(
                           children: [
-                            if (Provider.of<MyProvider>(context,listen: false).isLoading)
+                            if (Provider.of<MyProvider>(context, listen: false)
+                                .isLoading)
                               const CircularProgressIndicator(),
-                            if (!Provider.of<MyProvider>(context,listen: false).isLoading)
+                            if (!Provider.of<MyProvider>(context, listen: false)
+                                .isLoading)
                               IconButton(
                                 alignment: Alignment.topLeft,
                                 icon: Icon(
-                                  Provider.of<MyProvider>(context,listen: false).isMyFav(resData[index].id)
+                                  Provider.of<MyProvider>(context,
+                                              listen: false)
+                                          .isMyFav(resData[index].id)
                                       ? Icons.favorite
                                       : Icons.favorite_border,
                                   color: Colors.red,
@@ -189,24 +228,37 @@ class _MainResScreenState extends State<MainResScreen> {
                                 onPressed: () async {
                                   try {
                                     setState(() {
-                                      Provider.of<MyProvider>(context,listen: false).isLoading = true;
-                                      Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                                      Provider.of<MyProvider>(context,
+                                              listen: false)
+                                          .isLoading = true;
+                                      Provider.of<MyProvider>(context,
+                                              listen: false)
+                                          .mealID = resData[index].id;
                                     });
-                                    await Provider.of<MyProvider>(context,listen: false).toggleFavourite();
+                                    await Provider.of<MyProvider>(context,
+                                            listen: false)
+                                        .toggleFavourite();
                                     setState(() {
-                                      Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                                      Provider.of<MyProvider>(context,
+                                              listen: false)
+                                          .isLoading = false;
                                     });
                                   } on FirebaseException catch (e) {
                                     setState(() {
-                                      Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                                      Provider.of<MyProvider>(context,
+                                              listen: false)
+                                          .isLoading = false;
                                     });
                                     dialog(e.message);
                                     print(e.message);
                                   } catch (e) {
                                     setState(() {
-                                      Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                                      Provider.of<MyProvider>(context,
+                                              listen: false)
+                                          .isLoading = false;
                                     });
-                                    dialog(Provider.of<LanProvider>(context,listen: false)
+                                    dialog(Provider.of<LanProvider>(context,
+                                            listen: false)
                                         .texts('Error occurred !'));
                                     print(e);
                                   }
@@ -214,13 +266,19 @@ class _MainResScreenState extends State<MainResScreen> {
                               ),
                             Row(
                               children: [
-                                Text(Provider.of<MyProvider>(context,listen: false).getIndex(resData[index].id) == -1
+                                Text(Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .getIndex(resData[index].id) ==
+                                        -1
                                     ? "0"
-                                    : (Provider.of<MyProvider>(context,listen: false)
-                                    .myCart[Provider.of<MyProvider>(context,listen: false)
-                                    .getIndex(resData[index].id)]
-                                    .quantity)
-                                    .toString()),
+                                    : (Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .myCart[Provider.of<MyProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .getIndex(resData[index].id)]
+                                            .quantity)
+                                        .toString()),
                                 IconButton(
                                     icon: const Icon(
                                       Icons.add,
@@ -228,32 +286,54 @@ class _MainResScreenState extends State<MainResScreen> {
                                     ),
                                     onPressed: () async {
                                       setState(() {
-                                        Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .mealID = resData[index].id;
                                       });
-                                      if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0 &&
-                                          Provider.of<MyProvider>(context,listen: false).restaurantName !=
-                                              Provider.of<MyProvider>(context,listen: false).myCart[0].resName)
-                                        return dialog(
-                                            Provider.of<LanProvider>(context,listen: false).texts('foodCart'));
-                                      Provider.of<MyProvider>(context,listen: false).addFoodCart(
-                                          resData[index]['meal name'],
-                                          resData[index]['meal price'],resData[index]['description']);
+                                      if (Provider.of<MyProvider>(context,
+                                                      listen: false)
+                                                  .myCart
+                                                  .length !=
+                                              0 &&
+                                          Provider.of<MyProvider>(context,
+                                                      listen: false)
+                                                  .restaurantName !=
+                                              Provider.of<MyProvider>(context,
+                                                      listen: false)
+                                                  .myCart[0]
+                                                  .resName)
+                                        return dialog(Provider.of<LanProvider>(
+                                                context,
+                                                listen: false)
+                                            .texts('foodCart'));
+                                      Provider.of<MyProvider>(context,
+                                              listen: false)
+                                          .addFoodCart(
+                                              resData[index]['meal name'],
+                                              resData[index]['meal price'],
+                                              resData[index]['description']);
                                     }),
                               ],
                             ),
-                            Provider.of<MyProvider>(context,listen: false).existsInCart(resData[index].id)
+                            Provider.of<MyProvider>(context, listen: false)
+                                    .existsInCart(resData[index].id)
                                 ? IconButton(
-                              icon: const Icon(
-                                Icons.remove,
-                                color: Colors.red,
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
-                                });
-                                await Provider.of<MyProvider>(context,listen: false).removeFoodCart(resData[index]['meal price']);
-                              },
-                            )
+                                    icon: const Icon(
+                                      Icons.remove,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () async {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .mealID = resData[index].id;
+                                      });
+                                      await Provider.of<MyProvider>(context,
+                                              listen: false)
+                                          .removeFoodCart(
+                                              resData[index]['meal price']);
+                                    },
+                                  )
                                 : Container(),
                           ],
                         ),
@@ -266,9 +346,9 @@ class _MainResScreenState extends State<MainResScreen> {
           },
         ),
         bottomNavigationBar: Container(
-          height: getHeight()*0.1,
+          height: getHeight() * 0.1,
           child: Opacity(
-            opacity: Provider.of<MyProvider>(context).total <0.009 ? 0.4 : 1,
+            opacity: Provider.of<MyProvider>(context).total < 0.009 ? 0.4 : 1,
             child: Container(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 15),
               alignment: Alignment.bottomCenter,
@@ -292,28 +372,30 @@ class _MainResScreenState extends State<MainResScreen> {
                         Icons.shopping_basket_outlined,
                         color: Colors.white,
                       ),
-                      SizedBox(width: getWidth()*0.02),
+                      SizedBox(width: getWidth() * 0.02),
                       Text(
-                        Provider.of<LanProvider>(context,listen: false).texts('food cart'),
-                        style: const TextStyle(
-                            fontSize: 17, color: Colors.white),
+                        Provider.of<LanProvider>(context, listen: false)
+                            .texts('food cart'),
+                        style:
+                            const TextStyle(fontSize: 17, color: Colors.white),
                       ),
                       Spacer(),
                       Text(
-                        Provider.of<LanProvider>(context,listen: false).texts('total'),
-                        style: const TextStyle(
-                            fontSize: 17, color: Colors.white),
+                        Provider.of<LanProvider>(context, listen: false)
+                            .texts('total'),
+                        style:
+                            const TextStyle(fontSize: 17, color: Colors.white),
                       ),
                       Text(
-                        " ${Provider.of<MyProvider>(context).total.toStringAsFixed(2)=="-0.00"?
-                        0.0:Provider.of<MyProvider>(context).total.toStringAsFixed(2)}",
-                        style: const TextStyle(
-                            fontSize: 16, color: Colors.white),
+                        " ${Provider.of<MyProvider>(context).total.toStringAsFixed(2) == "-0.00" ? 0.0 : Provider.of<MyProvider>(context).total.toStringAsFixed(2)}",
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.white),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2.0),
                         child: Text(
-                          Provider.of<LanProvider>(context,listen: false).texts('jd'),
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('jd'),
                           style: const TextStyle(
                               fontSize: 16, color: Colors.white),
                         ),

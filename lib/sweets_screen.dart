@@ -16,6 +16,7 @@ class SweetScreen extends StatefulWidget {
   var tab1s;
   var tab2s;
   var tab3s;
+  var tabGateau;
 class _SweetScreenState extends State<SweetScreen> {
   @override
   void initState() {
@@ -36,13 +37,17 @@ class _SweetScreenState extends State<SweetScreen> {
     return Directionality(
       textDirection: Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
       child: DefaultTabController(
-        length: 3,
+        length: Provider.of<MyProvider>(context,listen: false).restaurantName!='نفيسة'?3:4,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(Provider.of<MyProvider>(context,listen: false).restaurantName),
             bottom: TabBar(
+              labelPadding:EdgeInsets.symmetric(horizontal: getWidth()*0.08),
+              isScrollable: true,
               tabs: [
+                if (Provider.of<MyProvider>(context,listen: false).restaurantName=='نفيسة')
+                  Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tabNafesa')),
                 Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab4')),
                 Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab5')),
                 Tab(text: Provider.of<LanProvider>(context,listen: false).texts('tab3')),
@@ -111,6 +116,8 @@ class _SweetScreenState extends State<SweetScreen> {
           ),
           body: TabBarView(
             children: <Widget>[
+              if (Provider.of<MyProvider>(context,listen: false).restaurantName=='نفيسة')
+                Gateau(),
               First(),
               Second(),
               Third(),
@@ -121,7 +128,7 @@ class _SweetScreenState extends State<SweetScreen> {
     );
   }
 }
-
+//--------------------------1----------------------------
 class First extends StatefulWidget {
   @override
   _FirstState createState() => _FirstState();
@@ -134,7 +141,7 @@ class _FirstState extends State<First> {
   void initState() {
     tab1s = FirebaseFirestore.instance
         .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/kunafeh')
+        .restaurantName}/kunafeh').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -363,6 +370,430 @@ class _FirstState extends State<First> {
 }
 
 //-----------------------2--------------------------
+class Gateau extends StatefulWidget {
+  @override
+  _GateauState createState() => _GateauState();
+}
+
+class _GateauState extends State<Gateau> {
+  @override
+  void initState() {
+    tabGateau = FirebaseFirestore.instance
+        .collection(
+        '/sweets/${Provider.of<MyProvider>(context, listen: false).restaurantName}/gateau').orderBy("meal name")
+        .snapshots();
+    super.initState();
+  }
+
+  int _counter = 0;
+  double _price = 0.00;
+
+  Widget radioListType(index,setState) {
+    return RadioListTile(
+      value: Provider.of<MyProvider>(context).cakeTypes[index].value,
+      groupValue: Provider.of<MyProvider>(context).radioValue2,
+      onChanged: (val) {
+        setState(() {
+          Provider.of<MyProvider>(context, listen: false).radioValue2 = val!;
+        });
+      },
+      title: Text(Provider.of<MyProvider>(context).cakeTypes[index].title),
+    );
+  }
+
+  bottomSheet() {
+    return Directionality(
+        textDirection: Provider.of<LanProvider>(context).isEn
+            ? TextDirection.ltr
+            : TextDirection.rtl,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              Provider.of<LanProvider>(context, listen: false)
+                  .texts('choose pizza'),
+              style: TextStyle(
+                  color: Provider.of<MyProvider>(context).isDark
+                      ? CupertinoColors.white
+                      : CupertinoColors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            backgroundColor: Theme.of(context).canvasColor,
+            elevation: 2,
+          ),
+          body: Scrollbar(
+            child: StatefulBuilder(builder: (BuildContext context,
+                void Function(void Function()) setState) {
+              return ListView.builder(
+                itemCount: Provider.of<MyProvider>(context).cakeTypes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return radioListType(index,setState);
+                },
+              );
+            }),
+          ),
+          bottomNavigationBar: StatefulBuilder(builder:
+              (BuildContext context, void Function(void Function()) setState) {
+            return Container(
+              height: getWidth() * 0.2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('total') +
+                          ' ${_price.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 15)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _counter != 0
+                          ? IconButton(
+                        icon: const Icon(
+                          Icons.remove,
+                          color: Colors.red,
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            _counter--;
+                            _price -= Provider.of<MyProvider>(context,
+                                listen: false)
+                                .mealPrice ??
+                                0;
+                          });
+                        },
+                      )
+                          : Container(),
+                      Text(_counter.toString()),
+                      IconButton(
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.green,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _counter++;
+                              _price += Provider.of<MyProvider>(context,
+                                  listen: false)
+                                  .mealPrice ??
+                                  0;
+                            });
+                          }),
+                    ],
+                  ),
+                  _counter != 0
+                      ? TextButton(
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('add')),
+                      onPressed: () {
+                        Provider.of<MyProvider>(context, listen: false)
+                            .addFoodCartRadio(_counter);
+                        setState(() {
+                          _price = 0.00;
+                          _counter = 0;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .radioValue2 = null;
+                        });
+                        Navigator.of(context).pop();
+                      })
+                      : Container(),
+                ],
+              ),
+            );
+          }),
+        ));
+  }
+
+  dialog(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return Directionality(
+            textDirection: Provider.of<LanProvider>(context).isEn
+                ? TextDirection.ltr
+                : TextDirection.rtl,
+            child: AlertDialog(
+              title: Text(
+                title,
+                style: const TextStyle(fontSize: 23),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('cancel?'),
+                          style:
+                          const TextStyle(fontSize: 19, color: Colors.red)),
+                      onTap: () => Navigator.of(context).pop()),
+                ),
+                const SizedBox(width: 11),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('yes?'),
+                          style: const TextStyle(fontSize: 19)),
+                      onPressed: () {
+                        Provider.of<MyProvider>(context, listen: false)
+                            .myCartClear();
+                        Navigator.of(context).pop();
+                      }),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  double? width;
+  double? height;
+
+  getWidth() => width = MediaQuery.of(context).size.width;
+
+  getHeight() => height = MediaQuery.of(context).size.height;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: tabGateau,
+      builder: (ctx, snapshot) {
+        if (snapshot.hasError)
+          return Center(
+              child: Text(Provider.of<LanProvider>(context, listen: false)
+                  .texts('something went wrong !')));
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return const Center(child: const CircularProgressIndicator());
+        return Scrollbar(
+          child: ListView.builder(
+            itemCount: snapshot.data?.docs.length ?? 0,
+            itemBuilder: (context, int index) {
+              var resData = snapshot.data!.docs;
+              return Card(
+                elevation: 3,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            if (resData[index]['imageUrl'] != "")
+                              Container(
+                                margin:
+                                const EdgeInsets.symmetric(vertical: 10),
+                                width: getWidth() * 0.24,
+                                height: getHeight() * 0.16,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fill,
+                                    imageUrl: resData[index]['imageUrl'],
+                                    placeholder: (context, url) => const Center(
+                                        child:
+                                        const CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: getHeight() * 0.025),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.54,
+                                  child: AutoSizeText(
+                                    resData[index]['meal name'],
+                                    maxLines: 2,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                SizedBox(height: getHeight() * 0.01),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: getWidth() * 0.51,
+                                  child: AutoSizeText(
+                                    resData[index]['description'],
+                                    maxLines: 3,
+                                    minFontSize: 12,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
+                                  ),
+                                ),
+                                Container(
+                                  padding:
+                                  const EdgeInsets.symmetric(horizontal: 7),
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(top: 16),
+                                  child: Padding(
+                                    padding:
+                                    const EdgeInsets.symmetric(vertical: 7),
+                                    child: Text(
+                                      Provider.of<LanProvider>(context,
+                                          listen: false)
+                                          .texts('price') +
+                                          " " +
+                                          resData[index]['meal price'] +
+                                          " " +
+                                          Provider.of<LanProvider>(context,
+                                              listen: false)
+                                              .texts('jd'),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                          Provider.of<MyProvider>(context)
+                                              .isDark
+                                              ? Colors.white70
+                                              : Colors.pink),
+                                    ),
+                                  ),
+                                ),
+                                // SizedBox(height: 50),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        if (Provider.of<MyProvider>(context, listen: false)
+                            .isLoading)
+                          const CircularProgressIndicator(),
+                        if (!Provider.of<MyProvider>(context, listen: false)
+                            .isLoading)
+                          IconButton(
+                            icon: Icon(
+                              Icons.cake,
+                              color: Colors.blue,
+                            ),
+                            onPressed: () async {
+                              try {
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = true;
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .mealID = resData[index].id;
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .mealPrice =
+                                      double.parse(
+                                          resData[index]['meal price']);
+                                });
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (_) => bottomSheet());
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                              } on FirebaseException catch (e) {
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                                dialog(e.message);
+                                print(e.message);
+                              } catch (e) {
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                                dialog(Provider.of<LanProvider>(context,
+                                    listen: false)
+                                    .texts('Error occurred !'));
+                                print(e);
+                              }
+                            },
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                          child: TextButton(
+                            child: Text(
+                                Provider.of<LanProvider>(context, listen: false)
+                                    .texts('choose pizza'),
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.blueAccent)),
+                            onPressed: () {
+                              try {
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = true;
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .mealID = resData[index].id;
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .mealPrice =
+                                      double.parse(
+                                          resData[index]['meal price']);
+                                });
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (_) => bottomSheet());
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                              } on FirebaseException catch (e) {
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                                dialog(e.message);
+                                print(e.message);
+                              } catch (e) {
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                                dialog(Provider.of<LanProvider>(context,
+                                    listen: false)
+                                    .texts('Error occurred !'));
+                                print(e);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+//------------------------------2----------------------------
 class Second extends StatefulWidget {
   @override
   _SecondState createState() => _SecondState();
@@ -374,7 +805,7 @@ class _SecondState extends State<Second> {
   void initState() {
     tab2s = FirebaseFirestore.instance
         .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/cake')
+        .restaurantName}/cake').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -629,7 +1060,7 @@ class _ThirdState extends State<Third> {
   void initState() {
     tab3s = FirebaseFirestore.instance
         .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
-        .restaurantName}/others')
+        .restaurantName}/others').orderBy("meal name")
         .snapshots();
     super.initState();
   }

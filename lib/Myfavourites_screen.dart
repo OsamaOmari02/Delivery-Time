@@ -21,7 +21,7 @@ class _MyFavouritesState extends State<MyFavourites> {
   void initState() {
     Provider.of<MyProvider>(context, listen: false).fetchFav();
       stream = FirebaseFirestore.instance
-          .collection('/favorites/${user!.uid}/myFavorites')
+          .collection('/favorites/${user!.uid}/myFavorites').orderBy("meal name")
           .snapshots();
     super.initState();
   }

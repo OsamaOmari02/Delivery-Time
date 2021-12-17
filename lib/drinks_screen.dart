@@ -25,7 +25,7 @@ class _DrinksScreenState extends State<DrinksScreen> {
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
       tab1d = FirebaseFirestore.instance
-          .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals')
+          .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).restaurantName}/meals').orderBy("meal name")
           .snapshots();
     super.initState();
   }

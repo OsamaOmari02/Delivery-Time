@@ -27,6 +27,8 @@ class _HomosState extends State<Homos> {
           setState(() {
             Provider.of<MyProvider>(context,listen: false).restaurantName = title;
           });
+          Provider.of<MyProvider>(context, listen: false).restaurantName ==
+              'هون وبس'?Navigator.of(context).pushNamed('shawarmaScreen'):
           Navigator.of(context).pushNamed('homosScreen');
         },
         title: ClipRRect(

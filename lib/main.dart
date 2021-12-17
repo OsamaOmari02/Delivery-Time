@@ -6,7 +6,9 @@ import 'package:app/Myaccount_screen.dart';
 import 'package:app/Myfavourites_screen.dart';
 import 'package:app/Myprovider.dart';
 import 'package:app/Settings.dart';
+import 'package:app/mo3ajanat.dart';
 import 'package:app/pizzaScreen.dart';
+import 'package:app/rice.dart';
 import 'package:app/shawarma_screen.dart';
 import 'package:app/sweets.dart';
 import 'package:app/sweets_screen.dart';
@@ -78,7 +80,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: UserState(),
-      themeMode: Provider.of<MyProvider>(context).isDark ? ThemeMode.dark : ThemeMode.light,
+      themeMode: Provider.of<MyProvider>(context).isDark
+          ? ThemeMode.dark
+          : ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
@@ -108,7 +112,7 @@ class _MyAppState extends State<MyApp> {
         'userState': (context) => UserState(),
         'checkOut': (context) => CheckOut(),
         'homos': (context) => Homos(),
-        'homosScreen': (context) => HomosScreen(),
+        // 'homosScreen': (context) => HomosScreen(),
         'sweets': (context) => Sweets(),
         'sweetScreen': (context) => SweetScreen(),
         'shawarma': (context) => Shawarma(),
@@ -117,6 +121,8 @@ class _MyAppState extends State<MyApp> {
         'drinksScreen': (context) => DrinksScreen(),
         'resScreen': (context) => MainResScreen(),
         'pizzaScreen': (context) => PizzaScreen(),
+        'riceScreen': (context) => RiceScreen(),
+        'mo3ajanatScreen': (context) => Mo3ajanatScreen(),
         'callCenter': (context) => CallCenter(),
         'details': (context) => Details(),
         'location': (context) => Locations(),
@@ -135,9 +141,10 @@ class _MyHomepageState extends State<MyHomepage> {
   @override
   void initState() {
     Provider.of<LanProvider>(context, listen: false).getLanguage();
-    if (Provider.of<MyProvider>(context, listen: false).authData['name']!=null
-    || Provider.of<MyProvider>(context, listen: false).authData['name']!='')
-        Provider.of<MyProvider>(context, listen: false).fetch();
+    if (Provider.of<MyProvider>(context, listen: false).authData['name'] !=
+            null ||
+        Provider.of<MyProvider>(context, listen: false).authData['name'] != '')
+      Provider.of<MyProvider>(context, listen: false).fetch();
     Provider.of<MyProvider>(context, listen: false).fetchAddress();
     super.initState();
   }
@@ -146,16 +153,35 @@ class _MyHomepageState extends State<MyHomepage> {
   double height;
 
   getWidth() => width = MediaQuery.of(context).size.width;
+
   getHeight() => height = MediaQuery.of(context).size.height;
+
   Widget funImage(image, title) {
     return ListTile(
       onTap: () {
         setState(() {
-          Provider.of<MyProvider>(context,listen: false).restaurantName = title;
+          Provider.of<MyProvider>(context, listen: false).restaurantName =
+              title;
         });
-        if (Provider.of<MyProvider>(context,listen: false).restaurantName=='بيتزا المفرق'
-            || Provider.of<MyProvider>(context,listen: false).restaurantName=='بيتزا اونلاين')
+        if (Provider.of<MyProvider>(context, listen: false).restaurantName ==
+                'بيتزا المفرق' ||
+            Provider.of<MyProvider>(context, listen: false).restaurantName ==
+                'بيتزا اونلاين')
           Navigator.of(context).pushNamed('pizzaScreen');
+        else if (Provider.of<MyProvider>(context, listen: false)
+                .restaurantName ==
+            'ارزه لبنان')
+          Navigator.of(context).pushNamed('mo3ajanatScreen');
+        else if (Provider.of<MyProvider>(context, listen: false)
+                    .restaurantName ==
+                'قايد حضر موت' ||
+            Provider.of<MyProvider>(context, listen: false).restaurantName ==
+                'بوابة حضر موت')
+          Navigator.of(context).pushNamed('riceScreen');
+        else if (Provider.of<MyProvider>(context, listen: false)
+                    .restaurantName ==
+                'الدويري' )
+          Navigator.of(context).pushNamed('shawarmaScreen');
         else
           Navigator.of(context).pushNamed('resScreen');
       },
@@ -169,19 +195,22 @@ class _MyHomepageState extends State<MyHomepage> {
       ),
       subtitle: Text(title,
           style: TextStyle(
-            fontSize: width*0.042,
+            fontSize: width * 0.042,
             fontWeight: FontWeight.bold,
-            color: Provider.of<MyProvider>(context).isDark ? Colors.white : Colors.black,
+            color: Provider.of<MyProvider>(context).isDark
+                ? Colors.white
+                : Colors.black,
           ),
           textAlign: TextAlign.center),
     );
   }
+
   Widget content(image, String title, route) {
     return Container(
         width: width * 0.44,
         child: Card(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 1.5,
           child: ListTile(
             onTap: () => Navigator.of(context).pushNamed(route),
@@ -195,15 +224,19 @@ class _MyHomepageState extends State<MyHomepage> {
             ),
             subtitle: Container(
               padding: EdgeInsets.symmetric(vertical: height * 0.015),
-              child: Text( Provider.of<LanProvider>(context,listen: false).texts(title),
+              child: Text(
+                  Provider.of<LanProvider>(context, listen: false).texts(title),
                   style: TextStyle(
-                      color: Provider.of<MyProvider>(context).isDark ? Colors.white : Colors.black,
+                      color: Provider.of<MyProvider>(context).isDark
+                          ? Colors.white
+                          : Colors.black,
                       fontSize: width * 0.042),
                   textAlign: TextAlign.center),
             ),
           ),
         ));
   }
+
   @override
   Widget build(BuildContext context) {
     var shortestSide = MediaQuery.of(context).size.shortestSide;
@@ -212,27 +245,30 @@ class _MyHomepageState extends State<MyHomepage> {
             context: context,
             builder: (context) => new AlertDialog(
               title: new Text(
-                  Provider.of<LanProvider>(context,listen: false).texts('Do you want to exit an App'),
-                textDirection:
-                Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
-                style: const TextStyle(fontSize: 21)
-              ),
+                  Provider.of<LanProvider>(context, listen: false)
+                      .texts('Do you want to exit an App'),
+                  textDirection: Provider.of<LanProvider>(context).isEn
+                      ? TextDirection.ltr
+                      : TextDirection.rtl,
+                  style: const TextStyle(fontSize: 21)),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: new Text(
-                    Provider.of<LanProvider>(context,listen: false).texts('yes?'),
-                    textDirection:  Provider.of<LanProvider>(context).isEn
+                    Provider.of<LanProvider>(context, listen: false)
+                        .texts('yes?'),
+                    textDirection: Provider.of<LanProvider>(context).isEn
                         ? TextDirection.ltr
                         : TextDirection.rtl,
-                    style: const TextStyle(fontSize: 17,color: Colors.red),
+                    style: const TextStyle(fontSize: 17, color: Colors.red),
                   ),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
                   child: new Text(
-                    Provider.of<LanProvider>(context,listen: false).texts('cancel?'),
-                    textDirection:  Provider.of<LanProvider>(context).isEn
+                    Provider.of<LanProvider>(context, listen: false)
+                        .texts('cancel?'),
+                    textDirection: Provider.of<LanProvider>(context).isEn
                         ? TextDirection.ltr
                         : TextDirection.rtl,
                     style: const TextStyle(fontSize: 17),
@@ -245,7 +281,9 @@ class _MyHomepageState extends State<MyHomepage> {
     }
 
     return Directionality(
-      textDirection:  Provider.of<LanProvider>(context).isEn ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: Provider.of<LanProvider>(context).isEn
+          ? TextDirection.ltr
+          : TextDirection.rtl,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -264,31 +302,40 @@ class _MyHomepageState extends State<MyHomepage> {
                         radius: 10,
                         backgroundColor: Colors.red,
                         child: Text(
-                          Provider.of<MyProvider>(context).myCart.length.toString(),
+                          Provider.of<MyProvider>(context)
+                              .myCart
+                              .length
+                              .toString(),
                           style: const TextStyle(color: Colors.white),
                         )),
                 ]),
               ),
             ],
             centerTitle: true,
-            title: Text( Provider.of<LanProvider>(context,listen: false).texts('Drawer1')),
+            title: Text(Provider.of<LanProvider>(context, listen: false)
+                .texts('Drawer1')),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               try {
                 setState(() {
-                  Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                  Provider.of<MyProvider>(context, listen: false).isLoading =
+                      true;
                 });
-                await Provider.of<MyProvider>(context,listen: false).sendLocationToDB(context);
+                await Provider.of<MyProvider>(context, listen: false)
+                    .sendLocationToDB(context);
                 setState(() {
-                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                  Provider.of<MyProvider>(context, listen: false).isLoading =
+                      false;
                 });
               } catch (e) {
                 setState(() {
-                  Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                  Provider.of<MyProvider>(context, listen: false).isLoading =
+                      false;
                 });
                 Fluttertoast.showToast(
-                    msg:  Provider.of<LanProvider>(context,listen: false).texts('Error occurred !'),
+                    msg: Provider.of<LanProvider>(context, listen: false)
+                        .texts('Error occurred !'),
                     toastLength: Toast.LENGTH_SHORT,
                     backgroundColor: Colors.red,
                     textColor: Colors.white,
@@ -296,7 +343,7 @@ class _MyHomepageState extends State<MyHomepage> {
                 print(e);
               }
             },
-            child: !Provider.of<MyProvider>(context,listen: false).isLoading
+            child: !Provider.of<MyProvider>(context, listen: false).isLoading
                 ? Icon(Icons.my_location)
                 : CircularProgressIndicator(),
             backgroundColor: Theme.of(context).accentColor,
@@ -312,10 +359,22 @@ class _MyHomepageState extends State<MyHomepage> {
                   width: double.infinity,
                   child: Carousel(
                     images: <Widget>[
-                      Image.asset(Provider.of<MyProvider>(context,listen: false).imageFun[0], fit: BoxFit.cover),
-                      Image.asset(Provider.of<MyProvider>(context,listen: false).imageFun[1], fit: BoxFit.cover),
-                      Image.asset(Provider.of<MyProvider>(context,listen: false).imageFun[2], fit: BoxFit.fill),
-                      Image.asset(Provider.of<MyProvider>(context,listen: false).imageFun[3], fit: BoxFit.fill),
+                      Image.asset(
+                          Provider.of<MyProvider>(context, listen: false)
+                              .imageFun[0],
+                          fit: BoxFit.cover),
+                      Image.asset(
+                          Provider.of<MyProvider>(context, listen: false)
+                              .imageFun[1],
+                          fit: BoxFit.cover),
+                      Image.asset(
+                          Provider.of<MyProvider>(context, listen: false)
+                              .imageFun[2],
+                          fit: BoxFit.fill),
+                      Image.asset(
+                          Provider.of<MyProvider>(context, listen: false)
+                              .imageFun[3],
+                          fit: BoxFit.fill),
                     ],
                     dotColor: Colors.white,
                     dotSize: 5,
@@ -331,7 +390,8 @@ class _MyHomepageState extends State<MyHomepage> {
                     SizedBox(width: getWidth() * 0.03),
                     Expanded(
                       child: Text(
-                        Provider.of<LanProvider>(context,listen: false).texts('order ur food..'),
+                        Provider.of<LanProvider>(context, listen: false)
+                            .texts('order ur food..'),
                         maxLines: 3,
                         style: TextStyle(
                             fontSize: getWidth() * 0.06,
@@ -363,7 +423,8 @@ class _MyHomepageState extends State<MyHomepage> {
                     SizedBox(width: getWidth() * 0.03),
                     Expanded(
                       child: Text(
-                        Provider.of<LanProvider>(context,listen: false).texts('choose ur..'),
+                        Provider.of<LanProvider>(context, listen: false)
+                            .texts('choose ur..'),
                         maxLines: 2,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -374,15 +435,17 @@ class _MyHomepageState extends State<MyHomepage> {
                 ),
                 SizedBox(height: getHeight() * 0.02),
                 Container(
-                  height: shortestSide<650?getHeight() * 1.17:getHeight()*0.82,
+                  height: shortestSide < 650
+                      ? getHeight() * 1.17
+                      : getHeight() * 0.82,
                   child: GridView(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: shortestSide<700?220:300,
-                      mainAxisSpacing: shortestSide<700?25:50,
+                      maxCrossAxisExtent: shortestSide < 700 ? 220 : 300,
+                      mainAxisSpacing: shortestSide < 700 ? 25 : 50,
                       crossAxisSpacing: 1,
-                      childAspectRatio: shortestSide<700?1.5:1,
+                      childAspectRatio: shortestSide < 700 ? 1.5 : 1,
                     ),
                     children: [
                       funImage('file/معجنات ورد.png', "معجنات ورد"),

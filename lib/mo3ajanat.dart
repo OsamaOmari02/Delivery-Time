@@ -10,21 +10,20 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'LanguageProvider.dart';
 
-class PizzaScreen extends StatefulWidget {
+class Mo3ajanatScreen extends StatefulWidget {
   @override
-  _PizzaScreenState createState() => _PizzaScreenState();
+  _Mo3ajanatScreenState createState() => _Mo3ajanatScreenState();
 }
 
 var tab1p;
 var tab2p;
 var tab3p;
 
-class _PizzaScreenState extends State<PizzaScreen> {
-
+class _Mo3ajanatScreenState extends State<Mo3ajanatScreen> {
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<MyProvider>(context, listen: false).fetchMealsPizza(
+      Provider.of<MyProvider>(context, listen: false).fetchMealsMo3ajanat(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
     super.initState();
@@ -46,7 +45,7 @@ class _PizzaScreenState extends State<PizzaScreen> {
       child: DefaultTabController(
         length:
             Provider.of<MyProvider>(context, listen: false).restaurantName ==
-                    'بيتزا المفرق'
+                    'ارزه لبنان'
                 ? 3
                 : 2,
         child: Scaffold(
@@ -55,18 +54,14 @@ class _PizzaScreenState extends State<PizzaScreen> {
             title: Text(
                 Provider.of<MyProvider>(context, listen: false).restaurantName),
             bottom: TabBar(
-              labelPadding:EdgeInsets.symmetric(horizontal: getWidth()*0.1),
-              // isScrollable: true,
+              isScrollable: true,
               tabs: [
                 Tab(
                     text: Provider.of<LanProvider>(context, listen: false)
-                        .texts('tabPizza')),
-                if (Provider.of<MyProvider>(context, listen: false)
-                        .restaurantName ==
-                    'بيتزا المفرق')
-                  Tab(
-                      text: Provider.of<LanProvider>(context, listen: false)
-                          .texts('tabPM')),
+                        .texts('tabArza')),
+                Tab(
+                    text: Provider.of<LanProvider>(context, listen: false)
+                        .texts('tabMashrouh')),
                 Tab(
                     text: Provider.of<LanProvider>(context, listen: false)
                         .texts('tab3')),
@@ -138,10 +133,7 @@ class _PizzaScreenState extends State<PizzaScreen> {
           body: TabBarView(
             children: <Widget>[
               First(),
-              if (Provider.of<MyProvider>(context, listen: false)
-                      .restaurantName ==
-                  'بيتزا المفرق')
-                Second(),
+              Second(),
               Third(),
             ],
           ),
@@ -162,7 +154,7 @@ class _FirstState extends State<First> {
   void initState() {
     tab1p = FirebaseFirestore.instance
         .collection(
-            '/Pizza/${Provider.of<MyProvider>(context, listen: false).restaurantName}/Pizza').orderBy("meal name")
+            '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/Pizza').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -170,35 +162,59 @@ class _FirstState extends State<First> {
   int _counter = 0;
   double _price = 0.00;
 
-  Widget checkBox1(index,setState){
-    return CheckboxListTile(
-        title: Text(Provider.of<MyProvider>(context)
-        .pizzaTypes[index]
-        .title),
-    value: Provider.of<MyProvider>(context, listen: false)
-        .pizzaTypes[index]
-        .value,
-    onChanged: (newValue) =>
-    Provider.of<MyProvider>(context, listen: false)
-        .checkFun(newValue, index),
-    controlAffinity: ListTileControlAffinity.leading,
+  Widget radioListType(index, setState) {
+    return RadioListTile(
+      value: Provider.of<MyProvider>(context).pizzaTypes2[index].value,
+      groupValue: Provider.of<MyProvider>(context).radioValue3,
+      onChanged: (val) {
+        setState(() {
+          Provider.of<MyProvider>(context, listen: false).radioValue3 = val!;
+        });
+      },
+      title: Text(Provider.of<MyProvider>(context).pizzaTypes2[index].title),
     );
   }
-  Widget checkBox2(index,setState){
-    return CheckboxListTile(
-      title: Text(Provider.of<MyProvider>(context)
-          .pizzaTypes1[index]
-          .title),
-      value: Provider.of<MyProvider>(context, listen: false)
-          .pizzaTypes1[index]
-          .value,
-      onChanged: (newValue) =>
-          Provider.of<MyProvider>(context, listen: false)
-              .checkFun1(newValue, index),
-      controlAffinity: ListTileControlAffinity.leading,
+
+  Widget radioListType1(index, setState) {
+    return RadioListTile(
+      value: Provider.of<MyProvider>(context).mo3ajanat1[index].value,
+      groupValue: Provider.of<MyProvider>(context).radioValue4,
+      onChanged: (val) {
+        setState(() {
+          Provider.of<MyProvider>(context, listen: false).radioValue4 = val!;
+        });
+      },
+      title: Text(Provider.of<MyProvider>(context).mo3ajanat1[index].title),
     );
   }
-  bottomSheet() {
+
+  Widget radioListType2(index, setState) {
+    return RadioListTile(
+      value: Provider.of<MyProvider>(context).mo3ajanat2[index].value,
+      groupValue: Provider.of<MyProvider>(context).radioValue5,
+      onChanged: (val) {
+        setState(() {
+          Provider.of<MyProvider>(context, listen: false).radioValue5 = val!;
+        });
+      },
+      title: Text(Provider.of<MyProvider>(context).mo3ajanat2[index].title),
+    );
+  }
+
+  Widget radioListType3(index, setState) {
+    return RadioListTile(
+      value: Provider.of<MyProvider>(context).mo3ajanat3[index].value,
+      groupValue: Provider.of<MyProvider>(context).radioValue6,
+      onChanged: (val) {
+        setState(() {
+          Provider.of<MyProvider>(context, listen: false).radioValue6 = val!;
+        });
+      },
+      title: Text(Provider.of<MyProvider>(context).mo3ajanat3[index].title),
+    );
+  }
+
+  bottomSheet(mealName) {
     return Directionality(
         textDirection: Provider.of<LanProvider>(context).isEn
             ? TextDirection.ltr
@@ -222,14 +238,23 @@ class _FirstState extends State<First> {
             child: StatefulBuilder(builder: (BuildContext context,
                 void Function(void Function()) setState) {
               return ListView.builder(
-                itemCount: Provider.of<MyProvider>(context).restaurantName ==
-                        'بيتزا المفرق'
-                    ? Provider.of<MyProvider>(context).pizzaTypes.length
-                    : Provider.of<MyProvider>(context).pizzaTypes1.length,
+                itemCount: mealName.toString().startsWith('بيتزا')
+                    ? Provider.of<MyProvider>(context).pizzaTypes2.length
+                    : mealName == 'معجنات صغير'
+                        ? Provider.of<MyProvider>(context).mo3ajanat1.length
+                        : mealName == 'معجنات كبير'
+                            ? Provider.of<MyProvider>(context).mo3ajanat2.length
+                            : Provider.of<MyProvider>(context)
+                                .mo3ajanat3
+                                .length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Provider.of<MyProvider>(context).restaurantName ==
-                      'بيتزا المفرق'
-                      ? checkBox1(index,setState):checkBox2(index,setState);
+                  return mealName.toString().startsWith('بيتزا')
+                      ? radioListType(index, setState)
+                      : mealName == 'معجنات صغير'
+                          ? radioListType1(index, setState)
+                          : mealName == 'معجنات كبير'
+                              ? radioListType2(index, setState)
+                              : radioListType3(index, setState);
                 },
               );
             }),
@@ -290,15 +315,18 @@ class _FirstState extends State<First> {
                                   .texts('add')),
                           onPressed: () {
                             Provider.of<MyProvider>(context, listen: false)
-                                .addFoodCartPizza(_counter);
-                            Provider.of<MyProvider>(context, listen: false)
-                                .restaurantName=='بيتزا المفرق'?
-                            Provider.of<MyProvider>(context, listen: false)
-                                .setFalse():Provider.of<MyProvider>(context, listen: false)
-                                .setFalse1();
+                                .addFoodCartRadioMo3ajanat(_counter,mealName);
                             setState(() {
                               _price = 0.00;
                               _counter = 0;
+                              Provider.of<MyProvider>(context, listen: false)
+                                  .radioValue3 = null;
+                              Provider.of<MyProvider>(context, listen: false)
+                                  .radioValue4 = null;
+                              Provider.of<MyProvider>(context, listen: false)
+                                  .radioValue5 = null;
+                              Provider.of<MyProvider>(context, listen: false)
+                                  .radioValue6 = null;
                             });
                             Navigator.of(context).pop();
                           })
@@ -506,7 +534,7 @@ class _FirstState extends State<First> {
                                 });
                                 showModalBottomSheet(
                                     context: context,
-                                    builder: (_) => bottomSheet());
+                                    builder: (_) => bottomSheet(resData[index]['meal name'].toString()));
                                 setState(() {
                                   Provider.of<MyProvider>(context,
                                           listen: false)
@@ -558,7 +586,7 @@ class _FirstState extends State<First> {
                                 });
                                 showModalBottomSheet(
                                     context: context,
-                                    builder: (_) => bottomSheet());
+                                    builder: (_) => bottomSheet(resData[index]['meal name'].toString()));
                                 setState(() {
                                   Provider.of<MyProvider>(context,
                                           listen: false)
@@ -610,7 +638,7 @@ class _SecondState extends State<Second> {
   void initState() {
     tab2p = FirebaseFirestore.instance
         .collection(
-            '/Pizza/${Provider.of<MyProvider>(context, listen: false).restaurantName}/broasted').orderBy("meal name")
+            '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/mashrouh').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -911,7 +939,7 @@ class _ThirdState extends State<Third> {
   void initState() {
     tab3p = FirebaseFirestore.instance
         .collection(
-            '/Pizza/${Provider.of<MyProvider>(context, listen: false).restaurantName}/others').orderBy("meal name")
+            '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/others').orderBy("meal name")
         .snapshots();
     super.initState();
   }
