@@ -236,7 +236,7 @@ class _FirstState extends State<First> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -286,7 +286,37 @@ class _FirstState extends State<First> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -436,7 +466,7 @@ class _FirstState extends State<First> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -444,7 +474,7 @@ class _FirstState extends State<First> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -487,7 +517,7 @@ class _FirstState extends State<First> {
                                                   listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                             context,
                                             listen: false)
                                         .texts('foodCart'));
@@ -557,7 +587,57 @@ class _SecondState extends State<Second> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return Directionality(
+            textDirection: Provider.of<LanProvider>(context).isEn
+                ? TextDirection.ltr
+                : TextDirection.rtl,
+            child: AlertDialog(
+              title: Text(
+                title,
+                style: const TextStyle(fontSize: 23),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('cancel?'),
+                          style:
+                          const TextStyle(fontSize: 19, color: Colors.red)),
+                      onTap: () => Navigator.of(context).pop()),
+                ),
+                const SizedBox(width: 11),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('yes?'),
+                          style: const TextStyle(fontSize: 19)),
+                      onPressed: () {
+                        Provider.of<MyProvider>(context, listen: false)
+                            .myCartClear();
+                        Navigator.of(context).pop();
+                      }),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+  dialog2(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -588,7 +668,6 @@ class _SecondState extends State<Second> {
           );
         });
   }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -738,7 +817,7 @@ class _SecondState extends State<Second> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -746,7 +825,7 @@ class _SecondState extends State<Second> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -789,7 +868,7 @@ class _SecondState extends State<Second> {
                                                   listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                             context,
                                             listen: false)
                                         .texts('foodCart'));
@@ -859,7 +938,57 @@ class _ThirdState extends State<Third> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return Directionality(
+            textDirection: Provider.of<LanProvider>(context).isEn
+                ? TextDirection.ltr
+                : TextDirection.rtl,
+            child: AlertDialog(
+              title: Text(
+                title,
+                style: const TextStyle(fontSize: 23),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('cancel?'),
+                          style:
+                          const TextStyle(fontSize: 19, color: Colors.red)),
+                      onTap: () => Navigator.of(context).pop()),
+                ),
+                const SizedBox(width: 11),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('yes?'),
+                          style: const TextStyle(fontSize: 19)),
+                      onPressed: () {
+                        Provider.of<MyProvider>(context, listen: false)
+                            .myCartClear();
+                        Navigator.of(context).pop();
+                      }),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+  dialog2(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -1040,7 +1169,7 @@ class _ThirdState extends State<Third> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -1048,7 +1177,7 @@ class _ThirdState extends State<Third> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -1091,7 +1220,7 @@ class _ThirdState extends State<Third> {
                                                   listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                             context,
                                             listen: false)
                                         .texts('foodCart'));
@@ -1161,7 +1290,7 @@ class _ChickenState extends State<Chicken> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -1189,7 +1318,7 @@ class _ChickenState extends State<Chicken> {
                           Provider.of<LanProvider>(context, listen: false)
                               .texts('cancel?'),
                           style:
-                              const TextStyle(fontSize: 19, color: Colors.red)),
+                          const TextStyle(fontSize: 19, color: Colors.red)),
                       onTap: () => Navigator.of(context).pop()),
                 ),
                 const SizedBox(width: 11),
@@ -1211,7 +1340,37 @@ class _ChickenState extends State<Chicken> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -1361,7 +1520,7 @@ class _ChickenState extends State<Chicken> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -1369,7 +1528,7 @@ class _ChickenState extends State<Chicken> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -1412,7 +1571,7 @@ class _ChickenState extends State<Chicken> {
                                                   listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                             context,
                                             listen: false)
                                         .texts('foodCart'));
@@ -1482,7 +1641,7 @@ class _BreakFastState extends State<BreakFast> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -1532,7 +1691,37 @@ class _BreakFastState extends State<BreakFast> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -1682,7 +1871,7 @@ class _BreakFastState extends State<BreakFast> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -1690,7 +1879,7 @@ class _BreakFastState extends State<BreakFast> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -1733,7 +1922,7 @@ class _BreakFastState extends State<BreakFast> {
                                                   listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                             context,
                                             listen: false)
                                         .texts('foodCart'));
@@ -1803,7 +1992,7 @@ class _AldwairyState extends State<Aldwairy> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -1853,7 +2042,37 @@ class _AldwairyState extends State<Aldwairy> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -2003,7 +2222,7 @@ class _AldwairyState extends State<Aldwairy> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -2011,7 +2230,7 @@ class _AldwairyState extends State<Aldwairy> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -2054,7 +2273,7 @@ class _AldwairyState extends State<Aldwairy> {
                                                   listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                             context,
                                             listen: false)
                                         .texts('foodCart'));
@@ -2123,7 +2342,7 @@ class _FalafelState extends State<Falafel> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -2173,7 +2392,37 @@ class _FalafelState extends State<Falafel> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -2323,7 +2572,7 @@ class _FalafelState extends State<Falafel> {
                                       listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -2331,7 +2580,7 @@ class _FalafelState extends State<Falafel> {
                                       listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                     listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -2374,7 +2623,7 @@ class _FalafelState extends State<Falafel> {
                                               listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                         context,
                                         listen: false)
                                         .texts('foodCart'));
@@ -2443,7 +2692,7 @@ class _Mo3ajanatState extends State<Mo3ajanat> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -2493,7 +2742,37 @@ class _Mo3ajanatState extends State<Mo3ajanat> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -2643,7 +2922,7 @@ class _Mo3ajanatState extends State<Mo3ajanat> {
                                       listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -2651,7 +2930,7 @@ class _Mo3ajanatState extends State<Mo3ajanat> {
                                       listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                     listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -2694,7 +2973,7 @@ class _Mo3ajanatState extends State<Mo3ajanat> {
                                               listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                         context,
                                         listen: false)
                                         .texts('foodCart'));
@@ -2763,7 +3042,7 @@ class _HummusState extends State<Hummus> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -2813,7 +3092,37 @@ class _HummusState extends State<Hummus> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -2963,7 +3272,7 @@ class _HummusState extends State<Hummus> {
                                       listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -2971,7 +3280,7 @@ class _HummusState extends State<Hummus> {
                                       listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                     listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -3014,7 +3323,7 @@ class _HummusState extends State<Hummus> {
                                               listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                         context,
                                         listen: false)
                                         .texts('foodCart'));

@@ -10,20 +10,20 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'LanguageProvider.dart';
 
-class Mo3ajanatScreen extends StatefulWidget {
+class MilkScreen extends StatefulWidget {
   @override
-  _Mo3ajanatScreenState createState() => _Mo3ajanatScreenState();
+  _MilkScreenState createState() => _MilkScreenState();
 }
 
 var tab1p;
 var tab2p;
 var tab3p;
 
-class _Mo3ajanatScreenState extends State<Mo3ajanatScreen> {
+class _MilkScreenState extends State<MilkScreen> {
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<MyProvider>(context, listen: false).fetchMealsMo3ajanat(
+      Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
           Provider.of<MyProvider>(context, listen: false).restaurantName);
     });
     super.initState();
@@ -43,40 +43,25 @@ class _Mo3ajanatScreenState extends State<Mo3ajanatScreen> {
           ? TextDirection.ltr
           : TextDirection.rtl,
       child: DefaultTabController(
-        length:
-            Provider.of<MyProvider>(context, listen: false).restaurantName ==
-                        'ارزه لبنان' ||
-                    Provider.of<MyProvider>(context, listen: false)
-                            .restaurantName ==
-                        'معجنات ورد'
-                ? 3
-                : 2,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(
                 Provider.of<MyProvider>(context, listen: false).restaurantName),
             bottom: TabBar(
+              // labelPadding: EdgeInsets.symmetric(horizontal: getWidth() * 0.1),
               // isScrollable: true,
               tabs: [
-                if (Provider.of<MyProvider>(context, listen: false)
-                        .restaurantName ==
-                    'معجنات ورد')
-                  Tab(
-                      text: Provider.of<LanProvider>(context, listen: false)
-                          .texts('tabManakeesh')),
                 Tab(
                     text: Provider.of<LanProvider>(context, listen: false)
-                        .texts('tabArza')),
-                if (Provider.of<MyProvider>(context, listen: false)
-                        .restaurantName !=
-                    'معجنات ورد')
-                  Tab(
-                      text: Provider.of<LanProvider>(context, listen: false)
-                          .texts('tabMashrouh')),
+                        .texts('tabMilk')),
                 Tab(
                     text: Provider.of<LanProvider>(context, listen: false)
-                        .texts('tab3')),
+                        .texts('tabMixes')),
+                Tab(
+                    text: Provider.of<LanProvider>(context, listen: false)
+                        .texts('tabHot')),
               ],
             ),
           ),
@@ -114,7 +99,7 @@ class _Mo3ajanatScreenState extends State<Mo3ajanatScreen> {
                           style: const TextStyle(
                               fontSize: 17, color: Colors.white),
                         ),
-                        const Spacer(),
+                        Spacer(),
                         Text(
                           Provider.of<LanProvider>(context, listen: false)
                               .texts('total'),
@@ -143,17 +128,9 @@ class _Mo3ajanatScreenState extends State<Mo3ajanatScreen> {
             ),
           ),
           body: TabBarView(
-            physics: const BouncingScrollPhysics(),
             children: <Widget>[
-              if (Provider.of<MyProvider>(context, listen: false)
-                      .restaurantName ==
-                  'معجنات ورد')
-                Manakeesh(),
               First(),
-              if (Provider.of<MyProvider>(context, listen: false)
-                      .restaurantName !=
-                  'معجنات ورد')
-                Second(),
+              Second(),
               Third(),
             ],
           ),
@@ -174,8 +151,8 @@ class _FirstState extends State<First> {
   void initState() {
     tab1p = FirebaseFirestore.instance
         .collection(
-            '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/Pizza')
-        .orderBy("meal name")
+            '/drinks/${Provider.of<MyProvider>(context, listen: false).restaurantName}/milk')
+        .orderBy("meal price")
         .snapshots();
     super.initState();
   }
@@ -183,85 +160,33 @@ class _FirstState extends State<First> {
   int _counter = 0;
   double _price = 0.00;
 
-  Widget radioListType(index, setState) {
-    return RadioListTile(
-      value: Provider.of<MyProvider>(context).pizzaTypes2[index].value,
-      groupValue: Provider.of<MyProvider>(context).radioValue3,
-      onChanged: (val) {
-        setState(() {
-          Provider.of<MyProvider>(context, listen: false).radioValue3 = val!;
-        });
-      },
-      title: Text(Provider.of<MyProvider>(context).pizzaTypes2[index].title),
-    );
-  }
-
   Widget radioListType1(index, setState) {
     return RadioListTile(
-      value: Provider.of<MyProvider>(context).mo3ajanat1[index].value,
-      groupValue: Provider.of<MyProvider>(context).radioValue4,
+      value: Provider.of<MyProvider>(context).milkTypes[index].value,
+      groupValue: Provider.of<MyProvider>(context).radioValue7,
       onChanged: (val) {
         setState(() {
-          Provider.of<MyProvider>(context, listen: false).radioValue4 = val!;
+          Provider.of<MyProvider>(context, listen: false).radioValue7 = val!;
         });
       },
-      title: Text(Provider.of<MyProvider>(context).mo3ajanat1[index].title),
+      title: Text(Provider.of<MyProvider>(context).milkTypes[index].title),
     );
   }
 
   Widget radioListType2(index, setState) {
     return RadioListTile(
-      value: Provider.of<MyProvider>(context).mo3ajanat2[index].value,
-      groupValue: Provider.of<MyProvider>(context).radioValue5,
+      value: Provider.of<MyProvider>(context).iceCreamTypes[index].value,
+      groupValue: Provider.of<MyProvider>(context).radioValue8,
       onChanged: (val) {
         setState(() {
-          Provider.of<MyProvider>(context, listen: false).radioValue5 = val!;
+          Provider.of<MyProvider>(context, listen: false).radioValue8 = val!;
         });
       },
-      title: Text(Provider.of<MyProvider>(context).mo3ajanat2[index].title),
+      title: Text(Provider.of<MyProvider>(context).iceCreamTypes[index].title),
     );
   }
 
-  Widget radioListType3(index, setState) {
-    return RadioListTile(
-      value: Provider.of<MyProvider>(context).mo3ajanat3[index].value,
-      groupValue: Provider.of<MyProvider>(context).radioValue6,
-      onChanged: (val) {
-        setState(() {
-          Provider.of<MyProvider>(context, listen: false).radioValue6 = val!;
-        });
-      },
-      title: Text(Provider.of<MyProvider>(context).mo3ajanat3[index].title),
-    );
-  }
-
-  Widget radioListType4(index, setState) {
-    return RadioListTile(
-      value: Provider.of<MyProvider>(context).pizzaTypes3[index].value,
-      groupValue: Provider.of<MyProvider>(context).radioValue13,
-      onChanged: (val) {
-        setState(() {
-          Provider.of<MyProvider>(context, listen: false).radioValue13 = val!;
-        });
-      },
-      title: Text(Provider.of<MyProvider>(context).pizzaTypes3[index].title),
-    );
-  }
-
-  Widget radioListType5(index, setState) {
-    return RadioListTile(
-      value: Provider.of<MyProvider>(context).mo3ajanat4[index].value,
-      groupValue: Provider.of<MyProvider>(context).radioValue14,
-      onChanged: (val) {
-        setState(() {
-          Provider.of<MyProvider>(context, listen: false).radioValue14 = val!;
-        });
-      },
-      title: Text(Provider.of<MyProvider>(context).mo3ajanat4[index].title),
-    );
-  }
-
-  bottomSheet1(mealName) {
+  bottomSheet(itemCount, mealName) {
     return Directionality(
         textDirection: Provider.of<LanProvider>(context).isEn
             ? TextDirection.ltr
@@ -285,149 +210,13 @@ class _FirstState extends State<First> {
             child: StatefulBuilder(builder: (BuildContext context,
                 void Function(void Function()) setState) {
               return ListView.builder(
-                itemCount: mealName.toString() == 'بيتزا'
-                    ? Provider.of<MyProvider>(context).pizzaTypes3.length
-                    : Provider.of<MyProvider>(context).mo3ajanat4.length,
+                itemCount: itemCount,
                 itemBuilder: (BuildContext context, int index) {
-                  return mealName.toString() == 'بيتزا'
-                      ? radioListType4(index, setState)
-                      : radioListType5(index, setState);
-                },
-              );
-            }),
-          ),
-          bottomNavigationBar: StatefulBuilder(builder:
-              (BuildContext context, void Function(void Function()) setState) {
-            return Container(
-              height: getWidth() * 0.2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                      Provider.of<LanProvider>(context, listen: false)
-                              .texts('total') +
-                          ' ${_price.toStringAsFixed(2)}',
-                      style: TextStyle(fontSize: 15)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _counter != 0
-                          ? IconButton(
-                              icon: const Icon(
-                                Icons.remove,
-                                color: Colors.red,
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  _counter--;
-                                  _price -= Provider.of<MyProvider>(context,
-                                              listen: false)
-                                          .mealPrice ??
-                                      0;
-                                });
-                              },
-                            )
-                          : Container(),
-                      Text(_counter.toString()),
-                      IconButton(
-                          icon: const Icon(
-                            Icons.add,
-                            color: Colors.green,
-                          ),
-                          onPressed: () {
-                            if (Provider.of<MyProvider>(context,
-                                listen: false)
-                                .myCart
-                                .length !=
-                                0 &&
-                                Provider.of<MyProvider>(context,
-                                    listen: false)
-                                    .restaurantName !=
-                                    Provider.of<MyProvider>(context,
-                                        listen: false)
-                                        .myCart[0]
-                                        .resName)
-                              return dialog1(Provider.of<LanProvider>(
-                                  context,
-                                  listen: false)
-                                  .texts('foodCart'));
-                            setState(() {
-                              _counter++;
-                              _price += Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .mealPrice ??
-                                  0;
-                            });
-                          }),
-                    ],
-                  ),
-                  _counter != 0
-                      ? TextButton(
-                          child: Text(
-                              Provider.of<LanProvider>(context, listen: false)
-                                  .texts('add')),
-                          onPressed: () {
-                            Provider.of<MyProvider>(context, listen: false)
-                                .addFoodCartRadioMo3ajanat1(_counter, mealName);
-                            setState(() {
-                              _price = 0.00;
-                              _counter = 0;
-                              Provider.of<MyProvider>(context, listen: false)
-                                  .radioValue13 = null;
-                              Provider.of<MyProvider>(context, listen: false)
-                                  .radioValue14 = null;
-                            });
-                            Navigator.of(context).pop();
-                          })
-                      : Container(),
-                ],
-              ),
-            );
-          }),
-        ));
-  }
-
-  bottomSheet(mealName) {
-    return Directionality(
-        textDirection: Provider.of<LanProvider>(context).isEn
-            ? TextDirection.ltr
-            : TextDirection.rtl,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              Provider.of<LanProvider>(context, listen: false)
-                  .texts('choose pizza'),
-              style: TextStyle(
-                  color: Provider.of<MyProvider>(context).isDark
-                      ? CupertinoColors.white
-                      : CupertinoColors.black,
-                  fontWeight: FontWeight.bold),
-            ),
-            backgroundColor: Theme.of(context).canvasColor,
-            elevation: 2,
-          ),
-          body: Scrollbar(
-            child: StatefulBuilder(builder: (BuildContext context,
-                void Function(void Function()) setState) {
-              return ListView.builder(
-                itemCount: mealName.toString().startsWith('بيتزا')
-                    ? Provider.of<MyProvider>(context).pizzaTypes2.length
-                    : mealName == 'معجنات صغير'
-                        ? Provider.of<MyProvider>(context).mo3ajanat1.length
-                        : mealName == 'معجنات كبير'
-                            ? Provider.of<MyProvider>(context).mo3ajanat2.length
-                            : Provider.of<MyProvider>(context)
-                                .mo3ajanat3
-                                .length,
-                itemBuilder: (BuildContext context, int index) {
-                  return mealName.toString().startsWith('بيتزا')
-                      ? radioListType(index, setState)
-                      : mealName == 'معجنات صغير'
+                  return mealName.toString() == 'بوظة كبير'
+                      ? radioListType2(index, setState)
+                      : mealName.toString().startsWith('ميلك شيك')
                           ? radioListType1(index, setState)
-                          : mealName == 'معجنات كبير'
-                              ? radioListType2(index, setState)
-                              : radioListType3(index, setState);
+                          : Container();
                 },
               );
             }),
@@ -504,18 +293,14 @@ class _FirstState extends State<First> {
                                   .texts('add')),
                           onPressed: () {
                             Provider.of<MyProvider>(context, listen: false)
-                                .addFoodCartRadioMo3ajanat(_counter, mealName);
+                                .addFoodCartRadioMilk(_counter, mealName);
                             setState(() {
                               _price = 0.00;
                               _counter = 0;
                               Provider.of<MyProvider>(context, listen: false)
-                                  .radioValue3 = null;
+                                  .radioValue7 = null;
                               Provider.of<MyProvider>(context, listen: false)
-                                  .radioValue4 = null;
-                              Provider.of<MyProvider>(context, listen: false)
-                                  .radioValue5 = null;
-                              Provider.of<MyProvider>(context, listen: false)
-                                  .radioValue6 = null;
+                                  .radioValue8 = null;
                             });
                             Navigator.of(context).pop();
                           })
@@ -724,121 +509,285 @@ class _FirstState extends State<First> {
                         ),
                       ),
                     ),
-                    Column(
-                      children: [
-                        if (Provider.of<MyProvider>(context, listen: false)
-                            .isLoading)
-                          const CircularProgressIndicator(),
-                        if (!Provider.of<MyProvider>(context, listen: false)
-                            .isLoading)
-                          IconButton(
-                            icon: Icon(
-                              Icons.local_pizza,
-                              color: Colors.blue,
-                            ),
-                            onPressed: () async {
-                              try {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = true;
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .mealID = resData[index].id;
-                                  Provider.of<MyProvider>(context,
+                    resData[index]['meal name'].toString() != 'بوظة كبير' &&
+                            (resData[index]['meal name'] != 'ميلك شيك كبير' &&
+                                resData[index]['meal name'] != 'ميلك شيك صغير')
+                        ? Column(
+                            children: [
+                              if (Provider.of<MyProvider>(context,
+                                      listen: false)
+                                  .isLoading)
+                                const CircularProgressIndicator(),
+                              if (!Provider.of<MyProvider>(context,
+                                      listen: false)
+                                  .isLoading)
+                                IconButton(
+                                  alignment: Alignment.topLeft,
+                                  icon: Icon(
+                                    Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isMyFav(resData[index].id)
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () async {
+                                    try {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = true;
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .mealID = resData[index].id;
+                                      });
+                                      await Provider.of<MyProvider>(context,
                                               listen: false)
-                                          .mealPrice =
-                                      double.parse(
-                                          resData[index]['meal price']);
-                                });
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (_) => resData[index]['resName']=='ارزه لبنان'?bottomSheet(resData[index]
-                                            ['meal name']
-                                        .toString()):bottomSheet1(resData[index]['meal name'].toString()));
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                              } on FirebaseException catch (e) {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                                dialog2(e.message);
-                                print(e.message);
-                              } catch (e) {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                                dialog2(Provider.of<LanProvider>(context,
-                                        listen: false)
-                                    .texts('Error occurred !'));
-                                print(e);
-                              }
-                            },
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 1.0),
-                          child: TextButton(
-                            child: Text(
-                                Provider.of<LanProvider>(context, listen: false)
-                                    .texts('choose pizza'),
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.blueAccent)),
-                            onPressed: () {
-                              try {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = true;
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .mealID = resData[index].id;
-                                  Provider.of<MyProvider>(context,
+                                          .toggleFavourite();
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                    } on FirebaseException catch (e) {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                      dialog2(e.message);
+                                      print(e.message);
+                                    } catch (e) {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                      dialog2(Provider.of<LanProvider>(context,
                                               listen: false)
-                                          .mealPrice =
-                                      double.parse(
-                                          resData[index]['meal price']);
-                                });
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (_) => resData[index]['resName']=='ارزه لبنان'?bottomSheet(resData[index]
-                                    ['meal name']
-                                        .toString()):bottomSheet1(resData[index]['meal name'].toString()));
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                              } on FirebaseException catch (e) {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                                dialog2(e.message);
-                                print(e.message);
-                              } catch (e) {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                                dialog2(Provider.of<LanProvider>(context,
-                                        listen: false)
-                                    .texts('Error occurred !'));
-                                print(e);
-                              }
-                            },
+                                          .texts('Error occurred !'));
+                                      print(e);
+                                    }
+                                  },
+                                ),
+                              Row(
+                                children: [
+                                  Text(Provider.of<MyProvider>(context,
+                                                  listen: false)
+                                              .getIndex(resData[index].id) ==
+                                          -1
+                                      ? "0"
+                                      : (Provider.of<MyProvider>(context,
+                                                  listen: false)
+                                              .myCart[Provider.of<MyProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .getIndex(resData[index].id)]
+                                              .quantity)
+                                          .toString()),
+                                  IconButton(
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color: Colors.green,
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          Provider.of<MyProvider>(context,
+                                                  listen: false)
+                                              .mealID = resData[index].id;
+                                        });
+                                        if (Provider.of<MyProvider>(context,
+                                                        listen: false)
+                                                    .myCart
+                                                    .length !=
+                                                0 &&
+                                            Provider.of<MyProvider>(context,
+                                                        listen: false)
+                                                    .restaurantName !=
+                                                Provider.of<MyProvider>(context,
+                                                        listen: false)
+                                                    .myCart[0]
+                                                    .resName)
+                                          return dialog1(
+                                              Provider.of<LanProvider>(context,
+                                                      listen: false)
+                                                  .texts('foodCart'));
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .addFoodCart(
+                                                resData[index]['meal name'],
+                                                resData[index]['meal price'],
+                                                resData[index]['description']);
+                                      }),
+                                ],
+                              ),
+                              Provider.of<MyProvider>(context, listen: false)
+                                      .existsInCart(resData[index].id)
+                                  ? IconButton(
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          Provider.of<MyProvider>(context,
+                                                  listen: false)
+                                              .mealID = resData[index].id;
+                                        });
+                                        await Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .removeFoodCart(
+                                                resData[index]['meal price']);
+                                      },
+                                    )
+                                  : Container(),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              if (Provider.of<MyProvider>(context,
+                                      listen: false)
+                                  .isLoading)
+                                const CircularProgressIndicator(),
+                              if (!Provider.of<MyProvider>(context,
+                                      listen: false)
+                                  .isLoading)
+                                IconButton(
+                                  icon: Icon(
+                                    resData[index]['meal name'].toString() ==
+                                            'بوظة كبير'
+                                        ? Icons.icecream
+                                        : Icons.local_drink,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () async {
+                                    try {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = true;
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .mealID = resData[index].id;
+                                        Provider.of<MyProvider>(context,
+                                                    listen: false)
+                                                .mealPrice =
+                                            double.parse(
+                                                resData[index]['meal price']);
+                                      });
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (_) => resData[index]
+                                                          ['meal name']
+                                                      .toString() ==
+                                                  'بوظة كبير'
+                                              ? bottomSheet(9,
+                                                  resData[index]['meal name'])
+                                              : resData[index]['meal name']
+                                                      .toString()
+                                                      .startsWith('ميلك شيك')
+                                                  ? bottomSheet(
+                                                      9,
+                                                      resData[index]
+                                                          ['meal name'])
+                                                  : null);
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                    } on FirebaseException catch (e) {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                      dialog2(e.message);
+                                      print(e.message);
+                                    } catch (e) {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                      dialog2(Provider.of<LanProvider>(context,
+                                              listen: false)
+                                          .texts('Error occurred !'));
+                                      print(e);
+                                    }
+                                  },
+                                ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 1.0),
+                                child: TextButton(
+                                  child: Text(
+                                      Provider.of<LanProvider>(context,
+                                              listen: false)
+                                          .texts('choose pizza'),
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.blueAccent)),
+                                  onPressed: () {
+                                    try {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = true;
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .mealID = resData[index].id;
+                                        Provider.of<MyProvider>(context,
+                                                    listen: false)
+                                                .mealPrice =
+                                            double.parse(
+                                                resData[index]['meal price']);
+                                      });
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (_) => resData[index]
+                                                          ['meal name']
+                                                      .toString() ==
+                                                  'بوظة كبير'
+                                              ? bottomSheet(9,
+                                                  resData[index]['meal name'])
+                                              : resData[index]['meal name']
+                                                      .toString()
+                                                      .startsWith('ميلك شيك')
+                                                  ? bottomSheet(
+                                                      9,
+                                                      resData[index]
+                                                          ['meal name'])
+                                                  : null);
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                    } on FirebaseException catch (e) {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                      dialog2(e.message);
+                                      print(e.message);
+                                    } catch (e) {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,
+                                                listen: false)
+                                            .isLoading = false;
+                                      });
+                                      dialog2(Provider.of<LanProvider>(context,
+                                              listen: false)
+                                          .texts('Error occurred !'));
+                                      print(e);
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               );
@@ -861,7 +810,7 @@ class _SecondState extends State<Second> {
   void initState() {
     tab2p = FirebaseFirestore.instance
         .collection(
-            '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/mashrouh')
+            '/drinks/${Provider.of<MyProvider>(context, listen: false).restaurantName}/mixes')
         .orderBy("meal name")
         .snapshots();
     super.initState();
@@ -1193,342 +1142,141 @@ class _ThirdState extends State<Third> {
   void initState() {
     tab3p = FirebaseFirestore.instance
         .collection(
-            '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/others')
+            '/drinks/${Provider.of<MyProvider>(context, listen: false).restaurantName}/hot drinks')
         .orderBy("meal name")
         .snapshots();
     super.initState();
   }
 
-  double? width;
-  double? height;
+  int _counter = 0;
+  double _price = 0.00;
 
-  getWidth() => width = MediaQuery.of(context).size.width;
-
-  getHeight() => height = MediaQuery.of(context).size.height;
-
-  dialog1(title) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
+  bottomSheet() {
+    return Directionality(
+        textDirection: Provider.of<LanProvider>(context).isEn
+            ? TextDirection.ltr
+            : TextDirection.rtl,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
             title: Text(
-              title,
-              textAlign: Provider.of<LanProvider>(context).isEn
-                  ? TextAlign.start
-                  : TextAlign.end,
-              style: const TextStyle(fontSize: 23),
+              Provider.of<LanProvider>(context, listen: false)
+                  .texts('choose pizza'),
+              style: TextStyle(
+                  color: Provider.of<MyProvider>(context).isDark
+                      ? CupertinoColors.white
+                      : CupertinoColors.black,
+                  fontWeight: FontWeight.bold),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 7),
-            elevation: 24,
-            content: Container(
-              height: 30,
-              child: const Divider(),
-              alignment: Alignment.topCenter,
-            ),
-            actions: [
-              const SizedBox(width: 11),
-              InkWell(
-                  child: Text(
-                      Provider.of<LanProvider>(context, listen: false)
-                          .texts('ok'),
-                      style: const TextStyle(fontSize: 19)),
-                  onTap: () => Navigator.of(context).pop()),
-            ],
-          );
-        });
-  }
-  dialog2(title) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
-            title: Text(
-              title,
-              textAlign: Provider.of<LanProvider>(context).isEn
-                  ? TextAlign.start
-                  : TextAlign.end,
-              style: const TextStyle(fontSize: 23),
-            ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 7),
-            elevation: 24,
-            content: Container(
-              height: 30,
-              child: const Divider(),
-              alignment: Alignment.topCenter,
-            ),
-            actions: [
-              const SizedBox(width: 11),
-              InkWell(
-                  child: Text(
-                      Provider.of<LanProvider>(context, listen: false)
-                          .texts('ok'),
-                      style: const TextStyle(fontSize: 19)),
-                  onTap: () => Navigator.of(context).pop()),
-            ],
-          );
-        });
-  }
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: tab3p,
-      builder: (ctx, snapshot) {
-        if (snapshot.hasError)
-          return Center(
-              child: Text(Provider.of<LanProvider>(context, listen: false)
-                  .texts('something went wrong !')));
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return const Center(child: const CircularProgressIndicator());
-        return Scrollbar(
-          child: ListView.builder(
-            itemCount: snapshot.data?.docs.length ?? 0,
-            itemBuilder: (context, int index) {
-              var resData = snapshot.data!.docs;
-              return Card(
-                elevation: 3,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: Container(
-                        child: Row(
-                          children: [
-                            if (resData[index]['imageUrl'] != "")
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.fill,
-                                    imageUrl: resData[index]['imageUrl'],
-                                    placeholder: (context, url) => const Center(
-                                        child:
-                                            const CircularProgressIndicator()),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(height: getHeight() * 0.025),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  width: getWidth() * 0.54,
-                                  child: AutoSizeText(
-                                    resData[index]['meal name'],
-                                    maxLines: 2,
-                                    minFontSize: 12,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                                SizedBox(height: getHeight() * 0.01),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  width: getWidth() * 0.51,
-                                  child: AutoSizeText(
-                                    resData[index]['description'],
-                                    maxLines: 3,
-                                    minFontSize: 12,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 14, color: Colors.grey),
-                                  ),
-                                ),
-                                Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 7),
-                                  alignment: Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(top: 16),
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 7),
-                                    child: Text(
-                                      Provider.of<LanProvider>(context,
-                                                  listen: false)
-                                              .texts('price') +
-                                          " " +
-                                          resData[index]['meal price'] +
-                                          " " +
-                                          Provider.of<LanProvider>(context,
-                                                  listen: false)
-                                              .texts('jd'),
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color:
-                                              Provider.of<MyProvider>(context)
-                                                      .isDark
-                                                  ? Colors.white70
-                                                  : Colors.pink),
-                                    ),
-                                  ),
-                                ),
-                                // SizedBox(height: 50),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        if (Provider.of<MyProvider>(context, listen: false)
-                            .isLoading)
-                          const CircularProgressIndicator(),
-                        if (!Provider.of<MyProvider>(context, listen: false)
-                            .isLoading)
-                          IconButton(
-                            alignment: Alignment.topLeft,
-                            icon: Icon(
-                              Provider.of<MyProvider>(context, listen: false)
-                                      .isMyFav(resData[index].id)
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: Colors.red,
-                            ),
-                            onPressed: () async {
-                              try {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = true;
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .mealID = resData[index].id;
-                                });
-                                await Provider.of<MyProvider>(context,
-                                        listen: false)
-                                    .toggleFavourite();
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                              } on FirebaseException catch (e) {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                                dialog2(e.message);
-                                print(e.message);
-                              } catch (e) {
-                                setState(() {
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .isLoading = false;
-                                });
-                                dialog2(Provider.of<LanProvider>(context,
-                                        listen: false)
-                                    .texts('Error occurred !'));
-                                print(e);
-                              }
-                            },
-                          ),
-                        Row(
-                          children: [
-                            Text(Provider.of<MyProvider>(context, listen: false)
-                                        .getIndex(resData[index].id) ==
-                                    -1
-                                ? "0"
-                                : (Provider.of<MyProvider>(context,
-                                            listen: false)
-                                        .myCart[Provider.of<MyProvider>(context,
-                                                listen: false)
-                                            .getIndex(resData[index].id)]
-                                        .quantity)
-                                    .toString()),
-                            IconButton(
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.green,
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    Provider.of<MyProvider>(context,
-                                            listen: false)
-                                        .mealID = resData[index].id;
-                                  });
-                                  if (Provider.of<MyProvider>(context,
-                                                  listen: false)
-                                              .myCart
-                                              .length !=
-                                          0 &&
-                                      Provider.of<MyProvider>(context,
-                                                  listen: false)
-                                              .restaurantName !=
-                                          Provider.of<MyProvider>(context,
-                                                  listen: false)
-                                              .myCart[0]
-                                              .resName)
-                                    return dialog1(Provider.of<LanProvider>(
-                                            context,
-                                            listen: false)
-                                        .texts('foodCart'));
-                                  Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .addFoodCart(
-                                          resData[index]['meal name'],
-                                          resData[index]['meal price'],
-                                          resData[index]['description']);
-                                }),
-                          ],
-                        ),
-                        Provider.of<MyProvider>(context, listen: false)
-                                .existsInCart(resData[index].id)
-                            ? IconButton(
-                                icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    Provider.of<MyProvider>(context,
-                                            listen: false)
-                                        .mealID = resData[index].id;
-                                  });
-                                  await Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .removeFoodCart(
-                                          resData[index]['meal price']);
-                                },
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
+            backgroundColor: Theme.of(context).canvasColor,
+            elevation: 2,
           ),
-        );
-      },
-    );
-  }
-}
-
-//----------------------------manakeesh---------------------
-class Manakeesh extends StatefulWidget {
-  @override
-  _ManakeeshState createState() => _ManakeeshState();
-}
-
-class _ManakeeshState extends State<Manakeesh> {
-  @override
-  void initState() {
-    tab3p = FirebaseFirestore.instance
-        .collection(
-            '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/manakeesh')
-        .orderBy("meal name")
-        .snapshots();
-    super.initState();
+          body: Scrollbar(
+            child: StatefulBuilder(builder: (BuildContext context,
+                void Function(void Function()) setState) {
+              return ListView.builder(
+                itemCount: 3,
+                itemBuilder: (BuildContext context, int index) {
+                  return RadioListTile(
+                    value: Provider.of<MyProvider>(context).hotTypes[index].value,
+                    groupValue: Provider.of<MyProvider>(context).radioValue9,
+                    onChanged: (val) {
+                      setState(() {
+                        Provider.of<MyProvider>(context, listen: false).radioValue9 = val!;                      });
+                    },
+                    title: Text(Provider.of<MyProvider>(context).hotTypes[index].title),
+                  );
+                },
+              );
+            }),
+          ),
+          bottomNavigationBar: StatefulBuilder(builder:
+              (BuildContext context, void Function(void Function()) setState) {
+            return Container(
+              height: getWidth() * 0.2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('total') +
+                          ' ${_price.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 15)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _counter != 0
+                          ? IconButton(
+                        icon: const Icon(
+                          Icons.remove,
+                          color: Colors.red,
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            _counter--;
+                            _price -= Provider.of<MyProvider>(context,
+                                listen: false)
+                                .mealPrice ??
+                                0;
+                          });
+                        },
+                      )
+                          : Container(),
+                      Text(_counter.toString()),
+                      IconButton(
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.green,
+                          ),
+                          onPressed: () {
+                            if (Provider.of<MyProvider>(context,
+                                listen: false)
+                                .myCart
+                                .length !=
+                                0 &&
+                                Provider.of<MyProvider>(context,
+                                    listen: false)
+                                    .restaurantName !=
+                                    Provider.of<MyProvider>(context,
+                                        listen: false)
+                                        .myCart[0]
+                                        .resName)
+                              return dialog1(Provider.of<LanProvider>(
+                                  context,
+                                  listen: false)
+                                  .texts('foodCart'));
+                            setState(() {
+                              _counter++;
+                              _price += Provider.of<MyProvider>(context,
+                                  listen: false)
+                                  .mealPrice ??
+                                  0;
+                            });
+                          }),
+                    ],
+                  ),
+                  _counter != 0
+                      ? TextButton(
+                      child: Text(
+                          Provider.of<LanProvider>(context, listen: false)
+                              .texts('add')),
+                      onPressed: () {
+                        Provider.of<MyProvider>(context, listen: false)
+                            .addFoodCartRadioHot(_counter);
+                        setState(() {
+                          _price = 0.00;
+                          _counter = 0;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .radioValue9 = null;
+                        });
+                        Navigator.of(context).pop();
+                      })
+                      : Container(),
+                ],
+              ),
+            );
+          }),
+        ));
   }
 
   double? width;
@@ -1711,42 +1459,45 @@ class _ManakeeshState extends State<Manakeesh> {
                     ),
                     Column(
                       children: [
-                        if (Provider.of<MyProvider>(context, listen: false)
+                        if (Provider.of<MyProvider>(context,
+                            listen: false)
                             .isLoading)
                           const CircularProgressIndicator(),
-                        if (!Provider.of<MyProvider>(context, listen: false)
+                        if (!Provider.of<MyProvider>(context,
+                            listen: false)
                             .isLoading)
                           IconButton(
-                            alignment: Alignment.topLeft,
                             icon: Icon(
-                              Provider.of<MyProvider>(context, listen: false)
-                                      .isMyFav(resData[index].id)
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: Colors.red,
+                              Icons.coffee,
+                              color: Colors.blue,
                             ),
                             onPressed: () async {
                               try {
                                 setState(() {
                                   Provider.of<MyProvider>(context,
-                                          listen: false)
+                                      listen: false)
                                       .isLoading = true;
                                   Provider.of<MyProvider>(context,
-                                          listen: false)
+                                      listen: false)
                                       .mealID = resData[index].id;
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .mealPrice =
+                                      double.parse(
+                                          resData[index]['meal price']);
                                 });
-                                await Provider.of<MyProvider>(context,
-                                        listen: false)
-                                    .toggleFavourite();
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (_) => bottomSheet());
                                 setState(() {
                                   Provider.of<MyProvider>(context,
-                                          listen: false)
+                                      listen: false)
                                       .isLoading = false;
                                 });
                               } on FirebaseException catch (e) {
                                 setState(() {
                                   Provider.of<MyProvider>(context,
-                                          listen: false)
+                                      listen: false)
                                       .isLoading = false;
                                 });
                                 dialog2(e.message);
@@ -1754,85 +1505,72 @@ class _ManakeeshState extends State<Manakeesh> {
                               } catch (e) {
                                 setState(() {
                                   Provider.of<MyProvider>(context,
-                                          listen: false)
+                                      listen: false)
                                       .isLoading = false;
                                 });
                                 dialog2(Provider.of<LanProvider>(context,
-                                        listen: false)
+                                    listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
                               }
                             },
                           ),
-                        Row(
-                          children: [
-                            Text(Provider.of<MyProvider>(context, listen: false)
-                                        .getIndex(resData[index].id) ==
-                                    -1
-                                ? "0"
-                                : (Provider.of<MyProvider>(context,
-                                            listen: false)
-                                        .myCart[Provider.of<MyProvider>(context,
-                                                listen: false)
-                                            .getIndex(resData[index].id)]
-                                        .quantity)
-                                    .toString()),
-                            IconButton(
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.green,
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    Provider.of<MyProvider>(context,
-                                            listen: false)
-                                        .mealID = resData[index].id;
-                                  });
-                                  if (Provider.of<MyProvider>(context,
-                                                  listen: false)
-                                              .myCart
-                                              .length !=
-                                          0 &&
-                                      Provider.of<MyProvider>(context,
-                                                  listen: false)
-                                              .restaurantName !=
-                                          Provider.of<MyProvider>(context,
-                                                  listen: false)
-                                              .myCart[0]
-                                              .resName)
-                                    return dialog1(Provider.of<LanProvider>(
-                                            context,
-                                            listen: false)
-                                        .texts('foodCart'));
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 1.0),
+                          child: TextButton(
+                            child: Text(
+                                Provider.of<LanProvider>(context,
+                                    listen: false)
+                                    .texts('choose pizza'),
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.blueAccent)),
+                            onPressed: () {
+                              try {
+                                setState(() {
                                   Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .addFoodCart(
-                                          resData[index]['meal name'],
-                                          resData[index]['meal price'],
-                                          resData[index]['description']);
-                                }),
-                          ],
-                        ),
-                        Provider.of<MyProvider>(context, listen: false)
-                                .existsInCart(resData[index].id)
-                            ? IconButton(
-                                icon: const Icon(
-                                  Icons.remove,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    Provider.of<MyProvider>(context,
-                                            listen: false)
-                                        .mealID = resData[index].id;
-                                  });
-                                  await Provider.of<MyProvider>(context,
-                                          listen: false)
-                                      .removeFoodCart(
+                                      listen: false)
+                                      .isLoading = true;
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .mealID = resData[index].id;
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .mealPrice =
+                                      double.parse(
                                           resData[index]['meal price']);
-                                },
-                              )
-                            : Container(),
+                                });
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (_) => bottomSheet());
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                              } on FirebaseException catch (e) {
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                                dialog2(e.message);
+                                print(e.message);
+                              } catch (e) {
+                                setState(() {
+                                  Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .isLoading = false;
+                                });
+                                dialog2(Provider.of<LanProvider>(context,
+                                    listen: false)
+                                    .texts('Error occurred !'));
+                                print(e);
+                              }
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ],

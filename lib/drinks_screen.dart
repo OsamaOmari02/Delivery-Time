@@ -35,7 +35,8 @@ class _DrinksScreenState extends State<DrinksScreen> {
 
   getWidth() => width = MediaQuery.of(context).size.width;
   getHeight() => height = MediaQuery.of(context).size.height;
-  dialog(title) {
+
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -76,6 +77,37 @@ class _DrinksScreenState extends State<DrinksScreen> {
                 ),
               ],
             ),
+          );
+        });
+  }
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
           );
         });
   }
@@ -205,13 +237,13 @@ class _DrinksScreenState extends State<DrinksScreen> {
                                     setState(() {
                                       Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                     });
-                                    dialog(e.message);
+                                    dialog2(e.message);
                                     print(e.message);
                                   } catch (e) {
                                     setState(() {
                                       Provider.of<MyProvider>(context,listen: false).isLoading = false;
                                     });
-                                    dialog(Provider.of<LanProvider>(context,listen: false)
+                                    dialog2(Provider.of<LanProvider>(context,listen: false)
                                         .texts('Error occurred !'));
                                     print(e);
                                   }
@@ -238,7 +270,7 @@ class _DrinksScreenState extends State<DrinksScreen> {
                                       if (Provider.of<MyProvider>(context,listen: false).myCart.length != 0 &&
                                           Provider.of<MyProvider>(context,listen: false).restaurantName !=
                                               Provider.of<MyProvider>(context,listen: false).myCart[0].resName)
-                                        return dialog(
+                                        return dialog1(
                                             Provider.of<LanProvider>(context,listen: false).texts('foodCart'));
                                       Provider.of<MyProvider>(context,listen: false).addFoodCart(
                                           resData[index]['meal name'],

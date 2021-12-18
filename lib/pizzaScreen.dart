@@ -273,6 +273,22 @@ class _FirstState extends State<First> {
                             color: Colors.green,
                           ),
                           onPressed: () {
+                            if (Provider.of<MyProvider>(context,
+                                listen: false)
+                                .myCart
+                                .length !=
+                                0 &&
+                                Provider.of<MyProvider>(context,
+                                    listen: false)
+                                    .restaurantName !=
+                                    Provider.of<MyProvider>(context,
+                                        listen: false)
+                                        .myCart[0]
+                                        .resName)
+                              return dialog1(Provider.of<LanProvider>(
+                                  context,
+                                  listen: false)
+                                  .texts('foodCart'));
                             setState(() {
                               _counter++;
                               _price += Provider.of<MyProvider>(context,
@@ -310,7 +326,7 @@ class _FirstState extends State<First> {
         ));
   }
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -360,7 +376,37 @@ class _FirstState extends State<First> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   double? width;
   double? height;
 
@@ -518,7 +564,7 @@ class _FirstState extends State<First> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -526,7 +572,7 @@ class _FirstState extends State<First> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -570,7 +616,7 @@ class _FirstState extends State<First> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -578,7 +624,7 @@ class _FirstState extends State<First> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -622,7 +668,7 @@ class _SecondState extends State<Second> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -653,7 +699,37 @@ class _SecondState extends State<Second> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -803,7 +879,7 @@ class _SecondState extends State<Second> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -811,7 +887,7 @@ class _SecondState extends State<Second> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -837,6 +913,22 @@ class _SecondState extends State<Second> {
                                   color: Colors.green,
                                 ),
                                 onPressed: () async {
+                                  if (Provider.of<MyProvider>(context,
+                                      listen: false)
+                                      .myCart
+                                      .length !=
+                                      0 &&
+                                      Provider.of<MyProvider>(context,
+                                          listen: false)
+                                          .restaurantName !=
+                                          Provider.of<MyProvider>(context,
+                                              listen: false)
+                                              .myCart[0]
+                                              .resName)
+                                    return dialog1(Provider.of<LanProvider>(
+                                        context,
+                                        listen: false)
+                                        .texts('foodCart'));
                                   setState(() {
                                     Provider.of<MyProvider>(context,
                                             listen: false)
@@ -854,7 +946,7 @@ class _SecondState extends State<Second> {
                                                   listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                             context,
                                             listen: false)
                                         .texts('foodCart'));
@@ -923,7 +1015,7 @@ class _ThirdState extends State<Third> {
 
   getHeight() => height = MediaQuery.of(context).size.height;
 
-  dialog(title) {
+  dialog1(title) {
     return showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -954,7 +1046,37 @@ class _ThirdState extends State<Third> {
           );
         });
   }
-
+  dialog2(title) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              title,
+              textAlign: Provider.of<LanProvider>(context).isEn
+                  ? TextAlign.start
+                  : TextAlign.end,
+              style: const TextStyle(fontSize: 23),
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 7),
+            elevation: 24,
+            content: Container(
+              height: 30,
+              child: const Divider(),
+              alignment: Alignment.topCenter,
+            ),
+            actions: [
+              const SizedBox(width: 11),
+              InkWell(
+                  child: Text(
+                      Provider.of<LanProvider>(context, listen: false)
+                          .texts('ok'),
+                      style: const TextStyle(fontSize: 19)),
+                  onTap: () => Navigator.of(context).pop()),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -1104,7 +1226,7 @@ class _ThirdState extends State<Third> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(e.message);
+                                dialog2(e.message);
                                 print(e.message);
                               } catch (e) {
                                 setState(() {
@@ -1112,7 +1234,7 @@ class _ThirdState extends State<Third> {
                                           listen: false)
                                       .isLoading = false;
                                 });
-                                dialog(Provider.of<LanProvider>(context,
+                                dialog2(Provider.of<LanProvider>(context,
                                         listen: false)
                                     .texts('Error occurred !'));
                                 print(e);
@@ -1139,6 +1261,22 @@ class _ThirdState extends State<Third> {
                                 ),
                                 onPressed: () async {
                                   setState(() {
+                                    if (Provider.of<MyProvider>(context,
+                                        listen: false)
+                                        .myCart
+                                        .length !=
+                                        0 &&
+                                        Provider.of<MyProvider>(context,
+                                            listen: false)
+                                            .restaurantName !=
+                                            Provider.of<MyProvider>(context,
+                                                listen: false)
+                                                .myCart[0]
+                                                .resName)
+                                      return dialog1(Provider.of<LanProvider>(
+                                          context,
+                                          listen: false)
+                                          .texts('foodCart'));
                                     Provider.of<MyProvider>(context,
                                             listen: false)
                                         .mealID = resData[index].id;
@@ -1155,7 +1293,7 @@ class _ThirdState extends State<Third> {
                                                   listen: false)
                                               .myCart[0]
                                               .resName)
-                                    return dialog(Provider.of<LanProvider>(
+                                    return dialog1(Provider.of<LanProvider>(
                                             context,
                                             listen: false)
                                         .texts('foodCart'));

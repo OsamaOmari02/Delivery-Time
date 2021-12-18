@@ -40,6 +40,7 @@ import 'SignUp.dart';
 import 'UserState.dart';
 import 'about.dart';
 import 'callCenter.dart';
+import 'cukurScreen.dart';
 import 'drinks.dart';
 import 'drinks_screen.dart';
 import 'homos.dart';
@@ -123,6 +124,7 @@ class _MyAppState extends State<MyApp> {
         'pizzaScreen': (context) => PizzaScreen(),
         'riceScreen': (context) => RiceScreen(),
         'mo3ajanatScreen': (context) => Mo3ajanatScreen(),
+        'milkScreen': (context) => MilkScreen(),
         'callCenter': (context) => CallCenter(),
         'details': (context) => Details(),
         'location': (context) => Locations(),
@@ -170,7 +172,9 @@ class _MyHomepageState extends State<MyHomepage> {
           Navigator.of(context).pushNamed('pizzaScreen');
         else if (Provider.of<MyProvider>(context, listen: false)
                 .restaurantName ==
-            'ارزه لبنان')
+            'ارزه لبنان' || Provider.of<MyProvider>(context, listen: false)
+            .restaurantName ==
+            'معجنات ورد')
           Navigator.of(context).pushNamed('mo3ajanatScreen');
         else if (Provider.of<MyProvider>(context, listen: false)
                     .restaurantName ==
@@ -458,7 +462,6 @@ class _MyHomepageState extends State<MyHomepage> {
                       funImage('file/بوابة حضر موت.jpg', "بوابة حضر موت"),
                       funImage('file/بيتزا اونلاين.jpg', "بيتزا اونلاين"),
                       funImage('file/ابو جمال.jpg', "مطعم ابو جمال"),
-                      funImage('file/ابو هشهش.jpg', "ابو هشهش"),
                       funImage('file/الدويري.jpg', "الدويري"),
                       // funImage('file/ابو قاسم.jpg', "ابو قاسم"),
                       // funImage('file/السلطان إبراهيم.jpg', "السلطان إبراهيم"),
