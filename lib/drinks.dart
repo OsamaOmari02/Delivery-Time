@@ -24,7 +24,7 @@ class _DrinksState extends State<Drinks> {
         setState(() {
           Provider.of<MyProvider>(context,listen: false).restaurantName = title;
         });
-        Provider.of<MyProvider>(context,listen: false).restaurantName=='الحفرة'?
+        Provider.of<MyProvider>(context,listen: false).restaurantName=='الحفرة' ||Provider.of<MyProvider>(context,listen: false).restaurantName=='لبناني الشمال' ?
         Navigator.of(context).pushNamed('milkScreen'):
         Navigator.of(context).pushNamed('drinksScreen');
       },

@@ -17,6 +17,12 @@ class ShawarmaScreen extends StatefulWidget {
 var tab1sh;
 var tab2sh;
 var tab3sh;
+var tab4sh;
+var tab5sh;
+var tab6sh;
+var tab7sh;
+var tab8sh;
+var tab9sh;
 
 class _ShawarmaScreenState extends State<ShawarmaScreen> {
   @override
@@ -1275,7 +1281,7 @@ class Chicken extends StatefulWidget {
 class _ChickenState extends State<Chicken> {
   @override
   void initState() {
-    tab1sh = FirebaseFirestore.instance
+    tab9sh = FirebaseFirestore.instance
         .collection(
             '/shawarma/${Provider.of<MyProvider>(context, listen: false).restaurantName}/Chicken')
         .orderBy("meal name")
@@ -1374,7 +1380,7 @@ class _ChickenState extends State<Chicken> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab1sh,
+      stream: tab9sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
           return Center(
@@ -1626,7 +1632,7 @@ class BreakFast extends StatefulWidget {
 class _BreakFastState extends State<BreakFast> {
   @override
   void initState() {
-    tab1sh = FirebaseFirestore.instance
+    tab8sh = FirebaseFirestore.instance
         .collection(
             '/shawarma/${Provider.of<MyProvider>(context, listen: false).restaurantName}/BreakFast')
         .orderBy("meal name")
@@ -1725,7 +1731,7 @@ class _BreakFastState extends State<BreakFast> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab1sh,
+      stream: tab8sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
           return Center(
@@ -1977,7 +1983,7 @@ class Aldwairy extends StatefulWidget {
 class _AldwairyState extends State<Aldwairy> {
   @override
   void initState() {
-    tab1sh = FirebaseFirestore.instance
+    tab7sh = FirebaseFirestore.instance
         .collection(
             '/shawarma/${Provider.of<MyProvider>(context, listen: false).restaurantName}/Aldwairy')
         .orderBy("meal name")
@@ -2076,7 +2082,7 @@ class _AldwairyState extends State<Aldwairy> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab1sh,
+      stream: tab7sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
           return Center(
@@ -2327,7 +2333,7 @@ class Falafel extends StatefulWidget {
 class _FalafelState extends State<Falafel> {
   @override
   void initState() {
-    tab1sh = FirebaseFirestore.instance
+    tab4sh = FirebaseFirestore.instance
         .collection(
         '/shawarma/${Provider.of<MyProvider>(context, listen: false).restaurantName}/Falafel')
         .orderBy("meal name")
@@ -2426,7 +2432,7 @@ class _FalafelState extends State<Falafel> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab1sh,
+      stream: tab4sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
           return Center(
@@ -2677,7 +2683,7 @@ class Mo3ajanat extends StatefulWidget {
 class _Mo3ajanatState extends State<Mo3ajanat> {
   @override
   void initState() {
-    tab1sh = FirebaseFirestore.instance
+    tab5sh = FirebaseFirestore.instance
         .collection(
         '/shawarma/${Provider.of<MyProvider>(context, listen: false).restaurantName}/Mo3ajanat')
         .orderBy("meal name")
@@ -2776,7 +2782,7 @@ class _Mo3ajanatState extends State<Mo3ajanat> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab1sh,
+      stream: tab5sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
           return Center(
@@ -3027,7 +3033,7 @@ class Hummus extends StatefulWidget {
 class _HummusState extends State<Hummus> {
   @override
   void initState() {
-    tab1sh = FirebaseFirestore.instance
+    tab6sh = FirebaseFirestore.instance
         .collection(
         '/shawarma/${Provider.of<MyProvider>(context, listen: false).restaurantName}/Hummus')
         .orderBy("meal name")
@@ -3126,7 +3132,7 @@ class _HummusState extends State<Hummus> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab1sh,
+      stream: tab6sh,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
           return Center(

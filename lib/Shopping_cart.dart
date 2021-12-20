@@ -351,7 +351,11 @@ class _ShoppingState extends State<Shopping> {
                                         .restaurantName ==
                                         'نفيسة'|| Provider.of<MyProvider>(context, listen: false)
                                         .restaurantName ==
-                                        'ارزه لبنان')
+                                        'ارزه لبنان'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'لبناني الشمال'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'الحفرة')
                                       await Provider.of<MyProvider>(context,
                                               listen: false)
                                           .removeFoodCartTypes(
@@ -410,7 +414,11 @@ class _ShoppingState extends State<Shopping> {
                                         .restaurantName ==
                                         'نفيسة'|| Provider.of<MyProvider>(context, listen: false)
                                         .restaurantName ==
-                                        'ارزه لبنان')
+                                        'ارزه لبنان' || Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'لبناني الشمال'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'الحفرة')
                                       await Provider.of<MyProvider>(context,
                                           listen: false)
                                           .addFoodCartTypes(

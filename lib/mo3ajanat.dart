@@ -18,6 +18,7 @@ class Mo3ajanatScreen extends StatefulWidget {
 var tab1p;
 var tab2p;
 var tab3p;
+var tab4p;
 
 class _Mo3ajanatScreenState extends State<Mo3ajanatScreen> {
   @override
@@ -1523,7 +1524,7 @@ class Manakeesh extends StatefulWidget {
 class _ManakeeshState extends State<Manakeesh> {
   @override
   void initState() {
-    tab3p = FirebaseFirestore.instance
+    tab4p = FirebaseFirestore.instance
         .collection(
             '/mainRes/${Provider.of<MyProvider>(context, listen: false).restaurantName}/manakeesh')
         .orderBy("meal name")
@@ -1603,7 +1604,7 @@ class _ManakeeshState extends State<Manakeesh> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab3p,
+      stream: tab4p,
       builder: (ctx, snapshot) {
         if (snapshot.hasError)
           return Center(

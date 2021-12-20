@@ -16,6 +16,11 @@ class SweetScreen extends StatefulWidget {
 var tab1s;
 var tab2s;
 var tab3s;
+var tab4s;
+var tab5s;
+var tab6s;
+var tab7s;
+var tab8s;
 var tabGateau;
 
 class _SweetScreenState extends State<SweetScreen> {
@@ -1824,7 +1829,7 @@ class Snacks extends StatefulWidget {
 class _SnacksState extends State<Snacks> {
   @override
   void initState() {
-    tab3s = FirebaseFirestore.instance
+    tab4s = FirebaseFirestore.instance
         .collection(
             '/sweets/${Provider.of<MyProvider>(context, listen: false).restaurantName}/snacks')
         .orderBy("meal name")
@@ -1924,7 +1929,7 @@ class _SnacksState extends State<Snacks> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab3s,
+      stream: tab4s,
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return const Center(child: const CircularProgressIndicator());
@@ -2176,7 +2181,7 @@ class Pizza extends StatefulWidget {
 class _PizzaState extends State<Pizza> {
   @override
   void initState() {
-    tab3s = FirebaseFirestore.instance
+    tab5s = FirebaseFirestore.instance
         .collection(
             '/sweets/${Provider.of<MyProvider>(context, listen: false).restaurantName}/pizza')
         .orderBy("meal name")
@@ -2276,7 +2281,7 @@ class _PizzaState extends State<Pizza> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab3s,
+      stream: tab5s,
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return const Center(child: const CircularProgressIndicator());
@@ -2528,7 +2533,7 @@ class Rolls extends StatefulWidget {
 class _RollsState extends State<Rolls> {
   @override
   void initState() {
-    tab3s = FirebaseFirestore.instance
+    tab6s = FirebaseFirestore.instance
         .collection(
             '/sweets/${Provider.of<MyProvider>(context, listen: false).restaurantName}/rolls')
         .orderBy("meal name")
@@ -2628,7 +2633,7 @@ class _RollsState extends State<Rolls> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab3s,
+      stream: tab6s,
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return const Center(child: const CircularProgressIndicator());
@@ -2880,7 +2885,7 @@ class Waffle extends StatefulWidget {
 class _WaffleState extends State<Waffle> {
   @override
   void initState() {
-    tab3s = FirebaseFirestore.instance
+    tab7s = FirebaseFirestore.instance
         .collection(
             '/sweets/${Provider.of<MyProvider>(context, listen: false).restaurantName}/waffle')
         .orderBy("meal name")
@@ -2980,7 +2985,7 @@ class _WaffleState extends State<Waffle> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab3s,
+      stream: tab7s,
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return const Center(child: const CircularProgressIndicator());
@@ -3232,7 +3237,7 @@ class IceCream extends StatefulWidget {
 class _IceCreamState extends State<IceCream> {
   @override
   void initState() {
-    tab3s = FirebaseFirestore.instance
+    tab8s = FirebaseFirestore.instance
         .collection(
             '/sweets/${Provider.of<MyProvider>(context, listen: false).restaurantName}/ice cream')
         .orderBy("meal name")
@@ -3473,7 +3478,7 @@ class _IceCreamState extends State<IceCream> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: tab3s,
+      stream: tab8s,
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return const Center(child: const CircularProgressIndicator());

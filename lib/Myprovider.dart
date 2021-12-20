@@ -152,6 +152,10 @@ class MyProvider with ChangeNotifier {
   var radioValue12;
   var radioValue13;
   var radioValue14;
+  var radioValue15;
+  var radioValue16;
+  var radioValue17;
+  var radioValue18;
 
   checkFun(val, index) {
     pizzaTypes[index].value = val;
@@ -345,6 +349,44 @@ class MyProvider with ChangeNotifier {
     Types2Class(title: 'كبة', value: 7),
   ];
 
+  List<Types2Class> naturalDrinks = <Types2Class>[
+    Types2Class(title: 'كيوي', value: 0),
+    Types2Class(title: 'جزر', value: 1),
+    Types2Class(title: 'ليمون', value: 2),
+    Types2Class(title: 'جريب فروت', value: 3),
+    Types2Class(title: 'بندورة', value: 4),
+    Types2Class(title: 'برتقال', value: 5),
+    Types2Class(title: 'اناناس', value: 6),
+    Types2Class(title: 'فراوله', value: 7),
+    Types2Class(title: 'مانجا', value: 8),
+    Types2Class(title: 'تفاح', value: 9),
+  ];
+
+  List<Types2Class> naturalSlush = <Types2Class>[
+    Types2Class(title: 'برتقال', value: 0),
+    Types2Class(title: 'ليمون', value: 1),
+    Types2Class(title: 'فراولة', value: 2),
+    Types2Class(title: 'جوافة', value: 3),
+  ];
+
+  List<Types2Class> iceCreamTypes3 = <Types2Class>[
+    Types2Class(title: 'توتي فروتي', value: 0),
+    Types2Class(title: 'شوكولاته مو', value: 1),
+    Types2Class(title: 'ستروبري شيك', value: 2),
+    Types2Class(title: 'بنانا سبليت', value: 3),
+    Types2Class(title: 'بنانا بيري', value: 4),
+    Types2Class(title: 'بنانا شوكليت', value: 5),
+  ];
+
+  List<Types2Class> milkShakeTypes = <Types2Class>[
+    Types2Class(title: 'عربي', value: 0),
+    Types2Class(title: 'فانيلا', value: 1),
+    Types2Class(title: 'فراولة', value: 2),
+    Types2Class(title: 'اوريو', value: 3),
+    Types2Class(title: 'شوكولاته', value: 4),
+  ];
+
+  //-------------------------
   List<String> areas = <String>[
     '---اختر المنطقة---',
     'حي الحسين',
@@ -702,9 +744,17 @@ class MyProvider with ChangeNotifier {
   }
 
   Future<void> addFoodCartRadioMilk(counter, mealName) async {
-    int desc = mealName.toString().startsWith('بوظة')
-        ? iceCreamTypes.indexWhere((element) => element.value == radioValue8)
-        : milkTypes.indexWhere((element) => element.value == radioValue7);
+    int desc = mealName.toString().startsWith('ايس كريم')
+        ? iceCreamTypes3.indexWhere((element) => element.value == radioValue17)
+        : mealName.toString() == 'ميلك شيك سبيشال' ||
+        mealName.toString() == 'ميلك شيك عادي'
+            ? milkShakeTypes
+                .indexWhere((element) => element.value == radioValue18)
+            : mealName.toString().startsWith('بوظة')
+                ? iceCreamTypes
+                    .indexWhere((element) => element.value == radioValue8)
+                : milkTypes
+                    .indexWhere((element) => element.value == radioValue7);
     int index = mealIDs.indexWhere((element) => element.id == mealID);
     myCart.add(FoodCart(
         quantity: counter,
@@ -712,9 +762,14 @@ class MyProvider with ChangeNotifier {
         mealName: mealIDs[index].mealName,
         mealPrice: mealIDs[index].mealPrice,
         resName: mealIDs[index].resName,
-        description: mealName.toString().startsWith('بوظة')
-            ? iceCreamTypes[desc].title
-            : milkTypes[desc].title));
+        description: mealName.toString().startsWith('ايس كريم')
+            ? iceCreamTypes3[desc].title
+            : mealName.toString() == 'ميلك شيك سبيشال' ||
+            mealName.toString() == 'ميلك شيك عادي'
+                ? milkShakeTypes[desc].title
+                : mealName.toString().startsWith('بوظة')
+                    ? iceCreamTypes[desc].title
+                    : milkTypes[desc].title));
     addPrice(double.parse(mealIDs[index].mealPrice) * counter);
     notifyListeners();
   }
@@ -801,7 +856,26 @@ class MyProvider with ChangeNotifier {
         mealPrice: mealIDs[index].mealPrice,
         resName: mealIDs[index].resName,
         description: mealName.toString() == 'بيتزا'
-            ? pizzaTypes3[desc].title:mo3ajanat4[desc].title));
+            ? pizzaTypes3[desc].title
+            : mo3ajanat4[desc].title));
+    addPrice(double.parse(mealIDs[index].mealPrice) * counter);
+    notifyListeners();
+  }
+
+  Future<void> addFoodCartRadioLebanese(counter, mealName) async {
+    int desc = mealName.toString().startsWith('سلاش')
+        ? naturalSlush.indexWhere((element) => element.value == radioValue16)
+        : naturalDrinks.indexWhere((element) => element.value == radioValue15);
+    int index = mealIDs.indexWhere((element) => element.id == mealID);
+    myCart.add(FoodCart(
+        quantity: counter,
+        foodID: mealID,
+        mealName: mealIDs[index].mealName,
+        mealPrice: mealIDs[index].mealPrice,
+        resName: mealIDs[index].resName,
+        description: mealName.toString().startsWith('سلاش')
+            ? naturalSlush[desc].title
+            : naturalDrinks[desc].title));
     addPrice(double.parse(mealIDs[index].mealPrice) * counter);
     notifyListeners();
   }
@@ -1179,24 +1253,23 @@ class MyProvider with ChangeNotifier {
   }
 
   Future<void> fetchMealsMo3ajanat(title) async {
-    if (restaurantName=='معجنات ورد')
-      {
-        await FirebaseFirestore.instance
-            .collection('mainRes/$title/manakeesh')
-            .get()
-            .then((value) {
-          value.docs.forEach((element) {
-            bool exists = mealIDs.any((e) => e.id == element.id);
-            if (!exists)
-              mealIDs.add(Meals(
-                  resName: title,
-                  mealName: element.data()['meal name'],
-                  mealPrice: element.data()['meal price'],
-                  description: element.data()['description'],
-                  id: element.id));
-          });
+    if (restaurantName == 'معجنات ورد') {
+      await FirebaseFirestore.instance
+          .collection('mainRes/$title/manakeesh')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                resName: title,
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id));
         });
-      }
+      });
+    }
     await FirebaseFirestore.instance
         .collection('mainRes/$title/Pizza')
         .get()
@@ -1212,22 +1285,22 @@ class MyProvider with ChangeNotifier {
               id: element.id));
       });
     });
-    if (restaurantName=='ارزه لبنان')
-    await FirebaseFirestore.instance
-        .collection('mainRes/$title/mashrouh')
-        .get()
-        .then((value) {
-      value.docs.forEach((element) {
-        bool exists = mealIDs.any((e) => e.id == element.id);
-        if (!exists)
-          mealIDs.add(Meals(
-              mealName: element.data()['meal name'],
-              mealPrice: element.data()['meal price'],
-              description: element.data()['description'],
-              id: element.id,
-              resName: title));
+    if (restaurantName == 'ارزه لبنان')
+      await FirebaseFirestore.instance
+          .collection('mainRes/$title/mashrouh')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
       });
-    });
     await FirebaseFirestore.instance
         .collection('mainRes/$title/others')
         .get()
@@ -1315,7 +1388,7 @@ class MyProvider with ChangeNotifier {
   // }
 
   Future<void> fetchMealsDrinks(title) async {
-    if (restaurantName != 'الحفرة')
+    if (restaurantName != 'الحفرة' && restaurantName != 'لبناني الشمال')
       await FirebaseFirestore.instance
           .collection('drinks/$title/meals')
           .get()
@@ -1331,7 +1404,7 @@ class MyProvider with ChangeNotifier {
                 resName: title));
         });
       });
-    else {
+    else if (restaurantName == 'الحفرة') {
       await FirebaseFirestore.instance
           .collection('drinks/$title/milk')
           .get()
@@ -1364,6 +1437,112 @@ class MyProvider with ChangeNotifier {
       });
       await FirebaseFirestore.instance
           .collection('drinks/$title/hot drinks')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+    } else if (restaurantName == 'لبناني الشمال') {
+      await FirebaseFirestore.instance
+          .collection('drinks/$title/milk')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+      await FirebaseFirestore.instance
+          .collection('drinks/$title/natural cocktail')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+      await FirebaseFirestore.instance
+          .collection('drinks/$title/natural drinks')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+      await FirebaseFirestore.instance
+          .collection('drinks/$title/special cocktail')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+      await FirebaseFirestore.instance
+          .collection('drinks/$title/natural slush')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+      await FirebaseFirestore.instance
+          .collection('drinks/$title/fruits salads')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+      await FirebaseFirestore.instance
+          .collection('drinks/$title/waffle')
           .get()
           .then((value) {
         value.docs.forEach((element) {
