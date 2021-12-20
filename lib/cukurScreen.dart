@@ -2271,7 +2271,6 @@ class _NaturalDrinksState extends State<NaturalDrinks> {
           );
         });
   }
-
   dialog2(title) {
     return showDialog(
         context: context,
@@ -2308,7 +2307,6 @@ class _NaturalDrinksState extends State<NaturalDrinks> {
   double? height;
 
   getWidth() => width = MediaQuery.of(context).size.width;
-
   getHeight() => height = MediaQuery.of(context).size.height;
 
   @override

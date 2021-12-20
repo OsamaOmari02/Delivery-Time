@@ -336,26 +336,31 @@ class _ShoppingState extends State<Shopping> {
                                           .myCart[index]
                                           .foodID;
                                     });
-                                    if (Provider.of<MyProvider>(context,
-                                                    listen: false)
-                                                .myCart[index]
-                                                .resName ==
-                                            'بيتزا المفرق' ||
-                                        Provider.of<MyProvider>(context,
-                                                    listen: false)
-                                                .myCart[index]
-                                                .resName ==
+                                    if (Provider.of<MyProvider>(context, listen: false)
+                                        .myCart[index].resName == 'بيتزا المفرق'
+                                        || Provider.of<MyProvider>(context,
+                                            listen: false).myCart[index].resName ==
                                             'بيتزا اونلاين'|| Provider.of<MyProvider>(context,
                                         listen: false).myCart[index].resName ==
-                                        'قايد حضر موت'||  Provider.of<MyProvider>(context, listen: false)
+                                        'قايد حضر موت' ||  Provider.of<MyProvider>(context, listen: false)
                                         .restaurantName ==
                                         'نفيسة'|| Provider.of<MyProvider>(context, listen: false)
                                         .restaurantName ==
-                                        'ارزه لبنان'|| Provider.of<MyProvider>(context, listen: false)
+                                        'ارزه لبنان' || Provider.of<MyProvider>(context, listen: false)
                                         .restaurantName ==
                                         'لبناني الشمال'|| Provider.of<MyProvider>(context, listen: false)
                                         .restaurantName ==
-                                        'الحفرة')
+                                        'الحفرة'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'معجنات ورد'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'بوابة حضر موت'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'هون وبس'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'الدويري'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'الصالون الأخضر-شويكة')
                                       await Provider.of<MyProvider>(context,
                                               listen: false)
                                           .removeFoodCartTypes(
@@ -366,7 +371,10 @@ class _ShoppingState extends State<Shopping> {
                                               Provider.of<MyProvider>(context,
                                                       listen: false)
                                                   .myCart[index]
-                                                  .description);
+                                                  .description,Provider.of<MyProvider>(context,
+                                          listen: false)
+                                          .myCart[index]
+                                          .mealName);
                                     else
                                       await Provider.of<MyProvider>(context,
                                               listen: false)
@@ -418,7 +426,17 @@ class _ShoppingState extends State<Shopping> {
                                         .restaurantName ==
                                         'لبناني الشمال'|| Provider.of<MyProvider>(context, listen: false)
                                         .restaurantName ==
-                                        'الحفرة')
+                                        'الحفرة'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'معجنات ورد'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'بوابة حضر موت'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'هون وبس'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'الدويري'|| Provider.of<MyProvider>(context, listen: false)
+                                        .restaurantName ==
+                                        'الصالون الأخضر-شويكة')
                                       await Provider.of<MyProvider>(context,
                                           listen: false)
                                           .addFoodCartTypes(
@@ -429,7 +447,10 @@ class _ShoppingState extends State<Shopping> {
                                           Provider.of<MyProvider>(context,
                                               listen: false)
                                               .myCart[index]
-                                              .description);
+                                              .description,Provider.of<MyProvider>(context,
+                                          listen: false)
+                                          .myCart[index]
+                                          .mealName);
                                     else
                                       await Provider.of<MyProvider>(context,
                                             listen: false)

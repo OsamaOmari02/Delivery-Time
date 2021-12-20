@@ -180,13 +180,13 @@ class MyProvider with ChangeNotifier {
   }
 
   List<TypesClass> pizzaTypes = <TypesClass>[
-    TypesClass(title: 'سلامي'),
-    TypesClass(title: 'ببروني'),
-    TypesClass(title: 'دجاج'),
-    TypesClass(title: 'خضار'),
-    TypesClass(title: 'مرغريتا'),
-    TypesClass(title: 'زنجر'),
-    TypesClass(title: 'هوت دوغ'),
+    TypesClass(title: 'سلامي '),
+    TypesClass(title: 'ببروني '),
+    TypesClass(title: 'دجاج '),
+    TypesClass(title: 'خضار '),
+    TypesClass(title: 'مرغريتا '),
+    TypesClass(title: 'زنجر '),
+    TypesClass(title: 'هوت دوغ '),
   ];
 
   List<TypesClass> pizzaTypes1 = <TypesClass>[
@@ -204,16 +204,16 @@ class MyProvider with ChangeNotifier {
   ];
 
   List<Types2Class> pizzaTypes2 = <Types2Class>[
-    Types2Class(title: 'خضار', value: 0),
-    Types2Class(title: 'نقانق', value: 1),
-    Types2Class(title: 'دجاج', value: 2),
-    Types2Class(title: 'مدخن', value: 3),
-    Types2Class(title: 'مرغريتا', value: 4),
-    Types2Class(title: 'ببروني', value: 5),
-    Types2Class(title: 'بابريكا', value: 6),
-    Types2Class(title: 'سوبر سوبريم', value: 7),
-    Types2Class(title: 'دجاج مع خضار', value: 8),
-    Types2Class(title: 'سجق حلبي', value: 9),
+    Types2Class(title: 'خضار  ', value: 0),
+    Types2Class(title: 'نقانق  ', value: 1),
+    Types2Class(title: 'دجاج  ', value: 2),
+    Types2Class(title: 'مدخن  ', value: 3),
+    Types2Class(title: 'مرغريتا  ', value: 4),
+    Types2Class(title: 'ببروني  ', value: 5),
+    Types2Class(title: 'بابريكا  ', value: 6),
+    Types2Class(title: 'سوبر سوبريم  ', value: 7),
+    Types2Class(title: 'دجاج مع خضار  ', value: 8),
+    Types2Class(title: 'سجق حلبي  ', value: 9),
   ];
 
   List<Types2Class> mo3ajanat1 = <Types2Class>[
@@ -270,8 +270,8 @@ class MyProvider with ChangeNotifier {
 
   List<Types2Class> cakeTypes = <Types2Class>[
     Types2Class(title: 'فانيلا', value: 0),
-    Types2Class(title: 'فراولة', value: 1),
-    Types2Class(title: 'نوتيلا', value: 2),
+    Types2Class(title: 'فراولة  ', value: 1),
+    Types2Class(title: 'نوتيلا  ', value: 2),
   ];
 
   List<Types2Class> milkTypes = <Types2Class>[
@@ -287,15 +287,15 @@ class MyProvider with ChangeNotifier {
   ];
 
   List<Types2Class> iceCreamTypes = <Types2Class>[
-    Types2Class(title: 'لوتس', value: 0),
-    Types2Class(title: 'سنكرز', value: 1),
-    Types2Class(title: 'اوريو', value: 2),
-    Types2Class(title: 'عربي', value: 3),
-    Types2Class(title: 'تشيز كيك', value: 4),
-    Types2Class(title: 'كت كات', value: 5),
-    Types2Class(title: 'فراولة', value: 6),
-    Types2Class(title: 'شوكولاته', value: 7),
-    Types2Class(title: 'فانيلا', value: 8),
+    Types2Class(title: 'لوتس ', value: 0),
+    Types2Class(title: 'سنكرز ', value: 1),
+    Types2Class(title: 'اوريو ', value: 2),
+    Types2Class(title: 'عربي ', value: 3),
+    Types2Class(title: 'تشيز كيك ', value: 4),
+    Types2Class(title: 'كت كات ', value: 5),
+    Types2Class(title: 'فراولة ', value: 6),
+    Types2Class(title: 'شوكولاته ', value: 7),
+    Types2Class(title: 'فانيلا ', value: 8),
   ];
 
   List<Types2Class> hotTypes = <Types2Class>[
@@ -312,10 +312,10 @@ class MyProvider with ChangeNotifier {
   ];
 
   List<Types2Class> saloonTypes2 = <Types2Class>[
-    Types2Class(title: 'شوكولاتة', value: 0),
-    Types2Class(title: 'فانيلا', value: 1),
+    Types2Class(title: 'شوكولاتة ', value: 0),
+    Types2Class(title: 'فانيلا ', value: 1),
     Types2Class(title: 'بابلي', value: 2),
-    Types2Class(title: 'فواكة', value: 3),
+    Types2Class(title: 'فواكة ', value: 3),
   ];
 
   List<Types2Class> iceCreamTypes2 = <Types2Class>[
@@ -363,27 +363,27 @@ class MyProvider with ChangeNotifier {
   ];
 
   List<Types2Class> naturalSlush = <Types2Class>[
-    Types2Class(title: 'برتقال', value: 0),
-    Types2Class(title: 'ليمون', value: 1),
-    Types2Class(title: 'فراولة', value: 2),
-    Types2Class(title: 'جوافة', value: 3),
+    Types2Class(title: ' برتقال', value: 0),
+    Types2Class(title: 'ليمون ', value: 1),
+    Types2Class(title: 'فراولة ', value: 2),
+    Types2Class(title: 'جوافة ', value: 3),
   ];
 
   List<Types2Class> iceCreamTypes3 = <Types2Class>[
-    Types2Class(title: 'توتي فروتي', value: 0),
-    Types2Class(title: 'شوكولاته مو', value: 1),
-    Types2Class(title: 'ستروبري شيك', value: 2),
-    Types2Class(title: 'بنانا سبليت', value: 3),
-    Types2Class(title: 'بنانا بيري', value: 4),
-    Types2Class(title: 'بنانا شوكليت', value: 5),
+    Types2Class(title: 'توتي فروتي ', value: 0),
+    Types2Class(title: 'شوكولاته مو ', value: 1),
+    Types2Class(title: 'ستروبري شيك ', value: 2),
+    Types2Class(title: 'بنانا سبليت ', value: 3),
+    Types2Class(title: 'بنانا بيري ', value: 4),
+    Types2Class(title: 'بنانا شوكليت ', value: 5),
   ];
 
   List<Types2Class> milkShakeTypes = <Types2Class>[
-    Types2Class(title: 'عربي', value: 0),
-    Types2Class(title: 'فانيلا', value: 1),
-    Types2Class(title: 'فراولة', value: 2),
-    Types2Class(title: 'اوريو', value: 3),
-    Types2Class(title: 'شوكولاته', value: 4),
+    Types2Class(title: 'عربي  ', value: 0),
+    Types2Class(title: 'فانيلا  ', value: 1),
+    Types2Class(title: 'فراولة  ', value: 2),
+    Types2Class(title: 'اوريو  ', value: 3),
+    Types2Class(title: 'شوكولاته  ', value: 4),
   ];
 
   //-------------------------
@@ -747,7 +747,7 @@ class MyProvider with ChangeNotifier {
     int desc = mealName.toString().startsWith('ايس كريم')
         ? iceCreamTypes3.indexWhere((element) => element.value == radioValue17)
         : mealName.toString() == 'ميلك شيك سبيشال' ||
-        mealName.toString() == 'ميلك شيك عادي'
+                mealName.toString() == 'ميلك شيك عادي'
             ? milkShakeTypes
                 .indexWhere((element) => element.value == radioValue18)
             : mealName.toString().startsWith('بوظة')
@@ -765,7 +765,7 @@ class MyProvider with ChangeNotifier {
         description: mealName.toString().startsWith('ايس كريم')
             ? iceCreamTypes3[desc].title
             : mealName.toString() == 'ميلك شيك سبيشال' ||
-            mealName.toString() == 'ميلك شيك عادي'
+                    mealName.toString() == 'ميلك شيك عادي'
                 ? milkShakeTypes[desc].title
                 : mealName.toString().startsWith('بوظة')
                     ? iceCreamTypes[desc].title
@@ -775,7 +775,11 @@ class MyProvider with ChangeNotifier {
   }
 
   Future<void> addFoodCartRadioSaloon(counter, mealName) async {
-    int desc = restaurantName == 'الصالون الأخضر-شويكة'
+    int desc = restaurantName == 'الصالون الأخضر-شويكة' &&
+            (mealName.toString() == 'بوظة مشكل 1 كيلو' ||
+                mealName.toString() == 'بوظة مشكل 1/2 كيلو' ||
+                mealName.toString() == 'علبة بوظة حجم صغير' ||
+                mealName.toString() == 'علبة بوظة حجم كبير')
         ? iceCreamTypes2.indexWhere((element) => element.value == radioValue12)
         : mealName.toString() == 'قالب جاتو صغير' ||
                 mealName.toString() == 'قالب جاتو كبير' ||
@@ -791,7 +795,11 @@ class MyProvider with ChangeNotifier {
         mealName: mealIDs[index].mealName,
         mealPrice: mealIDs[index].mealPrice,
         resName: mealIDs[index].resName,
-        description: restaurantName == 'الصالون الأخضر-شويكة'
+        description: restaurantName == 'الصالون الأخضر-شويكة' &&
+                (mealName.toString() == 'بوظة مشكل 1 كيلو' ||
+                    mealName.toString() == 'بوظة مشكل 1/2 كيلو' ||
+                    mealName.toString() == 'علبة بوظة حجم صغير' ||
+                    mealName.toString() == 'علبة بوظة حجم كبير')
             ? iceCreamTypes2[desc].title
             : mealName.toString() == 'قالب جاتو صغير' ||
                     mealName.toString() == 'قالب جاتو كبير' ||
@@ -880,8 +888,10 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addFoodCartTypes(price, desc) async {
-    int index = myCart.indexWhere((element) => element.description == desc);
+  Future<void> addFoodCartTypes(price, desc,mealName) async {
+    int index = myCart.indexWhere(
+        (element) => element.description == desc && element.mealPrice == price&&
+            element.mealName == mealName);
     myCart[index].quantity++;
     addPrice(double.parse(price));
     notifyListeners();
@@ -905,8 +915,11 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> removeFoodCartTypes(price, desc) async {
-    int index = myCart.indexWhere((element) => element.description == desc);
+  Future<void> removeFoodCartTypes(price, desc,mealName) async {
+    int index = myCart.indexWhere((element) =>
+        element.description == desc &&
+        element.mealPrice == price &&
+        element.mealName == mealName);
     if (myCart[index].quantity == 1)
       myCart.removeAt(index);
     else
