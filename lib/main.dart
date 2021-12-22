@@ -155,7 +155,6 @@ class _MyHomepageState extends State<MyHomepage> {
   double height;
 
   getWidth() => width = MediaQuery.of(context).size.width;
-
   getHeight() => height = MediaQuery.of(context).size.height;
 
   Widget funImage(image, title) {

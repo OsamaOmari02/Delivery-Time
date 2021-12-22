@@ -34,7 +34,6 @@ class _Mo3ajanatScreenState extends State<Mo3ajanatScreen> {
   double? height;
 
   getWidth() => width = MediaQuery.of(context).size.width;
-
   getHeight() => height = MediaQuery.of(context).size.height;
 
   @override

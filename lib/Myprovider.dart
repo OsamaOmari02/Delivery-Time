@@ -1066,7 +1066,6 @@ class MyProvider with ChangeNotifier {
   }
 
   //-----------------------admin----------------------------
-  String tabIndex = "";
 
   Future<void> fetchMealsShawarma(title) async {
     if (restaurantName != 'Snap Burger' && restaurantName != 'شاورما هنية')
@@ -1380,25 +1379,6 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
-
-  // Future<void> fetchMealsHomos(title) async {
-  //   await FirebaseFirestore.instance
-  //       .collection('homos/$title/meals')
-  //       .get()
-  //       .then((value) {
-  //     value.docs.forEach((element) {
-  //       bool exists = mealIDs.any((e) => e.id == element.id);
-  //       if (!exists)
-  //         mealIDs.add(Meals(
-  //             mealName: element.data()['meal name'],
-  //             mealPrice: element.data()['meal price'],
-  //             description: element.data()['description'],
-  //             id: element.id,
-  //             resName: title));
-  //     });
-  //   });
-  //   notifyListeners();
-  // }
 
   Future<void> fetchMealsDrinks(title) async {
     if (restaurantName != 'الحفرة' && restaurantName != 'لبناني الشمال')

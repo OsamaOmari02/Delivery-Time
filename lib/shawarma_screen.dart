@@ -206,9 +206,9 @@ class _ShawarmaScreenState extends State<ShawarmaScreen> {
               if (Provider.of<MyProvider>(context).restaurantName == 'الدويري')
                 Chicken(),
               if (Provider.of<MyProvider>(context).restaurantName == 'الدويري')
-                BreakFast(),
-              if (Provider.of<MyProvider>(context).restaurantName == 'الدويري')
                 Aldwairy(),
+              if (Provider.of<MyProvider>(context).restaurantName == 'الدويري')
+                BreakFast(),
               Third(),
             ],
           ),

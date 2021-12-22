@@ -129,7 +129,7 @@ class _CallCenterState extends State<CallCenter> {
             children: [
               const SizedBox(height: 20),
               listTile('صفحة الطلبات', Icons.home, 'callCenter', context),
-              listTile('الموقع', Icons.location_on, 'location', context),
+              // listTile('الموقع', Icons.location_on, 'location', context),
               ListTile(
                 onTap: logOutFun,
                 title: const Text(
