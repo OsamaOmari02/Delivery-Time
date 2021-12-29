@@ -352,8 +352,8 @@ class _FirstState extends State<First> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -703,8 +703,8 @@ class _SecondState extends State<Second> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -1055,8 +1055,8 @@ class _ThirdState extends State<Third> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -1406,8 +1406,8 @@ class _ChickenState extends State<Chicken> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -1757,8 +1757,8 @@ class _BreakFastState extends State<BreakFast> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -2108,8 +2108,8 @@ class _AldwairyState extends State<Aldwairy> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -2458,8 +2458,8 @@ class _FalafelState extends State<Falafel> {
                               Container(
                                 margin:
                                 const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -2808,8 +2808,8 @@ class _Mo3ajanatState extends State<Mo3ajanat> {
                               Container(
                                 margin:
                                 const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -3158,8 +3158,8 @@ class _HummusState extends State<Hummus> {
                               Container(
                                 margin:
                                 const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(

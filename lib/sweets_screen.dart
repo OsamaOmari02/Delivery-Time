@@ -372,8 +372,8 @@ class _FirstState extends State<First> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -913,8 +913,8 @@ class _GateauState extends State<Gateau> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -1251,8 +1251,8 @@ class _SecondState extends State<Second> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -1603,8 +1603,8 @@ class _ThirdState extends State<Third> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -1955,8 +1955,8 @@ class _SnacksState extends State<Snacks> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -2307,8 +2307,8 @@ class _PizzaState extends State<Pizza> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -2659,8 +2659,8 @@ class _RollsState extends State<Rolls> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -3011,8 +3011,8 @@ class _WaffleState extends State<Waffle> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
@@ -3504,8 +3504,8 @@ class _IceCreamState extends State<IceCream> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                width: getWidth() * 0.24,
-                                height: getHeight() * 0.16,
+                                width: getWidth() * 0.21,
+                                height: getHeight() * 0.14,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(

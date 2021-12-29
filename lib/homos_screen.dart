@@ -157,8 +157,8 @@
 //                                   Container(
 //                                     margin: const EdgeInsets.symmetric(
 //                                         vertical: 10),
-//                                     width: getWidth() * 0.24,
-//                                     height: getHeight() * 0.16,
+//                                     width: getWidth() * 0.21,
+//                                 height: getHeight() * 0.14,
 //                                     child: ClipRRect(
 //                                       borderRadius: BorderRadius.circular(10.0),
 //                                       child: CachedNetworkImage(
