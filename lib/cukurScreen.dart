@@ -637,7 +637,7 @@ class _FirstState extends State<First> {
                                     'ميلك شيك صغير') &&
                             (resData[index]['meal name'] != 'ميلك شيك عادي' &&
                                 resData[index]['meal name'] !=
-                                    'ميلك شيك سبيشال')
+                                    'ميلك شيك سبيشال' && resData[index]['meal name'].toString() != 'ايس كريم عادي' && resData[index]['meal name'].toString() != 'ايس كريم سبيشال')
                         ? Column(
                             children: [
                               if (Provider.of<MyProvider>(context,
