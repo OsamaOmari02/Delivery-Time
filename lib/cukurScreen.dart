@@ -52,7 +52,7 @@ class _MilkScreenState extends State<MilkScreen> {
         length:
             Provider.of<MyProvider>(context, listen: false).restaurantName ==
                     'لبناني الشمال'
-                ? 7
+                ? 6
                 : 3,
         child: Scaffold(
           appBar: AppBar(
@@ -82,12 +82,12 @@ class _MilkScreenState extends State<MilkScreen> {
                   Tab(
                       text: Provider.of<LanProvider>(context, listen: false)
                           .texts('tabNaturalDrinks')),
-                if (Provider.of<MyProvider>(context, listen: false)
-                        .restaurantName ==
-                    'لبناني الشمال')
-                  Tab(
-                      text: Provider.of<LanProvider>(context, listen: false)
-                          .texts('tabSpecial')),
+                // if (Provider.of<MyProvider>(context, listen: false)
+                //         .restaurantName ==
+                //     'لبناني الشمال')
+                //   Tab(
+                //       text: Provider.of<LanProvider>(context, listen: false)
+                //           .texts('tabSpecial')),
                 if (Provider.of<MyProvider>(context, listen: false)
                         .restaurantName ==
                     'لبناني الشمال')
@@ -194,10 +194,10 @@ class _MilkScreenState extends State<MilkScreen> {
                       .restaurantName ==
                   'لبناني الشمال')
                 NaturalDrinks(),
-              if (Provider.of<MyProvider>(context, listen: false)
-                      .restaurantName ==
-                  'لبناني الشمال')
-                SpecialCocktail(),
+              // if (Provider.of<MyProvider>(context, listen: false)
+              //         .restaurantName ==
+              //     'لبناني الشمال')
+              //   SpecialCocktail(),
               if (Provider.of<MyProvider>(context, listen: false)
                       .restaurantName ==
                   'لبناني الشمال')
@@ -866,7 +866,7 @@ class _FirstState extends State<First> {
                                               listen: false)
                                           .texts('choose pizza'),
                                       style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 11.5,
                                           color: Colors.blueAccent)),
                                   onPressed: () {
                                     try {
@@ -1676,7 +1676,7 @@ class _ThirdState extends State<Third> {
                                 Provider.of<LanProvider>(context, listen: false)
                                     .texts('choose pizza'),
                                 style: TextStyle(
-                                    fontSize: 14, color: Colors.blueAccent)),
+                                    fontSize: 11.5, color: Colors.blueAccent)),
                             onPressed: () {
                               try {
                                 setState(() {
@@ -2625,7 +2625,7 @@ class _NaturalDrinksState extends State<NaturalDrinks> {
                                               listen: false)
                                           .texts('choose pizza'),
                                       style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 11.5,
                                           color: Colors.blueAccent)),
                                   onPressed: () {
                                     try {
@@ -3435,7 +3435,7 @@ class _NaturalSlushState extends State<NaturalSlush> {
                                 Provider.of<LanProvider>(context, listen: false)
                                     .texts('choose pizza'),
                                 style: TextStyle(
-                                    fontSize: 14, color: Colors.blueAccent)),
+                                    fontSize: 11.5, color: Colors.blueAccent)),
                             onPressed: () {
                               try {
                                 setState(() {

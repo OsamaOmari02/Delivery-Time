@@ -1057,7 +1057,8 @@ class _GateauState extends State<Gateau> {
                                 Provider.of<LanProvider>(context, listen: false)
                                     .texts('choose pizza'),
                                 style: TextStyle(
-                                    fontSize: 14, color: Colors.blueAccent)),
+                                    fontSize: 11.5,
+                                    color: Colors.blueAccent)),
                             onPressed: () {
                               try {
                                 setState(() {
@@ -3660,7 +3661,7 @@ class _IceCreamState extends State<IceCream> {
                                               listen: false)
                                           .texts('choose pizza'),
                                       style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 11.5,
                                           color: Colors.blueAccent)),
                                   onPressed: () {
                                     try {

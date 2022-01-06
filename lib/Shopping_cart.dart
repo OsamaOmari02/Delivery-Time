@@ -482,7 +482,7 @@ class _ShoppingState extends State<Shopping> {
                     );
                   }),
           bottomNavigationBar: Container(
-            height: getHeight() * 0.15,
+            height: getHeight() * 0.16,
             child: Column(children: [
               if (Provider.of<MyProvider>(context).myCart.isNotEmpty)
                 Row(
