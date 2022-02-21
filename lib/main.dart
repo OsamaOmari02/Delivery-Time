@@ -21,8 +21,10 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import 'AddOrRemoveRes.dart';
 import 'Addaddress.dart';
 import 'CheckOut.dart';
+import 'DPEdit.dart';
 import 'Details.dart';
 import 'DetailsHistory.dart';
 import 'Drawer.dart';
@@ -43,8 +45,8 @@ import 'callCenter.dart';
 import 'cukurScreen.dart';
 import 'drinks.dart';
 import 'drinks_screen.dart';
+import 'editRes.dart';
 import 'homos.dart';
-import 'homos_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,10 +89,9 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
-        accentColor: Colors.orangeAccent,
         canvasColor: Colors.white,
         floatingActionButtonTheme:
-            FloatingActionButtonThemeData(backgroundColor: Colors.blue),
+            FloatingActionButtonThemeData(backgroundColor: Colors.blue), accentColor: Colors.orangeAccent,
       ),
       darkTheme:
           ThemeData(brightness: Brightness.dark, accentColor: Colors.white),
@@ -129,6 +130,9 @@ class _MyAppState extends State<MyApp> {
         'details': (context) => Details(),
         'location': (context) => Locations(),
         'detailsHistory': (context) => DetailsHistory(),
+        'editRes': (context) => EditRes(),
+        'editDP': (context) => DPEdit(),
+        'addOrRemoveRes': (context) => AddOrRemoveRes(),
       },
     );
   }
@@ -349,7 +353,7 @@ class _MyHomepageState extends State<MyHomepage> {
             child: !Provider.of<MyProvider>(context, listen: false).isLoading
                 ? Icon(Icons.my_location)
                 : CircularProgressIndicator(),
-            backgroundColor: Theme.of(context).accentColor,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           body: Container(
             // height: height,
