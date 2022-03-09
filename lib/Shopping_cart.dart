@@ -99,7 +99,7 @@ class _ShoppingState extends State<Shopping> {
             return Card(
               elevation: 0.5,
               child: ListTile(
-                onTap: () {
+                onTap: () async {
                   setState(() {
                     Provider.of<MyProvider>(context, listen: false)
                         .checkOut['area'] =
@@ -117,7 +117,7 @@ class _ShoppingState extends State<Shopping> {
                             .loc[index]
                             .phoneNum;
                   });
-                  Provider.of<MyProvider>(context, listen: false)
+                  await Provider.of<MyProvider>(context, listen: false)
                       .deliveryPriceOnArea();
                   Navigator.of(context).pushNamed('checkOut');
                 },

@@ -1,4 +1,5 @@
 import 'package:app/Myprovider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,31 @@ class Discount extends StatefulWidget {
 class _DiscountState extends State<Discount> {
   TextEditingController _price = TextEditingController();
 
+  void getPriceController() async {
+    await FirebaseFirestore.instance
+        .collection('DP')
+        .doc('2')
+        .get()
+        .then((value) {
+      setState(() {
+        _price = TextEditingController(
+            text: double.parse(value['discount']).toString());
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    getPriceController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _price.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,6 +53,11 @@ class _DiscountState extends State<Discount> {
               body: Column(
                 children: [
                   const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("تحديد سعر التوصيل لجميع المناطق",
+                        style: const TextStyle(fontSize: 18)),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextFormField(
@@ -43,19 +74,27 @@ class _DiscountState extends State<Discount> {
                       ),
                     ),
                   ),
-                  Switch(
-                      activeColor: Colors.blueAccent,
-                      activeTrackColor: Colors.blue[200],
-                      value: Provider.of<MyProvider>(context).discount,
-                      onChanged: (val) async {
-                        SharedPreferences pref =
-                            await SharedPreferences.getInstance();
-                        pref.setBool('discount', val);
-                        setState(() {
-                          Provider.of<MyProvider>(context, listen: false)
-                              .discount = val;
-                        });
-                      }),
+                  ListTile(
+                    trailing: Switch(
+                        activeColor: Colors.blueAccent,
+                        activeTrackColor: Colors.blue[200],
+                        value: Provider.of<MyProvider>(context).discount,
+                        onChanged: (val) async {
+                            await FirebaseFirestore.instance.collection('DP').doc('2').update({
+                              'discount' : _price.text,
+                              'discountBool' : val
+                            });
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          pref.setBool('discount', val);
+                          setState(() {
+                            Provider.of<MyProvider>(context, listen: false)
+                                .discount = val;
+                          });
+                        }),
+                    title: const Text("تفعيل/إلغاء",
+                        style: const TextStyle(fontSize: 19)),
+                  ),
                 ],
               ),
             )));
