@@ -154,6 +154,8 @@ class _EditResState extends State<EditRes> {
             const SizedBox(height: 20),
             fun('تعديل أسعار التوصيل', Icons.delivery_dining, 'editDP'),
             const Divider(thickness: 0.8),
+            fun('خصم لجميع المناطق', Icons.delivery_dining_outlined, 'discount'),
+            const Divider(thickness: 0.8),
             fun('حذف وإضافة مطاعم', Icons.restaurant_menu, 'addOrRemoveRes'),
           ],
         ),

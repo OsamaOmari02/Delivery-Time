@@ -449,9 +449,9 @@ class MyProvider with ChangeNotifier {
   ];
   String area = '---اختر المنطقة---';
 
-  double deliveryPrice = 1.00;
+  var deliveryPrice = 1.00;
 
-  deliveryPriceOnArea() {
+  deliveryPriceOnArea() async {
     if (checkOut['area'] == "حي الحسين" ||
         checkOut['area'] == "الحي الجنوبي" ||
         checkOut['area'] == "حي الضباط" ||
@@ -460,14 +460,22 @@ class MyProvider with ChangeNotifier {
         checkOut['area'] == "السوق" ||
         checkOut['area'] == "حي المعانية" ||
         checkOut['area'] == "إسكان الفقراء")
-      deliveryPrice = 1.00;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price1']));
     else if (checkOut['area'] == "شويكة الشرقية" ||
         checkOut['area'] == "اول الضاحية" ||
         checkOut['area'] == "حي الفدين" ||
         checkOut['area'] == "حي الحسبان" ||
         checkOut['area'] == "شارع المهندسين" ||
         checkOut['area'] == "الإسكان العسكري")
-      deliveryPrice = 1.25;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price2']));
     else if (checkOut['area'] == "شويكة الغربية" ||
         checkOut['area'] == "نص الضاحية" ||
         checkOut['area'] == "حي المقام" ||
@@ -486,45 +494,120 @@ class MyProvider with ChangeNotifier {
         checkOut['area'] == "حي الكويتية" ||
         checkOut['area'] == "اول شارع المنشية" ||
         checkOut['area'] == "حي كلثوم")
-      deliveryPrice = 1.50;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price3']));
     else if (checkOut['area'] == "بير عقلة" ||
         checkOut['area'] == "آخر الضاحية" ||
         checkOut['area'] == "الغدير الاخضر" ||
         checkOut['area'] == "بويضة الحوامده")
-      deliveryPrice = 2.00;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price4']));
     else if (checkOut['area'] == "الثغرة" || checkOut['area'] == "طيب اسم")
-      deliveryPrice = 2.50;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price5']));
     else if (checkOut['area'] == "الزعتري" ||
         checkOut['area'] == "المطلة" ||
         checkOut['area'] == "المنشية")
-      deliveryPrice = 3.00;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price6']));
     else if (checkOut['area'] == "الباعج" || checkOut['area'] == "رحاب")
-      deliveryPrice = 3.50;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price7']));
     else if (checkOut['area'] == "المنصورة" ||
         checkOut['area'] == "بويضة العليمات" ||
         checkOut['area'] == "حيان المشرف" ||
         checkOut['area'] == "زبيدية")
-      deliveryPrice = 4.00;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price8']));
     else if (checkOut['area'] == "دير ورق" ||
         checkOut['area'] == "رباع السرحان")
-      deliveryPrice = 4.50;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price9']));
     else if (checkOut['area'] == "الحمرا" ||
         checkOut['area'] == "سما السرحان" ||
         checkOut['area'] == "مغير السرحان")
-      deliveryPrice = 5.00;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price10']));
     else if (checkOut['area'] == "حمامة العليمات")
-      deliveryPrice = 5.50;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price11']));
     else if (checkOut['area'] == "حوشا" ||
         checkOut['area'] == "جابر السرحان" ||
         checkOut['area'] == "حمامة العموش")
-      deliveryPrice = 6.00;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price12']));
     else if (checkOut['area'] == "الدجنية")
-      deliveryPrice = 6.50;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price13']));
     else if (checkOut['area'] == "الغدير الابيض" || checkOut['area'] == "بلعما")
-      deliveryPrice = 7.00;
-    else if (checkOut['area'] == "صبحا وصبحية") deliveryPrice = 9.00;
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price14']));
+    else if (checkOut['area'] == "صبحا وصبحية")
+      await FirebaseFirestore.instance
+          .collection('DP')
+          .doc('1')
+          .get()
+          .then((value) => deliveryPrice = double.parse(value['price15']));
     notifyListeners();
   }
+
+  void getDP(g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13, g14, g15)async {
+    await FirebaseFirestore.instance.collection('DP').doc('1').get().then((value) {
+      g1 = TextEditingController(text: double.parse(value['price1']).toString());
+      g2 = TextEditingController(text: double.parse(value['price2']).toString());
+      g3 = TextEditingController(text: double.parse(value['price3']).toString());
+      g4 = TextEditingController(text: double.parse(value['price4']).toString());
+      g5 = TextEditingController(text: double.parse(value['price5']).toString());
+      g6 = TextEditingController(text: double.parse(value['price6']).toString());
+      g7 = TextEditingController(text: double.parse(value['price7']).toString());
+      g8 = TextEditingController(text: double.parse(value['price8']).toString());
+      g9 = TextEditingController(text: double.parse(value['price9']).toString());
+      g10 =TextEditingController(text: double.parse(value['price10']).toString());
+      g11 = TextEditingController(text: double.parse(value['price11']).toString());
+      g12 = TextEditingController(text: double.parse(value['price12']).toString());
+      g13 = TextEditingController(text: double.parse(value['price13']).toString());
+      g14 = TextEditingController(text: double.parse(value['price14']).toString());
+      g15 = TextEditingController(text: double.parse(value['price15']).toString());
+    });
+    notifyListeners();
+  }
+  bool discount = false;
 
   Map<String, String> checkOut = {
     'area': ' ',
@@ -888,10 +971,11 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addFoodCartTypes(price, desc,mealName) async {
-    int index = myCart.indexWhere(
-        (element) => element.description == desc && element.mealPrice == price&&
-            element.mealName == mealName);
+  Future<void> addFoodCartTypes(price, desc, mealName) async {
+    int index = myCart.indexWhere((element) =>
+        element.description == desc &&
+        element.mealPrice == price &&
+        element.mealName == mealName);
     myCart[index].quantity++;
     addPrice(double.parse(price));
     notifyListeners();
@@ -915,7 +999,7 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> removeFoodCartTypes(price, desc,mealName) async {
+  Future<void> removeFoodCartTypes(price, desc, mealName) async {
     int index = myCart.indexWhere((element) =>
         element.description == desc &&
         element.mealPrice == price &&

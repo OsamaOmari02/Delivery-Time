@@ -27,6 +27,7 @@ import 'CheckOut.dart';
 import 'DPEdit.dart';
 import 'Details.dart';
 import 'DetailsHistory.dart';
+import 'Discount.dart';
 import 'Drawer.dart';
 import 'LanguageProvider.dart';
 import 'Location.dart';
@@ -133,6 +134,7 @@ class _MyAppState extends State<MyApp> {
         'editRes': (context) => EditRes(),
         'editDP': (context) => DPEdit(),
         'addOrRemoveRes': (context) => AddOrRemoveRes(),
+        'discount': (context) => Discount(),
       },
     );
   }
