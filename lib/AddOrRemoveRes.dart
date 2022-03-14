@@ -11,18 +11,17 @@ class AddOrRemoveRes extends StatefulWidget {
 class _AddOrRemoveResState extends State<AddOrRemoveRes> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Directionality(
+    return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('حذف وإضافة المطاعم'),
-        ),
-        body: ListView(
-          children: [],
-        ),
+    appBar: AppBar(
+      centerTitle: true,
+      title: Text('حذف وإضافة المطاعم'),
+    ),
+    body: ListView(
+      children: [],
+    ),
       ),
-    ));
+    );
   }
 }

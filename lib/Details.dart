@@ -126,24 +126,26 @@ class _DetailsState extends State<Details> {
           centerTitle: true,
           backgroundColor: Colors.blue,
         ),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              const SizedBox(height: 20),
-              listTile('صفحة الطلبات', Icons.home, 'callCenter', context),
-              // listTile('الموقع', Icons.location_on, 'location', context),
-              ListTile(
-                onTap: logOutFun,
-                title: Text(
-                  "تسجيل الخروج",
-                  style: const TextStyle(fontSize: 25, color: Colors.red),
+        drawer: SafeArea(
+          child: Drawer(
+            child: ListView(
+              children: [
+                const SizedBox(height: 20),
+                listTile('صفحة الطلبات', Icons.home, 'callCenter', context),
+                listTile('الإدارة', Icons.edit_off, 'editRes', context),
+                ListTile(
+                  onTap: logOutFun,
+                  title: Text(
+                    "تسجيل الخروج",
+                    style: const TextStyle(fontSize: 25, color: Colors.red),
+                  ),
+                  leading: const Icon(
+                    Icons.logout,
+                    color: Colors.red,
+                  ),
                 ),
-                leading: const Icon(
-                  Icons.logout,
-                  color: Colors.red,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         body: ListView(

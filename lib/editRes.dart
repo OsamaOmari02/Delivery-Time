@@ -121,45 +121,46 @@ class _EditResState extends State<EditRes> {
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Directionality(
+    return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('الإدارة'),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              const SizedBox(height: 20),
-              listTile('صفحة الطلبات', Icons.home, 'callCenter', context),
-              listTile('الإدارة', Icons.edit_off, 'editRes', context),
-              ListTile(
-                onTap: logOutFun,
-                title: const Text(
-                  "تسجيل الخروج",
-                  style: const TextStyle(fontSize: 23, color: Colors.red),
-                ),
-                leading: const Icon(
-                  Icons.logout,
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
-        ),
-        body: ListView(
+    appBar: AppBar(
+      centerTitle: true,
+      title: Text('الإدارة'),
+    ),
+    drawer: SafeArea(
+      child: Drawer(
+        child: ListView(
           children: [
             const SizedBox(height: 20),
-            fun('تعديل أسعار التوصيل', Icons.delivery_dining, 'editDP'),
-            const Divider(thickness: 0.8),
-            fun('خصم لجميع المناطق', Icons.delivery_dining_outlined, 'discount'),
-            const Divider(thickness: 0.8),
-            fun('حذف وإضافة مطاعم', Icons.restaurant_menu, 'addOrRemoveRes'),
+            listTile('صفحة الطلبات', Icons.home, 'callCenter', context),
+            listTile('الإدارة', Icons.edit_off, 'editRes', context),
+            ListTile(
+              onTap: logOutFun,
+              title: const Text(
+                "تسجيل الخروج",
+                style: const TextStyle(fontSize: 23, color: Colors.red),
+              ),
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.red,
+              ),
+            ),
           ],
         ),
       ),
-    ));
+    ),
+    body: ListView(
+      children: [
+        const SizedBox(height: 20),
+        fun('تعديل أسعار التوصيل', Icons.delivery_dining, 'editDP'),
+        const Divider(thickness: 0.8),
+        fun('خصم لجميع المناطق', Icons.delivery_dining_outlined, 'discount'),
+        const Divider(thickness: 0.8),
+        fun('حذف وإضافة مطاعم', Icons.restaurant_menu, 'addOrRemoveRes'),
+      ],
+    ),
+      ),
+    );
   }
 }
