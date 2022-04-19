@@ -1,7 +1,6 @@
 # app
 
-A new Flutter project.
-
+It is a mobile application to deliver food in an easy way with a clean UX/UI. 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
