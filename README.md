@@ -1,4 +1,4 @@
-# app
+# Delivery Time
 
 It is a mobile application to deliver food in an easy way with a clean UX/UI. 
 ## Getting Started
